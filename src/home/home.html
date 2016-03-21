@@ -1,0 +1,34 @@
+<div class="container">
+
+    <div class="alert alert-danger" ng-if="ctrl.displayOpts.error">{{ctrl.displayOpts.error}}</div>
+    
+    <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
+    
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Base Characters</h5>
+        <div ng-repeat="character in ctrl.choices" class="list-group-item">
+            <button type="button" class="btn btn-sm btn-primary"
+                ng-click="ctrl.createFrom(character)">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            {{character.name}} <em>({{character['class']}})</em>
+        </div>
+    </div>
+
+    <hr>
+
+    
+    <div class="list-group">
+        <h5 class="list-group-item disabled">
+            <button type="button" class="btn btn-sm btn-primary"
+                title="Create a new campaign" ng-click="ctrl.createCampaign()">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            Campaigns
+        </h5>
+        <a ng-repeat="campaign in ctrl.campaigns" class="list-group-item" href="#/campaign/{{campaign.name}}">
+            {{campaign.name}} ({{campaign.numChars}})
+        </a>
+    </div>
+
+</div>

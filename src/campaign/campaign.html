@@ -1,0 +1,20 @@
+<div class="container">
+
+    <div class="alert alert-danger" ng-if="ctrl.displayOpts.error">{{ctrl.displayOpts.error}}</div>
+    
+    <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
+
+    <h4>Campaign: {{ctrl.campId}}</h4>
+    
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Characters</h5>
+        <a ng-repeat="(id,character) in ctrl.campaign" class="list-group-item" href="#/campaign/{{ctrl.campId}}/{{id}}">
+            {{character.name}} 
+            ( 
+            <span class="glyphicon glyphicon-heart"></span> {{character.stats.health}} / 
+            <span class="glyphicon glyphicon-user"></span> {{character.stats.strain}}
+            )
+        </a>
+    </div>
+
+</div>

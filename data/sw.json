@@ -1,0 +1,658 @@
+{
+    
+    "base": {
+
+        "characters": [
+
+            {
+                "name" : "Gaarkhan",
+                "class": "Fierce Warrior",
+                "image": "gaarkhan.png",
+                "normal": {
+                    "health": 14,
+                    "endurance": 4,
+                    "speed": 4,
+                    "defense": "black",
+                    "abilities": [
+                        {
+                            "name": "Charge",
+                            "cost": "1 action + 2 strain",
+                            "description": "Move a number of spaces up to your Speed.  Then, you may perform an attack with a melee weapon."
+                        },
+                        {
+                            "name": "Rage",
+                            "description": "After an attack targeting you is resolved, if you suffered 3 or more damage, you become Focused."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + green + yellow",
+                        "insight": "blue",
+                        "tech": "blue + green"
+                    }
+                },
+                "wounded": {
+                    "health": 14,
+                    "endurance": 3,
+                    "speed": 3,
+                    "defense": "black",
+                    "abilities": [
+                        {
+                            "name": "Charge",
+                            "cost": "1 action + 2 strain",
+                            "description": "Move a number of spaces up to your Speed.  Then, you may perform an attack with a melee weapon."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + red + green",
+                        "insight": "red",
+                        "tech": "blue + red"
+                    }
+                },
+                "weapons": [
+                    {
+                        "name": "Vibro-Ax",
+                        "type": "Blade",
+                        "attack": "red + yellow",
+                        "description": "'Muaarga.' (Peace)",
+                        "effects": ["1 surge: Pierce 1", "1 surge: Cleave 1 damage"]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Wookiee Fortitude",
+                        "cost": "1 XP",
+                        "effects": ["1 Strain: exhaust this card during your activation to either recover 2 Damage or discard one of your conditions."]
+                    },
+                    {
+                        "name": "Wookiee Loyalty",
+                        "cost": "1 XP",
+                        "effects": ["Exhaust this card while you or an adjacent friendly figure is defending to apply +1 Block to the defense results."]
+                    },
+                    {
+                        "name": "Ferocity",
+                        "cost": "2 XP",
+                        "effects": ["When you declare an attack while you are Focused, add 1 red die to your attack pool instead of 1 green die. This attack also gains: Surge: Cleave 1Damage."]
+                    },
+                    {
+                        "name": "Staggering Blow",
+                        "cost": "2 XP",
+                        "effects": ["1 Strain: exhaust this card after you resolve an attack. If the target suffered 3 or more Damage, it becomes Stunned."]
+                    },
+                    {
+                        "name": "Vicious Strike",
+                        "cost": "3 XP",
+                        "effects": ["1 Strain: use when you declare an attack with a Meleeweapon. Apply +1 Damage to the attack results."]
+                    },
+                    {
+                        "name": "Rampage",
+                        "cost": "3 XP",
+                        "effects": ["After you resolve 'Charge', each hostile figure adjacent to you suffers 1 Damage."]
+                    },
+                    {
+                        "name": "Unstoppable",
+                        "cost": "4 XP",
+                        "effects": ["Apply +1 Endurance and +1 Speed to your hero. / While attacking, while you are wounded, apply +2 Damage to your attack results."]
+                    },
+                    {
+                        "name": "Brutal Cleave",
+                        "cost": "4 XP",
+                        "effects": ["1 Strain: Exhaust this card after you resolve an attack with a Melee weapon. Perform an additional attack targeting a different figure or object adjacent to the target of the attack."]
+                    }
+                ]
+
+            },
+
+            {
+                "name" : "Jyn Odan",
+                "class": "Sly Smuggler",
+                "image": "jyn.png",
+                "normal": {
+                    "health": 10,
+                    "endurance": 4,
+                    "speed": 5,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Quick Draw",
+                            "cost": "2 strain",
+                            "description": "Use at the start of a hostile figure's activation. Interrupt to perform an attack with a Pistol targeting that figure. Limit once per round (twice if you have 2 activation tokens)."
+                        },
+                        {
+                            "name": "Opportunist",
+                            "description": "After you resolve an attack, if the target suffered 1 or more damage, move 1 space."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue",
+                        "insight": "blue + green",
+                        "tech": "blue + green + yellow"
+                    }
+                },
+                "wounded": {
+                    "health": 10,
+                    "endurance": 3,
+                    "speed": 4,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Quick Draw",
+                            "cost": "2 strain",
+                            "description": "Use at the start of a hostile figure's activation. Interrupt to perform an attack with a Pistol targeting that figure. Limit once per round (twice if you have 2 activation tokens)."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "red",
+                        "insight": "blue + red",
+                        "tech": "blue + green + red"
+                    }
+                },
+                "weapons": [
+                    {
+                        "name": "Vintage Blaster",
+                        "type": "Blaster - Pistol",
+                        "attack": "green + green",
+                        "description": "It's engraved with the words: 'Think fast.'",
+                        "effects": ["1 surge: +1 damage", "1 surge: +1 accuracy"]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Quick As A Whip",
+                        "cost":    "1 XP",
+                        "effects": ["After an attack targeting you is resolved, you may move 1 space."]
+                    },
+                    {
+                        "name": "Smuggler's Luck",
+                        "cost":    "1 XP",
+                        "effects": [
+                            "Exhaust this card while performing an attribute test to reroll any number of dice. ",
+                            "Exhaust this card after you draw a supply card to discard that card and draw another one.",
+                            "During the Rebel upgrade phase, draw 1 additional Item Card."
+                        ]
+                    },
+                    {
+                        "name": "Cheap Shot",
+                        "cost": "2 XP",
+                        "effects": ["When you use 'Quick Draw', apply +1 Damage to the attack results. The attack also gains: 1 Surge -> Stun."]
+                    },
+                    {
+                        "name": "Roll With It",
+                        "cost": "2 XP",
+                        "effects": ["1 Strain: Use when an attack targeting you is declared to apply +1 Block to your defense results. You may convert 1 or more Block results to Evade results."]
+                    },
+                    {
+                        "name": "Get Cocky",
+                        "cost":    "3 XP",
+                        "effects": ["Exhaust this card after you resolve an attack. If the target was defeated, recover 2 Strain or become Focused."]
+                    },
+                    {
+                        "name": "Gunslinger",
+                        "cost":    "3 XP",
+                        "effects": [
+                            "While attacking with a PISTOL you can use the Surge abilities from any PISTOL you brought to the mission.",
+                            "1 Strain: Exhaust this card while attacking to apply +1 Surge to your attack results."
+                        ]
+                    },
+                    {
+                        "name": "Sidewinder",
+                        "cost":    "4 XP",
+                        "effects": ["After you resolve an attack you may move up to 2 spaces."]
+                    },
+                    {
+                        "name": "Trick Shot",
+                        "cost":    "4 XP",
+                        "effects": ["Gained From 1 Strain: Use before you declare an attack with a Ranged weapon. You can draw line of sight from any space within 3 spaces."]
+                    }
+                ]   
+            },
+
+            {
+                "name" : "Mak Eshka'rey",
+                "class": "Bold Renegade",
+                "image": "mak.png",
+                "normal": {
+                    "health": 10,
+                    "endurance": 5,
+                    "speed": 4,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Ambush",
+                            "cost": "1 strain",
+                            "description": "1 Strain: Use when you declare an attack targeting a figure that does not have line of sight to you. This attack gains pierce 2."
+                        },
+                        {
+                            "name": "Covert",
+                            "description": "Hostile figures 4 or more spaces away from you do not have line of sight to you. You do no block line of sight for those figures."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + green",
+                        "insight": "blue + green",
+                        "tech": "blue + green + yellow"
+                    }
+                },
+                "wounded": {
+                    "health": 10,
+                    "endurance": 4,
+                    "speed": 3,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Ambush",
+                            "cost": "1 strain",
+                            "description": "1 Strain: Use when you declare an attack targeting a figure that does not have line of sight to you. This attack gains pierce 2."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + red",
+                        "insight": "blue + red",
+                        "tech": "blue + red + green"
+                    }
+                },
+                "weapons": [
+                    {
+                        "name": "Longblaster",
+                        "description": "An illegally modified sporting blaster",
+                        "attack": "blue + blue",
+                        "type": "Blaster - Rifle",
+                        "effects": [
+                            "1 Surge: 1 Damage",
+                            "1 Surge: Pierce 1"
+                        ]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Supply Network", 
+                        "cost": "1 XP",
+                        "effects": [
+                            "Exhaust this card during your activation to test eye. If you pass, reveal the top card of the Supply deck and place it on the top or bottom of the deck.", 
+                            "Action: deplete this card to draw 1 card from the Supply deck."
+                        ]
+                    },
+                    {
+                        "name": "Disengage",
+                        "cost": "1 XP",
+                        "effects": ["1 Strain: Exhaust this card when a hostile figure enters a space within 3 spaces of you to gain 3 movement points."]
+                    },
+                    {
+                        "name": "Target Acquired",
+                        "cost": "2 XP",
+                        "effects": [
+                            "1 strain: exhaust this card before you declare an attack. During this attack, figures do not block your line of sight. Apply +2 Accuracy to the attack results."
+                        ]
+                    },
+                    {
+                        "name": "Jeswandi Training",
+                        "cost": "2 XP",
+                        "effects": [
+                            "Apply +2 Health to your hero.",
+                            "Exhaust this card after a hostile figure within 3 spaces resolves an attack. You become Focused."
+                        ]
+                    },
+                    {
+                        "name": "Expertise", 
+                        "cost": "3 XP",
+                        "effects": [
+                            "1 strain: exhaust this card during your activation after you interact. Perform 1 additional action during this activation."
+                        ]
+                    },
+                    {
+                        "name": "Execute",
+                        "cost": "3 XP",
+                        "effects": [
+                            "After you resolve an attack, if the target figure was defeated, recover 1 strain.", 
+                            "1 strain: exhaust this card when you use 'Ambush'. Remove all white dice from the target's defense pool."
+                        ]
+                    },
+                    {
+                        "name": "No Escape",
+                        "cost": "4 XP",
+                        "effects": [
+                            "2 strain: exhaust this card after you resolve an attack. If the target figure was not defeated, you become Focused. Then, perform 1 additional attack targeting the same figure."
+                        ]
+                    },
+                        {
+                        "name": "Decoy",
+                        "cost": "4 XP",
+                        "effects": [
+                            "Deplete this card when an attack targeting you is declared. The attack misses. After the attack resolves, you may interrupt to place your figure in any empty space within 3 spaces. Then, you become Focused and may perform an attack."
+                        ]
+                    }
+                ]
+
+            },
+
+            {
+                "name" : "Gideon Argus",
+                "class": "Valiant Commander",
+                "image": "gideon.png",
+                "normal": {
+                    "health": 10,
+                    "endurance": 5,
+                    "speed": 4,
+                    "defense": "black",
+                    "abilities": [
+                        {
+                            "name": "Command",
+                            "cost": "2 strain",
+                            "description": "2 Strain: Choose another friendly figure within 3 spaces. That figure may interrupt to either perform 1 move or 1 attack."
+                        },
+                        {
+                            "name": "Disabling Shot",
+                            "description": "While attacking with a Ranged weapon, you gain: 1 Surge -> Stun."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + green",
+                        "insight": "blue + green + yellow",
+                        "tech": "blue + green"
+                    }
+                },
+                "wounded": {
+                    "health": 10,
+                    "endurance": 4,
+                    "speed": 3,
+                    "defense": "white",
+                    "abilities": [],
+                    "actions": {
+                        "strength": "blue + red",
+                        "insight": "blue + red + green",
+                        "tech": "blue + red"
+                    }
+                },
+                "weapons": [
+                    {
+                        "name": "Holdout Blaster",
+                        "description": "An illegally modified sporting blaster",
+                        "attack": "blue + yellow",
+                        "type": "Blaster - Pistol",
+                        "effects": [
+                            "1 Surge: Pierce 2"
+                        ]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Called Shot",
+                        "cost": "1 XP",
+                        "effects": ["Exhaust this card while you or a friendly figure is attacking. If the target is in your line of sight, apply +1 surge to the attack results."]
+                    },
+                    {
+                        "name": "Military Efficiency",
+                        "cost": "1 XP",
+                        "effects": [
+                            "Exhaust this card while attacking to convert 1 damage result to 1 surge result.", 
+                            "Exhaust this card while defending to convert 1 defense result to 1 surge-cancel result."
+                        ]
+                    },
+                    {
+                        "name": "Mobile Tactician",
+                        "cost": "2 XP", 
+                        "effects": ["After you resolve 'Command', gain 2 movement points."]
+                    },
+                    {
+                        "name": "Air of Command",
+                        "cost": "2 XP",
+                        "effects": ["Apply +2 Health to your hero.", "When you use 'Command', you may choose any friendly figure in your line of sight."]
+                    },
+                    {
+                        "name": "For the Cause!",
+                        "cost": "3 XP", 
+                        "effects": ["1 strain: Exhaust this card when another friendly figure within 3 spaces declares an attack. That figure becomes Focused."]
+                    },
+                    {
+                        "name": "Rallying Shout", 
+                        "cost": "3 XP",
+                        "effects": ["Exhaust this card during your activation to choose another hero in your line of sight. That hero recovers 2 strain."]
+                    },
+                    {
+                        "name": "Hammer and Anvil",
+                        "cost": "4 XP", 
+                        "effects": ["Action, 2 strain: Choose another friendly figure. You and that figure may each perform an attack targeting the same figure. The target figure chooses the order in which these attacks resolve. During the second attack, remove all dice from the target's defense pool."]
+                    },
+                    {
+                        "name": "Masterstroke",
+                        "cost": "4 XP",
+                        "effects": ["Exhaust this card after you resolve 'Command'. You may perform an additional 'Command' without using an action or suffering the strain cost."]
+                    }
+                ]
+            },
+
+            {
+                "name" : "Diala Passil",
+                "class": "Haunted Exile",
+                "image": "diala.png",
+                "normal": {
+                    "health": 12,
+                    "endurance": 5,
+                    "speed": 4,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Precise Strike",
+                            "cost": "2 strain",
+                            "description": "2 Strain: Use when you declare an attack with a Melee weapon. Choose and remove 1 die from the target's defense pool. Limit once per activation."
+                        },
+                        {
+                            "name": "Foresight",
+                            "cost": "1 Strain",
+                            "description": "1 Strain: Use while defending to reroll 1 defense die."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + green",
+                        "insight": "blue + green + yellow",
+                        "tech": "blue"
+                    }
+                },
+                "wounded": {
+                    "health": 12,
+                    "endurance": 4,
+                    "speed": 3,
+                    "defense": "white",
+                    "abilities": [
+                        {
+                            "name": "Foresight",
+                            "cost": "1 Strain",
+                            "description": "1 Strain: Use while defending to reroll 1 defense die."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + red",
+                        "insight": "blue + red + green",
+                        "tech": "red"
+                    }
+                },
+                "weapons": [
+                    {            
+                        "name": "Plasteel Staff",
+                        "type": "Staff (Reach)",
+                        "attack": "Green+Yellow",
+                        "effects": ["1 Surge: Stun", "1 Surge: +1 damage"]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Force Adept", 
+                        "cost": "1 XP", 
+                        "effects": [
+                            "1 strain: Use while you or a friendly figure is performing an attack or attribute test. That figure may reroll 1 die.", 
+                            "Exhaust this card when you perform a fist or wrench test. Add 1 blue die to your dice pool."
+                        ]
+                    },
+                    {
+                        "name": "Force Throw", 
+                        "cost": "1 XP", 
+                        "effects": [
+                            "2 strain: Exhaust this card during your activation to choose another small figure within 3 spaces and test eye. If you pass, push that figure 3 spaces. Then, if that figure is hostile, it suffers 1 damage."
+                        ]
+                    },
+                    {
+                        "name": "Defensive Stance", 
+                        "cost": "2 XP", 
+                        "effects": [
+                            "When you use 'Foresight', apply +1 defense to your defense results.", 
+                            "After an attack targeting you is resolved, if you suffered no damage, you become Focused."
+                        ]
+                    },
+                    {
+                        "name": "Battle Meditation", 
+                        "cost": "2 XP", 
+                        "effects": ["Use when you rest during your activation. Test eye. If you pass, choose yourself or a friendly figure. That figure becomes Focused."]
+                    },
+                    {
+                        "name": "Snap Kick", 
+                        "cost": "3 XP", 
+                        "effects": [
+                            "Exhaust this card after you resolve an attack with a melee weapon to choose 1 hostile figure adjacent to you and roll 1 green die. That figure suffers damage equal to the damage results."
+                        ]
+                    },
+                    {
+                        "name": "Art of Movement", 
+                        "cost": "3 XP", 
+                        "effects": [
+                            "Apply +1 Speed to your hero.", 
+                            "You ignore additional movement point costs when entering difficult terrain or spaces containing hostile figures."
+                        ]
+                    },
+                    {
+                        "name": "Way of the Sarlacc", 
+                        "cost": "4 XP", 
+                        "effects": ["Action, 2 strain: For each hostile figure adjacent to you, perform 1 attack with a melee weapon targeting that figure."]
+                    },
+                    {    
+                        "name": "Dancing Weapon", 
+                        "cost": "1 XP", 
+                        "effects": ["Action, 1 strain: Perform a ranged attack using a melee weapon. Add 1 blue die to the attack pool and gain: Surge: +2 accuracy, +1 damage."]
+                    }
+                ]
+            },
+
+            {
+                "name": "Fenn Signis",
+                "class": "Hardened Veteran",
+                "image": "fenn.png",
+                "normal": {
+                    "health": 12,
+                    "endurance": 4,
+                    "speed": 4,
+                    "defense": "black",
+                    "abilities": [
+                        {
+                            "name": "Havoc Shot",
+                            "cost": "1 strain",
+                            "description": "1 Strain: Use while attacking with a Ranged weapon. This attack gains Blast 1 Damage."
+                        },
+                        {
+                            "name": "Lone Wolf",
+                            "description": "At the end of your activation, if there are no friendly figures adjacent to you, recover 1 Strain."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + green",
+                        "insight": "blue + green",
+                        "tech": "blue + green"
+                    }
+                },
+                "wounded": {
+                    "health": 12,
+                    "endurance": 3,
+                    "speed": 3,
+                    "defense": "black",
+                    "abilities": [
+                        {
+                            "name": "Havoc Shot",
+                            "cost": "1 strain",
+                            "description": "1 Strain: Use while attacking with a Ranged weapon. This attack gains Blast 1 Damage."
+                        }
+                    ],
+                    "actions": {
+                        "strength": "blue + red",
+                        "insight": "blue + red",
+                        "tech": "blue + red"
+                    }
+                },
+                "weapons": [
+                    {            
+                        "name": "Infantry Rifle",
+                        "type": "Blaster - Rifle",
+                        "attack": "Green + Blue",
+                        "effects": ["1 Surge: +1 damage", "1 Surge: +1 accuracy"]
+                    }
+                ],
+                "abilities": [
+                    {
+                        "name": "Tactical Movement", 
+                        "cost": "1 XP", 
+                        "effects": [ "exhaust this card at the start of your activation. Choose yourself or another friendly figure within 3 spaces. That figure gains 2 movement points."]
+                    },
+                    {
+                        "name": "Take Cover", 
+                        "cost": "1 XP", 
+                        "effects": [ "1 strain: exhaust this card when an attack targeting you is declared. Add 1 white die to your defense pool."]
+                    },
+                    {
+                        "name": "Weapon Expert", 
+                        "cost": "2 XP", 
+                        "effects": [ "1 strain: use when attacking to gain Pierce 1 and apply +2 Accuracy to the attack results."]
+                    },
+                    {
+                        "name": "Adrenaline Rush", 
+                        "cost": "2 XP", 
+                        "effects": [ "Exhaust this card after an attack targeting you is resolved. If you suffered 1 or more damage, test fist. If you pass, recover 3 strain."]
+                    },
+                    {
+                        "name": "Suppressive Fire", 
+                        "cost": "3 XP", 
+                        "effects": [ "1 strain: exhaust this card after resolving an attack using 'Havoc Shot'. Each figure that suffered 1 or more damage chooses to either suffer 1 damage or become Stunned. If that figure was already Stunned it must choose to suffer 1 damage."]
+                    },
+                    {
+                        "name": "Trench Fighter", 
+                        "cost": "3 XP", 
+                        "effects": [ "Exhaust this card when you declare an attack targeting a figure within 3 spaces. Apply +2 damage to the attack results."]
+                    },
+                    {
+                        "name": "Rebel Elite", 
+                        "cost": "4 XP", 
+                        "effects": [ "Apply +3 Health and +1 Endurance to your hero.", "When you use 'Havoc Shot', it applies Blast 2 instead of Blast 1."]
+                    },
+                    {
+                        "name": "Superior Positioning", 
+                        "cost": "4 XP", 
+                        "effects": [ "action, 1 strain: Move a number of spaces up to your Speed and become Focused.", "When defending, while you are Focused, apply +1 defense to your defense results."]
+                    }
+                ]
+            }
+        ]
+    },
+
+    "saved": {
+
+        "Test" : {
+
+            "firstChar" : {
+                "name": "Fenn Signis",
+                "condition": "normal",
+                "stats": {
+                    "health": 10,
+                    "endurance": 4,
+                    "speed": 4
+                },
+                "weapons": [
+                    {            
+                        "name": "Infantry Rifle",
+                        "type": "Blaster - Rifle",
+                        "attack": "Green + Blue",
+                        "effects": ["1 Surge: +1 damage", "1 Surge: +1 accuracy"]
+                    }
+                ],
+                "abilities": [
+
+                ]
+            }
+        }
+    }
+
+}

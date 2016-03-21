@@ -1,0 +1,95 @@
+<div class="container">
+
+    <div class="char {{ctrl.character.condition}}">
+
+        <div class="label">
+            <div class="pull-right">
+                {{ctrl.character.xp}} XP
+                <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseXP()" title="earn XP">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+            <h4>{{ctrl.character.name}}</h4>
+            <h6>{{ctrl.baseData['class']}}</h6>
+        </div>
+
+        <img class="image" src="assets/{{ctrl.baseData.image}}">
+
+        <abilities />
+        
+        <div class="stats">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="stat">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <h5>Health</h5>
+                                {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}
+                            </div>
+                            <div class="col-xs-5">
+                                <div class="btn-group-vertical">
+                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseStat('health')">
+                                        <span class="glyphicon glyphicon-triangle-top"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.decreaseStat('health')">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="stat">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <h5>Strain</h5> 
+                                {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}
+                            </div>
+                            <div class="col-xs-5">
+                                <div class="btn-group-vertical">
+                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseStat('strain')">
+                                        <span class="glyphicon glyphicon-triangle-top"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.decreaseStat('strain')">
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="stat"><h5>Speed</h5> {{ctrl.baseData[ctrl.character.condition].speed}}</div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="stat">
+                        <h5>Defense</h5> 
+                        <div ng-bind-html="ctrl.baseData[ctrl.character.condition].defense | colorize"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="skill">
+                        <span class="glyphicon glyphicon-hand-up"></span> 
+                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.strength | colorize"></span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="skill">
+                        <span class="glyphicon glyphicon-eye-open"></span> 
+                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.insight | colorize"></span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="skill">
+                        <span class="glyphicon glyphicon-wrench"></span> 
+                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.tech | colorize"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</div>
