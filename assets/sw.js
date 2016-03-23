@@ -293,9 +293,8 @@
                     name: character.name,
                     condition: "normal",
                     stats: {
-                        endurance: character.normal.endurance,
-                        health: character.normal.health,
-                        speed: character.normal.speed
+                        strain: 0,
+                        health: character.normal.health
                     },
                     weapons: [character.weapons[0]]
                 };

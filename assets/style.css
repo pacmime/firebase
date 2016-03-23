@@ -113,10 +113,12 @@
     width: 16px;
     height: 16px;
     margin: 0 auto;
+    border-radius: 2px;
+    border: 1px solid #000; 
 }
 .color-icon.black { background: #000; }
 .color-icon.blue { background: #00f; }
 .color-icon.green { background: #0f0; }
 .color-icon.red { background: #f00; }
-.color-icon.white { background: #fff; }
+.color-icon.white { background: #fff;}
 .color-icon.yellow { background: #f6ff00; }

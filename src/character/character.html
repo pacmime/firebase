@@ -21,42 +21,32 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="stat">
-                        <div class="row">
-                            <div class="col-xs-7">
-                                <h5>Health</h5>
-                                {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}
-                            </div>
-                            <div class="col-xs-5">
-                                <div class="btn-group-vertical">
-                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseStat('health')">
-                                        <span class="glyphicon glyphicon-triangle-top"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.decreaseStat('health')">
-                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="btn-group-vertical pull-right">
+                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.increaseStat('health')">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.decreaseStat('health')">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
                         </div>
+
+                        <h5 style="color: #f00">Health</h5>
+                        {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}
+                
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="stat">
-                        <div class="row">
-                            <div class="col-xs-7">
-                                <h5>Strain</h5> 
-                                {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}
-                            </div>
-                            <div class="col-xs-5">
-                                <div class="btn-group-vertical">
-                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseStat('strain')">
-                                        <span class="glyphicon glyphicon-triangle-top"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.decreaseStat('strain')">
-                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="btn-group-vertical pull-right">
+                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.increaseStat('strain')">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.decreaseStat('strain')">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
                         </div>
+                        <h5 style="color:#00f">Strain</h5> 
+                        {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -71,19 +61,19 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <div class="skill">
+                    <div class="skill" title="Strength">
                         <span class="glyphicon glyphicon-hand-up"></span> 
                         <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.strength | colorize"></span>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="skill">
+                    <div class="skill" title="Insight">
                         <span class="glyphicon glyphicon-eye-open"></span> 
                         <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.insight | colorize"></span>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="skill">
+                    <div class="skill" title="Tech">
                         <span class="glyphicon glyphicon-wrench"></span> 
                         <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.tech | colorize"></span>
                     </div>

@@ -5,30 +5,19 @@
     <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
     
     <div class="list-group">
-        <h5 class="list-group-item disabled">Base Characters</h5>
-        <div ng-repeat="character in ctrl.choices" class="list-group-item">
-            <button type="button" class="btn btn-sm btn-primary"
-                ng-click="ctrl.createFrom(character)">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            {{character.name}} <em>({{character['class']}})</em>
+        <div class="list-group-item disabled">
+            <h4 class="list-group-item-heading">Campaigns</h4>
+            <p class="list-group-item-text">First, select a campaign. From there you will have access to your character in that campaign or be able to create a new character for use in that campaign.</p>
         </div>
-    </div>
-
-    <hr>
-
-    
-    <div class="list-group">
-        <h5 class="list-group-item disabled">
-            <button type="button" class="btn btn-sm btn-primary"
-                title="Create a new campaign" ng-click="ctrl.createCampaign()">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            Campaigns
-        </h5>
         <a ng-repeat="campaign in ctrl.campaigns" class="list-group-item" href="#/campaign/{{campaign.name}}">
             {{campaign.name}} ({{campaign.numChars}})
         </a>
     </div>
+
+    <button type="button" class="btn btn-primary"
+        title="Create a new campaign" ng-click="ctrl.createCampaign()">
+        New Campaign
+    </button>
+            
 
 </div>

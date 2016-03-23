@@ -4,17 +4,44 @@
     
     <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
 
-    <h4>Campaign: {{ctrl.campId}}</h4>
+    <h3>Campaign: {{ctrl.campId}}</h3>
     
     <div class="list-group">
-        <h5 class="list-group-item disabled">Characters</h5>
+        <div class="list-group-item disabled">
+            <h4 class="list-group-item-heading">Characters</h4>
+            <p class="list-group-item-text">Select your character from the list below or click 'New Character' to create one.</p>
+        </div>
         <a ng-repeat="(id,character) in ctrl.campaign" class="list-group-item" href="#/campaign/{{ctrl.campId}}/{{id}}">
             {{character.name}} 
             ( 
-            <span class="glyphicon glyphicon-heart"></span> {{character.stats.health}} / 
-            <span class="glyphicon glyphicon-user"></span> {{character.stats.strain}}
+            <span class="glyphicon glyphicon-heart" title="Health"></span> {{character.stats.health}} / 
+            <span class="glyphicon glyphicon-user" title="Strain"></span> {{character.stats.strain}}
             )
         </a>
     </div>
+
+    <button type="button" class="btn btn-primary" 
+        ng-if="!ctrl.displayOpts.displayChoices" 
+        ng-click="ctrl.displayOpts.displayChoices=true">
+        New Character
+    </button>
+    
+    <div class="list-group" ng-if="ctrl.displayOpts.displayChoices">
+        <h5 class="list-group-item disabled">Which character do you want to use?</h5>
+        <div ng-repeat="character in ctrl.choices" class="list-group-item">
+            <button type="button" class="btn btn-sm btn-primary"
+                ng-disabled="ctrl.campaignHasChar(character)"
+                ng-click="ctrl.createFrom(character)">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            {{character.name}} <em>({{character['class']}})</em>
+        </div>
+        <div class="list-group-item">
+            <button type="button" class="btn btn-default" 
+                ng-click="ctrl.displayOpts.displayChoices=false">
+                Cancel
+            </button>
+        </div>
+    </div> 
 
 </div>
