@@ -1,0 +1,342 @@
+<div class="page">
+
+    <div class="header">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-sm-5 col-md-7 col-lg-8">
+                    <div><label>Name: </label> {{ctrl.charName}}</div>
+                    <div><label>Class: </label> {{ctrl.character.class}}</div>
+                    <div><label>Keywords: </label> {{ctrl.character.keywords}}</div>
+
+                    <div>
+                        <div><label>To Hit:</label></div>
+
+                        <div class="stat">
+                            <label>Combat</label>
+                            <div editable-stat-value ng-model="ctrl.character.combat"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Melee</label>
+                            <div editable-stat-value ng-model="ctrl.character.melee"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Ranged</label>
+                            <div editable-stat-value ng-model="ctrl.character.ranged"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-7 col-md-5 col-lg-4">
+
+                    <div class="stats">
+                        <div class="stat">
+                            <label>Agility</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Agility"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Cunning</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Cunning"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Spirit</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Spirit"></div>
+                        </div>
+                        <br>
+                        <div class="stat">
+                            <label>Strength</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Strength"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Lore</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Lore"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Spirit</label>
+                            <div editable-stat-value ng-model="ctrl.character.stats.Spirit"></div>
+                        </div>
+
+                        <div class="stat">
+                            <label>Initiative</label>
+                            <div editable-stat-value ng-model="ctrl.character.init"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="body">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="items">
+                        <h4>Items</h4>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>A</th>
+                                    <th>D</th>
+                                    <th>H</th>
+                                    <th>U</th>
+                                    <th width="70%">Name + Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(name, item) in ctrl.character.items">
+                                    <td>{{item.weight}}</td>
+                                    <td>{{item.darkstone}}</td>
+                                    <td>{{item.hands}}</td>
+                                    <td>{{item.slots}}</td>
+                                    <td><strong>{{name}}: </strong> {{item.description}} [{{item.source}}]
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">Weight: {{ctrl.itemWeight}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="ctrl.addNewItem()">New</button>
+                                        Darkstone: {{ctrl.itemDarkstone}}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="abilities">
+                        <h4>Abilities</h4>
+                        <div ng-repeat="(name, desc) in ctrl.character.abilities">
+                            <strong>{{name}}</strong> <small>{{desc}}</small>
+                            <br><br>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" placeholder="Name"
+                                    ng-model="ctrl.newAbility.name">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="Description" 
+                                    ng-model="ctrl.newAbility.desc">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success" 
+                                    ng-disabled="!ctrl.newAbility.name" 
+                                    ng-click="ctrl.addNewAbility()">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="footer">
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div class="level">
+                        <div class="stat">
+                            <label>Level</label>
+                            <div class="value">{{ctrl.character.level}}</div>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <label>XP</label>
+                        <div class="value--sm" editable-stat-value ng-model="ctrl.character.xp"></div>
+                    </div>
+                    <div class="stat">
+                        <label>Gold</label>
+                        <div class="value--sm" editable-stat-value ng-model="ctrl.character.wealth"></div>
+                    </div>
+                    <div class="darkstone">
+                        <div class="stat">
+                            <label>Dark Stone</label>
+                            <div editable-stat-value ng-model="ctrl.character.darkstone"></div>
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <div class="col-sm-12">
+                        <div class="row row--no-gutter">
+
+                            <div class="col-sm-8 col-sm-push-4">
+                                <div class="clearfix">
+                                    <div class="health">
+                                        <div class="stat">
+                                            <label>Max Health</label>
+                                            <div editable-stat-value ng-model="ctrl.character.health.max"></div>
+                                        </div>
+                                        <div class="stat">
+                                            <label>Wounds</label>
+                                            <div editable-stat-value ng-model="ctrl.character.health.wounds"></div>
+                                        </div>
+                                        <div class="stat">
+                                            <label>Defense</label>
+                                            <div editable-stat-value ng-model="ctrl.character.defense"></div>
+                                        </div>
+                                    </div>
+                                    <div class="sanity">
+                                        <div class="stat">
+                                            <label>Max Sanity</label>
+                                            <div editable-stat-value ng-model="ctrl.character.sanity.max"></div>
+                                        </div>
+                                        <div class="stat">
+                                            <label>Loss</label>
+                                            <div editable-stat-value ng-model="ctrl.character.sanity.loss"></div>
+                                        </div>
+                                        <div class="stat">
+                                            <label>Willpower</label>
+                                            <div editable-stat-value ng-model="ctrl.character.willpower"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="clearfix">
+                                        <div class="faith">
+                                            <div class="stat">
+                                                <label>Max Faith</label>
+                                                <div editable-stat-value ng-model="ctrl.character.faith"></div>
+                                            </div>
+                                        </div>
+                                        <div class="corruption">
+                                            <div class="stat">
+                                                <label>Max Corruption</label>
+                                                <div editable-stat-value ng-model="ctrl.character.corruption.max"></div>
+                                            </div>
+                                            <div class="stat">
+                                                <label>Current</label>
+                                                <div editable-stat-value ng-model="ctrl.character.corruption.current"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="movement">
+                                            <div class="stat">
+                                                <label>Move</label>
+                                                <div editable-stat-value ng-model="ctrl.character.movement"></div>
+                                            </div>
+                                        </div>
+                                        <div class="grit">
+                                            <div class="stat">
+                                                <label>Max Grit</label>
+                                                <div editable-stat-value ng-model="ctrl.character.grit.max"></div>
+                                            </div>
+                                            <div class="stat">
+                                                <label>Current</label>
+                                                <div editable-stat-value ng-model="ctrl.character.grit.current"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-sm-4 col-sm-pull-8">
+                                <div class="sidebag">
+                                    <h4>Side Bag</h4>
+
+                                    <div class="stat">
+                                        <label>Bandages</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.bandages"></div>
+                                    </div>    
+                                    <div class="stat">
+                                        <label>Whiskey</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.whiskey"></div>
+                                    </div>    
+                                    <br>
+                                    <div class="stat">
+                                        <label>Tonic</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.tonic"></div>
+                                    </div>    
+                                    <div class="stat">
+                                        <label>Herbs</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.herbs"></div>
+                                    </div>    
+                                    <br>
+                                    <div class="stat">
+                                        <label>Dynamite</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.dynamite"></div>
+                                    </div>    
+                                    <div class="stat">
+                                        <label>Flash</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.flash"></div>
+                                    </div>    
+                                    <br>
+                                    <div class="stat">
+                                        <label>Swamp Fungus</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.fungus"></div>
+                                    </div>    
+                                    <div class="stat">
+                                        <label>Capacity</label>
+                                        <div editable-stat-value ng-model="ctrl.character.sidebag.capacity"></div>
+                                    </div>    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+
+                    <div class="clothing">
+                        <h4>Clothing</h4>
+                        <div ng-repeat="(slotName,slot) in ctrl.character.clothing" class="media">
+                            <div class="media-left">
+                                <strong>{{slotName}}: </strong>
+                            </div>
+                            <div class="media-body">
+                                <div ng-repeat="(name,desc) in slot">
+                                    {{name}} <small>{{desc}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mutations">
+                        <h4>Mutations</h4>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-success">+</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

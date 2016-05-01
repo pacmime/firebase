@@ -178,16 +178,28 @@
         }
     ]);
 
+    app.factory("CharacterChoices", ["$firebaseArray",
+        function($firebaseArray) {
+
+            var ref = new Firebase("https://intense-fire-8692.firebaseio.com/base/characters");
+
+            // this uses AngularFire to create the synchronized array
+            return $firebaseArray(ref);
+        }
+    ]);
+
+
     app.controller("CampaignController", [
-        "$scope", "$routeParams", "Campaign",
-        function($scope, $routeParams, Campaign) {
+        "$scope", "$routeParams", "Campaign", "CharacterChoices", 
+        function($scope, $routeParams, Campaign, CharacterChoices) {
         
         var self = this;
         
         this.displayOpts = {
             loading: true,
             message: null,
-            error: null
+            error: null,
+            displayChoices: false
         };
 
         //load the campaign
@@ -201,6 +213,50 @@
         });
 
 
+        //load base class options
+        this.choices = CharacterChoices;
+        
+
+        //is this character already chosen in this campaign?
+        this.campaignHasChar = function(character) {
+            var charName = character.name;
+            for(var id in this.campaign) {
+                if(this.campaign[id] && this.campaign[id].name && 
+                    this.campaign[id].name===charName)
+                    return true;
+            }
+            return false;
+        };
+
+        //create char from base classes
+        this.createFrom = function(character) {
+
+            //hide choice list
+            self.displayOpts.displayChoices = false;
+                
+            var id = Math.floor(Math.random()*999999);
+
+            //append character to loaded campaign
+            self.campaign[id] = {
+                name: character.name,
+                condition: "normal",
+                stats: {
+                    strain: 0,
+                    health: character.normal.health
+                },
+                weapons: [character.weapons[0]]
+            };
+
+            //and save the now changed campaign
+            campaign.$save().then(function() {
+                updateCampaignList();
+                self.displayOpts.message = "Character created";
+            }).catch(function(error) {
+                self.error = "Failed to save new character: " + error.data;
+            });
+
+        };
+
     }]);
 
 }) (angular);
@@ -211,16 +267,7 @@
 
     var app = angular.module("home", ["firebase", "campaign"]);
 
-    app.factory("CharacterChoices", ["$firebaseArray",
-        function($firebaseArray) {
-
-            var ref = new Firebase("https://intense-fire-8692.firebaseio.com/base/characters");
-
-            // this uses AngularFire to create the synchronized array
-            return $firebaseArray(ref);
-        }
-    ]);
-
+    
     app.factory("SavedInfo", ["$firebaseObject",
         function($firebaseObject) {
             var ref = new Firebase("https://intense-fire-8692.firebaseio.com/saved");
@@ -230,31 +277,22 @@
 
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "CharacterChoices", "SavedInfo", "Campaign",
-        function($scope, $timeout, CharacterChoices, SavedInfo, Campaign) {
+        "$scope", "$timeout", "SavedInfo", "Campaign",
+        function($scope, $timeout, SavedInfo, Campaign) {
         
         var self = this;
         
         this.displayOpts = {
-            loading: 2,
+            loading: true,
             message: null,
             error: null
         };
 
 
-        //load base class options
-        this.choices = CharacterChoices;
-        CharacterChoices.$loaded().then(function() {
-            self.displayOpts.loading-=1;
-        }).catch(function(err) {
-            self.displayOpts.error = "Failed to load base character options: " + err.data;
-        });
-
-
         //load saved campaigns
         SavedInfo.$loaded().then(function() {
             updateCampaignList();
-            self.displayOpts.loading-=1;
+            self.displayOpts.loading = false;
         }).catch(function(error) {
             self.displayOpts.error = "Failed to load saved data: " + error.data;
         });
@@ -282,35 +320,6 @@
             });
         };
 
-        this.createFrom = function(character) {
-
-            var campaignName = prompt("Enter the campaign:");
-            var campaign = Campaign(campaignName);
-            campaign.$loaded().then(function() {
-
-                var id = Math.floor(Math.random()*999999);
-                campaign[id] = {
-                    name: character.name,
-                    condition: "normal",
-                    stats: {
-                        strain: 0,
-                        health: character.normal.health
-                    },
-                    weapons: [character.weapons[0]]
-                };
-
-                campaign.$save().then(function() {
-                    updateCampaignList();
-                    self.displayOpts.message = "Character created";
-                }).catch(function(error) {
-                    self.error = "Failed to save new character: " + error.data;
-                });
-
-            }).catch(function(error) {
-                self.error = "Failed to load campaign: " + error.data;
-            });
-
-        };
 
     }]);
 
@@ -362,18 +371,45 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    \n" +
     "    <div ng-if=\"ctrl.displayOpts.loading\">Fetching data...</div>\n" +
     "\n" +
-    "    <h4>Campaign: {{ctrl.campId}}</h4>\n" +
+    "    <h3>Campaign: {{ctrl.campId}}</h3>\n" +
     "    \n" +
     "    <div class=\"list-group\">\n" +
-    "        <h5 class=\"list-group-item disabled\">Characters</h5>\n" +
+    "        <div class=\"list-group-item disabled\">\n" +
+    "            <h4 class=\"list-group-item-heading\">Characters</h4>\n" +
+    "            <p class=\"list-group-item-text\">Select your character from the list below or click 'New Character' to create one.</p>\n" +
+    "        </div>\n" +
     "        <a ng-repeat=\"(id,character) in ctrl.campaign\" class=\"list-group-item\" href=\"#/campaign/{{ctrl.campId}}/{{id}}\">\n" +
     "            {{character.name}} \n" +
     "            ( \n" +
-    "            <span class=\"glyphicon glyphicon-heart\"></span> {{character.stats.health}} / \n" +
-    "            <span class=\"glyphicon glyphicon-user\"></span> {{character.stats.strain}}\n" +
+    "            <span class=\"glyphicon glyphicon-heart\" title=\"Health\"></span> {{character.stats.health}} / \n" +
+    "            <span class=\"glyphicon glyphicon-user\" title=\"Strain\"></span> {{character.stats.strain}}\n" +
     "            )\n" +
     "        </a>\n" +
     "    </div>\n" +
+    "\n" +
+    "    <button type=\"button\" class=\"btn btn-primary\" \n" +
+    "        ng-if=\"!ctrl.displayOpts.displayChoices\" \n" +
+    "        ng-click=\"ctrl.displayOpts.displayChoices=true\">\n" +
+    "        New Character\n" +
+    "    </button>\n" +
+    "    \n" +
+    "    <div class=\"list-group\" ng-if=\"ctrl.displayOpts.displayChoices\">\n" +
+    "        <h5 class=\"list-group-item disabled\">Which character do you want to use?</h5>\n" +
+    "        <div ng-repeat=\"character in ctrl.choices\" class=\"list-group-item\">\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-primary\"\n" +
+    "                ng-disabled=\"ctrl.campaignHasChar(character)\"\n" +
+    "                ng-click=\"ctrl.createFrom(character)\">\n" +
+    "                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
+    "            </button>\n" +
+    "            {{character.name}} <em>({{character['class']}})</em>\n" +
+    "        </div>\n" +
+    "        <div class=\"list-group-item\">\n" +
+    "            <button type=\"button\" class=\"btn btn-default\" \n" +
+    "                ng-click=\"ctrl.displayOpts.displayChoices=false\">\n" +
+    "                Cancel\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </div> \n" +
     "\n" +
     "</div>"
   );
@@ -478,42 +514,32 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"row\">\n" +
     "                <div class=\"col-sm-3\">\n" +
     "                    <div class=\"stat\">\n" +
-    "                        <div class=\"row\">\n" +
-    "                            <div class=\"col-xs-7\">\n" +
-    "                                <h5>Health</h5>\n" +
-    "                                {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}\n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-xs-5\">\n" +
-    "                                <div class=\"btn-group-vertical\">\n" +
-    "                                    <button type=\"button\" class=\"btn btn-link btn-xs\" ng-click=\"ctrl.increaseStat('health')\">\n" +
-    "                                        <span class=\"glyphicon glyphicon-triangle-top\"></span>\n" +
-    "                                    </button>\n" +
-    "                                    <button type=\"button\" class=\"btn btn-link btn-xs\" ng-click=\"ctrl.decreaseStat('health')\">\n" +
-    "                                        <span class=\"glyphicon glyphicon-triangle-bottom\"></span>\n" +
-    "                                    </button>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
+    "                        <div class=\"btn-group-vertical pull-right\">\n" +
+    "                            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"ctrl.increaseStat('health')\">\n" +
+    "                                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
+    "                            </button>\n" +
+    "                            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"ctrl.decreaseStat('health')\">\n" +
+    "                                <span class=\"glyphicon glyphicon-minus\"></span>\n" +
+    "                            </button>\n" +
     "                        </div>\n" +
+    "\n" +
+    "                        <h5 style=\"color: #f00\">Health</h5>\n" +
+    "                        {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}\n" +
+    "                \n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"col-sm-3\">\n" +
     "                    <div class=\"stat\">\n" +
-    "                        <div class=\"row\">\n" +
-    "                            <div class=\"col-xs-7\">\n" +
-    "                                <h5>Strain</h5> \n" +
-    "                                {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}\n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-xs-5\">\n" +
-    "                                <div class=\"btn-group-vertical\">\n" +
-    "                                    <button type=\"button\" class=\"btn btn-link btn-xs\" ng-click=\"ctrl.increaseStat('strain')\">\n" +
-    "                                        <span class=\"glyphicon glyphicon-triangle-top\"></span>\n" +
-    "                                    </button>\n" +
-    "                                    <button type=\"button\" class=\"btn btn-link btn-xs\" ng-click=\"ctrl.decreaseStat('strain')\">\n" +
-    "                                        <span class=\"glyphicon glyphicon-triangle-bottom\"></span>\n" +
-    "                                    </button>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
+    "                        <div class=\"btn-group-vertical pull-right\">\n" +
+    "                            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"ctrl.increaseStat('strain')\">\n" +
+    "                                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
+    "                            </button>\n" +
+    "                            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"ctrl.decreaseStat('strain')\">\n" +
+    "                                <span class=\"glyphicon glyphicon-minus\"></span>\n" +
+    "                            </button>\n" +
     "                        </div>\n" +
+    "                        <h5 style=\"color:#00f\">Strain</h5> \n" +
+    "                        {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"col-sm-3\">\n" +
@@ -528,19 +554,19 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col-sm-4\">\n" +
-    "                    <div class=\"skill\">\n" +
+    "                    <div class=\"skill\" title=\"Strength\">\n" +
     "                        <span class=\"glyphicon glyphicon-hand-up\"></span> \n" +
     "                        <span ng-bind-html=\"ctrl.baseData[ctrl.character.condition].actions.strength | colorize\"></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"col-sm-4\">\n" +
-    "                    <div class=\"skill\">\n" +
+    "                    <div class=\"skill\" title=\"Insight\">\n" +
     "                        <span class=\"glyphicon glyphicon-eye-open\"></span> \n" +
     "                        <span ng-bind-html=\"ctrl.baseData[ctrl.character.condition].actions.insight | colorize\"></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"col-sm-4\">\n" +
-    "                    <div class=\"skill\">\n" +
+    "                    <div class=\"skill\" title=\"Tech\">\n" +
     "                        <span class=\"glyphicon glyphicon-wrench\"></span> \n" +
     "                        <span ng-bind-html=\"ctrl.baseData[ctrl.character.condition].actions.tech | colorize\"></span>\n" +
     "                    </div>\n" +
@@ -561,31 +587,20 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-if=\"ctrl.displayOpts.loading\">Fetching data...</div>\n" +
     "    \n" +
     "    <div class=\"list-group\">\n" +
-    "        <h5 class=\"list-group-item disabled\">Base Characters</h5>\n" +
-    "        <div ng-repeat=\"character in ctrl.choices\" class=\"list-group-item\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-primary\"\n" +
-    "                ng-click=\"ctrl.createFrom(character)\">\n" +
-    "                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
-    "            </button>\n" +
-    "            {{character.name}} <em>({{character['class']}})</em>\n" +
+    "        <div class=\"list-group-item disabled\">\n" +
+    "            <h4 class=\"list-group-item-heading\">Campaigns</h4>\n" +
+    "            <p class=\"list-group-item-text\">First, select a campaign. From there you will have access to your character in that campaign or be able to create a new character for use in that campaign.</p>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <hr>\n" +
-    "\n" +
-    "    \n" +
-    "    <div class=\"list-group\">\n" +
-    "        <h5 class=\"list-group-item disabled\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-primary\"\n" +
-    "                title=\"Create a new campaign\" ng-click=\"ctrl.createCampaign()\">\n" +
-    "                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
-    "            </button>\n" +
-    "            Campaigns\n" +
-    "        </h5>\n" +
     "        <a ng-repeat=\"campaign in ctrl.campaigns\" class=\"list-group-item\" href=\"#/campaign/{{campaign.name}}\">\n" +
     "            {{campaign.name}} ({{campaign.numChars}})\n" +
     "        </a>\n" +
     "    </div>\n" +
+    "\n" +
+    "    <button type=\"button\" class=\"btn btn-primary\"\n" +
+    "        title=\"Create a new campaign\" ng-click=\"ctrl.createCampaign()\">\n" +
+    "        New Campaign\n" +
+    "    </button>\n" +
+    "            \n" +
     "\n" +
     "</div>"
   );

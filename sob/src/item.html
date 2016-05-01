@@ -1,0 +1,33 @@
+<div class="modal-content">
+  <!-- <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+  </div> -->
+    <div class="modal-body">
+
+        <input type="text" class="form-control" ng-model="item.name" placeholder="Name">
+        <input type="text" class="form-control" ng-model="item.description" placeholder="Description">
+        <input type="text" class="form-control" ng-model="item.source" placeholder="Source">
+
+        <div>
+            <label>Weight: <input type="number" min="0" max="2" ng-model="item.weight" class="form-control">
+            </label>
+        </div>
+        <div>
+            <label>Darkstone: <input type="number" min="0" ng-model="item.darkstone" class="form-control">
+            </label>
+        </div>
+        <div>
+            <label>Num Hands: <input type="number" min="0" max="2" ng-model="item.hands" class="form-control">
+            </label>
+        </div>
+        <div>
+            <label>Upgrade Slots:<input type="number" max="2" min="0" ng-model="item.slots" class="form-control">
+            </label>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+        <button type="button" class="btn btn-primary" ng-disabled="!item.name" ng-click="ok()">Apply</button>
+    </div>
+</div>

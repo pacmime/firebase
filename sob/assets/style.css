@@ -1,0 +1,241 @@
+html, body {
+    font-size: 16px;
+}
+
+body {
+    background: #E9E3CD;
+}
+body .navbar.navbar-default {
+    background: #725746;
+}
+body .navbar>.container .navbar-brand, 
+body .navbar>.container-fluid .navbar-brand {
+    color: #fff;
+    text-shadow: 0 0 12px #000;
+}
+
+.page {
+    margin: 0 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+
+.stat {
+    position: relative;
+    display:    inline-block;
+    width:      5em;
+    height:     4.5em;
+    /*border:   1px solid #000;*/
+    text-align: center;
+    vertical-align: top;
+}
+.stat label {
+    position: absolute;
+    top:   0;
+    left:  0;
+    right: 0;
+    line-height: 0.9;
+    color:      #fff;
+    text-shadow: 0 1px 3px #000;
+}
+.stat .value {
+    font-size:  2em;
+    margin:     0.25em auto 0;
+    padding-top: 0.25em;
+    width:      1.75em;
+    height:     1.75em;
+    background: #fff;
+    border-radius: 36px; 
+}
+.stat .value.value--sm {
+    font-size:   1rem;
+    width:       3.5em;
+    height:      3.5em;
+    margin-top:  0.5em;
+    padding-top: 1em;
+}
+
+.stat input {
+    border: none;
+    border-radius: 25px;
+    text-align: center;
+    font-size: inherit;
+    padding: 0 0 0 .5em;
+    height: 87%;
+    width: 100%;
+}
+
+
+
+.items, .abilities, .clothing, .mutations {
+    /*background:     #FFFDE1;*/
+    margin-bottom:  1em;
+    padding:        1em;
+    /*box-shadow:     0 1px 3px #000;*/
+    background-image: url('paper.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+
+
+.sidebag {
+    text-align: center;
+    background-color: #A25952;
+}
+.sidebag .stat {
+    font-size: 1.25em;
+    margin-bottom: 1em;
+}
+
+@media(min-width:768px) {
+    .sidebag {
+        height: 15.85em;
+    }
+    .sidebag .stat {
+        font-size: 0.6em;
+    }
+}
+@media(min-width:992px) {
+    .sidebag {
+        height: 20.35em;
+    }
+    .sidebag .stat {
+        font-size: 0.8em;
+    }
+}
+
+.level {
+    display: inline-block;
+    background-color: #A5BC9A;
+}
+.darkstone {
+    display: inline-block;
+    background-color: #61407C;
+}
+
+.health {
+    background-color: #C24E4E;
+}
+.sanity {
+    background-color: #81A0D3;
+}
+.faith {
+    background-color: #ff0;
+    width: 33%;
+}
+.corruption {
+    background-color: #58A932;
+    width: 67%;
+}
+.movement {
+    background-color: #9B8282;
+    width: 33%;
+}
+.grit {
+    background-color: #5F4F4F;
+    width: 67%;
+}
+.faith, .corruption, .grit, .movement {
+    float: left;
+}
+.health, .sanity, .faith, .corruption, .grit, .movement {
+    text-align: center;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+}
+
+@media(min-width: 768px) {
+    .health, .sanity, .faith, .corruption, .grit, .movement {
+        padding-top: 0.2em;
+        padding-bottom: 0.2em;
+    }
+}
+
+@media(min-width: 992px) {
+    .health, .sanity, .faith, .corruption, .grit, .movement {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+    }
+}
+
+
+.health .stat,
+.sanity .stat,
+.faith .stat,
+.corruption .stat,
+.movement .stat,
+.grit .stat {
+    font-size: 1.175em;
+}
+
+@media(min-width:768px) {
+    .health .stat,
+    .sanity .stat,
+    .faith .stat,
+    .corruption .stat,
+    .movement .stat,
+    .grit .stat {
+        font-size: 0.8em;
+    }
+}
+@media(min-width:992px) {
+    .health .stat,
+    .sanity .stat,
+    .faith .stat,
+    .corruption .stat,
+    .movement .stat,
+    .grit .stat {
+        font-size: 1em;
+    }
+}
+
+
+
+
+h4 {
+    margin-top: 0;
+    padding-top: 1em;
+}
+
+
+
+
+/* keypad css */
+
+.keypad .modal-body {
+    text-align: center;
+}
+.keypad .modal-body button {
+    font-size:  1.5em;
+    width:      2em;
+    height:     2em;
+    margin:     0.25em;
+}
+
+
+
+
+/* gutterless rows */
+
+.row--no-gutter .col-lg-1, .row--no-gutter .col-lg-10, .row--no-gutter .col-lg-11, .row--no-gutter .col-lg-12, 
+.row--no-gutter .col-lg-2, .row--no-gutter .col-lg-3, .row--no-gutter .col-lg-4, .row--no-gutter .col-lg-5, 
+.row--no-gutter .col-lg-6, .row--no-gutter .col-lg-7, .row--no-gutter .col-lg-8, .row--no-gutter .col-lg-9, 
+.row--no-gutter .col-md-1, .row--no-gutter .col-md-10, .row--no-gutter .col-md-11, .row--no-gutter .col-md-12, 
+.row--no-gutter .col-md-2, .row--no-gutter .col-md-3, .row--no-gutter .col-md-4, .row--no-gutter .col-md-5, 
+.row--no-gutter .col-md-6, .row--no-gutter .col-md-7, .row--no-gutter .col-md-8, .row--no-gutter .col-md-9, 
+.row--no-gutter .col-sm-1, .row--no-gutter .col-sm-10, .row--no-gutter .col-sm-11, .row--no-gutter .col-sm-12, 
+.row--no-gutter .col-sm-2, .row--no-gutter .col-sm-3, .row--no-gutter .col-sm-4, .row--no-gutter .col-sm-5, 
+.row--no-gutter .col-sm-6, .row--no-gutter .col-sm-7, .row--no-gutter .col-sm-8, .row--no-gutter .col-sm-9, 
+.row--no-gutter .col-xs-1, .row--no-gutter .col-xs-10, .row--no-gutter .col-xs-11, .row--no-gutter .col-xs-12, 
+.row--no-gutter .col-xs-2, .row--no-gutter .col-xs-3, .row--no-gutter .col-xs-4, .row--no-gutter .col-xs-5, 
+.row--no-gutter .col-xs-6, .row--no-gutter .col-xs-7, .row--no-gutter .col-xs-8, .row--no-gutter .col-xs-9 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
