@@ -37,7 +37,8 @@
 
 
         this.save = function() {
-            this.character.$save();
+            console.log("Saved");
+            // this.character.$save();
         };
 
         this.addNewAbility = function() {

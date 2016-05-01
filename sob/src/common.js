@@ -67,7 +67,7 @@
     .directive('editableStatValue', ['$uibModal', function($uibModal) {
         return {
             scope: {
-
+                onSave: '&'
             },
             restrict: 'A',
             require: 'ngModel',
@@ -82,7 +82,7 @@
 
                 $scope.openKeypad = function() {
 
-                    var value = ngModelController.$modelValue;
+                    var value = ngModelController.$modelValue || 0;
 
                     var modalInstance = $uibModal.open({
                         templateUrl: 'src/keypad.html',
@@ -94,9 +94,12 @@
                     });
 
                     modalInstance.result.then(function(value) {
+                        
                         ngModelController.$setViewValue(value);
                         ngModelController.$render();
-                        // scope.onSave();
+                        if($scope.onSave)
+                            $scope.onSave();
+
                     }, function () { });
 
                 };

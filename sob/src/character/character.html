@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row">
 
-                <div class="col-sm-5 col-md-7 col-lg-8">
+                <div class="col-sm-5 col-md-6 col-lg-8">
                     <div><label>Name: </label> {{ctrl.charName}}</div>
                     <div><label>Class: </label> {{ctrl.character.class}}</div>
                     <div><label>Keywords: </label> {{ctrl.character.keywords}}</div>
@@ -14,58 +14,60 @@
 
                         <div class="stat">
                             <label>Combat</label>
-                            <div editable-stat-value ng-model="ctrl.character.combat"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.combat"></div>
                         </div>
 
                         <div class="stat">
                             <label>Melee</label>
-                            <div editable-stat-value ng-model="ctrl.character.melee"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.melee"></div>
                         </div>
 
                         <div class="stat">
                             <label>Ranged</label>
-                            <div editable-stat-value ng-model="ctrl.character.ranged"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.ranged"></div>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="col-sm-7 col-md-5 col-lg-4">
+                <div class="col-sm-7 col-md-6 col-lg-4">
 
                     <div class="stats">
                         <div class="stat">
                             <label>Agility</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Agility"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Agility"></div>
                         </div>
 
                         <div class="stat">
                             <label>Cunning</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Cunning"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Cunning"></div>
                         </div>
 
                         <div class="stat">
                             <label>Spirit</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Spirit"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Spirit"></div>
                         </div>
                         <br>
+                        <span class="hidden-xs" style="display:inline-block;width:2em;"></span>
+
                         <div class="stat">
                             <label>Strength</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Strength"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Strength"></div>
                         </div>
 
                         <div class="stat">
                             <label>Lore</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Lore"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Lore"></div>
                         </div>
 
                         <div class="stat">
                             <label>Spirit</label>
-                            <div editable-stat-value ng-model="ctrl.character.stats.Spirit"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.stats.Spirit"></div>
                         </div>
 
                         <div class="stat">
                             <label>Initiative</label>
-                            <div editable-stat-value ng-model="ctrl.character.init"></div>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.init"></div>
                         </div>
 
                     </div>
@@ -81,45 +83,48 @@
         <div class="container-fluid">
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-12 col-md-6">
                     <div class="items">
                         <h4>Items</h4>
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>A</th>
-                                    <th>D</th>
-                                    <th>H</th>
-                                    <th>U</th>
-                                    <th width="70%">Name + Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="(name, item) in ctrl.character.items">
-                                    <td>{{item.weight}}</td>
-                                    <td>{{item.darkstone}}</td>
-                                    <td>{{item.hands}}</td>
-                                    <td>{{item.slots}}</td>
-                                    <td><strong>{{name}}: </strong> {{item.description}} [{{item.source}}]
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="4">Weight: {{ctrl.itemWeight}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-success pull-right" ng-click="ctrl.addNewItem()">New</button>
-                                        Darkstone: {{ctrl.itemDarkstone}}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div ng-repeat="(name, item) in ctrl.character.items" class="item row row--no-gutter">
+                            <div class="col-sm-9 col-sm-push-3 col-md-8 col-md-push-4">
+                                <strong>{{name}}: </strong> {{item.description}} [<em>{{item.source}}</em>]
+                            </div>
+                            <div class="col-sm-3 col-sm-pull-9 col-md-4 col-md-pull-8">
+                                <div class="item__attr">
+                                    <img src="assets/item_weight.png"> 
+                                    <br class="hidden-xs"> 
+                                    {{item.weight}}
+                                </div>
+                                <div class="item__attr">
+                                    <img src="assets/item_darkstone.png"> 
+                                    <br class="hidden-xs"> 
+                                    {{item.darkstone}}
+                                </div>
+                                <div class="item__attr">
+                                    <img src="assets/item_hands.png"> 
+                                    <br class="hidden-xs"> 
+                                    {{item.hands}}
+                                </div>
+                                <div class="item__attr">
+                                    <img src="assets/item_slots.png"> 
+                                    <br class="hidden-xs"> 
+                                    {{item.slots}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-success pull-right" ng-click="ctrl.addNewItem()">New</button>
+                                        
+                        <img src="assets/item_weight.png" width="32"> {{ctrl.itemWeight}}
+                        <img src="assets/item_darkstone.png" width="32"> {{ctrl.itemDarkstone}}
 
                     </div>
 
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-sm-12 col-md-6">
 
                     <div class="abilities">
                         <h4>Abilities</h4>
@@ -161,30 +166,35 @@
 
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-12 col-md-6">
 
-                    <div class="level">
-                        <div class="stat">
-                            <label>Level</label>
-                            <div class="value">{{ctrl.character.level}}</div>
+                    <div class="col-sm-12">
+                        <div class="level">
+                            <div class="stat">
+                                <label>Level</label>
+                                <div class="value">{{ctrl.character.level}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat">
-                        <label>XP</label>
-                        <div class="value--sm" editable-stat-value ng-model="ctrl.character.xp"></div>
-                    </div>
-                    <div class="stat">
-                        <label>Gold</label>
-                        <div class="value--sm" editable-stat-value ng-model="ctrl.character.wealth"></div>
-                    </div>
-                    <div class="darkstone">
                         <div class="stat">
-                            <label>Dark Stone</label>
-                            <div editable-stat-value ng-model="ctrl.character.darkstone"></div>
+                            <!-- <label>XP</label> -->
+                            <div class="value--sm" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.xp"></div>
+                            <img src="assets/xp.png">
                         </div>
+                        <div class="stat">
+                            <!-- <label>Gold</label> -->
+                            <div class="value--sm" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.wealth"></div>
+                            <img src="assets/wealth.png">
+                        </div>
+                        <div class="darkstone">
+                            <div class="stat">
+                                <!-- <label>Dark Stone</label> -->
+                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.darkstone"></div>
+                                <img src="assets/darkstone.png">
+                            </div>
+                        </div>
+                        
+                        <br>
                     </div>
-                    
-                    <br>
                     <div class="col-sm-12">
                         <div class="row row--no-gutter">
 
@@ -193,29 +203,33 @@
                                     <div class="health">
                                         <div class="stat">
                                             <label>Max Health</label>
-                                            <div editable-stat-value ng-model="ctrl.character.health.max"></div>
+                                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.health.max"></div>
                                         </div>
                                         <div class="stat">
-                                            <label>Wounds</label>
-                                            <div editable-stat-value ng-model="ctrl.character.health.wounds"></div>
+                                            <img src="assets/wealth.png">
+                                            <div editable-stat-value on-save="ctrl.save()" 
+                                                ng-model="ctrl.character.health.wounds"></div>
+                                            <img src="assets/wound.png">    
                                         </div>
                                         <div class="stat">
                                             <label>Defense</label>
-                                            <div editable-stat-value ng-model="ctrl.character.defense"></div>
+                                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.defense"></div>
                                         </div>
                                     </div>
                                     <div class="sanity">
                                         <div class="stat">
                                             <label>Max Sanity</label>
-                                            <div editable-stat-value ng-model="ctrl.character.sanity.max"></div>
+                                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.sanity.max"></div>
                                         </div>
                                         <div class="stat">
-                                            <label>Loss</label>
-                                            <div editable-stat-value ng-model="ctrl.character.sanity.loss"></div>
+                                            <!-- <label>Loss</label> -->
+                                            <div editable-stat-value on-save="ctrl.save()" 
+                                                ng-model="ctrl.character.sanity.loss"></div>
+                                            <img src="assets/sanity.png">
                                         </div>
                                         <div class="stat">
                                             <label>Willpower</label>
-                                            <div editable-stat-value ng-model="ctrl.character.willpower"></div>
+                                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.willpower"></div>
                                         </div>
                                     </div>
                                     
@@ -223,17 +237,19 @@
                                         <div class="faith">
                                             <div class="stat">
                                                 <label>Max Faith</label>
-                                                <div editable-stat-value ng-model="ctrl.character.faith"></div>
+                                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.faith"></div>
                                             </div>
                                         </div>
                                         <div class="corruption">
                                             <div class="stat">
                                                 <label>Max Corruption</label>
-                                                <div editable-stat-value ng-model="ctrl.character.corruption.max"></div>
+                                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.corruption.max"></div>
                                             </div>
                                             <div class="stat">
-                                                <label>Current</label>
-                                                <div editable-stat-value ng-model="ctrl.character.corruption.current"></div>
+                                                <!-- <label>Current</label> -->
+                                                <div editable-stat-value on-save="ctrl.save()" 
+                                                    ng-model="ctrl.character.corruption.current"></div>
+                                                <img src="assets/corruption.png">
                                             </div>
                                         </div>
                                     </div>
@@ -242,17 +258,17 @@
                                         <div class="movement">
                                             <div class="stat">
                                                 <label>Move</label>
-                                                <div editable-stat-value ng-model="ctrl.character.movement"></div>
+                                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.movement"></div>
                                             </div>
                                         </div>
                                         <div class="grit">
                                             <div class="stat">
                                                 <label>Max Grit</label>
-                                                <div editable-stat-value ng-model="ctrl.character.grit.max"></div>
+                                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.grit.max"></div>
                                             </div>
                                             <div class="stat">
                                                 <label>Current</label>
-                                                <div editable-stat-value ng-model="ctrl.character.grit.current"></div>
+                                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.grit.current"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -264,39 +280,53 @@
                                     <h4>Side Bag</h4>
 
                                     <div class="stat">
-                                        <label>Bandages</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.bandages"></div>
+                                        <!-- <label>Bandages</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.bandages"></div>
+                                        <img src="assets/bandages.png">
                                     </div>    
                                     <div class="stat">
-                                        <label>Whiskey</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.whiskey"></div>
-                                    </div>    
-                                    <br>
-                                    <div class="stat">
-                                        <label>Tonic</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.tonic"></div>
-                                    </div>    
-                                    <div class="stat">
-                                        <label>Herbs</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.herbs"></div>
+                                        <!-- <label>Whiskey</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.whiskey"></div>
+                                        <img src="assets/whiskey.png">
                                     </div>    
                                     <br>
                                     <div class="stat">
-                                        <label>Dynamite</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.dynamite"></div>
+                                        <!-- <label>Tonic</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.tonic"></div>
+                                        <img src="assets/tonic.png">
                                     </div>    
                                     <div class="stat">
-                                        <label>Flash</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.flash"></div>
+                                        <!-- <label>Herbs</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.herbs"></div>
+                                        <img src="assets/herb.png">
                                     </div>    
                                     <br>
                                     <div class="stat">
-                                        <label>Swamp Fungus</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.fungus"></div>
+                                        <!-- <label>Dynamite</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.dynamite"></div>
+                                        <img src="assets/dynamite.png">
+                                    </div>    
+                                    <div class="stat">
+                                        <!-- <label>Flash</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.flash"></div>
+                                        <img src="assets/flash.png">
+                                    </div>    
+                                    <br>
+                                    <div class="stat">
+                                        <!-- <label>Swamp Fungus</label> -->
+                                        <div editable-stat-value on-save="ctrl.save()" 
+                                            ng-model="ctrl.character.sidebag.fungus"></div>
+                                        <img src="assets/fungus.png">
                                     </div>    
                                     <div class="stat">
                                         <label>Capacity</label>
-                                        <div editable-stat-value ng-model="ctrl.character.sidebag.capacity"></div>
+                                        <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.sidebag.capacity"></div>
                                     </div>    
                                 </div>
                             </div>
@@ -305,7 +335,7 @@
                     </div>
 
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12 col-md-6">
 
 
                     <div class="clothing">

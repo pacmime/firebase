@@ -21,6 +21,13 @@ body .navbar>.container-fluid .navbar-brand {
 }
 
 
+.stats .stat {
+    margin-right: -.3em;
+    background-color: #C4AC83;
+    background-image: url(texture.png);
+}
+
+
 .stat {
     position: relative;
     display:    inline-block;
@@ -56,16 +63,12 @@ body .navbar>.container-fluid .navbar-brand {
     padding-top: 1em;
 }
 
-.stat input {
-    border: none;
-    border-radius: 25px;
-    text-align: center;
-    font-size: inherit;
-    padding: 0 0 0 .5em;
-    height: 87%;
-    width: 100%;
+.stat img {
+    position:   absolute;
+    bottom:     0;
+    left:       0;
+    width:      2em;
 }
-
 
 
 .items, .abilities, .clothing, .mutations {
@@ -79,6 +82,18 @@ body .navbar>.container-fluid .navbar-brand {
 }
 
 
+.items .item {
+    margin-bottom: 1em;
+}
+.items img {
+    width:  1.5em;
+    height: 1.5em;
+}
+.items .item__attr {
+    display:inline-block; 
+    vertical-align:top; 
+    text-align:center;
+}
 
 
 
@@ -87,13 +102,18 @@ body .navbar>.container-fluid .navbar-brand {
 .sidebag {
     text-align: center;
     background-color: #A25952;
+    background-image: url(texture2.png);
+}
+.sidebag h4 { 
+    color: #fff; 
+    text-shadow: 0 1px 3px #000;
 }
 .sidebag .stat {
     font-size: 1.25em;
     margin-bottom: 1em;
 }
 
-@media(min-width:768px) {
+/*@media(min-width:768px) {
     .sidebag {
         height: 15.85em;
     }
@@ -101,10 +121,11 @@ body .navbar>.container-fluid .navbar-brand {
         font-size: 0.6em;
     }
 }
+*/
 @media(min-width:992px) {
-    .sidebag {
+  /*  .sidebag {
         height: 20.35em;
-    }
+    }*/
     .sidebag .stat {
         font-size: 0.8em;
     }
@@ -113,10 +134,12 @@ body .navbar>.container-fluid .navbar-brand {
 .level {
     display: inline-block;
     background-color: #A5BC9A;
+    background-image: url(texture.png);
 }
 .darkstone {
     display: inline-block;
-    background-color: #61407C;
+    /*background-color: #61407C;
+    background-image: url(texture.png);*/
 }
 
 .health {
@@ -126,7 +149,7 @@ body .navbar>.container-fluid .navbar-brand {
     background-color: #81A0D3;
 }
 .faith {
-    background-color: #ff0;
+    background-color: #DEDE9C;
     width: 33%;
 }
 .corruption {
@@ -148,6 +171,7 @@ body .navbar>.container-fluid .navbar-brand {
     text-align: center;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
+    background-image: url(texture.png);
 }
 
 @media(min-width: 768px) {
@@ -174,7 +198,7 @@ body .navbar>.container-fluid .navbar-brand {
     font-size: 1.175em;
 }
 
-@media(min-width:768px) {
+/*@media(min-width:768px) {
     .health .stat,
     .sanity .stat,
     .faith .stat,
@@ -184,6 +208,7 @@ body .navbar>.container-fluid .navbar-brand {
         font-size: 0.8em;
     }
 }
+*/
 @media(min-width:992px) {
     .health .stat,
     .sanity .stat,
@@ -197,11 +222,14 @@ body .navbar>.container-fluid .navbar-brand {
 
 
 
-
 h4 {
     margin-top: 0;
     padding-top: 1em;
 }
+
+
+
+table thead img { width: 1.5em; }
 
 
 
@@ -225,6 +253,10 @@ h4 {
 
 /* gutterless rows */
 
+.row.row--no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
 .row--no-gutter .col-lg-1, .row--no-gutter .col-lg-10, .row--no-gutter .col-lg-11, .row--no-gutter .col-lg-12, 
 .row--no-gutter .col-lg-2, .row--no-gutter .col-lg-3, .row--no-gutter .col-lg-4, .row--no-gutter .col-lg-5, 
 .row--no-gutter .col-lg-6, .row--no-gutter .col-lg-7, .row--no-gutter .col-lg-8, .row--no-gutter .col-lg-9, 
