@@ -109,37 +109,30 @@ body .navbar>.container-fluid .navbar-brand {
     text-shadow: 0 1px 3px #000;
 }
 .sidebag .stat {
-    font-size: 1.25em;
+    font-size: 1em;
     margin-bottom: 1em;
 }
 
-/*@media(min-width:768px) {
-    .sidebag {
-        height: 15.85em;
-    }
-    .sidebag .stat {
-        font-size: 0.6em;
-    }
+@media(min-width:768px) {
+    .sidebag .stat { font-size: 0.9em; }
 }
-*/
 @media(min-width:992px) {
-  /*  .sidebag {
-        height: 20.35em;
-    }*/
-    .sidebag .stat {
-        font-size: 0.8em;
-    }
+    .sidebag .stat { font-size: 0.8em; }
 }
 
 .level {
-    display: inline-block;
     background-color: #A5BC9A;
     background-image: url(texture.png);
 }
 .darkstone {
-    display: inline-block;
     /*background-color: #61407C;
     background-image: url(texture.png);*/
+}
+
+.level, .darkstone, .wealth, .xp {
+    display: inline-block;
+    text-align:center;
+    width: 23%;
 }
 
 .health {
@@ -168,16 +161,32 @@ body .navbar>.container-fluid .navbar-brand {
     float: left;
 }
 .health, .sanity, .faith, .corruption, .grit, .movement {
-    text-align: center;
-    padding-top: 0.3em;
-    padding-bottom: 0.3em;
+    text-align:     center;
+    padding-top:    1.1em;
+    padding-bottom: 1.15em;
     background-image: url(texture.png);
+}
+.health .stat, 
+.sanity .stat, 
+.faith .stat, 
+.corruption .stat, 
+.grit .stat, 
+.movement .stat {
+    font-size:0.9em;
 }
 
 @media(min-width: 768px) {
     .health, .sanity, .faith, .corruption, .grit, .movement {
         padding-top: 0.2em;
         padding-bottom: 0.2em;
+    }
+    .health .stat,
+    .sanity .stat,
+    .faith .stat,
+    .corruption .stat,
+    .movement .stat,
+    .grit .stat {
+        font-size: 1.175em;
     }
 }
 
@@ -189,14 +198,6 @@ body .navbar>.container-fluid .navbar-brand {
 }
 
 
-.health .stat,
-.sanity .stat,
-.faith .stat,
-.corruption .stat,
-.movement .stat,
-.grit .stat {
-    font-size: 1.175em;
-}
 
 /*@media(min-width:768px) {
     .health .stat,
@@ -251,25 +252,54 @@ table thead img { width: 1.5em; }
 
 
 
-/* gutterless rows */
 
-.row.row--no-gutter {
-    margin-left: 0;
-    margin-right: 0;
+
+
+
+/* editable input */
+
+.editable-input-label {
+    /*width: 33%;*/
 }
-.row--no-gutter .col-lg-1, .row--no-gutter .col-lg-10, .row--no-gutter .col-lg-11, .row--no-gutter .col-lg-12, 
-.row--no-gutter .col-lg-2, .row--no-gutter .col-lg-3, .row--no-gutter .col-lg-4, .row--no-gutter .col-lg-5, 
-.row--no-gutter .col-lg-6, .row--no-gutter .col-lg-7, .row--no-gutter .col-lg-8, .row--no-gutter .col-lg-9, 
-.row--no-gutter .col-md-1, .row--no-gutter .col-md-10, .row--no-gutter .col-md-11, .row--no-gutter .col-md-12, 
-.row--no-gutter .col-md-2, .row--no-gutter .col-md-3, .row--no-gutter .col-md-4, .row--no-gutter .col-md-5, 
-.row--no-gutter .col-md-6, .row--no-gutter .col-md-7, .row--no-gutter .col-md-8, .row--no-gutter .col-md-9, 
-.row--no-gutter .col-sm-1, .row--no-gutter .col-sm-10, .row--no-gutter .col-sm-11, .row--no-gutter .col-sm-12, 
-.row--no-gutter .col-sm-2, .row--no-gutter .col-sm-3, .row--no-gutter .col-sm-4, .row--no-gutter .col-sm-5, 
-.row--no-gutter .col-sm-6, .row--no-gutter .col-sm-7, .row--no-gutter .col-sm-8, .row--no-gutter .col-sm-9, 
-.row--no-gutter .col-xs-1, .row--no-gutter .col-xs-10, .row--no-gutter .col-xs-11, .row--no-gutter .col-xs-12, 
-.row--no-gutter .col-xs-2, .row--no-gutter .col-xs-3, .row--no-gutter .col-xs-4, .row--no-gutter .col-xs-5, 
-.row--no-gutter .col-xs-6, .row--no-gutter .col-xs-7, .row--no-gutter .col-xs-8, .row--no-gutter .col-xs-9 {
-    padding-left: 0;
-    padding-right: 0;
+
+.editable-input-label:after {
+    content: ":";
+    font-weight: inherit;
 }
+
+
+.editable-input-display { 
+    display: inline-block; 
+    min-width: 6rem;
+    word-break: break-word;
+    cursor: text;
+    border-bottom: 1px dashed rgba(0, 153, 255,0.3);
+    color: #333;
+
+}
+
+.editable-input form {
+    position:relative;
+    display: inline-block;
+    width: 70%;
+}
+.editable-input form .form-group {
+    margin-bottom: 0;
+}
+
+.editable-input form .editable-input-buttons {
+    padding-top: 0.25rem;
+}
+
+
+
+
+
+
+.grid__col--grow-1 { flex-grow: 1; }
+.grid__col--grow-2 { flex-grow: 2; }
+.grid__col--grow-3 { flex-grow: 3; }
+.grid__col--grow-4 { flex-grow: 4; }
+.grid__col--grow-5 { flex-grow: 5; }
+
 

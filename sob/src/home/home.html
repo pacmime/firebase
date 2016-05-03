@@ -9,13 +9,15 @@
             <h4 class="list-group-item-heading">Characters</h4>
             <p class="list-group-item-text">Select a character from the list</p>
         </div>
-        <a ng-repeat="name in ctrl.chars" class="list-group-item" href="#/{{name|encode}}">{{name}}</a>
+        <a ng-repeat="name in ctrl.chars" 
+            class="list-group-item" 
+            href="#/{{name|encode}}">{{name}}</a>
     </div>
 
-    <!-- <button type="button" class="btn btn-primary"
-        title="Create a new campaign" ng-click="ctrl.createCampaign()">
-        New Campaign
-    </button> -->
-            
+    <button type="button" class="btn btn-success"
+        title="Create a new character" 
+        ng-click="ctrl.createCharacter()">
+        New
+    </button>
 
 </div>

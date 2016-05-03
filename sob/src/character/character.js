@@ -36,6 +36,15 @@
         });
 
 
+
+        this.onInputKeyPress = function($event) {
+            var key = $event.keyCode || $event.which;
+            if(key === 13) {    //enter
+                // this.save();
+            }
+        };
+
+
         this.save = function() {
             console.log("Saved");
             // this.character.$save();
