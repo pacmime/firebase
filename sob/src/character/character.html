@@ -1,6 +1,6 @@
 <div class="page">
 
-    <div class="header">
+    <header>
         <div class="grid grid--bleed">
             
             <div class="grid__col-sm-5 grid__col-md-6 grid__col-lg-6">
@@ -19,19 +19,16 @@
                             <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.combat"></div>
                         </div>
                     </div>
-                    <div class="grid__col-xs-2">
-                        <label style="text-align:right">To Hit:</label>
-                    </div>
-                    <div class="grid__col-xs-3">
-                        <div class="stat">
-                            <label>Melee</label>
-                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.melee"></div>
-                        </div>
-                    </div>
-                    <div class="grid__col-xs-3">
-                        <div class="stat">
-                            <label>Ranged</label>
-                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.ranged"></div>
+                    <div class="grid__col-xs-8">
+                        <div>
+                            <div class="stat">
+                                <label>Melee</label>
+                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.melee"></div>
+                            </div>
+                            <div class="stat">
+                                <label>Ranged</label>
+                                <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.ranged"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -81,7 +78,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </header>
 
 
 
@@ -98,14 +95,18 @@
                         <div class="grid__col-sm-3 grid__col-md-4">
                             <div class="grid grid--justify-space-between">
                                 <div class="grid__col">
-                                    <img src="assets/item_weight.png"> 
-                                    <br class="hidden-xs"> 
-                                    {{item.weight}}
+                                    <div>
+                                        <img src="assets/item_weight.png"> 
+                                        <br class="hidden-xs"> 
+                                        {{item.weight}}
+                                    </div>
                                 </div>
                                 <div class="grid__col">
-                                    <img src="assets/item_darkstone.png"> 
-                                    <br class="hidden-xs"> 
-                                    {{item.darkstone}}
+                                    <div>
+                                        <img src="assets/item_darkstone.png"> 
+                                        <br class="hidden-xs"> 
+                                        {{item.darkstone}}
+                                    </div>
                                 </div>
                                 <div class="grid__col">
                                     <img src="assets/item_hands.png"> 

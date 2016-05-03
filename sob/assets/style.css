@@ -16,8 +16,11 @@ body .navbar>.container-fluid .navbar-brand {
 
 .page {
     margin: 0 1rem;
-    padding: 1rem;
     border-radius: 4px;
+}
+
+header {
+    padding: 1rem;
 }
 
 
@@ -88,11 +91,21 @@ body .navbar>.container-fluid .navbar-brand {
 .items img {
     width:  1.5em;
     height: 1.5em;
+    margin-right: .5em;
 }
 .items .item__attr {
     display:inline-block; 
     vertical-align:top; 
     text-align:center;
+}
+@media(min-width: 768px) {
+    .items img {
+        margin-right: 0;
+    }
+
+    .items .item .grid__col:nth-child(-n+4) {
+        text-align:center;
+    }
 }
 
 

@@ -19,7 +19,7 @@
             controller: 'HomeController as ctrl'
         })
 
-        // .otherwise({ redirectTo: "/" });
+        .otherwise({ redirectTo: "/" });
       
         //http://stackoverflow.com/questions/17895675/angularjs-html5mode-refresh-page-get-404
         // $locationProvider.html5Mode(true);
