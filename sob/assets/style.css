@@ -1,3 +1,8 @@
+
+/* --------------------------------- *\
+    Basic page structure
+\* --------------------------------- */
+
 html, body {
     font-size: 16px;
 }
@@ -23,6 +28,12 @@ header {
     padding: 1rem;
 }
 
+
+
+
+/* --------------------------------- *\
+    Stats section
+\* --------------------------------- */
 
 .stats .stat {
     margin-right: -.3em;
@@ -74,16 +85,20 @@ header {
 }
 
 
+
+
+
+
+/* --------------------------------- *\
+    Sections with lists
+\* --------------------------------- */
 .items, .abilities, .clothing, .mutations {
-    /*background:     #FFFDE1;*/
     margin-bottom:  1em;
     padding:        1em;
-    /*box-shadow:     0 1px 3px #000;*/
     background-image: url('paper.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
-
 
 .items .item {
     margin-bottom: 1em;
@@ -111,7 +126,9 @@ header {
 
 
 
-
+/* --------------------------------- *\
+    Sections with stats
+\* --------------------------------- */
 .sidebag {
     text-align: center;
     background-color: #A25952;
@@ -248,7 +265,13 @@ table thead img { width: 1.5em; }
 
 
 
-/* keypad css */
+
+
+
+
+/* --------------------------------- *\
+    Keypad Modal
+\* --------------------------------- */
 
 .keypad .modal-body {
     text-align: center;
@@ -269,7 +292,10 @@ table thead img { width: 1.5em; }
 
 
 
-/* editable input */
+/* --------------------------------- *\
+    Editable Input directive
+    <editable-input />
+\* --------------------------------- */
 
 .editable-input-label {
     /*width: 33%;*/
@@ -307,8 +333,32 @@ table thead img { width: 1.5em; }
 
 
 
+/* --------------------------------- *\
+    Image Selector directive
+    <img-selector />
+\* --------------------------------- */
+.img-selector {
+    position: relative;
+
+    img {
+        max-height: 100px;
+    }
+    button {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}
 
 
+
+
+
+
+
+
+
+/* Reflex CSS extensions */
 .grid__col--grow-1 { flex-grow: 1; }
 .grid__col--grow-2 { flex-grow: 2; }
 .grid__col--grow-3 { flex-grow: 3; }

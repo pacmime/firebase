@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 
             //monitor js files and reload if changed
             js: {
-                files: ['src/**/*.js', 'src/**/*.html'],
+                files: ['src/**/*.js'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true
@@ -54,6 +54,7 @@ module.exports = function(grunt) {
             //monitor html templates and reload if changed
             html: {
                 files: ['src/**/*.html'],
+                tasks: ['ngtemplates'],
                 options: {
                     livereload: true
                 }

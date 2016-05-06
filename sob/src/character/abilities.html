@@ -1,0 +1,25 @@
+<div class="abilities">
+    <h4>Abilities</h4>
+    <div ng-repeat="(name, desc) in ctrl.character.abilities">
+        <strong>{{name}}</strong> <small>{{desc}}</small>
+        <br><br>
+    </div>
+
+    <div class="grid grid--bleed">
+        <div class="grid__col-md-5">
+            <input type="text" class="form-control" placeholder="Name"
+                ng-model="ctrl.newAbility.name">
+        </div>
+        <div class="grid__col-md-7">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Description" 
+                    ng-model="ctrl.newAbility.desc">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-success" 
+                        ng-disabled="!ctrl.newAbility.name" 
+                        ng-click="ctrl.addNewAbility()">+</button>
+                </span>
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,23 @@
+
+<div class="clearfix">
+    
+    <div class="faith">
+        <div class="stat">
+            <label>Max Faith</label>
+            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.faith"></div>
+        </div>
+    </div>
+
+    <div class="corruption">
+        <div class="stat">
+            <label>Max Corruption</label>
+            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.corruption.max"></div>
+        </div>
+        <div class="stat">
+            <div editable-stat-value on-save="ctrl.save()" 
+                ng-model="ctrl.character.corruption.current"></div>
+            <img src="assets/corruption.png">
+        </div>
+    </div>
+    
+</div>

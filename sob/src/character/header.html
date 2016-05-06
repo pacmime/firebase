@@ -1,0 +1,57 @@
+<header>
+        
+    <div class="grid grid--bleed">
+        
+        <div class="grid__col-sm-5 grid__col-md-6 grid__col-lg-6">
+
+            <div class="grid">
+
+                <!-- avatar -->
+                <div class="grid__col-xs-5 grid__col-sm-4 grid__col-md-3 grid__col-lg-2 grid--align-self-end">
+                    <div img-selector ng-model="ctrl.character.avatar" on-save="ctrl.save()"></div>
+                </div>
+
+                <!-- name, class, and keywords -->
+                <div class="grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-10">
+                    <div><label>Name: </label> {{ctrl.charName}}</div>
+                    <div editable-input label="Class" ng-model="ctrl.character.class" on-save="ctrl.save()"></div>
+                    <div editable-input label="Keywords" ng-model="ctrl.character.keywords" on-save="ctrl.save()"></div>
+                </div>
+            </div>
+            <br>
+
+            <div class="grid">
+                
+                <div class="grid__col-xs-4">
+
+                    <div class="stat">
+                        <label>Combat</label>
+                        <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.combat"></div>
+                    </div>
+
+                </div>
+                <div class="grid__col-xs-8">
+                    
+                    <div>
+                        <div class="stat">
+                            <label>Melee</label>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.melee"></div>
+                        </div>
+                        <div class="stat">
+                            <label>Ranged</label>
+                            <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.ranged"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid__col-sm-7 grid__col-md-6 grid__col-lg-4">
+
+            <ng-include src="'src/character/stats.html'"></ng-include>
+
+        </div>
+    </div>
+</header>

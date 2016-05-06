@@ -79,7 +79,6 @@
                     $scope.display = ngModelController.$viewValue;
                 };
 
-
                 $scope.openKeypad = function() {
 
                     var value = ngModelController.$modelValue || 0;
@@ -201,6 +200,103 @@
 
     }])
 
+
+
+    .directive('imgSelector', function() {
+
+        function base64(file, callback){
+            var coolFile = {};
+            function readerOnload(e){
+                var base64 = btoa(e.target.result);
+                coolFile.base64 = base64;
+                callback(coolFile)
+            };
+
+            var reader = new FileReader();
+            reader.onload = readerOnload;
+
+            var file = file[0].files[0];
+            if(file.size > 100000) {
+                alert("Image is too large, should be less than 100 KB");
+                callback(null);
+                return;
+            }
+
+            coolFile.filetype = file.type;
+            coolFile.size = file.size;
+            coolFile.filename = file.name;
+            reader.readAsBinaryString(file);
+        }
+
+        return {
+            scope: {
+                onSave: '&'
+            },
+            require: 'ngModel',
+            template: [
+                '<form class="img-selector">',
+                '  <div class="image" title="click to change">',
+                '    <img src="assets/avatar.png">',
+                '  </div>',
+                '  <button type="button" class="btn btn-sm btn-success" ',
+                '    ng-if="imgData && isDirty()" ng-click="save()">save</button>',
+                '  <input type="file" class="hidden">',
+                '</form>'
+            ].join(' '),
+
+            link: function($scope, $element, $attrs, ngModelController) {
+
+                $scope.isDirty = function() {
+                    return ngModelController.$dirty;
+                }
+
+                function update() {
+                    if(!$scope.imgData) {return;}
+                    var image = '<img alt="avatar" src="' + $scope.imgData + '">';
+                    $element.find('.image').html(image);
+                    ngModelController.$setDirty();
+                }
+
+                function save() {
+                    ngModelController.$setViewValue($scope.imgData);
+                    ngModelController.$setPristine();
+                    $scope.onSave();
+                }
+                
+                function onFileSelect() {
+
+                    console.log("selecting file");
+                    base64( $element.find('input'), function(data){
+
+                        if(!data) {
+                            $element.find('form')[0].reset();
+                            return;
+                        }
+
+                        $scope.$apply(function() {
+                            $scope.imgData = 'data:' + data.filetype + ';base64,' + data.base64;
+                            update();
+                        });
+                    });
+
+                }
+
+                var filePicker = $element.find('input');
+                $element.find('.image').on('click', function() {
+                    filePicker.trigger('click');
+                });
+                filePicker.on('change', onFileSelect);
+
+                ngModelController.$render = function() {
+                    if(!$scope.imgData) {
+                        $scope.imgData = ngModelController.$viewValue;
+                        update();
+                    }
+                };
+            }
+        };
+
+    })
 
     ;
 

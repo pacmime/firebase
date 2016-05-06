@@ -1,0 +1,16 @@
+<div class="health">
+    <div class="stat">
+        <label>Max Health</label>
+        <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.health.max"></div>
+    </div>
+    <div class="stat">
+        <img src="assets/wealth.png">
+        <div editable-stat-value on-save="ctrl.save()" 
+            ng-model="ctrl.character.health.wounds"></div>
+        <img src="assets/wound.png">    
+    </div>
+    <div class="stat">
+        <label>Defense</label>
+        <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.defense"></div>
+    </div>
+</div>
