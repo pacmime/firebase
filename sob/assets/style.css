@@ -35,10 +35,12 @@ header {
     Stats section
 \* --------------------------------- */
 
-.stats .stat {
-    margin-right: -.3em;
+.stats {
     background-color: #C4AC83;
     background-image: url(texture.png);
+}
+.stats .stat {
+    margin-right: -.3em;
 }
 
 

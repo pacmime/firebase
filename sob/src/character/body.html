@@ -3,14 +3,14 @@
 
         <div class="grid__col-sm-12 grid__col-md-6">
             
-            <ng-include src="'src/character/items.html'"></ng-include>
+            <div items character="ctrl.character" on-save="ctrl.save()"></div>
 
         </div>
 
         <div class="grid__col-sm-12 grid__col-md-6">
 
-            <ng-include src="'src/character/abilities.html'"></ng-include>
-
+            <div abilities character="ctrl.character" on-save="ctrl.save()"></div>
+            
         </div>
     </div>
 </div>

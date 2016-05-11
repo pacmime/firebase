@@ -1,53 +1,11 @@
 <div class="items">
     <h4>Items</h4>
 
-    <div ng-repeat="(name, item) in ctrl.character.items" class="item grid grid--bleed grid--wrap-reverse">
+    <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
 
-        <div class="grid__col-sm-3 grid__col-md-4">
-            <div class="grid grid--justify-space-between">
-                <div class="grid__col">
-                    <div>
-                        <img src="assets/item_weight.png"> 
-                        <br class="hidden-xs"> 
-                        {{item.weight}}
-                    </div>
-                </div>
-                <div class="grid__col">
-                    <div>
-                        <img src="assets/item_darkstone.png"> 
-                        <br class="hidden-xs"> 
-                        {{item.darkstone}}
-                    </div>
-                </div>
-                <div class="grid__col">
-                    <img src="assets/item_hands.png"> 
-                    <br class="hidden-xs"> 
-                    {{item.hands}}
-                </div>
-                <div class="grid__col">
-                    <img src="assets/item_slots.png"> 
-                    <br class="hidden-xs"> 
-                    {{item.slots}}
-                </div>
-                <div class="grid__col"></div>
-            </div>
-        </div>
-
-        <div class="grid__col-sm-9 grid__col-md-8">
-            <div>
-                <strong>{{name}} </strong>
-                <br>
-                {{item.description}}
-                <br>
-                <em>{{item.source}}</em>
-            </div>
-        </div>
-
-    </div>
-
-    <button type="button" class="btn btn-success pull-right" ng-click="ctrl.addNewItem()">New</button>
+    <button type="button" class="btn btn-success pull-right" ng-click="add()">Add</button>
                     
-    <img src="assets/item_weight.png" width="32"> {{ctrl.itemWeight}}
-    <img src="assets/item_darkstone.png" width="32"> {{ctrl.itemDarkstone}}
+    <img src="assets/item_weight.png" width="32"> {{itemWeight}}
+    <img src="assets/item_darkstone.png" width="32"> {{itemDarkstone}}
 
 </div>

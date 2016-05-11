@@ -1,13 +1,13 @@
 <div class="clothing">
     <h4>Clothing</h4>
-    <div ng-repeat="(slotName,slot) in ctrl.character.clothing" class="media">
-        <div class="media-left">
-            <strong>{{slotName}}: </strong>
-        </div>
-        <div class="media-body">
-            <div ng-repeat="(name,desc) in slot">
-                {{name}} <small>{{desc}}</small>
-            </div>
-        </div>
-    </div>
+
+    <div clothing type="hat" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="face" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="shoulders" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="coat" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="torso" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="belt" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="gloves" character="ctrl.character" on-save="ctrl.save()"></div>
+    <div clothing type="boots" character="ctrl.character" on-save="ctrl.save()"></div>
+    
 </div>

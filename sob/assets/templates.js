@@ -4,25 +4,21 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/abilities.html',
     "<div class=\"abilities\">\n" +
     "    <h4>Abilities</h4>\n" +
-    "    <div ng-repeat=\"(name, desc) in ctrl.character.abilities\">\n" +
-    "        <strong>{{name}}</strong> <small>{{desc}}</small>\n" +
-    "        <br><br>\n" +
-    "    </div>\n" +
+    "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
+    "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
     "    <div class=\"grid grid--bleed\">\n" +
     "        <div class=\"grid__col-md-5\">\n" +
-    "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
-    "                ng-model=\"ctrl.newAbility.name\">\n" +
+    "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
     "        </div>\n" +
     "        <div class=\"grid__col-md-7\">\n" +
     "            <div class=\"input-group\">\n" +
-    "                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" \n" +
-    "                    ng-model=\"ctrl.newAbility.desc\">\n" +
+    "                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\">\n" +
     "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-success\" \n" +
-    "                        ng-disabled=\"!ctrl.newAbility.name\" \n" +
-    "                        ng-click=\"ctrl.addNewAbility()\">+</button>\n" +
+    "                    <button type=\"button\" class=\"btn btn-success\" ng-disabled=\"!value.name\" \n" +
+    "                        ng-click=\"add()\">+</button>\n" +
     "                </span>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        \n" +
     "    </div>\n" +
@@ -36,14 +32,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "            \n" +
-    "            <ng-include src=\"'src/character/items.html'\"></ng-include>\n" +
+    "            <div items character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "\n" +
-    "            <ng-include src=\"'src/character/abilities.html'\"></ng-include>\n" +
-    "\n" +
+    "            <div abilities character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "            \n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>"
@@ -445,16 +441,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/clothing.html',
     "<div class=\"clothing\">\n" +
     "    <h4>Clothing</h4>\n" +
-    "    <div ng-repeat=\"(slotName,slot) in ctrl.character.clothing\" class=\"media\">\n" +
-    "        <div class=\"media-left\">\n" +
-    "            <strong>{{slotName}}: </strong>\n" +
-    "        </div>\n" +
-    "        <div class=\"media-body\">\n" +
-    "            <div ng-repeat=\"(name,desc) in slot\">\n" +
-    "                {{name}} <small>{{desc}}</small>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
+    "\n" +
+    "    <div clothing type=\"hat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"face\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"shoulders\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"coat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"torso\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"belt\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"gloves\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <div clothing type=\"boots\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    \n" +
     "</div>"
   );
 
@@ -498,7 +494,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <div class=\"level\">\n" +
     "                    <div class=\"stat\">\n" +
     "                        <label>Level</label>\n" +
-    "                        <div class=\"value\">{{ctrl.character.level}}</div>\n" +
+    "                        <div class=\"value\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.level\" minimum=\"1\">\n" +
+    "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                \n" +
@@ -553,7 +550,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <ng-include src=\"'src/character/clothing.html'\"></ng-include>\n" +
     "\n" +
-    "            <ng-include src=\"'src/character/mutations-and-injuries.html'\"></ng-include>\n" +
+    "            <div mutations character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -639,6 +636,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <label>Defense</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.defense\"></div>\n" +
     "    </div>\n" +
+    "    <div class=\"stat\">\n" +
+    "        <label>Armor</label>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.armor\"></div>\n" +
+    "    </div>\n" +
     "</div>"
   );
 
@@ -647,54 +648,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"items\">\n" +
     "    <h4>Items</h4>\n" +
     "\n" +
-    "    <div ng-repeat=\"(name, item) in ctrl.character.items\" class=\"item grid grid--bleed grid--wrap-reverse\">\n" +
+    "    <div ng-repeat=\"(name, item) in character.items\" item=\"item\" name=\"{{name}}\" on-save=\"onEdited(name, item)\"></div>\n" +
     "\n" +
-    "        <div class=\"grid__col-sm-3 grid__col-md-4\">\n" +
-    "            <div class=\"grid grid--justify-space-between\">\n" +
-    "                <div class=\"grid__col\">\n" +
-    "                    <div>\n" +
-    "                        <img src=\"assets/item_weight.png\"> \n" +
-    "                        <br class=\"hidden-xs\"> \n" +
-    "                        {{item.weight}}\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"grid__col\">\n" +
-    "                    <div>\n" +
-    "                        <img src=\"assets/item_darkstone.png\"> \n" +
-    "                        <br class=\"hidden-xs\"> \n" +
-    "                        {{item.darkstone}}\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"grid__col\">\n" +
-    "                    <img src=\"assets/item_hands.png\"> \n" +
-    "                    <br class=\"hidden-xs\"> \n" +
-    "                    {{item.hands}}\n" +
-    "                </div>\n" +
-    "                <div class=\"grid__col\">\n" +
-    "                    <img src=\"assets/item_slots.png\"> \n" +
-    "                    <br class=\"hidden-xs\"> \n" +
-    "                    {{item.slots}}\n" +
-    "                </div>\n" +
-    "                <div class=\"grid__col\"></div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"grid__col-sm-9 grid__col-md-8\">\n" +
-    "            <div>\n" +
-    "                <strong>{{name}} </strong>\n" +
-    "                <br>\n" +
-    "                {{item.description}}\n" +
-    "                <br>\n" +
-    "                <em>{{item.source}}</em>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"ctrl.addNewItem()\">New</button>\n" +
+    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>\n" +
     "                    \n" +
-    "    <img src=\"assets/item_weight.png\" width=\"32\"> {{ctrl.itemWeight}}\n" +
-    "    <img src=\"assets/item_darkstone.png\" width=\"32\"> {{ctrl.itemDarkstone}}\n" +
+    "    <img src=\"assets/item_weight.png\" width=\"32\"> {{itemWeight}}\n" +
+    "    <img src=\"assets/item_darkstone.png\" width=\"32\"> {{itemDarkstone}}\n" +
     "\n" +
     "</div>"
   );
@@ -726,12 +685,26 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/mutations-and-injuries.html',
     "<div class=\"mutations\">\n" +
     "    <h4>Mutations &amp; Injuries</h4>\n" +
+    "    <div ng-repeat=\"(name, desc) in character.mutations\" \n" +
+    "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
-    "    <div class=\"input-group\">\n" +
-    "        <input type=\"text\" class=\"form-control\">\n" +
-    "        <span class=\"input-group-btn\">\n" +
-    "            <button type=\"button\" class=\"btn btn-success\">+</button>\n" +
-    "        </span>\n" +
+    "    <div class=\"grid grid--bleed\">\n" +
+    "        <div class=\"grid__col-md-5\">\n" +
+    "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
+    "                ng-model=\"value.name\">\n" +
+    "        </div>\n" +
+    "        <div class=\"grid__col-md-7\">\n" +
+    "            <div class=\"input-group\">\n" +
+    "                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" \n" +
+    "                    ng-model=\"value.desc\">\n" +
+    "                <span class=\"input-group-btn\">\n" +
+    "                    <button type=\"button\" class=\"btn btn-success\" \n" +
+    "                        ng-disabled=\"!value.name\" \n" +
+    "                        ng-click=\"add()\">+</button>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        \n" +
     "    </div>\n" +
     "</div>"
   );
@@ -754,6 +727,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <label>Willpower</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.willpower\"></div>\n" +
     "    </div>\n" +
+    "    <div class=\"stat\">\n" +
+    "        <label>Sp Armor</label>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.spiritArmor\"></div>\n" +
+    "    </div>\n" +
     "</div>\n"
   );
 
@@ -765,52 +742,60 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Bandages</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.bandages\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.bandages\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/bandages.png\">\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Whiskey</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.whiskey\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.whiskey\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/whiskey.png\">\n" +
     "    </div>    \n" +
     "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Tonic</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.tonic\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.tonic\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/tonic.png\">\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Herbs</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.herbs\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.herbs\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/herb.png\">\n" +
     "    </div>    \n" +
     "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Dynamite</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.dynamite\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.dynamite\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/dynamite.png\">\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Flash</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.flash\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.flash\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/flash.png\">\n" +
     "    </div>    \n" +
     "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Swamp Fungus</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.fungus\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.fungus\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/fungus.png\">\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <label>Capacity</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.capacity\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.capacity\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "    </div>    \n" +
     "</div>"
   );
@@ -820,39 +805,39 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"stats\">\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Agility</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Agility\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Agility\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Cunning</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Cunning\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Cunning\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Spirit</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "    <br>\n" +
     "    <span class=\"hidden-xs\" style=\"display:inline-block;width:2em;\"></span>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Strength</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Strength\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Strength\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Lore</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Lore\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Lore\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Spirit</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Initiative</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.init\"></div>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.init\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "</div>"
@@ -928,12 +913,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  \n" +
     "    <div class=\"modal-body\">\n" +
     "\n" +
-    "        <h3>Current: {{value}}</h3>\n" +
+    "        <h3>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h3>\n" +
     "        \n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-10)\">-10</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-5)\">-5</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-2)\">-2</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-1)\">-1</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-5)\" ng-disable=\"value==minimum\">-5</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-2)\" ng-disable=\"value==minimum\">-2</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-1)\" ng-disable=\"value==minimum\">-1</button>\n" +
     "        <br>\n" +
     "\n" +
     "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(1)\">1</button>\n" +

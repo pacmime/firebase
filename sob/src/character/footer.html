@@ -9,7 +9,8 @@
                 <div class="level">
                     <div class="stat">
                         <label>Level</label>
-                        <div class="value">{{ctrl.character.level}}</div>
+                        <div class="value" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.level" minimum="1">
+                        </div>
                     </div>
                 </div>
                 
@@ -64,7 +65,7 @@
 
             <ng-include src="'src/character/clothing.html'"></ng-include>
 
-            <ng-include src="'src/character/mutations-and-injuries.html'"></ng-include>
+            <div mutations character="ctrl.character" on-save="ctrl.save()"></div>
 
         </div>
     </div>

@@ -2,12 +2,12 @@
   
     <div class="modal-body">
 
-        <h3>Current: {{value}}</h3>
+        <h3>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h3>
         
-        <button type="button" class="btn btn-default" ng-click="change(-10)">-10</button>
-        <button type="button" class="btn btn-default" ng-click="change(-5)">-5</button>
-        <button type="button" class="btn btn-default" ng-click="change(-2)">-2</button>
-        <button type="button" class="btn btn-default" ng-click="change(-1)">-1</button>
+        <button type="button" class="btn btn-default" ng-click="change(-10)" ng-disable="value==minimum">-10</button>
+        <button type="button" class="btn btn-default" ng-click="change(-5)" ng-disable="value==minimum">-5</button>
+        <button type="button" class="btn btn-default" ng-click="change(-2)" ng-disable="value==minimum">-2</button>
+        <button type="button" class="btn btn-default" ng-click="change(-1)" ng-disable="value==minimum">-1</button>
         <br>
 
         <button type="button" class="btn btn-default" ng-click="change(1)">1</button>

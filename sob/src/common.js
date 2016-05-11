@@ -47,11 +47,18 @@
     })
 
 
-    .controller('KeyPad', function ($scope, $uibModalInstance, value) {
+    .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
 
         $scope.value = value;
+        $scope.minimum = minimum || 0;
+        $scope.maximum = maximum || 9999;
         
-        $scope.change = function(v) { $scope.value += v; }
+        $scope.change = function(v) { 
+            if(v>0)
+                $scope.value = Math.min($scope.value + v, maximum); 
+            else
+                $scope.value = Math.max($scope.value + v, minimum); 
+        }
         
         $scope.ok = function () {
             $uibModalInstance.close($scope.value);
@@ -67,13 +74,18 @@
     .directive('editableStatValue', ['$uibModal', function($uibModal) {
         return {
             scope: {
-                onSave: '&'
+                onSave: '&',
+                minimum: '@',
+                maximum: '@',
             },
             restrict: 'A',
             require: 'ngModel',
             replace: true,
             template: '<div class="value" ng-click="openKeypad()">{{display}}</div>',
             link: function($scope, $element, $attrs, ngModelController) {
+
+                $scope.minimum = ($scope.minimum || 0)*1;
+                $scope.maximum = ($scope.maximum || 9999)*1;
 
                 ngModelController.$render = function() {
                     $scope.display = ngModelController.$viewValue;
@@ -88,7 +100,9 @@
                         controller: 'KeyPad',
                         animation: false,
                         resolve: {
-                            value: function() { return value; }
+                            value: function() { return value; },
+                            minimum: function() { return $scope.minimum; },
+                            maximum: function() { return $scope.maximum; }
                         }
                     });
 
