@@ -438,6 +438,60 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('character/clothing-item.html',
+    "<div>\n" +
+    "\n" +
+    "    <label>{{type}}</label>\n" +
+    "\n" +
+    "    <div class=\"grid\">\n" +
+    "\n" +
+    "        <div class=\"grid__col-xs-3\">\n" +
+    "            <div>\n" +
+    "                {{current.name}}\n" +
+    "                <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
+    "                    ng-model=\"value.name\" ng-if=\"!current.name\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"grid__col-xs-9\">\n" +
+    "            <div>\n" +
+    "            \n" +
+    "                {{current.desc}}\n" +
+    "            \n" +
+    "                <div class=\"btn-group pull-right\" ng-if=\"current.name\">\n" +
+    "                  \n" +
+    "                  <button type=\"button\" class=\"btn btn-danger\" \n" +
+    "                      ng-if=\"isRemoving\" ng-click=\"isRemoving=false\">\n" +
+    "                    <span class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "                  </button>\n" +
+    "\n" +
+    "                  <button type=\"button\" class=\"btn btn-danger\" \n" +
+    "                      ng-click=\"remove()\">\n" +
+    "                    <span class=\"glyphicon\" \n" +
+    "                       ng-class=\"\\'glyphicon-trash\\':!isRemoving,\\'glyphicon-ok\\':isRemoving\"></span>\n" +
+    "                  </button>\n" +
+    "                  \n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"input-group\" ng-if=\"!current.name\">\n" +
+    "                    <input type=\"text\" class=\"form-control\" placeholder=\"Description\"\n" +
+    "                        ng-model=\"value.desc\">\n" +
+    "                    <span class=\"input-group-btn\">\n" +
+    "                        <button type=\"button\" class=\"btn btn-success\" \n" +
+    "                            ng-click=\"add()\">+</button>\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>"
+  );
+
+
   $templateCache.put('character/clothing.html',
     "<div class=\"clothing\">\n" +
     "    <h4>Clothing</h4>\n" +
@@ -878,27 +932,46 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  </div> -->\n" +
     "    <div class=\"modal-body\">\n" +
     "\n" +
-    "        <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
-    "        <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
-    "        <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source\">\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
+    "        </div><br>\n" +
     "\n" +
-    "        <div>\n" +
-    "            <label>Weight: <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
-    "            </label>\n" +
-    "        </div>\n" +
-    "        <div>\n" +
-    "            <label>Darkstone: <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
-    "            </label>\n" +
-    "        </div>\n" +
-    "        <div>\n" +
-    "            <label>Num Hands: <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
-    "            </label>\n" +
-    "        </div>\n" +
-    "        <div>\n" +
-    "            <label>Upgrade Slots:<input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
-    "            </label>\n" +
-    "        </div>\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Source</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source\">\n" +
+    "        </div><br>\n" +
     "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "            \n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>        \n" +
     "    </div>\n" +
     "    <div class=\"modal-footer\">\n" +
     "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
@@ -915,28 +988,28 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <h3>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h3>\n" +
     "        \n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-5)\" ng-disable=\"value==minimum\">-5</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-2)\" ng-disable=\"value==minimum\">-2</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(-1)\" ng-disable=\"value==minimum\">-1</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-5)\" ng-disable=\"value==minimum\">-5</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-2)\" ng-disable=\"value==minimum\">-2</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-1)\" ng-disable=\"value==minimum\">-1</button>\n" +
     "        <br>\n" +
     "\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(1)\">1</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(2)\">2</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(3)\">3</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(4)\">4</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(1)\">+1</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(2)\">+2</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(3)\">+3</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(4)\">+4</button>\n" +
     "        <br>\n" +
     "        \n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(5)\">5</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(10)\">10</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(15)\">15</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(20)\">20</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(5)\">+5</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(10)\">+10</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(15)\">+15</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(20)\">+20</button>\n" +
     "        <br>\n" +
     "        \n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(25)\">25</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(30)\">30</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(35)\">35</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"change(40)\">40</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(25)\">+25</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(30)\">+30</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(35)\">+35</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(40)\">+40</button>\n" +
     "\n" +
     "    </div>\n" +
     "    \n" +

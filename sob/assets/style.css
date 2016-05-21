@@ -279,10 +279,10 @@ table thead img { width: 1.5em; }
     text-align: center;
 }
 .keypad .modal-body button {
-    font-size:  1.5em;
-    width:      2.5em;
-    height:     2.5em;
-    margin:     0.25em;
+    font-size:  1em;
+    width:      4em;
+    height:     4em;
+    margin:     0.5em;
     -webkit-appearance: none;
     -webkit-border-radius: 4px;
 }
@@ -340,16 +340,22 @@ table thead img { width: 1.5em; }
     <img-selector />
 \* --------------------------------- */
 .img-selector {
-    position: relative;
-
-    img {
-        max-height: 100px;
-    }
-    button {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
+    position:   relative;
+    display:    block;
+    width:      100%;
+}
+.img-selector .image { 
+    width: 100%;
+} 
+.img-selector .image img {
+    max-height: 200px;
+    max-width:  200px;
+    width:      100%;
+}
+.img-selector .image button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 

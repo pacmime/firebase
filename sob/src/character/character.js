@@ -6,8 +6,8 @@
 
     
     app.controller("CharacterController", [
-        "$scope", "$routeParams", "$uibModal", "CharacterRef",
-        function($scope, $routeParams, $uibModal, CharacterRef) {
+        "$scope", "$routeParams", "CharacterRef",
+        function($scope, $routeParams, CharacterRef) {
         
         var self = this;
         
@@ -20,23 +20,7 @@
         //load the campaign
         this.charName = decodeURIComponent($routeParams.charId);
         this.character = CharacterRef(this.charName);
-        // this.character.$loaded().then(function() {
-            
-        //     var weight=0, darkstone=0;
-        //     angular.forEach(self.character.items, function(item) {
-        //         weight += item.weight||0;
-        //         darkstone += item.darkstone||0;
-        //     });
-        //     self.itemWeight = weight;
-        //     self.itemDarkstone = darkstone;
-
-        // }).catch(function(error) {
-        //     self.displayOpts.loading = false;
-        //     self.displayOpts.error = error.data;
-        // });
-
-
-
+        
         this.onInputKeyPress = function($event) {
             var key = $event.keyCode || $event.which;
             if(key === 13) {    //enter
@@ -46,18 +30,9 @@
 
 
         this.save = function() {
-            console.log("Saved");
-            // this.character.$save();
+            // console.log("Saved");
+            this.character.$save();
         };
-
-        
-        
-        this.addNewMutation = function() {
-            this.character.abilities[this.newMutation.name] = this.newMutation.desc;
-            this.save();
-            this.newMutation = null;
-        };
-
 
         this.getAvailableSidebagCapacity = function() {
             if(!self.character.sidebag) return 0;
@@ -70,14 +45,6 @@
                 (self.character.sidebag.flash||0) + 
                 (self.character.sidebag.fungus||0));
         };
-
-        // this.toggleEditor = function(name) {
-        //     this.displayOpts.editors = this.displayOpts.editors || {};
-        //     var open = this.displayOpts.editors[name] = !this.displayOpts.editors[name];
-        //     if(!open)
-        //         this.save();
-        // };
-
 
     }])
 
@@ -96,24 +63,40 @@
             template: [
                 '<div>',
                 '    <label>{{type}}</label>',
-                '    <div class="grid">',
-                '        <div class="grid__col-xs-3">',
+                '    <button type="button" class="btn btn-default btn-sm" ',
+                '            ng-if="!current" ',
+                '            ng-click="isEditing=!isEditing">',
+                '        <span ng-if="!isEditing">+</span>',
+                '        <span ng-if="isEditing">&times;</span>',
+                '    </button>',
+
+                '    <div class="grid" ng-if="isEditing || current">',
+                '        <div class="grid__col-xs-3 grid__col--bleed">',
                 '            {{current.name}}',
                 '            <input type="text" class="form-control" placeholder="Name"',
                 '                ng-model="value.name" ng-if="!current.name">',
                 '        </div>',
-                '        <div class="grid__col-xs-9">',
+                '        <div class="grid__col-xs-9 grid__col--bleed">',
                 '            <div>',
                 '                {{current.desc}}',
-                '                <button type="button" class="btn btn-danger pull-right" ',
-                '                    ng-if="current.name" ng-click="remove()">&times;</button>',
+                '                <div class="btn-group pull-right" ng-if="current.name">',
+                '                  <button type="button" class="btn btn-danger" ',
+                '                      ng-if="isRemoving" ng-click="isRemoving=false">',
+                '                    <span class="glyphicon glyphicon-remove"></span>',
+                '                  </button>',
+                '                  <button type="button" class="btn btn-danger" ',
+                '                      ng-click="remove()">',
+                '                    <span class="glyphicon glyphicon-trash" ng-if="!isRemoving"></span>',
+                '                    <span class="glyphicon glyphicon-ok" ng-if="isRemoving"></span>',
+                '                  </button>',
+                '                </div>',
 
                 '                <div class="input-group" ng-if="!current.name">',
                 '                    <input type="text" class="form-control" placeholder="Description"',
                 '                        ng-model="value.desc">',
                 '                    <span class="input-group-btn">',
                 '                        <button type="button" class="btn btn-success" ',
-                '                            ng-click="add()">+</button>',
+                '                            ng-click="add()"><span class="glyphicon glyphicon-ok"></span></button>',
                 '                    </span>',
                 '                </div>',
                 '            </div>',
@@ -126,13 +109,14 @@
 
                 function init() {
                     $scope.value = {name: null, desc: null};
+                    $scope.isEditing = false;
                 }
                 init();
 
                 function update() {
                     $scope.current = $scope.character.clothing && $scope.character.clothing[$scope.type];
                 }
-                update();
+                $scope.character.$loaded().then(update);
 
                 $scope.add = function() {
                     if(!$scope.value.name) return;
@@ -145,9 +129,14 @@
                 };
 
                 $scope.remove = function() {
-                    $scope.character.clothing[$scope.type] = null;
-                    $scope.onSave();
-                    update();
+                    if($scope.isRemoving === true) {
+                        $scope.isRemoving = false;
+                        $scope.character.clothing[$scope.type] = null;
+                        $scope.onSave();
+                        update();
+                    } else {
+                        $scope.isRemoving = true;
+                    }
                 };
 
             }
@@ -392,7 +381,7 @@
 
 
 
-    .directive('items', ['$uibModal', function($uibModal) {
+    .directive('items', ['$timeout', '$uibModal', function($timeout, $uibModal) {
 
         return {
             scope: {
@@ -413,15 +402,22 @@
                     $scope.itemWeight = weight;
                     $scope.itemDarkstone = darkstone;
                 }
-                update();
+                
+                $scope.character.$loaded().then(update);
 
 
 
                 $scope.onEdited = function(name, item) {
 
-                    if(!item)
+                    //if deleting item or renaming it
+                    if(!item || (item.name && item.name !== name)) {
                         delete $scope.character.items[name];
-                    else
+
+                        if(item && item.name)
+                            name = item.name;
+                    }
+
+                    if(item)
                         $scope.character.items[name] = item;
 
                     $scope.onSave();
@@ -433,7 +429,10 @@
                     var modalInstance = $uibModal.open({
                         templateUrl: 'src/item.html',
                         controller: 'ItemEditor',
-                        animation: false
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;}
+                        }
                     });
 
                     modalInstance.result.then(function(item) {
@@ -443,7 +442,7 @@
                             $scope.character.items = {};
 
                         var obj = {};
-                        obj[name] = item;
+                        obj[item.name] = item;
                         angular.merge($scope.character.items, obj);
 
                         $scope.onSave();
@@ -458,7 +457,7 @@
     }])
 
 
-    .directive('item', function() {
+    .directive('item', ['$uibModal', function($uibModal) {
 
         function Controller($scope, $element) {
 
@@ -468,16 +467,35 @@
             this.item = $scope.item;
             
             this.edit = function() {
-                this.displayEditor = true;
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/item.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.item);
+                            copy.name = $scope.name;
+                            return copy; 
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.item[key] = value;
+                    });
+                    console.log($scope.ctrl.item);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
             };
 
             this.save = function() {
                 $scope.onSave({ item: this.item });
-                this.displayEditor = false;
-            };
-
-            this.cancel = function() {
-                this.displayEditor = false;
             };
 
             this.remove = function() {
@@ -515,8 +533,7 @@
                 '   <div class="grid__col-sm-9 grid__col-md-8">',
                 '       <div>',
                 '           <strong>{{name}}</strong><br>',
-                '           {{item.description}}<br>',
-                '           <em>{{item.source}}</em>',
+                '           {{item.description}}  <em>({{item.source}})</em>',
                 '           <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.remove()">',
                 '             <span class="glyphicon glyphicon-trash"></span>',
                 '           </button>',
@@ -530,7 +547,7 @@
             
             controller: Controller
         };
-    })
+    }])
 
 
     ;

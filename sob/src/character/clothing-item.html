@@ -1,0 +1,50 @@
+<div>
+
+    <label>{{type}}</label>
+
+    <div class="grid">
+
+        <div class="grid__col-xs-3">
+            <div>
+                {{current.name}}
+                <input type="text" class="form-control" placeholder="Name"
+                    ng-model="value.name" ng-if="!current.name">
+            </div>
+        </div>
+
+        <div class="grid__col-xs-9">
+            <div>
+            
+                {{current.desc}}
+            
+                <div class="btn-group pull-right" ng-if="current.name">
+                  
+                  <button type="button" class="btn btn-danger" 
+                      ng-if="isRemoving" ng-click="isRemoving=false">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+
+                  <button type="button" class="btn btn-danger" 
+                      ng-click="remove()">
+                    <span class="glyphicon" 
+                       ng-class="\'glyphicon-trash\':!isRemoving,\'glyphicon-ok\':isRemoving"></span>
+                  </button>
+                  
+                </div>
+
+                <div class="input-group" ng-if="!current.name">
+                    <input type="text" class="form-control" placeholder="Description"
+                        ng-model="value.desc">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success" 
+                            ng-click="add()">+</button>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

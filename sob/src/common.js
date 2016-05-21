@@ -34,7 +34,9 @@
         };
     })
 
-    .controller('ItemEditor', function($scope, $uibModalInstance) {
+    .controller('ItemEditor', function($scope, $uibModalInstance, item) {
+
+        $scope.item = item;
 
         $scope.ok = function () {
             $uibModalInstance.close($scope.item);
@@ -268,10 +270,10 @@
                     if(!$scope.imgData) {return;}
                     var image = '<img alt="avatar" src="' + $scope.imgData + '">';
                     $element.find('.image').html(image);
-                    ngModelController.$setDirty();
+                    
                 }
 
-                function save() {
+                $scope.save = function() {
                     ngModelController.$setViewValue($scope.imgData);
                     ngModelController.$setPristine();
                     $scope.onSave();
@@ -290,6 +292,7 @@
                         $scope.$apply(function() {
                             $scope.imgData = 'data:' + data.filetype + ';base64,' + data.base64;
                             update();
+                            ngModelController.$setDirty();
                         });
                     });
 
