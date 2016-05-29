@@ -22,7 +22,7 @@
         Auth.$onAuth(function(authData) {
             $scope.user = authData;
 
-            self.data = DataStore('userId', authData.uid);
+            self.data = DataStore('userId', authData ? authData.uid : null);
             self.data.$loaded().then(function() {
                 updateList();
                 self.displayOpts.loading = false;
@@ -38,7 +38,7 @@
         function updateList() {
             var chars = [];
             angular.forEach(self.data, function(value, key) { 
-                if(value.userId && value.userId === $scope.user.uid)
+                if($scope.user && value.userId && value.userId === $scope.user.uid)
                     chars.push(key); 
             });
             self.chars = chars;
