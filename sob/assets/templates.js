@@ -28,11 +28,55 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('character/body.html',
     "<div class=\"body\">\n" +
+    "    \n" +
     "    <div class=\"grid\">\n" +
     "\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "            \n" +
-    "            <div items character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "            <div>\n" +
+    "                \n" +
+    "                <div class=\"level\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <label>Level</label>\n" +
+    "                        <div class=\"value\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.level\" minimum=\"1\">\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                \n" +
+    "                <div class=\"xp\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <!-- <label>XP</label> -->\n" +
+    "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.xp\"></div>\n" +
+    "                        <img src=\"assets/xp.png\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                \n" +
+    "                <div class=\"wealth\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.wealth\"></div>\n" +
+    "                        <img src=\"assets/wealth.png\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"darkstone\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.darkstone\"></div>\n" +
+    "                        <img src=\"assets/darkstone.png\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <ng-include src=\"'src/character/health.html'\"></ng-include>\n" +
+    "\n" +
+    "            <ng-include src=\"'src/character/sanity.html'\"></ng-include>\n" +
+    "            \n" +
+    "            <ng-include src=\"'src/character/faith-and-corruption.html'\"></ng-include>\n" +
+    "            \n" +
+    "            <ng-include src=\"'src/character/move-and-grit.html'\"></ng-include>\n" +
+    "\n" +
+    "            <ng-include src=\"'src/character/sidebag.html'\"></ng-include>    \n" +
+    "                    \n" +
     "\n" +
     "        </div>\n" +
     "\n" +
@@ -439,55 +483,54 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('character/clothing-item.html',
-    "<div>\n" +
+    "<div class=\"clothing__item\">\n" +
     "\n" +
-    "    <label>{{type}}</label>\n" +
+    "    <div class=\"pull-right\">\n" +
+    "        \n" +
+    "        <button type=\"button\" class=\"btn btn-default btn-sm\" ng-if=\"!$ctrl.item.name\" \n" +
+    "            ng-click=\"$ctrl.isEditing=!$ctrl.isEditing\">\n" +
+    "            <span ng-if=\"!$ctrl.isEditing\" class=\"glyphicon glyphicon-plus\"></span>\n" +
+    "            <span ng-if=\"$ctrl.isEditing\" class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "        </button>\n" +
     "\n" +
-    "    <div class=\"grid\">\n" +
-    "\n" +
-    "        <div class=\"grid__col-xs-3\">\n" +
-    "            <div>\n" +
-    "                {{current.name}}\n" +
-    "                <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
-    "                    ng-model=\"value.name\" ng-if=\"!current.name\">\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"grid__col-xs-9\">\n" +
-    "            <div>\n" +
-    "            \n" +
-    "                {{current.desc}}\n" +
-    "            \n" +
-    "                <div class=\"btn-group pull-right\" ng-if=\"current.name\">\n" +
-    "                  \n" +
-    "                  <button type=\"button\" class=\"btn btn-danger\" \n" +
-    "                      ng-if=\"isRemoving\" ng-click=\"isRemoving=false\">\n" +
-    "                    <span class=\"glyphicon glyphicon-remove\"></span>\n" +
-    "                  </button>\n" +
-    "\n" +
-    "                  <button type=\"button\" class=\"btn btn-danger\" \n" +
-    "                      ng-click=\"remove()\">\n" +
-    "                    <span class=\"glyphicon\" \n" +
-    "                       ng-class=\"\\'glyphicon-trash\\':!isRemoving,\\'glyphicon-ok\\':isRemoving\"></span>\n" +
-    "                  </button>\n" +
-    "                  \n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"input-group\" ng-if=\"!current.name\">\n" +
-    "                    <input type=\"text\" class=\"form-control\" placeholder=\"Description\"\n" +
-    "                        ng-model=\"value.desc\">\n" +
-    "                    <span class=\"input-group-btn\">\n" +
-    "                        <button type=\"button\" class=\"btn btn-success\" \n" +
-    "                            ng-click=\"add()\">+</button>\n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "\n" +
+    "        <button type=\"button\" class=\"btn btn-default btn-sm\" ng-if=\"$ctrl.item.name\" \n" +
+    "            ng-click=\"$ctrl.isEditing=!$ctrl.isEditing\">\n" +
+    "            <span ng-if=\"!$ctrl.isEditing\" class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "            <span ng-if=\"$ctrl.isEditing\" class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-if=\"$ctrl.item.name\" ng-click=\"$ctrl.remove()\">\n" +
+    "            <span class=\"glyphicon glyphicon-trash\" ng-if=\"!$ctrl.isRemoving\"></span>\n" +
+    "            <span class=\"glyphicon glyphicon-ok\" ng-if=\"$ctrl.isRemoving\"></span>\n" +
+    "        </button>\n" +
+    "        \n" +
     "    </div>\n" +
     "\n" +
+    "    <div ng-if=\"$ctrl.item.name\">\n" +
+    "        <h5>\n" +
+    "            <span ng-if=\"!$ctrl.isEditing\">{{$ctrl.item.name}}</span>\n" +
+    "            <small>{{$ctrl.type}}</small>\n" +
+    "        </h5>  \n" +
+    "        <small ng-if=\"!$ctrl.isEditing\">{{$ctrl.item.desc}}</small>\n" +
+    "    </div>\n" +
+    "    <div ng-if=\"!$ctrl.item.name\">\n" +
+    "        <h5>\n" +
+    "            <em ng-if=\"!$ctrl.isEditing\">Empty</em>\n" +
+    "            <small>{{$ctrl.type}}</small>\n" +
+    "        </h5>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div ng-if=\"$ctrl.isEditing\">\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"$ctrl.item.name\">\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <input type=\"text\" class=\"form-control\" placeholder=\"Description\"\n" +
+    "                ng-model=\"$ctrl.item.desc\">\n" +
+    "            <span class=\"input-group-btn\">\n" +
+    "                <button type=\"button\" class=\"btn btn-success\" \n" +
+    "                    ng-click=\"$ctrl.add()\"><span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                </button>\n" +
+    "            </span>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "</div>"
   );
 
@@ -496,14 +539,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"clothing\">\n" +
     "    <h4>Clothing</h4>\n" +
     "\n" +
-    "    <div clothing type=\"hat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"face\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"shoulders\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"coat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"torso\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"belt\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"gloves\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
-    "    <div clothing type=\"boots\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "    <clothing type=\"hat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"face\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"shoulders\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"coat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"torso\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"belt\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"gloves\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
+    "    <clothing type=\"boots\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
     "    \n" +
     "</div>"
   );
@@ -543,61 +586,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "\n" +
-    "            <div>\n" +
-    "                \n" +
-    "                <div class=\"level\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <label>Level</label>\n" +
-    "                        <div class=\"value\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.level\" minimum=\"1\">\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                \n" +
-    "                <div class=\"xp\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <!-- <label>XP</label> -->\n" +
-    "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.xp\"></div>\n" +
-    "                        <img src=\"assets/xp.png\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                \n" +
-    "                <div class=\"wealth\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.wealth\"></div>\n" +
-    "                        <img src=\"assets/wealth.png\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"darkstone\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.darkstone\"></div>\n" +
-    "                        <img src=\"assets/darkstone.png\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"grid grid--bleed grid--wrap-reverse\">\n" +
-    "\n" +
-    "                <div class=\"grid__col-xs-5 grid__col-sm-4\">\n" +
-    "\n" +
-    "                    <ng-include src=\"'src/character/sidebag.html'\"></ng-include>    \n" +
-    "                    \n" +
-    "                </div>\n" +
-    "                \n" +
-    "                <div class=\"grid__col-xs-7 grid__col-sm-8\">\n" +
-    "\n" +
-    "                    <ng-include src=\"'src/character/health.html'\"></ng-include>\n" +
-    "\n" +
-    "                    <ng-include src=\"'src/character/sanity.html'\"></ng-include>\n" +
-    "                    \n" +
-    "                    <ng-include src=\"'src/character/faith-and-corruption.html'\"></ng-include>\n" +
-    "                    \n" +
-    "                    <ng-include src=\"'src/character/move-and-grit.html'\"></ng-include>\n" +
-    "\n" +
-    "                </div>\n" +
-    "                \n" +
-    "            </div>\n" +
+    "            <div items character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "        </div>\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
@@ -623,42 +612,32 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"grid\">\n" +
     "\n" +
     "                <!-- avatar -->\n" +
-    "                <div class=\"grid__col-xs-5 grid__col-sm-4 grid__col-md-3 grid__col-lg-2 grid--align-self-end\">\n" +
+    "                <div class=\"grid__col-xs-5 grid__col-sm-4 grid__col-md-3 grid__col-lg-3 grid--align-self-end\">\n" +
     "                    <div img-selector ng-model=\"ctrl.character.avatar\" on-save=\"ctrl.save()\"></div>\n" +
     "                </div>\n" +
     "\n" +
     "                <!-- name, class, and keywords -->\n" +
-    "                <div class=\"grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-10\">\n" +
+    "                <div class=\"grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-9\">\n" +
     "                    <div><label>Name: </label> {{ctrl.charName}}</div>\n" +
     "                    <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div>\n" +
     "                    <div editable-input label=\"Keywords\" ng-model=\"ctrl.character.keywords\" on-save=\"ctrl.save()\"></div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <br>\n" +
     "\n" +
-    "            <div class=\"grid\">\n" +
-    "                \n" +
-    "                <div class=\"grid__col-xs-4\">\n" +
-    "\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <label>Combat</label>\n" +
-    "                        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.combat\"></div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "                <div class=\"grid__col-xs-8\">\n" +
-    "                    \n" +
     "                    <div>\n" +
-    "                        <div class=\"stat\">\n" +
+    "                        <span class=\"stat\">\n" +
+    "                            <label>Combat</label>\n" +
+    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.combat\"></div>\n" +
+    "                        </span>\n" +
+    "\n" +
+    "                        <span class=\"stat stat--with-plus\">\n" +
     "                            <label>Melee</label>\n" +
     "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.melee\"></div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"stat\">\n" +
+    "                        </span>\n" +
+    "                        <span class=\"stat stat--with-plus\">\n" +
     "                            <label>Ranged</label>\n" +
     "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.ranged\"></div>\n" +
-    "                        </div>\n" +
+    "                        </span>\n" +
     "                    </div>\n" +
-    "                    \n" +
+    "\n" +
     "                </div>\n" +
     "            </div>\n" +
     "\n" +
@@ -686,11 +665,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            ng-model=\"ctrl.character.health.wounds\"></div>\n" +
     "        <img src=\"assets/wound.png\">    \n" +
     "    </div>\n" +
-    "    <div class=\"stat\">\n" +
+    "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Defense</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.defense\"></div>\n" +
     "    </div>\n" +
-    "    <div class=\"stat\">\n" +
+    "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Armor</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.armor\"></div>\n" +
     "    </div>\n" +
@@ -717,7 +696,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div>\n" +
     "    <div class=\"movement\">\n" +
-    "        <div class=\"stat\">\n" +
+    "        <div class=\"stat stat--prepend-plus\">\n" +
     "            <label>Move</label>\n" +
     "            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.movement\"></div>\n" +
     "        </div>\n" +
@@ -777,11 +756,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            ng-model=\"ctrl.character.sanity.loss\"></div>\n" +
     "        <img src=\"assets/sanity.png\">\n" +
     "    </div>\n" +
-    "    <div class=\"stat\">\n" +
+    "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Willpower</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.willpower\"></div>\n" +
     "    </div>\n" +
-    "    <div class=\"stat\">\n" +
+    "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Sp Armor</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.spiritArmor\"></div>\n" +
     "    </div>\n" +
@@ -807,7 +786,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/whiskey.png\">\n" +
     "    </div>    \n" +
-    "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Tonic</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
@@ -822,7 +800,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/herb.png\">\n" +
     "    </div>    \n" +
-    "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Dynamite</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
@@ -837,7 +814,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
     "        <img src=\"assets/flash.png\">\n" +
     "    </div>    \n" +
-    "    <br>\n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Swamp Fungus</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
@@ -885,8 +861,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
-    "        <label>Spirit</label>\n" +
-    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\" minimum=\"1\"></div>\n" +
+    "        <label>Luck</label>\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Luck\" minimum=\"1\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"stat\">\n" +
@@ -910,16 +886,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <h4 class=\"list-group-item-heading\">Characters</h4>\n" +
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
-    "        <a ng-repeat=\"name in ctrl.chars\" \n" +
-    "            class=\"list-group-item\" \n" +
-    "            href=\"#/{{name|encode}}\">{{name}}</a>\n" +
+    "        <a ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\" href=\"#/{{name|encode}}\">{{name}}</a>\n" +
+    "        <a class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
+    "            Create a New Character\n" +
+    "        </a>\n" +
     "    </div>\n" +
-    "\n" +
-    "    <button type=\"button\" class=\"btn btn-success\"\n" +
-    "        title=\"Create a new character\" \n" +
-    "        ng-click=\"ctrl.createCharacter()\">\n" +
-    "        New\n" +
-    "    </button>\n" +
     "\n" +
     "</div>"
   );
@@ -1019,6 +990,29 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('login.html',
+    "<div class=\"modal-content\">\n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <form class=\"form\">\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <label for=\"email\">Email</label>\n" +
+    "                <input type=\"email\" name=\"email\" placeholder=\"Email address\" class=\"form-control\" ng-model=\"email\">\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <label for=\"password\">Password</label>\n" +
+    "                <input type=\"password\" name=\"password\" placeholder=\"Password\" class=\"form-control\" ng-model=\"password\">\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</button>\n" +
+    "            <button type=\"button\" class=\"btn btn-primary\" ng-click=\"login()\">Login</button>\n" +
+    "        </form>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>"
   );
 
 }]);

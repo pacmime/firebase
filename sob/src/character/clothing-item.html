@@ -1,50 +1,49 @@
-<div>
+<div class="clothing__item">
 
-    <label>{{type}}</label>
+    <div class="pull-right">
+        
+        <button type="button" class="btn btn-default btn-sm" ng-if="!$ctrl.item.name" 
+            ng-click="$ctrl.isEditing=!$ctrl.isEditing">
+            <span ng-if="!$ctrl.isEditing" class="glyphicon glyphicon-plus"></span>
+            <span ng-if="$ctrl.isEditing" class="glyphicon glyphicon-remove"></span>
+        </button>
 
-    <div class="grid">
-
-        <div class="grid__col-xs-3">
-            <div>
-                {{current.name}}
-                <input type="text" class="form-control" placeholder="Name"
-                    ng-model="value.name" ng-if="!current.name">
-            </div>
-        </div>
-
-        <div class="grid__col-xs-9">
-            <div>
-            
-                {{current.desc}}
-            
-                <div class="btn-group pull-right" ng-if="current.name">
-                  
-                  <button type="button" class="btn btn-danger" 
-                      ng-if="isRemoving" ng-click="isRemoving=false">
-                    <span class="glyphicon glyphicon-remove"></span>
-                  </button>
-
-                  <button type="button" class="btn btn-danger" 
-                      ng-click="remove()">
-                    <span class="glyphicon" 
-                       ng-class="\'glyphicon-trash\':!isRemoving,\'glyphicon-ok\':isRemoving"></span>
-                  </button>
-                  
-                </div>
-
-                <div class="input-group" ng-if="!current.name">
-                    <input type="text" class="form-control" placeholder="Description"
-                        ng-model="value.desc">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-success" 
-                            ng-click="add()">+</button>
-                    </span>
-                </div>
-
-            </div>
-
-        </div>
-
+        <button type="button" class="btn btn-default btn-sm" ng-if="$ctrl.item.name" 
+            ng-click="$ctrl.isEditing=!$ctrl.isEditing">
+            <span ng-if="!$ctrl.isEditing" class="glyphicon glyphicon-pencil"></span>
+            <span ng-if="$ctrl.isEditing" class="glyphicon glyphicon-remove"></span>
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" ng-if="$ctrl.item.name" ng-click="$ctrl.remove()">
+            <span class="glyphicon glyphicon-trash" ng-if="!$ctrl.isRemoving"></span>
+            <span class="glyphicon glyphicon-ok" ng-if="$ctrl.isRemoving"></span>
+        </button>
+        
     </div>
 
+    <div ng-if="$ctrl.item.name">
+        <h5>
+            <span ng-if="!$ctrl.isEditing">{{$ctrl.item.name}}</span>
+            <small>{{$ctrl.type}}</small>
+        </h5>  
+        <small ng-if="!$ctrl.isEditing">{{$ctrl.item.desc}}</small>
+    </div>
+    <div ng-if="!$ctrl.item.name">
+        <h5>
+            <em ng-if="!$ctrl.isEditing">Empty</em>
+            <small>{{$ctrl.type}}</small>
+        </h5>
+    </div>
+
+    <div ng-if="$ctrl.isEditing">
+        <input type="text" class="form-control" placeholder="Name" ng-model="$ctrl.item.name">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Description"
+                ng-model="$ctrl.item.desc">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-success" 
+                    ng-click="$ctrl.add()"><span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </span>
+        </div>
+    </div>
 </div>

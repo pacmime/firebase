@@ -3,11 +3,20 @@
     Basic page structure
 \* --------------------------------- */
 
-html, body {
+html{
     font-size: 16px;
 }
 
+h6 { font-size: 0.85rem; }
+h5 { font-size: 1rem; }
+h4 { font-size: 1.25rem; }
+h3 { font-size: 1.5rem; }
+h2 { font-size: 1.75rem; }
+h1 { font-size: 2rem; }
+
+
 body {
+    font-size: 1rem;
     background: #E9E3CD;
 }
 body .navbar.navbar-default {
@@ -20,14 +29,21 @@ body .navbar>.container-fluid .navbar-brand {
 }
 
 .page {
-    margin: 0 1rem;
     border-radius: 4px;
 }
 
 header {
     padding: 1rem;
+    margin-bottom: 1rem;
 }
 
+@media (min-width: 768px) {
+    header { margin-bottom: 0; }
+}
+
+body .navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
 
 
 
@@ -36,8 +52,11 @@ header {
 \* --------------------------------- */
 
 .stats {
-    background-color: #C4AC83;
+    background-color: #E4CFAC;
     background-image: url(texture.png);
+    /* border: 4px solid #c4ac83; */
+    border-radius: 8px;
+    padding: .5em 0;
 }
 .stats .stat {
     margin-right: -.3em;
@@ -91,6 +110,27 @@ header {
 
 
 
+.stat.stat--with-plus [editable-stat-value]:after {
+    content: "+";
+    font-size: 0.7em;
+    position: absolute;
+    right: .75em;
+    top: 1em;
+}
+.stat.stat--prepend-plus [editable-stat-value]:before {
+    content: "+";
+    font-size: 0.7em;
+    position: absolute;
+    left: .75em;
+    top: 1em;
+}
+
+
+
+
+
+
+
 /* --------------------------------- *\
     Sections with lists
 \* --------------------------------- */
@@ -126,12 +166,29 @@ header {
 }
 
 
+.clothing__item {
+    clear: both;
+    min-height: 2em;
+    margin-bottom: 0.5em;
+}
+
+
+
+.ability {
+    margin-bottom: 1em;
+}
+.ability h5 {
+    padding: 1em 0 0;
+    margin-bottom: 0;
+}
+
 
 
 /* --------------------------------- *\
     Sections with stats
 \* --------------------------------- */
 .sidebag {
+    padding-bottom: 1em;
     text-align: center;
     background-color: #A25952;
     background-image: url(texture2.png);
@@ -140,6 +197,7 @@ header {
     color: #fff; 
     text-shadow: 0 1px 3px #000;
 }
+/*
 .sidebag .stat {
     font-size: 1em;
     margin-bottom: 1em;
@@ -151,6 +209,7 @@ header {
 @media(min-width:992px) {
     .sidebag .stat { font-size: 0.8em; }
 }
+*/
 
 .level {
     background-color: #A5BC9A;
@@ -348,14 +407,18 @@ table thead img { width: 1.5em; }
     width: 100%;
 } 
 .img-selector .image img {
-    max-height: 200px;
-    max-width:  200px;
     width:      100%;
 }
 .img-selector .image button {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+@media (min-width: 768px) {
+    .img-selector .image img {
+        max-height: 300px;
+        max-width:  200px;
+    }
 }
 
 

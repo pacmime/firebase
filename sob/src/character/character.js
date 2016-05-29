@@ -50,98 +50,58 @@
 
 
 
+    .component('clothing', {
+        bindings: {
+            character: "=",
+            type: "@",
+            onSave: "&"
+        },
+        controller: function() {
 
-    .directive('clothing', function() {
-
-        return {
-            scope: {
-                character: "=",
-                type: "@",
-                onSave: '&'
-            },
-            replace: true,
-            template: [
-                '<div>',
-                '    <label>{{type}}</label>',
-                '    <button type="button" class="btn btn-default btn-sm" ',
-                '            ng-if="!current" ',
-                '            ng-click="isEditing=!isEditing">',
-                '        <span ng-if="!isEditing">+</span>',
-                '        <span ng-if="isEditing">&times;</span>',
-                '    </button>',
-
-                '    <div class="grid" ng-if="isEditing || current">',
-                '        <div class="grid__col-xs-3 grid__col--bleed">',
-                '            {{current.name}}',
-                '            <input type="text" class="form-control" placeholder="Name"',
-                '                ng-model="value.name" ng-if="!current.name">',
-                '        </div>',
-                '        <div class="grid__col-xs-9 grid__col--bleed">',
-                '            <div>',
-                '                {{current.desc}}',
-                '                <div class="btn-group pull-right" ng-if="current.name">',
-                '                  <button type="button" class="btn btn-danger" ',
-                '                      ng-if="isRemoving" ng-click="isRemoving=false">',
-                '                    <span class="glyphicon glyphicon-remove"></span>',
-                '                  </button>',
-                '                  <button type="button" class="btn btn-danger" ',
-                '                      ng-click="remove()">',
-                '                    <span class="glyphicon glyphicon-trash" ng-if="!isRemoving"></span>',
-                '                    <span class="glyphicon glyphicon-ok" ng-if="isRemoving"></span>',
-                '                  </button>',
-                '                </div>',
-
-                '                <div class="input-group" ng-if="!current.name">',
-                '                    <input type="text" class="form-control" placeholder="Description"',
-                '                        ng-model="value.desc">',
-                '                    <span class="input-group-btn">',
-                '                        <button type="button" class="btn btn-success" ',
-                '                            ng-click="add()"><span class="glyphicon glyphicon-ok"></span></button>',
-                '                    </span>',
-                '                </div>',
-                '            </div>',
-                '        </div>',
-                '    </div>',
-                '</div>'
-            ].join(' '),
-
-            controller: function($scope, $element) {
-
-                function init() {
-                    $scope.value = {name: null, desc: null};
-                    $scope.isEditing = false;
-                }
-                init();
-
-                function update() {
-                    $scope.current = $scope.character.clothing && $scope.character.clothing[$scope.type];
-                }
-                $scope.character.$loaded().then(update);
-
-                $scope.add = function() {
-                    if(!$scope.value.name) return;
-
-                    $scope.character.clothing = $scope.character.clothing || {}
-                    $scope.character.clothing[$scope.type] = $scope.value;
-                    $scope.onSave();
-                    update();
-                    init();
-                };
-
-                $scope.remove = function() {
-                    if($scope.isRemoving === true) {
-                        $scope.isRemoving = false;
-                        $scope.character.clothing[$scope.type] = null;
-                        $scope.onSave();
-                        update();
-                    } else {
-                        $scope.isRemoving = true;
-                    }
-                };
-
+            var self = this;
+            this.init = function() {
+                this.item = {name: null, desc: null};
+                this.isEditing = false;
             }
-        };
+            this.init();
+
+            this.update = function() {
+                var current = this.character.clothing && this.character.clothing[this.type];
+                if(current) {
+                    this.item.name = current.name;
+                    this.item.desc = current.desc;
+                }
+            }
+            this.character.$loaded().then(function() {
+                self.update();
+            });
+
+            this.add = function() {
+                if(!this.item.name) return;
+
+                this.character.clothing = this.character.clothing || {}
+                this.character.clothing[this.type] = this.item;
+                this.onSave();
+                this.update();
+                this.init();
+            };
+
+            this.remove = function() {
+                if(this.isRemoving === true) {
+                    this.isRemoving = false;
+                    this.character.clothing[this.type] = null;
+                    this.onSave();
+                    this.update();
+                } else {
+                    this.isRemoving = true;
+                }
+            };
+
+        },
+        templateUrl: 'src/character/clothing-item.html' 
     })
+
+
 
 
     .directive('abilities', function() {
@@ -233,14 +193,14 @@
                 '<div class="ability">',
                 '  <div ng-if="!ctrl.displayEditor">',
                 '    <div class="pull-right">',
-                '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.remove()">',
+                '      <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
                 '        <span class="glyphicon glyphicon-trash"></span>',
                 '      </button>',
                 '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
                 '        <span class="glyphicon glyphicon-pencil"></span>',
                 '      </button>',
                 '    </div>',
-                '    <strong>{{ctrl.name}}</strong> <small>{{ctrl.desc}}</small>',
+                '    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>',
                 '  </div>',
                 '  <form ng-if="ctrl.displayEditor">',
                 '    <input type="text" ng-model="ctrl.name" placeholder="name">',
@@ -252,7 +212,6 @@
                 '      <span class="glyphicon glyphicon-remove"></span>',
                 '    </button>',
                 '  </form>',
-                '  <br><br>',
                 '</div>'
             ].join(' '),
             
@@ -351,14 +310,14 @@
                 '<div class="mutation">',
                 '  <div ng-if="!ctrl.displayEditor">',
                 '    <div class="pull-right">',
-                '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.remove()">',
+                '      <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
                 '        <span class="glyphicon glyphicon-trash"></span>',
                 '      </button>',
                 '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
                 '        <span class="glyphicon glyphicon-pencil"></span>',
                 '      </button>',
                 '    </div>',
-                '    <strong>{{ctrl.name}}</strong> <small>{{ctrl.desc}}</small>',
+                '    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>',
                 '  </div>',
                 '  <form ng-if="ctrl.displayEditor">',
                 '    <input type="text" ng-model="ctrl.name" placeholder="name">',
@@ -532,14 +491,16 @@
                 '   </div>',
                 '   <div class="grid__col-sm-9 grid__col-md-8">',
                 '       <div>',
-                '           <strong>{{name}}</strong><br>',
-                '           {{item.description}}  <em>({{item.source}})</em>',
-                '           <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.remove()">',
-                '             <span class="glyphicon glyphicon-trash"></span>',
-                '           </button>',
-                '           <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
-                '             <span class="glyphicon glyphicon-pencil"></span>',
-                '           </button>',
+                '           <div class="pull-right">',
+                '               <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
+                '                 <span class="glyphicon glyphicon-trash"></span>',
+                '               </button>',
+                '               <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
+                '                 <span class="glyphicon glyphicon-pencil"></span>',
+                '               </button>',
+                '           </div>',
+                '           <h5>{{name}}</h5>',
+                '           <small>{{item.description}}  <em>({{item.source}})</em></small>',
                 '       </div>',
                 '   </div>',
                 '</div>'

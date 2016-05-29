@@ -7,8 +7,8 @@
     
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "DataStore",
-        function($scope, $timeout, DataStore) {
+        "$scope", "$timeout", "DataStore", "Auth",
+        function($scope, $timeout, DataStore, Auth) {
         
         var self = this;
         
@@ -19,20 +19,27 @@
         };
 
 
-        //load saved campaigns
-        // this.data = DataStore;
-        DataStore.$loaded().then(function() {
-            updateList();
-            self.displayOpts.loading = false;
-        }).catch(function(error) {
-            self.displayOpts.error = "Failed to load saved data: " + error.data;
+        Auth.$onAuth(function(authData) {
+            $scope.user = authData;
+
+            self.data = DataStore('userId', authData.uid);
+            self.data.$loaded().then(function() {
+                updateList();
+                self.displayOpts.loading = false;
+            }).catch(function(error) {
+                self.displayOpts.error = "Failed to load saved data: " + error.data;
+            });
+          
+
         });
+
         
 
         function updateList() {
             var chars = [];
-            angular.forEach(DataStore, function(value, key) { 
-                chars.push(key); 
+            angular.forEach(self.data, function(value, key) { 
+                if(value.userId && value.userId === $scope.user.uid)
+                    chars.push(key); 
             });
             self.chars = chars;
         }
@@ -43,9 +50,14 @@
                 alert("Characters must have a name");
                 return;
             }
+            
             var json = getCharacterShell();
-            DataStore[name] = json;
-            DataStore.$save().then(function() {
+            
+            //associate user id for restricting who can edit
+            json.userId = $scope.user.uid;  
+
+            self.data[name] = json;
+            self.data.$save().then(function() {
                 //navigate to the new char page
                 window.location = '#/' + encodeURIComponent(name);
 

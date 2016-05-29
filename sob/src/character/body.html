@@ -1,9 +1,53 @@
 <div class="body">
+    
     <div class="grid">
 
         <div class="grid__col-sm-12 grid__col-md-6">
             
-            <div items character="ctrl.character" on-save="ctrl.save()"></div>
+            <div>
+                
+                <div class="level">
+                    <div class="stat">
+                        <label>Level</label>
+                        <div class="value" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.level" minimum="1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="xp">
+                    <div class="stat">
+                        <!-- <label>XP</label> -->
+                        <div class="value--sm" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.xp"></div>
+                        <img src="assets/xp.png">
+                    </div>
+                </div>
+                
+                <div class="wealth">
+                    <div class="stat">
+                        <div class="value--sm" editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.wealth"></div>
+                        <img src="assets/wealth.png">
+                    </div>
+                </div>
+
+                <div class="darkstone">
+                    <div class="stat">
+                        <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.darkstone"></div>
+                        <img src="assets/darkstone.png">
+                    </div>
+                </div>
+
+            </div>
+
+            <ng-include src="'src/character/health.html'"></ng-include>
+
+            <ng-include src="'src/character/sanity.html'"></ng-include>
+            
+            <ng-include src="'src/character/faith-and-corruption.html'"></ng-include>
+            
+            <ng-include src="'src/character/move-and-grit.html'"></ng-include>
+
+            <ng-include src="'src/character/sidebag.html'"></ng-include>    
+                    
 
         </div>
 

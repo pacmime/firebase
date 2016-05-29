@@ -5,21 +5,36 @@
 
     .constant('DataStoreUrl', "https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone")
 
-    .factory("DataStore", ["$firebaseObject",
-        function($firebaseObject) {
-            var ref = new Firebase("https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone/chars");
-            return $firebaseObject(ref);
-        }
-    ])
-
-    .factory("CharacterRef", ["$firebaseObject",
-        function($firebaseObject) {
-            return function(name) {
-                var ref = new Firebase("https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone/chars/" + name);
+    .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(property, value) {
+                var ref = new Firebase(DataStoreUrl + "/chars");
+                if(property && value)
+                    ref.orderByChild(property).equalTo(value);
                 return $firebaseObject(ref);
             }
         }
     ])
+
+    .factory("CharacterRef", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(name) {
+                var ref = new Firebase(DataStoreUrl + "/chars/" + name);
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("Auth", ["$firebaseAuth", 'DataStoreUrl',
+        function($firebaseAuth, DataStoreUrl) {
+            var ref = new Firebase(DataStoreUrl);
+            return $firebaseAuth(ref);
+        }
+    ])
+
+
+
+
 
 
     .filter('encode', function() {
@@ -33,6 +48,77 @@
             return decodeURIComponent(value);
         };
     })
+
+    .provider('responsiveHelper', ["$windowProvider", function ($windowProvider) {
+        
+        var $window  = $windowProvider.$get();
+
+        function Helper($window) {
+            this.window = $window;
+        }
+        Helper.prototype = {
+            getWidth: function() { return $window.innerWidth || $window.outerWidth; },
+            isXS: function () { var width = this.getWidth(); return width < 768; },
+            isSM: function () { var width = this.getWidth(); return width >= 768 && width < 992; },
+            isMD: function () { var width = this.getWidth(); return width >= 992 && width < 1200; },
+            isLG: function () { var width = this.getWidth(); return width >= 1200; }
+        };
+
+        var helper = new Helper($window);
+
+        this.$get = function() {
+            return helper;
+        };
+    }])
+
+    //directive which appends appropriate responsive breakpoint classNames to the element
+    // on which it's set
+    .directive('responsive', ['$window', 'responsiveHelper', function($window, responsiveHelper) {
+
+        return {
+            restrict: "A",
+            link: function($scope, $element, $attrs) {
+
+                function update(el, helper) {
+                    if(helper.isXS())
+                        el.addClass('responsive-xs');
+                    else
+                        el.removeClass('responsive-xs');
+
+                    if(helper.isSM())
+                        el.addClass('responsive-sm');
+                    else 
+                        el.removeClass('responsive-sm');
+
+                    if(helper.isMD())
+                        el.addClass('responsive-md');
+                    else 
+                        el.removeClass('responsive-md');
+
+                    if(helper.isLG())
+                        el.addClass('responsive-lg');
+                    else 
+                        el.removeClass('responsive-lg');
+                }
+
+                update($element, responsiveHelper);
+
+                var resizeFn = function() {
+                    update($element, responsiveHelper);
+                };
+
+                var w = angular.element($window);
+                var listener = w.on('resize', resizeFn);
+
+                $scope.$on('$destroy', function() {
+                    w.off('resize', resizeFn);
+                });
+
+            }
+        };
+
+    }])
+
 
     .controller('ItemEditor', function($scope, $uibModalInstance, item) {
 
@@ -78,7 +164,7 @@
             scope: {
                 onSave: '&',
                 minimum: '@',
-                maximum: '@',
+                maximum: '@'
             },
             restrict: 'A',
             require: 'ngModel',
@@ -314,6 +400,91 @@
         };
 
     })
+
+
+
+
+
+
+
+    .controller('LoginController', function($scope, $uibModalInstance, Auth) {
+
+        $scope.login = function() {
+            Auth.$authWithPassword({email: $scope.email, password: $scope.password})
+            .then(function(authData) {
+                console.log("Logged in");
+                $uibModalInstance.close();
+            })
+            .catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("unable to login: " + errorMessage);
+            });
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+
+    // // any time auth status updates, add the user data to scope
+    
+
+    })
+
+
+    .directive('login', ["$uibModal", "Auth", function($uibModal, Auth) {
+
+        return {
+        
+            template: [
+                '<a ng-click="toggle()">', 
+                '  <span ng-if="!user">Login</span>',
+                '  <span ng-if="user">{{user.password.email}} <span class="glyphicon glyphicon-log-out"></span></span>', 
+                '</a>'
+            ].join(' '),
+
+            controller: function($scope) {
+
+
+                Auth.$onAuth(function(authData) {
+                    $scope.user = authData;
+                });
+
+                $scope.toggle = function() {
+
+                    if($scope.user) {
+                        Auth.$unauth();
+                        $scope.user = null;
+
+                    } else {
+
+                        var modalInstance = $uibModal.open({
+                            templateUrl: 'src/login.html',
+                            controller: 'LoginController',
+                            resolve: {
+                                Auth: function() { return Auth; }
+                            }
+                        });
+
+                        modalInstance.result.then(function() {
+                            
+
+                        }, function () {
+
+
+                        });
+                    }
+
+                };
+
+
+            }
+        };
+
+
+    }])
+
 
     ;
 
