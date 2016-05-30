@@ -20,6 +20,16 @@
         //load the campaign
         this.charName = decodeURIComponent($routeParams.charId);
         this.character = CharacterRef(this.charName);
+
+        this.character.$loaded().then(function() {
+            self.character.sidebag.spices = self.character.sidebag.spices || 0;
+            self.character.sidebag.potions = self.character.sidebag.potions || 0;
+            self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;
+            self.character.sidebag.lanternOil = self.character.sidebag.lanternOil || 0;
+            self.character.sidebag.exoticHerbs = self.character.sidebag.exoticHerbs || 0;
+            self.character.sidebag.tequila = self.character.sidebag.tequila || 0;
+            self.character.sidebag.cigars = self.character.sidebag.cigars || 0;
+        });
         
         this.onInputKeyPress = function($event) {
             var key = $event.keyCode || $event.which;
@@ -43,7 +53,17 @@
                 (self.character.sidebag.herbs||0) + 
                 (self.character.sidebag.dynamite||0) + 
                 (self.character.sidebag.flash||0) + 
-                (self.character.sidebag.fungus||0));
+                (self.character.sidebag.fungus||0) + 
+                (self.character.sidebag.spices||0) +  
+                (self.character.sidebag.potions||0) +  
+                (self.character.sidebag.hatchets||0) + 
+                (self.character.sidebag.lanternOil||0) + 
+                (self.character.sidebag.exoticHerbs||0) +  
+                (self.character.sidebag.tequila||0) + 
+                (self.character.sidebag.cigars||0)
+            );
+
+            
         };
 
     }])

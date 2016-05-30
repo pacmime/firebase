@@ -438,10 +438,16 @@
         return {
         
             template: [
-                '<a ng-click="toggle()">', 
-                '  <span ng-if="!user">Login</span>',
-                '  <span ng-if="user">{{user.password.email}} <span class="glyphicon glyphicon-log-out"></span></span>', 
-                '</a>'
+                '<a ng-if="!user" ng-click="doLogin()">Login</a>',
+                '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
+                '  role="button" aria-haspopup="true" aria-expanded="false">',
+                '  {{user.password.email}} <span class="caret"></span>',
+                '</a>',
+                '<ul ng-if="user" class="dropdown-menu">',
+                '  <li><a ng-click="doReset()">Reset Password</a></li>',
+                '  <li><a ng-click="doLogout()">Log out</a></li>',
+                '</ul>',
+                '</div>'
             ].join(' '),
 
             controller: function($scope) {
@@ -451,33 +457,35 @@
                     $scope.user = authData;
                 });
 
-                $scope.toggle = function() {
+                $scope.doLogout = function() {
+                    Auth.$unauth();
+                    $scope.user = null;
+                };
 
-                    if($scope.user) {
-                        Auth.$unauth();
-                        $scope.user = null;
+                $scope.doLogin = function() {
 
-                    } else {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/login.html',
+                        controller: 'LoginController',
+                        resolve: {
+                            Auth: function() { return Auth; }
+                        }
+                    });
 
-                        var modalInstance = $uibModal.open({
-                            templateUrl: 'src/login.html',
-                            controller: 'LoginController',
-                            resolve: {
-                                Auth: function() { return Auth; }
-                            }
-                        });
-
-                        modalInstance.result.then(function() {
-                            
-
-                        }, function () {
-
-
-                        });
-                    }
+                    modalInstance.result.then(function() {}, function () {});
 
                 };
 
+                $scope.doReset = function() {
+
+                    Auth.$resetPassword({ email : $scope.user.password.email }, function(error) {
+                        if (error === null) {
+                            alert("Password reset email sent");
+                        } else {
+                            alert("Error sending password reset email:", error);
+                        }
+                    });
+                }
 
             }
         };
