@@ -49,6 +49,9 @@
             if(!name) {
                 alert("Characters must have a name");
                 return;
+            } else if(self.data[name]) {
+                alert("Name is already in use");
+                return;
             }
             
             var json = getCharacterShell();

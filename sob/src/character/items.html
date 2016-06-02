@@ -3,9 +3,11 @@
 
     <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
 
+    <hr>
+
     <button type="button" class="btn btn-success pull-right" ng-click="add()">Add</button>
                     
-    <img src="assets/item_weight.png" width="32"> {{itemWeight}}
-    <img src="assets/item_darkstone.png" width="32"> {{itemDarkstone}}
+    <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;
+    <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
 
 </div>

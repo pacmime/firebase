@@ -4,10 +4,10 @@
         <div editable-stat-value on-save="ctrl.save()" ng-model="ctrl.character.health.max"></div>
     </div>
     <div class="stat">
-        <img src="assets/wealth.png">
         <div editable-stat-value on-save="ctrl.save()" 
             ng-model="ctrl.character.health.wounds"></div>
-        <img src="assets/wound.png">    
+        <!-- <img src="assets/wound.png">    --> 
+        <span class="sprite sprite-wound"></span>
     </div>
     <div class="stat stat--with-plus">
         <label>Defense</label>

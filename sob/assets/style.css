@@ -104,6 +104,11 @@ body .navbar-default .navbar-nav>li>a {
     left:       0;
     width:      2em;
 }
+.stat .sprite {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
 
 
 
@@ -155,6 +160,9 @@ body .navbar-default .navbar-nav>li>a {
     vertical-align:top; 
     text-align:center;
 }
+.item h5 {
+    margin-top: 0;
+}
 @media(min-width: 768px) {
     .items img {
         margin-right: 0;
@@ -169,7 +177,12 @@ body .navbar-default .navbar-nav>li>a {
 .clothing__item {
     clear: both;
     min-height: 2em;
-    margin-bottom: 0.5em;
+    margin: 0.5em 0;
+}
+.clothing__item h5 {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 0.5em;
 }
 
 
@@ -437,3 +450,275 @@ table thead img { width: 1.5em; }
 .grid__col--grow-5 { flex-grow: 5; }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+.sprite {
+    background-image: url(spritesheet.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.sprite-bandages {
+    width: 55px;
+    height: 55px;
+    background-position: -5px -5px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-cigar {
+    width: 55px;
+    height: 55px;
+    background-position: -70px -5px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-corruption {
+    width: 56px;
+    height: 56px;
+    background-position: -135px -5px;
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.6);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-dynamite {
+    width: 55px;
+    height: 55px;
+    background-position: -200px -5px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-exoticHerbs {
+    width: 55px;
+    height: 54px;
+    background-position: -5px -70px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-flash {
+    width: 55px;
+    height: 55px;
+    background-position: -70px -70px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-fungus {
+    width: 55px;
+    height: 55px;
+    background-position: -135px -70px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-hatchet {
+    width: 55px;
+    height: 55px;
+    background-position: -200px -70px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-herb {
+    width: 55px;
+    height: 55px;
+    background-position: -5px -135px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-item_darkstone {
+    width: 55px;
+    height: 55px;
+    background-position: -70px -135px;
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.4);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-item_hands {
+    width: 55px;
+    height: 55px;
+    background-position: -135px -135px;
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.4);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-item_slots {
+    width: 55px;
+    height: 55px;
+    background-position: -200px -135px;
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.4);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-item_weight {
+    width: 55px;
+    height: 55px;
+    background-position: -5px -200px;
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.4);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-oil {
+    width: 55px;
+    height: 55px;
+    background-position: -70px -200px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-potion {
+    width: 55px;
+    height: 55px;
+    background-position: -135px -200px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-sanity {
+    width: 56px;
+    height: 56px;
+    background-position: -200px -200px;
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.6);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-spice {
+    width: 55px;
+    height: 55px;
+    background-position: -265px -5px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-tequila {
+    width: 55px;
+    height: 55px;
+    background-position: -265px -70px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-tonic {
+    width: 55px;
+    height: 55px;
+    background-position: -265px -135px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-wealth {
+    width: 55px;
+    height: 55px;
+    background-position: -265px -200px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-whiskey {
+    width: 55px;
+    height: 55px;
+    background-position: -5px -265px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-wound {
+    width: 56px;
+    height: 56px;
+    background-position: -70px -265px;
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.6);
+    -o-transform-origin: 0 0;
+}
+
+.sprite-xp {
+    width: 56px;
+    height: 56px;
+    background-position: -135px -265px;
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+}
