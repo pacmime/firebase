@@ -438,10 +438,16 @@
         return {
         
             template: [
-                '<a ng-click="toggle()">', 
-                '  <span ng-if="!user">Login</span>',
-                '  <span ng-if="user">{{user.password.email}} <span class="glyphicon glyphicon-log-out"></span></span>', 
-                '</a>'
+                '<a ng-if="!user" ng-click="doLogin()">Login</a>',
+                '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
+                '  role="button" aria-haspopup="true" aria-expanded="false">',
+                '  {{user.password.email}} <span class="caret"></span>',
+                '</a>',
+                '<ul ng-if="user" class="dropdown-menu">',
+                '  <li><a ng-click="doReset()">Reset Password</a></li>',
+                '  <li><a ng-click="doLogout()">Log out</a></li>',
+                '</ul>',
+                '</div>'
             ].join(' '),
 
             controller: function($scope) {
@@ -451,33 +457,35 @@
                     $scope.user = authData;
                 });
 
-                $scope.toggle = function() {
+                $scope.doLogout = function() {
+                    Auth.$unauth();
+                    $scope.user = null;
+                };
 
-                    if($scope.user) {
-                        Auth.$unauth();
-                        $scope.user = null;
+                $scope.doLogin = function() {
 
-                    } else {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/login.html',
+                        controller: 'LoginController',
+                        resolve: {
+                            Auth: function() { return Auth; }
+                        }
+                    });
 
-                        var modalInstance = $uibModal.open({
-                            templateUrl: 'src/login.html',
-                            controller: 'LoginController',
-                            resolve: {
-                                Auth: function() { return Auth; }
-                            }
-                        });
-
-                        modalInstance.result.then(function() {
-                            
-
-                        }, function () {
-
-
-                        });
-                    }
+                    modalInstance.result.then(function() {}, function () {});
 
                 };
 
+                $scope.doReset = function() {
+
+                    Auth.$resetPassword({ email : $scope.user.password.email }, function(error) {
+                        if (error === null) {
+                            alert("Password reset email sent");
+                        } else {
+                            alert("Error sending password reset email:", error);
+                        }
+                    });
+                }
 
             }
         };
@@ -512,6 +520,16 @@
         //load the campaign
         this.charName = decodeURIComponent($routeParams.charId);
         this.character = CharacterRef(this.charName);
+
+        this.character.$loaded().then(function() {
+            self.character.sidebag.spices = self.character.sidebag.spices || 0;
+            self.character.sidebag.potions = self.character.sidebag.potions || 0;
+            self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;
+            self.character.sidebag.lanternOil = self.character.sidebag.lanternOil || 0;
+            self.character.sidebag.exoticHerbs = self.character.sidebag.exoticHerbs || 0;
+            self.character.sidebag.tequila = self.character.sidebag.tequila || 0;
+            self.character.sidebag.cigars = self.character.sidebag.cigars || 0;
+        });
         
         this.onInputKeyPress = function($event) {
             var key = $event.keyCode || $event.which;
@@ -535,7 +553,17 @@
                 (self.character.sidebag.herbs||0) + 
                 (self.character.sidebag.dynamite||0) + 
                 (self.character.sidebag.flash||0) + 
-                (self.character.sidebag.fungus||0));
+                (self.character.sidebag.fungus||0) + 
+                (self.character.sidebag.spices||0) +  
+                (self.character.sidebag.potions||0) +  
+                (self.character.sidebag.hatchets||0) + 
+                (self.character.sidebag.lanternOil||0) + 
+                (self.character.sidebag.exoticHerbs||0) +  
+                (self.character.sidebag.tequila||0) + 
+                (self.character.sidebag.cigars||0)
+            );
+
+            
         };
 
     }])
@@ -967,16 +995,16 @@
                 '   <div class="grid__col-sm-3 grid__col-md-4">',
                 '       <div class="grid grid--justify-space-between">',
                 '           <div class="grid__col">',
-                '               <div><img src="assets/item_weight.png"> <br class="hidden-xs"> {{item.weight}}</div>',
+                '               <div><span class="sprite sprite-item_weight"></span> <br class="hidden-xs"> {{item.weight}}</div>',
                 '           </div>',
                 '           <div class="grid__col">',
-                '               <div><img src="assets/item_darkstone.png"> <br class="hidden-xs"> {{item.darkstone}}</div>',
+                '               <div><span class="sprite sprite-item_darkstone"></span> <br class="hidden-xs"> {{item.darkstone}}</div>',
                 '           </div>',
                 '           <div class="grid__col">',
-                '               <div><img src="assets/item_hands.png"> <br class="hidden-xs"> {{item.hands}}</div>',
+                '               <div><span class="sprite sprite-item_hands"></span> <br class="hidden-xs"> {{item.hands}}</div>',
                 '           </div>',
                 '           <div class="grid__col">',
-                '               <div><img src="assets/item_slots.png"> <br class="hidden-xs"> {{item.slots}}</div>',
+                '               <div><span class="sprite sprite-item_slots"></span> <br class="hidden-xs"> {{item.slots}}</div>',
                 '           </div>',
                 '           <div class="grid__col"></div>',
                 '       </div>',
@@ -1058,6 +1086,9 @@
             var name = prompt("Name the character", "Joe Bob");
             if(!name) {
                 alert("Characters must have a name");
+                return;
+            } else if(self.data[name]) {
+                alert("Name is already in use");
                 return;
             }
             
@@ -1266,14 +1297,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <div class=\"stat\">\n" +
     "                        <!-- <label>XP</label> -->\n" +
     "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.xp\"></div>\n" +
-    "                        <img src=\"assets/xp.png\">\n" +
+    "                        <!-- <img src=\"assets/xp.png\"> -->\n" +
+    "                        <span class=\"sprite sprite-xp\"></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                \n" +
     "                <div class=\"wealth\">\n" +
     "                    <div class=\"stat\">\n" +
     "                        <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.wealth\"></div>\n" +
-    "                        <img src=\"assets/wealth.png\">\n" +
+    "                        <!-- <img src=\"assets/wealth.png\"> -->\n" +
+    "                        <span class=\"sprite sprite-wealth\"></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
@@ -1790,7 +1823,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div class=\"stat\">\n" +
     "            <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "                ng-model=\"ctrl.character.corruption.current\"></div>\n" +
-    "            <img src=\"assets/corruption.png\">\n" +
+    "            <!-- <img src=\"assets/corruption.png\"> -->\n" +
+    "            <span class=\"sprite sprite-corruption\"></span>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    \n" +
@@ -1840,7 +1874,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <div><label>Name: </label> {{ctrl.charName}}</div>\n" +
     "                    <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div>\n" +
     "                    <div editable-input label=\"Keywords\" ng-model=\"ctrl.character.keywords\" on-save=\"ctrl.save()\"></div>\n" +
-    "\n" +
+    "                    <br>\n" +
     "                    <div>\n" +
     "                        <span class=\"stat\">\n" +
     "                            <label>Combat</label>\n" +
@@ -1879,10 +1913,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.health.max\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"stat\">\n" +
-    "        <img src=\"assets/wealth.png\">\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.health.wounds\"></div>\n" +
-    "        <img src=\"assets/wound.png\">    \n" +
+    "        <!-- <img src=\"assets/wound.png\">    --> \n" +
+    "        <span class=\"sprite sprite-wound\"></span>\n" +
     "    </div>\n" +
     "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Defense</label>\n" +
@@ -1902,10 +1936,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div ng-repeat=\"(name, item) in character.items\" item=\"item\" name=\"{{name}}\" on-save=\"onEdited(name, item)\"></div>\n" +
     "\n" +
+    "    <hr>\n" +
+    "\n" +
     "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>\n" +
     "                    \n" +
-    "    <img src=\"assets/item_weight.png\" width=\"32\"> {{itemWeight}}\n" +
-    "    <img src=\"assets/item_darkstone.png\" width=\"32\"> {{itemDarkstone}}\n" +
+    "    <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
+    "    <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
     "\n" +
     "</div>"
   );
@@ -1973,7 +2009,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <!-- <label>Loss</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sanity.loss\"></div>\n" +
-    "        <img src=\"assets/sanity.png\">\n" +
+    "        <!-- <img src=\"assets/sanity.png\"> -->\n" +
+    "        <span class=\"sprite sprite-sanity\"></span>\n" +
     "    </div>\n" +
     "    <div class=\"stat stat--with-plus\">\n" +
     "        <label>Willpower</label>\n" +
@@ -1996,50 +2033,117 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.bandages\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/bandages.png\">\n" +
+    "        <!-- <img src=\"assets/bandages.png\"> -->\n" +
+    "        <span class=\"sprite sprite-bandages\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Whiskey</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.whiskey\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/whiskey.png\">\n" +
+    "        <!-- <img src=\"assets/whiskey.png\"> -->\n" +
+    "        <span class=\"sprite sprite-whiskey\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Tonic</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.tonic\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/tonic.png\">\n" +
+    "        <!-- <img src=\"assets/tonic.png\"> -->\n" +
+    "        <span class=\"sprite sprite-tonic\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Herbs</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.herbs\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/herb.png\">\n" +
+    "        <!-- <img src=\"assets/herb.png\"> -->\n" +
+    "        <span class=\"sprite sprite-herb\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Dynamite</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.dynamite\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/dynamite.png\">\n" +
+    "        <!-- <img src=\"assets/dynamite.png\"> -->\n" +
+    "        <span class=\"sprite sprite-dynamite\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Flash</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.flash\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/flash.png\">\n" +
+    "        <!-- <img src=\"assets/flash.png\"> -->\n" +
+    "        <span class=\"sprite sprite-flash\"></span>\n" +
     "    </div>    \n" +
     "    <div class=\"stat\">\n" +
     "        <!-- <label>Swamp Fungus</label> -->\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
     "            ng-model=\"ctrl.character.sidebag.fungus\"\n" +
     "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "        <img src=\"assets/fungus.png\">\n" +
+    "        <!-- <img src=\"assets/fungus.png\"> -->\n" +
+    "        <span class=\"sprite sprite-fungus\"></span>\n" +
     "    </div>    \n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Spice</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.spices\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/spice.png\"> -->\n" +
+    "        <span class=\"sprite sprite-spice\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Potion</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.potions\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/potion.png\"> -->\n" +
+    "        <span class=\"sprite sprite-potion\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Hatchet</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.hatchets\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/hatchet.png\"> -->\n" +
+    "        <span class=\"sprite sprite-hatchet\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Lantern Oil</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.lanternOil\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/oil.png\"> -->\n" +
+    "        <span class=\"sprite sprite-oil\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Exotic Herbs</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.exoticHerbs\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/exoticHerbs.png\"> -->\n" +
+    "        <span class=\"sprite sprite-exoticHerbs\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Tequila</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.tequila\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/tequila.png\"> -->\n" +
+    "        <span class=\"sprite sprite-tequila\"></span>\n" +
+    "    </div> \n" +
+    "    <div class=\"stat\">\n" +
+    "        <!-- <label>Fine Cigar</label> -->\n" +
+    "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
+    "            ng-model=\"ctrl.character.sidebag.cigars\"\n" +
+    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "        <!-- <img src=\"assets/cigar.png\"> -->\n" +
+    "        <span class=\"sprite sprite-cigar\"></span>\n" +
+    "    </div> \n" +
+    "\n" +
+    "\n" +
     "    <div class=\"stat\">\n" +
     "        <label>Capacity</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +

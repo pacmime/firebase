@@ -80,7 +80,7 @@
 
             var self = this;
             this.init = function() {
-                this.item = {name: null, desc: null};
+                this.item = this.item || {name: null, desc: null};
                 this.isEditing = false;
             }
             this.init();
@@ -110,8 +110,10 @@
                 if(this.isRemoving === true) {
                     this.isRemoving = false;
                     this.character.clothing[this.type] = null;
+                    this.item = null;
                     this.onSave();
                     this.update();
+                    this.init();
                 } else {
                     this.isRemoving = true;
                 }
