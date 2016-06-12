@@ -139,7 +139,7 @@ body .navbar-default .navbar-nav>li>a {
 /* --------------------------------- *\
     Sections with lists
 \* --------------------------------- */
-.items, .abilities, .clothing, .mutations {
+.items, .abilities, .clothing, .mutations, .notes {
     margin-bottom:  1em;
     padding:        1em;
     background-image: url('paper.png');

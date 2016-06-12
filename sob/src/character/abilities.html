@@ -3,6 +3,8 @@
     <div ng-repeat="(name, desc) in character.abilities" 
         ability name="{{name}}" desc="{{desc}}" on-save="onEdited(name, newName, newDesc)"></div>
 
+    <hr>
+    
     <div class="grid grid--bleed">
         <div class="grid__col-md-5">
             <input type="text" class="form-control" placeholder="Name" ng-model="value.name">

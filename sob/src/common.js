@@ -134,6 +134,22 @@
 
     })
 
+    .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
+
+        $scope.item = item;
+        $scope.types = types;
+        $scope.newItem = !item;
+
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.item);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
 
     .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
 

@@ -7,6 +7,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
     "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
+    "    <hr>\n" +
+    "    \n" +
     "    <div class=\"grid grid--bleed\">\n" +
     "        <div class=\"grid__col-md-5\">\n" +
     "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
@@ -594,13 +596,26 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "\n" +
-    "            <ng-include src=\"'src/character/clothing.html'\"></ng-include>\n" +
+    "            <!-- <ng-include src=\"'src/character/clothing.html'\"></ng-include> -->\n" +
+    "            <div clothing-2 character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "            <div mutations character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "        </div>\n" +
+    "\n" +
+    "        <div class=\"grid__col-xs-12\">\n" +
+    "            <div class=\"notes\">\n" +
+    "                <h4>Notes</h4>\n" +
+    "                <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
+    "                    ng-model=\"ctrl.character.notes\"></textarea>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.save()\">Save</button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <br>\n" +
     "</div>"
   );
 
@@ -688,7 +703,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <hr>\n" +
     "\n" +
-    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>\n" +
+    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">New Item</button>\n" +
     "                    \n" +
     "    <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
     "    <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
@@ -726,6 +741,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-repeat=\"(name, desc) in character.mutations\" \n" +
     "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
+    "\n" +
+    "    <hr>\n" +
+    "    \n" +
     "    <div class=\"grid grid--bleed\">\n" +
     "        <div class=\"grid__col-md-5\">\n" +
     "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
@@ -947,6 +965,76 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('clothing.html',
+    "<div class=\"modal-content\">\n" +
+    "  <!-- <div class=\"modal-header\">\n" +
+    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
+    "  </div> -->\n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"What is the clothing's name?\">\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Source</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Slot</span>\n" +
+    "            <input disabled type=\"text\" class=\"form-control\" ng-if=\"!newItem\" value=\"{{item.type}}\">\n" +
+    "            <select type=\"text\" class=\"form-control\" ng-if=\"newItem\" \n" +
+    "                ng-model=\"item.type\" required ng-options=\"type for type in types\">\n" +
+    "                <option value=\"\">Select Slot</option>\n" +
+    "            </select>\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "            \n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>        \n" +
+    "    </div>\n" +
+    "    <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Apply</button>\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('home/home.html',
     "<div class=\"container\">\n" +
     "\n" +
@@ -978,17 +1066,22 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Name</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Give the item a name\">\n" +
     "        </div><br>\n" +
     "        \n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Describe the item\">\n" +
     "        </div><br>\n" +
     "\n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Source</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
     "        </div><br>\n" +
     "\n" +
     "        <div class=\"row\">\n" +

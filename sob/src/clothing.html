@@ -6,12 +6,12 @@
 
         <div class="input-group">
             <span class="input-group-addon">Name</span>
-            <input type="text" class="form-control" ng-model="item.name" placeholder="Give the item a name">
+            <input type="text" class="form-control" ng-model="item.name" placeholder="What is the clothing's name?">
         </div><br>
         
         <div class="input-group">
             <span class="input-group-addon">Desc</span>
-            <input type="text" class="form-control" ng-model="item.description" placeholder="Describe the item">
+            <input type="text" class="form-control" ng-model="item.desc" placeholder="Describe the clothing">
         </div><br>
 
         <div class="input-group">
@@ -22,6 +22,15 @@
         <div class="input-group">
             <span class="input-group-addon">Cost</span>
             <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
+        </div><br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Slot</span>
+            <input disabled type="text" class="form-control" ng-if="!newItem" value="{{item.type}}">
+            <select type="text" class="form-control" ng-if="newItem" 
+                ng-model="item.type" required ng-options="type for type in types">
+                <option value="">Select Slot</option>
+            </select>
         </div><br>
 
         <div class="row">
@@ -52,6 +61,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-        <button type="button" class="btn btn-primary" ng-disabled="!item.name" ng-click="ok()">Apply</button>
+        <button type="button" class="btn btn-primary" ng-disabled="!item.name||!item.type" ng-click="ok()">Apply</button>
     </div>
 </div>

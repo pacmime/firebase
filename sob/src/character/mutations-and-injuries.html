@@ -3,6 +3,9 @@
     <div ng-repeat="(name, desc) in character.mutations" 
         mutation name="{{name}}" desc="{{desc}}" on-save="onEdited(name, newName, newDesc)"></div>
 
+
+    <hr>
+    
     <div class="grid grid--bleed">
         <div class="grid__col-md-5">
             <input type="text" class="form-control" placeholder="Name"

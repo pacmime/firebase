@@ -134,6 +134,22 @@
 
     })
 
+    .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
+
+        $scope.item = item;
+        $scope.types = types;
+        $scope.newItem = !item;
+
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.item);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
 
     .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
 
@@ -540,7 +556,7 @@
 
 
         this.save = function() {
-            // console.log("Saved");
+            console.log("Saved");
             this.character.$save();
         };
 
@@ -580,7 +596,7 @@
 
             var self = this;
             this.init = function() {
-                this.item = {name: null, desc: null};
+                this.item = this.item || {name: null, desc: null};
                 this.isEditing = false;
             }
             this.init();
@@ -610,8 +626,10 @@
                 if(this.isRemoving === true) {
                     this.isRemoving = false;
                     this.character.clothing[this.type] = null;
+                    this.item = null;
                     this.onSave();
                     this.update();
+                    this.init();
                 } else {
                     this.isRemoving = true;
                 }
@@ -620,7 +638,6 @@
         },
         templateUrl: 'src/character/clothing-item.html' 
     })
-
 
 
 
@@ -1031,6 +1048,196 @@
     }])
 
 
+
+
+
+    .directive('clothing2', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            template: [
+                '<div class="clothing">',
+                '   <h4>Clothing</h4>',
+                '   <div ng-repeat="(type,item) in character.clothing"> ',
+                '     <clothing-item-2 clothing-item="character.clothing[type]" on-save="onEdited(item, type)"></clothing-item-2>',
+                '   </div>',
+                '   <hr>',
+                '   <button type="button" class="btn btn-success pull-right" ng-click="add()">New Item</button>',
+                '   <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;',
+                '   <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}',
+                '</div>'
+            ].join(' '),
+            
+            controller: function($scope, $element) {
+
+                function update() {
+                    
+                    var weight=0, darkstone=0;
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        
+                        if(!item.type)
+                            item.type = type;
+
+                        weight += item.weight||0;
+                        darkstone += item.darkstone||0;
+                    
+                    });
+
+                    $scope.itemWeight = weight;
+                    $scope.itemDarkstone = darkstone;
+                }
+                
+                $scope.character.$loaded().then(update);
+
+
+
+                $scope.onEdited = function(item, type) {
+
+                    //if deleting item or renaming it
+                    if(!item)
+                        delete $scope.character.clothing[type];
+
+                    if(item)
+                        $scope.character.clothing[item.type] = item;
+
+                    $scope.onSave();
+                    update();
+                };
+
+                $scope.add = function() {
+                    
+                    var types = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        var index = types.indexOf(type);
+                        if(index >= 0)
+                            types.splice(index, 1);
+                    });
+
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/clothing.html',
+                        controller: 'ClothingEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;},
+                            types: function() {return types;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(item) {
+                        if(!item || !item.name || !item.type) return;
+
+                        $scope.character.clothing = $scope.character.clothing || {};
+                        if($scope.character.clothing[item.type]) return;    //already has one
+                        
+                        var obj = {};
+                        obj[item.type] = item;
+                        angular.merge($scope.character.clothing, obj);
+
+                        $scope.onSave();
+                        update();   //recalc weights
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('clothingItem2', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.clothing = $scope.clothingItem;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/clothing.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.clothingItem);
+                            return copy; 
+                        }, 
+                        types: function() {return [$scope.clothingItem.type];}
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.clothing[key] = value;
+                    });
+                    // console.log($scope.ctrl.clothing);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                console.log("Saving...");
+                $scope.onSave({ item: this.clothing, type: this.clothing.type });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ item: null, type: this.clothing.type });
+            };
+
+        }
+
+        return {
+            scope: {
+                clothingItem: "=",
+                onSave: '&'
+            },
+            replace: true,
+            template: [
+                '<div class="clothing-item">',
+                '   <div class="pull-right">',
+                '       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
+                '           <span class="glyphicon glyphicon-trash"></span>',
+                '       </button>',
+                '       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
+                '           <span class="glyphicon glyphicon-pencil"></span>',
+                '       </button>',
+                '   </div>',
+                '   <h5>',
+                '       {{clothingItem.name}} ',
+                '       <small>{{clothingItem.type}}</small>',
+                '   </h5>',
+                '   <p><small>{{clothingItem.desc}}</small></p>',
+                '   <p>',
+                '       <small>',
+                '           <em ng-if="clothingItem.source"> ({{clothingItem.source}})</em>',
+                '           <span class="sprite sprite-item_weight"></span> {{clothingItem.weight}}',
+                '           <span class="sprite sprite-item_darkstone"></span> {{clothingItem.darkstone}}',
+                '           <span class="sprite sprite-item_hands"></span> {{clothingItem.hands}}',
+                '           <span class="sprite sprite-item_slots"></span> {{clothingItem.slots}}',
+                '       </small>',
+                '   </p>',
+                '</div>'
+            ].join(' '),
+            
+            controller: Controller
+        };
+    }])
+
+
+
+    
+
     ;
 
 
@@ -1257,6 +1464,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
     "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
+    "    <hr>\n" +
+    "    \n" +
     "    <div class=\"grid grid--bleed\">\n" +
     "        <div class=\"grid__col-md-5\">\n" +
     "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
@@ -1844,13 +2053,26 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "\n" +
-    "            <ng-include src=\"'src/character/clothing.html'\"></ng-include>\n" +
+    "            <!-- <ng-include src=\"'src/character/clothing.html'\"></ng-include> -->\n" +
+    "            <div clothing-2 character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "            <div mutations character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
     "\n" +
     "        </div>\n" +
+    "\n" +
+    "        <div class=\"grid__col-xs-12\">\n" +
+    "            <div class=\"notes\">\n" +
+    "                <h4>Notes</h4>\n" +
+    "                <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
+    "                    ng-model=\"ctrl.character.notes\"></textarea>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.save()\">Save</button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <br>\n" +
     "</div>"
   );
 
@@ -1938,7 +2160,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <hr>\n" +
     "\n" +
-    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>\n" +
+    "    <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">New Item</button>\n" +
     "                    \n" +
     "    <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
     "    <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
@@ -1976,6 +2198,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-repeat=\"(name, desc) in character.mutations\" \n" +
     "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "\n" +
+    "\n" +
+    "    <hr>\n" +
+    "    \n" +
     "    <div class=\"grid grid--bleed\">\n" +
     "        <div class=\"grid__col-md-5\">\n" +
     "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
@@ -2197,6 +2422,76 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('clothing.html',
+    "<div class=\"modal-content\">\n" +
+    "  <!-- <div class=\"modal-header\">\n" +
+    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
+    "  </div> -->\n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"What is the clothing's name?\">\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Source</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Slot</span>\n" +
+    "            <input disabled type=\"text\" class=\"form-control\" ng-if=\"!newItem\" value=\"{{item.type}}\">\n" +
+    "            <select type=\"text\" class=\"form-control\" ng-if=\"newItem\" \n" +
+    "                ng-model=\"item.type\" required ng-options=\"type for type in types\">\n" +
+    "                <option value=\"\">Select Slot</option>\n" +
+    "            </select>\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "            \n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>        \n" +
+    "    </div>\n" +
+    "    <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Apply</button>\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('home/home.html',
     "<div class=\"container\">\n" +
     "\n" +
@@ -2228,17 +2523,22 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Name</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Give the item a name\">\n" +
     "        </div><br>\n" +
     "        \n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Describe the item\">\n" +
     "        </div><br>\n" +
     "\n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Source</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source\">\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
     "        </div><br>\n" +
     "\n" +
     "        <div class=\"row\">\n" +
