@@ -1,0 +1,24 @@
+<div class="clothing-item">
+   <div class="pull-right">
+       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
+           <span class="glyphicon glyphicon-trash"></span>
+       </button>
+       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
+           <span class="glyphicon glyphicon-pencil"></span>
+       </button>
+   </div>
+   <h5>
+       {{clothingItem.name}} 
+       <small>{{clothingItem.type}}</small>
+   </h5>
+   <p><small>{{clothingItem.desc}}</small></p>
+   <p>
+       <small>
+           <em ng-if="clothingItem.source"> ({{clothingItem.source}})</em>
+           <span class="sprite sprite-item_weight"></span> {{clothingItem.weight}}
+           <span class="sprite sprite-item_darkstone"></span> {{clothingItem.darkstone}}
+           <span class="sprite sprite-item_hands"></span> {{clothingItem.hands}}
+           <span class="sprite sprite-item_slots"></span> {{clothingItem.slots}}
+       </small>
+   </p>
+</div>

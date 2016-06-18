@@ -1,0 +1,10 @@
+<div class="clothing">
+   <h4>Clothing</h4>
+   <div ng-repeat="(type,item) in character.clothing"> 
+     <clothing-item-2 clothing-item="character.clothing[type]" on-save="onEdited(item, type)"></clothing-item-2>
+   </div>
+   <hr>
+   <button type="button" class="btn btn-success pull-right" ng-click="add()">New Item</button>
+   <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;
+   <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
+</div>

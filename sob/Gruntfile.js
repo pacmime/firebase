@@ -13,6 +13,11 @@ module.exports = function(grunt) {
     var sourceFiles = [
         "src/common.js",
         "src/character/character.js",
+        "src/character/abilities/abilities.js",
+        "src/character/clothing/clothing.js",
+        "src/character/items/items.js",
+        "src/character/sermons/sermons.js",
+        "src/character/mutations/mutations.js",
         "src/home/home.js",
         "src/main.js",
         'assets/templates.js'

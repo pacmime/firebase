@@ -16,12 +16,18 @@
 
         </div>
 
-        <div class="grid__col-xs-12">
+        <div class="grid__col-sm-12 grid__col-md-6">
+            <div sermons character="ctrl.character" on-save="ctrl.save()"></div>
+        </div>
+        
+        <div class="grid__col-sm-12 grid__col-md-6">
             <div class="notes">
-                <h4>Notes</h4>
+                <h4>
+                    <button type="button" class="btn btn-sm btn-success pull-right" ng-click="ctrl.save()">Save</button>
+                    Notes
+                </h4>
                 <textarea name="notes" rows="10" placeholder="Enter any notes about this character" class="form-control"
                     ng-model="ctrl.character.notes"></textarea>
-                <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.save()">Save</button>
             </div>
         </div>
     </div>

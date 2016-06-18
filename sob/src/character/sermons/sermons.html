@@ -1,0 +1,8 @@
+<div class="sermons" ng-if="character.class && character.class.toLowerCase().indexOf('preacher')>=0">
+   <h4>Sermons</h4>
+   <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+     <div sermon="sermon" on-save="$parent.onEdited(name, sermon)"></div>
+   </div>
+   <hr>
+   <button type="button" class="btn btn-success pull-right" ng-click="$parent.add()">Add</button>
+</div>

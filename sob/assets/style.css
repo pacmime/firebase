@@ -139,7 +139,7 @@ body .navbar-default .navbar-nav>li>a {
 /* --------------------------------- *\
     Sections with lists
 \* --------------------------------- */
-.items, .abilities, .clothing, .mutations, .notes {
+.items, .abilities, .clothing, .mutations, .notes, .sermons {
     margin-bottom:  1em;
     padding:        1em;
     background-image: url('paper.png');
@@ -174,6 +174,14 @@ body .navbar-default .navbar-nav>li>a {
 }
 
 
+
+
+
+/* ------------------------------------ *\
+    Clothing Section
+\* ------------------------------------ */
+
+
 .clothing__item {
     clear: both;
     min-height: 2em;
@@ -187,6 +195,12 @@ body .navbar-default .navbar-nav>li>a {
 
 
 
+
+
+/* ------------------------------------ *\
+    Abilities Section
+\* ------------------------------------ */
+
 .ability {
     margin-bottom: 1em;
 }
@@ -194,6 +208,32 @@ body .navbar-default .navbar-nav>li>a {
     padding: 1em 0 0;
     margin-bottom: 0;
 }
+.ability .form .form-control {
+    margin-bottom: 0.25em;
+}
+
+
+
+
+
+/* ------------------------------------ *\
+    Mutations Section
+\* ------------------------------------ */
+.mutation .form .form-control {
+    margin-bottom: 0.25em;
+}
+
+
+
+
+/* ------------------------------------ *\
+    Sermons Section
+\* ------------------------------------ */
+.sermon {
+    margin: 1.5em 0 0;
+}
+
+
 
 
 
@@ -351,12 +391,20 @@ table thead img { width: 1.5em; }
     text-align: center;
 }
 .keypad .modal-body button {
-    font-size:  1em;
+    font-size:  0.8em;
     width:      4em;
     height:     4em;
     margin:     0.5em;
+    padding:    0.325em 0.5em;
     -webkit-appearance: none;
     -webkit-border-radius: 4px;
+}
+.keypad .modal-body .manual-entry {
+    width: 17em;
+    margin: 0 auto;
+}
+.keypad .modal-body .manual-entry input {
+    text-align: center;
 }
 
 

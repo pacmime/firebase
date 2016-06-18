@@ -586,62 +586,69 @@
 
 
 
-    .component('clothing', {
-        bindings: {
-            character: "=",
-            type: "@",
-            onSave: "&"
-        },
-        controller: function() {
+    // .component('clothing', {
+    //     bindings: {
+    //         character: "=",
+    //         type: "@",
+    //         onSave: "&"
+    //     },
+    //     controller: function() {
 
-            var self = this;
-            this.init = function() {
-                this.item = this.item || {name: null, desc: null};
-                this.isEditing = false;
-            }
-            this.init();
+    //         var self = this;
+    //         this.init = function() {
+    //             this.item = this.item || {name: null, desc: null};
+    //             this.isEditing = false;
+    //         }
+    //         this.init();
 
-            this.update = function() {
-                var current = this.character.clothing && this.character.clothing[this.type];
-                if(current) {
-                    this.item.name = current.name;
-                    this.item.desc = current.desc;
-                }
-            }
-            this.character.$loaded().then(function() {
-                self.update();
-            });
+    //         this.update = function() {
+    //             var current = this.character.clothing && this.character.clothing[this.type];
+    //             if(current) {
+    //                 this.item.name = current.name;
+    //                 this.item.desc = current.desc;
+    //             }
+    //         }
+    //         this.character.$loaded().then(function() {
+    //             self.update();
+    //         });
 
-            this.add = function() {
-                if(!this.item.name) return;
+    //         this.add = function() {
+    //             if(!this.item.name) return;
 
-                this.character.clothing = this.character.clothing || {}
-                this.character.clothing[this.type] = this.item;
-                this.onSave();
-                this.update();
-                this.init();
-            };
+    //             this.character.clothing = this.character.clothing || {}
+    //             this.character.clothing[this.type] = this.item;
+    //             this.onSave();
+    //             this.update();
+    //             this.init();
+    //         };
 
-            this.remove = function() {
-                if(this.isRemoving === true) {
-                    this.isRemoving = false;
-                    this.character.clothing[this.type] = null;
-                    this.item = null;
-                    this.onSave();
-                    this.update();
-                    this.init();
-                } else {
-                    this.isRemoving = true;
-                }
-            };
+    //         this.remove = function() {
+    //             if(this.isRemoving === true) {
+    //                 this.isRemoving = false;
+    //                 this.character.clothing[this.type] = null;
+    //                 this.item = null;
+    //                 this.onSave();
+    //                 this.update();
+    //                 this.init();
+    //             } else {
+    //                 this.isRemoving = true;
+    //             }
+    //         };
 
-        },
-        templateUrl: 'src/character/clothing-item.html' 
-    })
+    //     },
+    //     templateUrl: 'src/character/clothing-item.html' 
+    // })
+
+    ;
 
 
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
 
-    .directive('abilities', function() {
+    angular.module("sob-character").directive('abilities', function() {
 
         return {
             scope: {
@@ -649,7 +656,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/abilities.html',
+            templateUrl: 'src/character/abilities/abilities.html',
             
             controller: function($scope, $element) {
 
@@ -726,40 +733,22 @@
                 onSave: '&'
             },
             replace: true,
-            template: [
-                '<div class="ability">',
-                '  <div ng-if="!ctrl.displayEditor">',
-                '    <div class="pull-right">',
-                '      <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
-                '        <span class="glyphicon glyphicon-trash"></span>',
-                '      </button>',
-                '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
-                '        <span class="glyphicon glyphicon-pencil"></span>',
-                '      </button>',
-                '    </div>',
-                '    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>',
-                '  </div>',
-                '  <form ng-if="ctrl.displayEditor">',
-                '    <input type="text" ng-model="ctrl.name" placeholder="name">',
-                '    <input type="text" ng-model="ctrl.desc" placeholder="value">',
-                '    <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.save()">',
-                '      <span class="glyphicon glyphicon-ok"></span>',
-                '    </button>',
-                '    <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.cancel()">',
-                '      <span class="glyphicon glyphicon-remove"></span>',
-                '    </button>',
-                '  </form>',
-                '</div>'
-            ].join(' '),
+            templateUrl: 'src/character/abilities/ability.html',
             
             controller: Controller
         };
-    })
+    });
 
 
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
 
+    angular.module("sob-character")
 
-    .directive('mutations', function() {
+    .directive('clothing2', ['$timeout', '$uibModal', function($timeout, $uibModal) {
 
         return {
             scope: {
@@ -767,7 +756,443 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/mutations-and-injuries.html',
+            templateUrl: 'src/character/clothing/clothing.html',
+            
+            controller: function($scope, $element) {
+
+                function update() {
+                    
+                    var weight=0, darkstone=0;
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        
+                        if(!item.type)
+                            item.type = type;
+
+                        weight += item.weight||0;
+                        darkstone += item.darkstone||0;
+                    
+                    });
+
+                    $scope.itemWeight = weight;
+                    $scope.itemDarkstone = darkstone;
+                }
+                
+                $scope.character.$loaded().then(update);
+
+
+
+                $scope.onEdited = function(item, type) {
+
+                    //if deleting item or renaming it
+                    if(!item)
+                        delete $scope.character.clothing[type];
+
+                    if(item)
+                        $scope.character.clothing[item.type] = item;
+
+                    $scope.onSave();
+                    update();
+                };
+
+                $scope.add = function() {
+                    
+                    var types = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        var index = types.indexOf(type);
+                        if(index >= 0)
+                            types.splice(index, 1);
+                    });
+
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/character/clothing/editor.html',
+                        controller: 'ClothingEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;},
+                            types: function() {return types;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(item) {
+                        if(!item || !item.name || !item.type) return;
+
+                        $scope.character.clothing = $scope.character.clothing || {};
+                        if($scope.character.clothing[item.type]) return;    //already has one
+                        
+                        var obj = {};
+                        obj[item.type] = item;
+                        angular.merge($scope.character.clothing, obj);
+
+                        $scope.onSave();
+                        update();   //recalc weights
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('clothingItem2', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.clothing = $scope.clothingItem;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/character/clothing/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.clothingItem);
+                            return copy; 
+                        }, 
+                        types: function() {return [$scope.clothingItem.type];}
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.clothing[key] = value;
+                    });
+                    // console.log($scope.ctrl.clothing);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                console.log("Saving...");
+                $scope.onSave({ item: this.clothing, type: this.clothing.type });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ item: null, type: this.clothing.type });
+            };
+
+        }
+
+        return {
+            scope: {
+                clothingItem: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/clothing/clothing-item.html',
+            
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character")
+
+    .directive('items', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/items/items.html',
+            
+            controller: function($scope, $element) {
+
+                function update() {
+                    var weight=0, darkstone=0;
+                    angular.forEach($scope.character.items, function(item) {
+                        weight += item.weight||0;
+                        darkstone += item.darkstone||0;
+                    });
+                    $scope.itemWeight = weight;
+                    $scope.itemDarkstone = darkstone;
+                }
+                
+                $scope.character.$loaded().then(update);
+
+
+
+                $scope.onEdited = function(name, item) {
+
+                    //if deleting item or renaming it
+                    if(!item || (item.name && item.name !== name)) {
+                        delete $scope.character.items[name];
+
+                        if(item && item.name)
+                            name = item.name;
+                    }
+
+                    if(item)
+                        $scope.character.items[name] = item;
+
+                    $scope.onSave();
+                    update();
+                };
+
+                $scope.add = function() {
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/character/items/editor.html',
+                        controller: 'ItemEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(item) {
+                        if(!item || !item.name) return;
+                        
+                        if(!$scope.character.items)
+                            $scope.character.items = {};
+
+                        var obj = {};
+                        obj[item.name] = item;
+                        angular.merge($scope.character.items, obj);
+
+                        $scope.onSave();
+                        update();   //recalc weights
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('item', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.name = $scope.name;
+            this.item = $scope.item;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/character/items/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.item);
+                            copy.name = $scope.name;
+                            return copy; 
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.item[key] = value;
+                    });
+                    console.log($scope.ctrl.item);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                $scope.onSave({ item: this.item });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ item: null });
+            };
+
+        }
+
+        return {
+            scope: {
+                name: "@",
+                item: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/items/item.html',
+            
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character")
+
+    .directive('sermons', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/sermons/sermons.html',
+            
+            controller: function($scope, $element) {
+
+                $scope.onEdited = function(name, sermon) {
+                    if(!name) return;
+
+                    //if deleting item or renaming it
+                    if(name && !sermon)
+                        delete $scope.character.sermons[name];
+
+                    if(sermon)
+                        $scope.character.sermons[name] = sermon;
+
+                    $scope.onSave();
+                };
+
+                $scope.add = function() {
+                    
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/character/sermons/editor.html',
+                        controller: 'ItemEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(sermon) {
+                        if(!sermon || !sermon.name) return;
+
+                        $scope.character.sermons = $scope.character.sermons || {};
+                        if($scope.character.sermons[sermon.name]) return;    //already has one
+                        
+                        var obj = {};
+                        obj[sermon.name] = sermon;
+                        angular.merge($scope.character.sermons, obj);
+
+                        $scope.onSave();
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('sermon', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.sermon = $scope.sermon;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/character/sermons/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.sermon);
+                            return copy; 
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(sermon) {
+                    if(!sermon || !sermon.name) return; //cancel
+                    
+                    //apply changes to local version
+                    angular.forEach(sermon, function(value, key) {
+                        $scope.ctrl.sermon[key] = value;
+                    });
+                    
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                console.log("Saving...");
+                $scope.onSave({ sermon: this.sermon, name: $scope.name });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ sermon: null, name: $scope.name });
+            };
+
+        }
+
+        // {
+        //     type: "blessing|judgement",
+        //     cost: 1,
+        //     check: 5+,
+        //     range: 'self',
+        //     xp: 10
+        //     deadly: false
+        //     name: "",
+        //     desc: ""
+        // }
+
+
+        return {
+            scope: {
+                name: "@",
+                sermon: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/sermons/sermon.html',
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character").directive('mutations', function() {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/mutations/mutations-and-injuries.html',
             
             controller: function($scope, $element) {
 
@@ -843,402 +1268,11 @@
                 onSave: '&'
             },
             replace: true,
-            template: [
-                '<div class="mutation">',
-                '  <div ng-if="!ctrl.displayEditor">',
-                '    <div class="pull-right">',
-                '      <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
-                '        <span class="glyphicon glyphicon-trash"></span>',
-                '      </button>',
-                '      <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
-                '        <span class="glyphicon glyphicon-pencil"></span>',
-                '      </button>',
-                '    </div>',
-                '    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>',
-                '  </div>',
-                '  <form ng-if="ctrl.displayEditor">',
-                '    <input type="text" ng-model="ctrl.name" placeholder="name">',
-                '    <input type="text" ng-model="ctrl.desc" placeholder="value">',
-                '    <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.save()">',
-                '      <span class="glyphicon glyphicon-ok"></span>',
-                '    </button>',
-                '    <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.cancel()">',
-                '      <span class="glyphicon glyphicon-remove"></span>',
-                '    </button>',
-                '  </form>',
-                '  <br><br>',
-                '</div>'
-            ].join(' '),
+            templateUrl: 'src/character/mutations/mutation.html',
             
             controller: Controller
         };
-    })
-
-
-
-
-    .directive('items', ['$timeout', '$uibModal', function($timeout, $uibModal) {
-
-        return {
-            scope: {
-                character: "=",
-                onSave: '&'
-            },
-            replace: true,
-            templateUrl: 'src/character/items.html',
-            
-            controller: function($scope, $element) {
-
-                function update() {
-                    var weight=0, darkstone=0;
-                    angular.forEach($scope.character.items, function(item) {
-                        weight += item.weight||0;
-                        darkstone += item.darkstone||0;
-                    });
-                    $scope.itemWeight = weight;
-                    $scope.itemDarkstone = darkstone;
-                }
-                
-                $scope.character.$loaded().then(update);
-
-
-
-                $scope.onEdited = function(name, item) {
-
-                    //if deleting item or renaming it
-                    if(!item || (item.name && item.name !== name)) {
-                        delete $scope.character.items[name];
-
-                        if(item && item.name)
-                            name = item.name;
-                    }
-
-                    if(item)
-                        $scope.character.items[name] = item;
-
-                    $scope.onSave();
-                    update();
-                };
-
-                $scope.add = function() {
-
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'src/item.html',
-                        controller: 'ItemEditor',
-                        animation: false,
-                        resolve: {
-                            item: function() {return null;}
-                        }
-                    });
-
-                    modalInstance.result.then(function(item) {
-                        if(!item || !item.name) return;
-                        
-                        if(!$scope.character.items)
-                            $scope.character.items = {};
-
-                        var obj = {};
-                        obj[item.name] = item;
-                        angular.merge($scope.character.items, obj);
-
-                        $scope.onSave();
-                        update();   //recalc weights
-                        
-                    }, function () { });
-
-                };
-
-            }
-        };
-    }])
-
-
-    .directive('item', ['$uibModal', function($uibModal) {
-
-        function Controller($scope, $element) {
-
-            $scope.ctrl = this;
-
-            this.name = $scope.name;
-            this.item = $scope.item;
-            
-            this.edit = function() {
-                
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'src/item.html',
-                    controller: 'ItemEditor',
-                    animation: false,
-                    resolve: {
-                        item: function() { 
-                            var copy = angular.copy($scope.item);
-                            copy.name = $scope.name;
-                            return copy; 
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(item) {
-                    if(!item || !item.name) return; //cancel
-                    
-                    angular.forEach(item, function(value, key) {
-                        $scope.ctrl.item[key] = value;
-                    });
-                    console.log($scope.ctrl.item);
-                    $scope.ctrl.save();
-                                        
-                }, function () { });
-
-            };
-
-            this.save = function() {
-                $scope.onSave({ item: this.item });
-            };
-
-            this.remove = function() {
-                $scope.onSave({ item: null });
-            };
-
-        }
-
-        return {
-            scope: {
-                name: "@",
-                item: "=",
-                onSave: '&'
-            },
-            replace: true,
-            template: [
-                '<div class="item grid grid--bleed grid--wrap-reverse">',
-                '   <div class="grid__col-sm-3 grid__col-md-4">',
-                '       <div class="grid grid--justify-space-between">',
-                '           <div class="grid__col">',
-                '               <div><span class="sprite sprite-item_weight"></span> <br class="hidden-xs"> {{item.weight}}</div>',
-                '           </div>',
-                '           <div class="grid__col">',
-                '               <div><span class="sprite sprite-item_darkstone"></span> <br class="hidden-xs"> {{item.darkstone}}</div>',
-                '           </div>',
-                '           <div class="grid__col">',
-                '               <div><span class="sprite sprite-item_hands"></span> <br class="hidden-xs"> {{item.hands}}</div>',
-                '           </div>',
-                '           <div class="grid__col">',
-                '               <div><span class="sprite sprite-item_slots"></span> <br class="hidden-xs"> {{item.slots}}</div>',
-                '           </div>',
-                '           <div class="grid__col"></div>',
-                '       </div>',
-                '   </div>',
-                '   <div class="grid__col-sm-9 grid__col-md-8">',
-                '       <div>',
-                '           <div class="pull-right">',
-                '               <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
-                '                 <span class="glyphicon glyphicon-trash"></span>',
-                '               </button>',
-                '               <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
-                '                 <span class="glyphicon glyphicon-pencil"></span>',
-                '               </button>',
-                '           </div>',
-                '           <h5>{{name}}</h5>',
-                '           <small>{{item.description}}  <em>({{item.source}})</em></small>',
-                '       </div>',
-                '   </div>',
-                '</div>'
-            ].join(' '),
-            
-            controller: Controller
-        };
-    }])
-
-
-
-
-
-    .directive('clothing2', ['$timeout', '$uibModal', function($timeout, $uibModal) {
-
-        return {
-            scope: {
-                character: "=",
-                onSave: '&'
-            },
-            replace: true,
-            template: [
-                '<div class="clothing">',
-                '   <h4>Clothing</h4>',
-                '   <div ng-repeat="(type,item) in character.clothing"> ',
-                '     <clothing-item-2 clothing-item="character.clothing[type]" on-save="onEdited(item, type)"></clothing-item-2>',
-                '   </div>',
-                '   <hr>',
-                '   <button type="button" class="btn btn-success pull-right" ng-click="add()">New Item</button>',
-                '   <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;',
-                '   <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}',
-                '</div>'
-            ].join(' '),
-            
-            controller: function($scope, $element) {
-
-                function update() {
-                    
-                    var weight=0, darkstone=0;
-                    angular.forEach($scope.character.clothing, function(item, type) {
-                        
-                        if(!item.type)
-                            item.type = type;
-
-                        weight += item.weight||0;
-                        darkstone += item.darkstone||0;
-                    
-                    });
-
-                    $scope.itemWeight = weight;
-                    $scope.itemDarkstone = darkstone;
-                }
-                
-                $scope.character.$loaded().then(update);
-
-
-
-                $scope.onEdited = function(item, type) {
-
-                    //if deleting item or renaming it
-                    if(!item)
-                        delete $scope.character.clothing[type];
-
-                    if(item)
-                        $scope.character.clothing[item.type] = item;
-
-                    $scope.onSave();
-                    update();
-                };
-
-                $scope.add = function() {
-                    
-                    var types = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
-                    angular.forEach($scope.character.clothing, function(item, type) {
-                        var index = types.indexOf(type);
-                        if(index >= 0)
-                            types.splice(index, 1);
-                    });
-
-
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'src/clothing.html',
-                        controller: 'ClothingEditor',
-                        animation: false,
-                        resolve: {
-                            item: function() {return null;},
-                            types: function() {return types;}
-                        }
-                    });
-
-                    modalInstance.result.then(function(item) {
-                        if(!item || !item.name || !item.type) return;
-
-                        $scope.character.clothing = $scope.character.clothing || {};
-                        if($scope.character.clothing[item.type]) return;    //already has one
-                        
-                        var obj = {};
-                        obj[item.type] = item;
-                        angular.merge($scope.character.clothing, obj);
-
-                        $scope.onSave();
-                        update();   //recalc weights
-                        
-                    }, function () { });
-
-                };
-
-            }
-        };
-    }])
-
-
-    .directive('clothingItem2', ['$uibModal', function($uibModal) {
-
-        function Controller($scope, $element) {
-
-            $scope.ctrl = this;
-
-            this.clothing = $scope.clothingItem;
-            
-            this.edit = function() {
-                
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'src/clothing.html',
-                    controller: 'ItemEditor',
-                    animation: false,
-                    resolve: {
-                        item: function() { 
-                            var copy = angular.copy($scope.clothingItem);
-                            return copy; 
-                        }, 
-                        types: function() {return [$scope.clothingItem.type];}
-                    }
-                });
-
-                modalInstance.result.then(function(item) {
-                    if(!item || !item.name) return; //cancel
-                    
-                    angular.forEach(item, function(value, key) {
-                        $scope.ctrl.clothing[key] = value;
-                    });
-                    // console.log($scope.ctrl.clothing);
-                    $scope.ctrl.save();
-                                        
-                }, function () { });
-
-            };
-
-            this.save = function() {
-                console.log("Saving...");
-                $scope.onSave({ item: this.clothing, type: this.clothing.type });
-            };
-
-            this.remove = function() {
-                $scope.onSave({ item: null, type: this.clothing.type });
-            };
-
-        }
-
-        return {
-            scope: {
-                clothingItem: "=",
-                onSave: '&'
-            },
-            replace: true,
-            template: [
-                '<div class="clothing-item">',
-                '   <div class="pull-right">',
-                '       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">',
-                '           <span class="glyphicon glyphicon-trash"></span>',
-                '       </button>',
-                '       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">',
-                '           <span class="glyphicon glyphicon-pencil"></span>',
-                '       </button>',
-                '   </div>',
-                '   <h5>',
-                '       {{clothingItem.name}} ',
-                '       <small>{{clothingItem.type}}</small>',
-                '   </h5>',
-                '   <p><small>{{clothingItem.desc}}</small></p>',
-                '   <p>',
-                '       <small>',
-                '           <em ng-if="clothingItem.source"> ({{clothingItem.source}})</em>',
-                '           <span class="sprite sprite-item_weight"></span> {{clothingItem.weight}}',
-                '           <span class="sprite sprite-item_darkstone"></span> {{clothingItem.darkstone}}',
-                '           <span class="sprite sprite-item_hands"></span> {{clothingItem.hands}}',
-                '           <span class="sprite sprite-item_slots"></span> {{clothingItem.slots}}',
-                '       </small>',
-                '   </p>',
-                '</div>'
-            ].join(' '),
-            
-            controller: Controller
-        };
-    }])
-
-
-
-    
-
-    ;
+    });
 
 
 }) (angular);
@@ -1458,7 +1492,7 @@
 angular.module('app').run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('character/abilities.html',
+  $templateCache.put('character/abilities/abilities.html',
     "<div class=\"abilities\">\n" +
     "    <h4>Abilities</h4>\n" +
     "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
@@ -1466,21 +1500,39 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <hr>\n" +
     "    \n" +
-    "    <div class=\"grid grid--bleed\">\n" +
-    "        <div class=\"grid__col-md-5\">\n" +
-    "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        </div>\n" +
-    "        <div class=\"grid__col-md-7\">\n" +
-    "            <div class=\"input-group\">\n" +
-    "                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\">\n" +
-    "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-success\" ng-disabled=\"!value.name\" \n" +
-    "                        ng-click=\"add()\">+</button>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        \n" +
+    "    <form class=\"form\">\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "    </form>\n" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('character/abilities/ability.html',
+    "<div class=\"ability\">\n" +
+    "  <div ng-if=\"!ctrl.displayEditor\">\n" +
+    "    <div class=\"pull-right\">\n" +
+    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "      </button>\n" +
+    "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "        <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "      </button>\n" +
     "    </div>\n" +
+    "    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>\n" +
+    "  </div>\n" +
+    "  <form class=\"form\" ng-if=\"ctrl.displayEditor\">\n" +
+    "    <input type=\"text\" class=\"form-control\" ng-model=\"ctrl.name\" placeholder=\"name\">\n" +
+    "    <textarea rows=\"3\" class=\"form-control\" ng-model=\"ctrl.desc\" placeholder=\"value\"></textarea>\n" +
+    "    <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.save()\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "    </button>\n" +
+    "    <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.cancel()\">\n" +
+    "      <span class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "    </button>\n" +
+    "  </form>\n" +
     "</div>"
   );
 
@@ -1551,385 +1603,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('character/char-bs.html',
-    "<div class=\"page\">\n" +
-    "\n" +
-    "    <div class=\"header\">\n" +
-    "        <div class=\"container-fluid\">\n" +
-    "            <div class=\"row\">\n" +
-    "\n" +
-    "                <div class=\"col-sm-5 col-md-6 col-lg-8\">\n" +
-    "\n" +
-    "                    <div><label>Name: </label> {{ctrl.charName}}</div>\n" +
-    "\n" +
-    "                    <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div>\n" +
-    "\n" +
-    "                    <div editable-input label=\"Keywords\" ng-model=\"ctrl.character.keywords\" on-save=\"ctrl.save()\"></div>\n" +
-    "\n" +
-    "                    <div>\n" +
-    "                        <div><label>To Hit:</label></div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Combat</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.combat\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Melee</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.melee\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Ranged</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.ranged\"></div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"col-sm-7 col-md-6 col-lg-4\">\n" +
-    "\n" +
-    "                    <div class=\"stats\">\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Agility</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Agility\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Cunning</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Cunning\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Spirit</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\"></div>\n" +
-    "                        </div>\n" +
-    "                        <br>\n" +
-    "                        <span class=\"hidden-xs\" style=\"display:inline-block;width:2em;\"></span>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Strength</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Strength\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Lore</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Lore\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Spirit</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.stats.Spirit\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Initiative</label>\n" +
-    "                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.init\"></div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "    <div class=\"body\">\n" +
-    "        <div class=\"container-fluid\">\n" +
-    "            <div class=\"row\">\n" +
-    "\n" +
-    "                <div class=\"col-sm-12 col-md-6\">\n" +
-    "                    <div class=\"items\">\n" +
-    "                        <h4>Items</h4>\n" +
-    "\n" +
-    "                        <div ng-repeat=\"(name, item) in ctrl.character.items\" class=\"item row row--no-gutter\">\n" +
-    "                            <div class=\"col-sm-9 col-sm-push-3 col-md-8 col-md-push-4\">\n" +
-    "                                <strong>{{name}}: </strong> {{item.description}} [<em>{{item.source}}</em>]\n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-sm-3 col-sm-pull-9 col-md-4 col-md-pull-8\">\n" +
-    "                                <div class=\"item__attr\">\n" +
-    "                                    <img src=\"assets/item_weight.png\"> \n" +
-    "                                    <br class=\"hidden-xs\"> \n" +
-    "                                    {{item.weight}}\n" +
-    "                                </div>\n" +
-    "                                <div class=\"item__attr\">\n" +
-    "                                    <img src=\"assets/item_darkstone.png\"> \n" +
-    "                                    <br class=\"hidden-xs\"> \n" +
-    "                                    {{item.darkstone}}\n" +
-    "                                </div>\n" +
-    "                                <div class=\"item__attr\">\n" +
-    "                                    <img src=\"assets/item_hands.png\"> \n" +
-    "                                    <br class=\"hidden-xs\"> \n" +
-    "                                    {{item.hands}}\n" +
-    "                                </div>\n" +
-    "                                <div class=\"item__attr\">\n" +
-    "                                    <img src=\"assets/item_slots.png\"> \n" +
-    "                                    <br class=\"hidden-xs\"> \n" +
-    "                                    {{item.slots}}\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"ctrl.addNewItem()\">New</button>\n" +
-    "                                        \n" +
-    "                        <img src=\"assets/item_weight.png\" width=\"32\"> {{ctrl.itemWeight}}\n" +
-    "                        <img src=\"assets/item_darkstone.png\" width=\"32\"> {{ctrl.itemDarkstone}}\n" +
-    "\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"col-sm-12 col-md-6\">\n" +
-    "\n" +
-    "                    <div class=\"abilities\">\n" +
-    "                        <h4>Abilities</h4>\n" +
-    "                        <div ng-repeat=\"(name, desc) in ctrl.character.abilities\">\n" +
-    "                            <strong>{{name}}</strong> <small>{{desc}}</small>\n" +
-    "                            <br><br>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                        <div class=\"row\">\n" +
-    "                            <div class=\"col-md-4\">\n" +
-    "                                <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
-    "                                    ng-model=\"ctrl.newAbility.name\">\n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-md-6\">\n" +
-    "                                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" \n" +
-    "                                    ng-model=\"ctrl.newAbility.desc\">\n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-md-2\">\n" +
-    "                                <button type=\"button\" class=\"btn btn-success\" \n" +
-    "                                    ng-disabled=\"!ctrl.newAbility.name\" \n" +
-    "                                    ng-click=\"ctrl.addNewAbility()\">+</button>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "    <div class=\"footer\">\n" +
-    "\n" +
-    "        <div class=\"container-fluid\">\n" +
-    "\n" +
-    "            <div class=\"row\">\n" +
-    "\n" +
-    "                <div class=\"col-sm-12 col-md-6\">\n" +
-    "\n" +
-    "                    <div class=\"col-sm-12\">\n" +
-    "                        <div class=\"level\">\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <label>Level</label>\n" +
-    "                                <div class=\"value\">{{ctrl.character.level}}</div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <!-- <label>XP</label> -->\n" +
-    "                            <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.xp\"></div>\n" +
-    "                            <img src=\"assets/xp.png\">\n" +
-    "                        </div>\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <!-- <label>Gold</label> -->\n" +
-    "                            <div class=\"value--sm\" editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.wealth\"></div>\n" +
-    "                            <img src=\"assets/wealth.png\">\n" +
-    "                        </div>\n" +
-    "                        <div class=\"darkstone\">\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <!-- <label>Dark Stone</label> -->\n" +
-    "                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.darkstone\"></div>\n" +
-    "                                <img src=\"assets/darkstone.png\">\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                        \n" +
-    "                        <br>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"col-sm-12\">\n" +
-    "                        <div class=\"row row--no-gutter\">\n" +
-    "\n" +
-    "                            <div class=\"col-sm-8 col-sm-push-4\">\n" +
-    "                                <div class=\"clearfix\">\n" +
-    "                                    <div class=\"health\">\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <label>Max Health</label>\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.health.max\"></div>\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <img src=\"assets/wealth.png\">\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                                ng-model=\"ctrl.character.health.wounds\"></div>\n" +
-    "                                            <img src=\"assets/wound.png\">    \n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <label>Defense</label>\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.defense\"></div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "                                    <div class=\"sanity\">\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <label>Max Sanity</label>\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.sanity.max\"></div>\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <!-- <label>Loss</label> -->\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                                ng-model=\"ctrl.character.sanity.loss\"></div>\n" +
-    "                                            <img src=\"assets/sanity.png\">\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"stat\">\n" +
-    "                                            <label>Willpower</label>\n" +
-    "                                            <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.willpower\"></div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "                                    \n" +
-    "                                    <div class=\"clearfix\">\n" +
-    "                                        <div class=\"faith\">\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <label>Max Faith</label>\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.faith\"></div>\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"corruption\">\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <label>Max Corruption</label>\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.corruption.max\"></div>\n" +
-    "                                            </div>\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <!-- <label>Current</label> -->\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                                    ng-model=\"ctrl.character.corruption.current\"></div>\n" +
-    "                                                <img src=\"assets/corruption.png\">\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "\n" +
-    "                                    <div>\n" +
-    "                                        <div class=\"movement\">\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <label>Move</label>\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.movement\"></div>\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                        <div class=\"grit\">\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <label>Max Grit</label>\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.grit.max\"></div>\n" +
-    "                                            </div>\n" +
-    "                                            <div class=\"stat\">\n" +
-    "                                                <label>Current</label>\n" +
-    "                                                <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.grit.current\"></div>\n" +
-    "                                            </div>\n" +
-    "                                        </div>\n" +
-    "                                    </div>\n" +
-    "                                </div>\n" +
-    "                                \n" +
-    "                            </div>\n" +
-    "                            <div class=\"col-sm-4 col-sm-pull-8\">\n" +
-    "                                <div class=\"sidebag\">\n" +
-    "                                    <h4>Side Bag</h4>\n" +
-    "\n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Bandages</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.bandages\"></div>\n" +
-    "                                        <img src=\"assets/bandages.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Whiskey</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.whiskey\"></div>\n" +
-    "                                        <img src=\"assets/whiskey.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <br>\n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Tonic</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.tonic\"></div>\n" +
-    "                                        <img src=\"assets/tonic.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Herbs</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.herbs\"></div>\n" +
-    "                                        <img src=\"assets/herb.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <br>\n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Dynamite</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.dynamite\"></div>\n" +
-    "                                        <img src=\"assets/dynamite.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Flash</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.flash\"></div>\n" +
-    "                                        <img src=\"assets/flash.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <br>\n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <!-- <label>Swamp Fungus</label> -->\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "                                            ng-model=\"ctrl.character.sidebag.fungus\"></div>\n" +
-    "                                        <img src=\"assets/fungus.png\">\n" +
-    "                                    </div>    \n" +
-    "                                    <div class=\"stat\">\n" +
-    "                                        <label>Capacity</label>\n" +
-    "                                        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.sidebag.capacity\"></div>\n" +
-    "                                    </div>    \n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "                            \n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-12 col-md-6\">\n" +
-    "\n" +
-    "\n" +
-    "                    <div class=\"clothing\">\n" +
-    "                        <h4>Clothing</h4>\n" +
-    "                        <div ng-repeat=\"(slotName,slot) in ctrl.character.clothing\" class=\"media\">\n" +
-    "                            <div class=\"media-left\">\n" +
-    "                                <strong>{{slotName}}: </strong>\n" +
-    "                            </div>\n" +
-    "                            <div class=\"media-body\">\n" +
-    "                                <div ng-repeat=\"(name,desc) in slot\">\n" +
-    "                                    {{name}} <small>{{desc}}</small>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"mutations\">\n" +
-    "                        <h4>Mutations</h4>\n" +
-    "\n" +
-    "                        <div class=\"input-group\">\n" +
-    "                            <input type=\"text\" class=\"form-control\">\n" +
-    "                            <span class=\"input-group-btn\">\n" +
-    "                                <button type=\"button\" class=\"btn btn-success\">+</button>\n" +
-    "                            </span>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "</div>"
-  );
-
-
   $templateCache.put('character/character.html',
     "<div class=\"page\">\n" +
     "\n" +
@@ -1943,73 +1616,115 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('character/clothing-item.html',
-    "<div class=\"clothing__item\">\n" +
-    "\n" +
-    "    <div class=\"pull-right\">\n" +
-    "        \n" +
-    "        <button type=\"button\" class=\"btn btn-default btn-sm\" ng-if=\"!$ctrl.item.name\" \n" +
-    "            ng-click=\"$ctrl.isEditing=!$ctrl.isEditing\">\n" +
-    "            <span ng-if=\"!$ctrl.isEditing\" class=\"glyphicon glyphicon-plus\"></span>\n" +
-    "            <span ng-if=\"$ctrl.isEditing\" class=\"glyphicon glyphicon-remove\"></span>\n" +
-    "        </button>\n" +
-    "\n" +
-    "        <button type=\"button\" class=\"btn btn-default btn-sm\" ng-if=\"$ctrl.item.name\" \n" +
-    "            ng-click=\"$ctrl.isEditing=!$ctrl.isEditing\">\n" +
-    "            <span ng-if=\"!$ctrl.isEditing\" class=\"glyphicon glyphicon-pencil\"></span>\n" +
-    "            <span ng-if=\"$ctrl.isEditing\" class=\"glyphicon glyphicon-remove\"></span>\n" +
-    "        </button>\n" +
-    "        <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-if=\"$ctrl.item.name\" ng-click=\"$ctrl.remove()\">\n" +
-    "            <span class=\"glyphicon glyphicon-trash\" ng-if=\"!$ctrl.isRemoving\"></span>\n" +
-    "            <span class=\"glyphicon glyphicon-ok\" ng-if=\"$ctrl.isRemoving\"></span>\n" +
-    "        </button>\n" +
-    "        \n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div ng-if=\"$ctrl.item.name\">\n" +
-    "        <h5>\n" +
-    "            <span ng-if=\"!$ctrl.isEditing\">{{$ctrl.item.name}}</span>\n" +
-    "            <small>{{$ctrl.type}}</small>\n" +
-    "        </h5>  \n" +
-    "        <small ng-if=\"!$ctrl.isEditing\">{{$ctrl.item.desc}}</small>\n" +
-    "    </div>\n" +
-    "    <div ng-if=\"!$ctrl.item.name\">\n" +
-    "        <h5>\n" +
-    "            <em ng-if=\"!$ctrl.isEditing\">Empty</em>\n" +
-    "            <small>{{$ctrl.type}}</small>\n" +
-    "        </h5>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div ng-if=\"$ctrl.isEditing\">\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"$ctrl.item.name\">\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <input type=\"text\" class=\"form-control\" placeholder=\"Description\"\n" +
-    "                ng-model=\"$ctrl.item.desc\">\n" +
-    "            <span class=\"input-group-btn\">\n" +
-    "                <button type=\"button\" class=\"btn btn-success\" \n" +
-    "                    ng-click=\"$ctrl.add()\"><span class=\"glyphicon glyphicon-ok\"></span>\n" +
-    "                </button>\n" +
-    "            </span>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
+  $templateCache.put('character/clothing/clothing-item.html',
+    "<div class=\"clothing-item\">\n" +
+    "   <div class=\"pull-right\">\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "       </button>\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "           <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "       </button>\n" +
+    "   </div>\n" +
+    "   <h5>\n" +
+    "       {{clothingItem.name}} \n" +
+    "       <small>{{clothingItem.type}}</small>\n" +
+    "   </h5>\n" +
+    "   <p><small>{{clothingItem.desc}}</small></p>\n" +
+    "   <p>\n" +
+    "       <small>\n" +
+    "           <em ng-if=\"clothingItem.source\"> ({{clothingItem.source}})</em>\n" +
+    "           <span class=\"sprite sprite-item_weight\"></span> {{clothingItem.weight}}\n" +
+    "           <span class=\"sprite sprite-item_darkstone\"></span> {{clothingItem.darkstone}}\n" +
+    "           <span class=\"sprite sprite-item_hands\"></span> {{clothingItem.hands}}\n" +
+    "           <span class=\"sprite sprite-item_slots\"></span> {{clothingItem.slots}}\n" +
+    "       </small>\n" +
+    "   </p>\n" +
     "</div>"
   );
 
 
-  $templateCache.put('character/clothing.html',
+  $templateCache.put('character/clothing/clothing.html',
     "<div class=\"clothing\">\n" +
-    "    <h4>Clothing</h4>\n" +
-    "\n" +
-    "    <clothing type=\"hat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"face\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"shoulders\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"coat\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"torso\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"belt\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"gloves\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    <clothing type=\"boots\" character=\"ctrl.character\" on-save=\"ctrl.save()\"></clothing>\n" +
-    "    \n" +
+    "   <h4>Clothing</h4>\n" +
+    "   <div ng-repeat=\"(type,item) in character.clothing\"> \n" +
+    "     <clothing-item-2 clothing-item=\"character.clothing[type]\" on-save=\"onEdited(item, type)\"></clothing-item-2>\n" +
+    "   </div>\n" +
+    "   <hr>\n" +
+    "   <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">New Item</button>\n" +
+    "   <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
+    "   <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
     "</div>"
+  );
+
+
+  $templateCache.put('character/clothing/editor.html',
+    "<div class=\"modal-content\">\n" +
+    "  <!-- <div class=\"modal-header\">\n" +
+    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
+    "  </div> -->\n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"What is the clothing's name?\">\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Source</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Slot</span>\n" +
+    "            <input disabled type=\"text\" class=\"form-control\" ng-if=\"!newItem\" value=\"{{item.type}}\">\n" +
+    "            <select type=\"text\" class=\"form-control\" ng-if=\"newItem\" \n" +
+    "                ng-model=\"item.type\" required ng-options=\"type for type in types\">\n" +
+    "                <option value=\"\">Select Slot</option>\n" +
+    "            </select>\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "            \n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>        \n" +
+    "    </div>\n" +
+    "    <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Apply</button>\n" +
+    "    </div>\n" +
+    "</div>\n"
   );
 
 
@@ -2060,12 +1775,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"grid__col-xs-12\">\n" +
+    "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
+    "            <div sermons character=\"ctrl.character\" on-save=\"ctrl.save()\"></div>\n" +
+    "        </div>\n" +
+    "        \n" +
+    "        <div class=\"grid__col-sm-12 grid__col-md-6\">\n" +
     "            <div class=\"notes\">\n" +
-    "                <h4>Notes</h4>\n" +
+    "                <h4>\n" +
+    "                    <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"ctrl.save()\">Save</button>\n" +
+    "                    Notes\n" +
+    "                </h4>\n" +
     "                <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
     "                    ng-model=\"ctrl.character.notes\"></textarea>\n" +
-    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.save()\">Save</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -2152,7 +1873,105 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('character/items.html',
+  $templateCache.put('character/items/editor.html',
+    "<div class=\"modal-content\">\n" +
+    "  <!-- <div class=\"modal-header\">\n" +
+    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
+    "  </div> -->\n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Give the item a name\">\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Describe the item\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Source</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Cost</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                </div><br>\n" +
+    "            \n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
+    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>        \n" +
+    "    </div>\n" +
+    "    <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name\" ng-click=\"ok()\">Apply</button>\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('character/items/item.html',
+    "<div class=\"item grid grid--bleed grid--wrap-reverse\">\n" +
+    "   <div class=\"grid__col-sm-3 grid__col-md-4\">\n" +
+    "       <div class=\"grid grid--justify-space-between\">\n" +
+    "           <div class=\"grid__col\">\n" +
+    "               <div><span class=\"sprite sprite-item_weight\"></span> <br class=\"hidden-xs\"> {{item.weight}}</div>\n" +
+    "           </div>\n" +
+    "           <div class=\"grid__col\">\n" +
+    "               <div><span class=\"sprite sprite-item_darkstone\"></span> <br class=\"hidden-xs\"> {{item.darkstone}}</div>\n" +
+    "           </div>\n" +
+    "           <div class=\"grid__col\">\n" +
+    "               <div><span class=\"sprite sprite-item_hands\"></span> <br class=\"hidden-xs\"> {{item.hands}}</div>\n" +
+    "           </div>\n" +
+    "           <div class=\"grid__col\">\n" +
+    "               <div><span class=\"sprite sprite-item_slots\"></span> <br class=\"hidden-xs\"> {{item.slots}}</div>\n" +
+    "           </div>\n" +
+    "           <div class=\"grid__col\"></div>\n" +
+    "       </div>\n" +
+    "   </div>\n" +
+    "   <div class=\"grid__col-sm-9 grid__col-md-8\">\n" +
+    "       <div>\n" +
+    "           <div class=\"pull-right\">\n" +
+    "               <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "                 <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "               </button>\n" +
+    "               <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "               </button>\n" +
+    "           </div>\n" +
+    "           <h5>{{name}}</h5>\n" +
+    "           <small>{{item.description}}  <em>({{item.source}})</em></small>\n" +
+    "       </div>\n" +
+    "   </div>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('character/items/items.html',
     "<div class=\"items\">\n" +
     "    <h4>Items</h4>\n" +
     "\n" +
@@ -2192,33 +2011,47 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('character/mutations-and-injuries.html',
+  $templateCache.put('character/mutations/mutation.html',
+    "<div class=\"mutation\">\n" +
+    "  <div ng-if=\"!ctrl.displayEditor\">\n" +
+    "    <div class=\"pull-right\">\n" +
+    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "      </button>\n" +
+    "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "        <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "      </button>\n" +
+    "    </div>\n" +
+    "    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>\n" +
+    "  </div>\n" +
+    "  <form ng-if=\"ctrl.displayEditor\">\n" +
+    "    <input type=\"text\" class=\"form-control\" ng-model=\"ctrl.name\" placeholder=\"name\">\n" +
+    "    <textarea rows=\"3\" class=\"form-control\" ng-model=\"ctrl.desc\" placeholder=\"value\"></textarea>\n" +
+    "    <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.save()\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "    </button>\n" +
+    "    <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.cancel()\">\n" +
+    "      <span class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "    </button>\n" +
+    "  </form>\n" +
+    "  <br><br>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('character/mutations/mutations-and-injuries.html',
     "<div class=\"mutations\">\n" +
     "    <h4>Mutations &amp; Injuries</h4>\n" +
     "    <div ng-repeat=\"(name, desc) in character.mutations\" \n" +
     "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
-    "\n" +
-    "\n" +
     "    <hr>\n" +
     "    \n" +
-    "    <div class=\"grid grid--bleed\">\n" +
-    "        <div class=\"grid__col-md-5\">\n" +
-    "            <input type=\"text\" class=\"form-control\" placeholder=\"Name\"\n" +
-    "                ng-model=\"value.name\">\n" +
-    "        </div>\n" +
-    "        <div class=\"grid__col-md-7\">\n" +
-    "            <div class=\"input-group\">\n" +
-    "                <input type=\"text\" class=\"form-control\" placeholder=\"Description\" \n" +
-    "                    ng-model=\"value.desc\">\n" +
-    "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-success\" \n" +
-    "                        ng-disabled=\"!value.name\" \n" +
-    "                        ng-click=\"add()\">+</button>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        \n" +
-    "    </div>\n" +
+    "    <form class=\"form\">\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "    </form>\n" +
+    "\n" +
     "</div>"
   );
 
@@ -2246,6 +2079,120 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div editable-stat-value on-save=\"ctrl.save()\" ng-model=\"ctrl.character.spiritArmor\"></div>\n" +
     "    </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('character/sermons/editor.html',
+    "<div class=\"modal-content\">\n" +
+    "  \n" +
+    "    <div class=\"modal-body\">\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Name</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Sermon Name\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Type</span>\n" +
+    "            <select class=\"form-control\" ng-model=\"item.type\">\n" +
+    "                <option value=\"\">Select One</option>\n" +
+    "                <option value=\"Blessing\">Blessing</option>\n" +
+    "                <option value=\"Judgement\">Judgement</option>\n" +
+    "            </select>\n" +
+    "        </div><br>\n" +
+    "        \n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Desc</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Description\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">Cost</span>\n" +
+    "                    <input type=\"number\" class=\"form-control\" ng-model=\"item.cost\" min=\"0\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">Check</span>\n" +
+    "                    <input type=\"number\" class=\"form-control\" ng-model=\"item.check\" min=\"0\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">Range</span>\n" +
+    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.range\" placeholder=\"e.g, 6\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">XP</span>\n" +
+    "                    <input type=\"number\" class=\"form-control\" ng-model=\"item.xp\" min=\"0\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <div class=\"input-group\">\n" +
+    "            <span class=\"input-group-addon\">Deadly</span>\n" +
+    "            <input type=\"checkbox\" class=\"form-control\" ng-model=\"item.deadly\">\n" +
+    "        </div><br>\n" +
+    "\n" +
+    "    </div>\n" +
+    "    <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Save</button>\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('character/sermons/sermon.html',
+    "<div class=\"sermon\">\n" +
+    "   <div class=\"pull-right\">\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "       </button>\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "           <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "       </button>\n" +
+    "   </div>\n" +
+    "   <h5>\n" +
+    "       {{sermon.name}} \n" +
+    "       <small>{{sermon.type}}</small>\n" +
+    "   </h5>\n" +
+    "   <p>\n" +
+    "       <small>\n" +
+    "           <div>\n" +
+    "               <span ng-if=\"sermon.deadly\">\n" +
+    "                <span class=\"glyphicon glyphicon-exclamation-sign\" title=\"Dangerous!\"></span>&nbsp;&nbsp;&nbsp;\n" +
+    "              </span>\n" +
+    "               <strong>{{sermon.check}}+</strong>&nbsp;&nbsp;&nbsp;\n" +
+    "               <strong>Cost: </strong> {{sermon.cost}}&nbsp;&nbsp;&nbsp;\n" +
+    "               <strong>XP: </strong> {{sermon.xp}}&nbsp;&nbsp;&nbsp;\n" +
+    "           </div>\n" +
+    "           <div><strong>Range: </strong> {{sermon.range}}</div>\n" +
+    "           <div>{{sermon.desc}}</div>\n" +
+    "       </small>\n" +
+    "   </p>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('character/sermons/sermons.html',
+    "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
+    "   <h4>Sermons</h4>\n" +
+    "   <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "     <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
+    "   </div>\n" +
+    "   <hr>\n" +
+    "   <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
+    "</div>"
   );
 
 
@@ -2422,76 +2369,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('clothing.html',
-    "<div class=\"modal-content\">\n" +
-    "  <!-- <div class=\"modal-header\">\n" +
-    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
-    "  </div> -->\n" +
-    "    <div class=\"modal-body\">\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Name</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"What is the clothing's name?\">\n" +
-    "        </div><br>\n" +
-    "        \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Source</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Cost</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Slot</span>\n" +
-    "            <input disabled type=\"text\" class=\"form-control\" ng-if=\"!newItem\" value=\"{{item.type}}\">\n" +
-    "            <select type=\"text\" class=\"form-control\" ng-if=\"newItem\" \n" +
-    "                ng-model=\"item.type\" required ng-options=\"type for type in types\">\n" +
-    "                <option value=\"\">Select Slot</option>\n" +
-    "            </select>\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
-    "                    </label>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "            \n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>        \n" +
-    "    </div>\n" +
-    "    <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Apply</button>\n" +
-    "    </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('home/home.html',
     "<div class=\"container\">\n" +
     "\n" +
@@ -2514,77 +2391,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('item.html',
-    "<div class=\"modal-content\">\n" +
-    "  <!-- <div class=\"modal-header\">\n" +
-    "    <h4 class=\"modal-title\">Modal title</h4>\n" +
-    "  </div> -->\n" +
-    "    <div class=\"modal-body\">\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Name</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Give the item a name\">\n" +
-    "        </div><br>\n" +
-    "        \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Describe the item\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Source</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Cost</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
-    "                    </label>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "            \n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>        \n" +
-    "    </div>\n" +
-    "    <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name\" ng-click=\"ok()\">Apply</button>\n" +
-    "    </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('keypad.html',
     "<div class=\"modal-content keypad\">\n" +
     "  \n" +
     "    <div class=\"modal-body\">\n" +
     "\n" +
-    "        <h3>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h3>\n" +
+    "        <h5>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h5>\n" +
     "        \n" +
+    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-50)\" ng-disable=\"value==minimum\">-50</button>\n" +
     "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
     "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-5)\" ng-disable=\"value==minimum\">-5</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-2)\" ng-disable=\"value==minimum\">-2</button>\n" +
     "        <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-1)\" ng-disable=\"value==minimum\">-1</button>\n" +
     "        <br>\n" +
     "\n" +
@@ -2602,8 +2418,21 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        \n" +
     "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(25)\">+25</button>\n" +
     "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(30)\">+30</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(35)\">+35</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(40)\">+40</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(50)\">+50</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(100)\">+100</button>\n" +
+    "        <br><br>\n" +
+    "\n" +
+    "        <div class=\"manual-entry\">\n" +
+    "            <div class=\"input-group\">\n" +
+    "                <span class=\"input-group-btn\">\n" +
+    "                    <a class=\"btn btn-danger\" ng-click=\"change(-1*manualAdj)\" ng-disabled=\"isNaN(manualAdj)\">-</a>\n" +
+    "                </span>\n" +
+    "                <input type=\"number\" class=\"form-control\" ng-model=\"manualAdj\" placeholder=\"Adjust by ...\">\n" +
+    "                <span class=\"input-group-btn\">\n" +
+    "                    <a class=\"btn btn-success\" ng-click=\"change(manualAdj)\" ng-disabled=\"isNaN(manualAdj)\">+</a>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "\n" +
     "    </div>\n" +
     "    \n" +

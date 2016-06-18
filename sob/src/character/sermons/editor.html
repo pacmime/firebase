@@ -1,0 +1,66 @@
+<div class="modal-content">
+  
+    <div class="modal-body">
+
+        <div class="input-group">
+            <span class="input-group-addon">Name</span>
+            <input type="text" class="form-control" ng-model="item.name" placeholder="Sermon Name">
+        </div><br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Type</span>
+            <select class="form-control" ng-model="item.type">
+                <option value="">Select One</option>
+                <option value="Blessing">Blessing</option>
+                <option value="Judgement">Judgement</option>
+            </select>
+        </div><br>
+        
+        <div class="input-group">
+            <span class="input-group-addon">Desc</span>
+            <input type="text" class="form-control" ng-model="item.desc" placeholder="Description">
+        </div><br>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <span class="input-group-addon">Cost</span>
+                    <input type="number" class="form-control" ng-model="item.cost" min="0">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <span class="input-group-addon">Check</span>
+                    <input type="number" class="form-control" ng-model="item.check" min="0">
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <span class="input-group-addon">Range</span>
+                    <input type="text" class="form-control" ng-model="item.range" placeholder="e.g, 6">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <span class="input-group-addon">XP</span>
+                    <input type="number" class="form-control" ng-model="item.xp" min="0">
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Deadly</span>
+            <input type="checkbox" class="form-control" ng-model="item.deadly">
+        </div><br>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+        <button type="button" class="btn btn-primary" ng-disabled="!item.name||!item.type" ng-click="ok()">Save</button>
+    </div>
+</div>
