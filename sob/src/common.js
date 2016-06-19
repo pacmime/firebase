@@ -154,8 +154,8 @@
     .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
 
         $scope.value = value;
-        $scope.minimum = minimum || 0;
-        $scope.maximum = maximum || 9999;
+        $scope.minimum = minimum*1 || 0;
+        $scope.maximum = maximum*1 || 9999;
         
         $scope.change = function(v) { 
             if(v>0)
