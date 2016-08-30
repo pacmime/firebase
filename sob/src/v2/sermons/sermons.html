@@ -1,0 +1,16 @@
+<div class="sermons" ng-if="character.class && character.class.toLowerCase().indexOf('preacher')>=0">
+    <br>
+    <div style="border-bottom: 1px solid #bbb;">
+        <strong>Faith:</strong> {{$parent.remainingFaith}} / {{$parent.character.faith}} 
+        <button type="button" class="btn btn-sm btn-default" ng-click="$parent.resetFaith()">reset</button>
+
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-success pull-right" ng-click="$parent.add()">Add</button>
+    </div>
+
+    <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+        <div sermon="sermon" on-save="$parent.onEdited(name, sermon)"></div>
+    </div>
+    <hr>
+    
+</div>

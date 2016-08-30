@@ -6,31 +6,32 @@
 
         <div class="input-group">
             <span class="input-group-addon">Name</span>
-            <input type="text" class="form-control" ng-model="item.name" placeholder="Name">
+            <input type="text" class="form-control" ng-model="item.name" placeholder="What is the clothing's name?">
         </div><br>
-
         
         <div class="input-group">
             <span class="input-group-addon">Desc</span>
-            <input type="text" class="form-control" ng-model="item.description" placeholder="Description">
+            <input type="text" class="form-control" ng-model="item.desc" placeholder="Describe the clothing">
         </div><br>
 
+        <div class="input-group">
+            <span class="input-group-addon">Source</span>
+            <input type="text" class="form-control" ng-model="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
+        </div><br>
 
-        <div class="row">
-            <div class="col-xs-8">
-                <div class="input-group">
-                    <span class="input-group-addon">Source</span>
-                    <input type="text" class="form-control" ng-model="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
-                </div>
-            </div>
-            <div class="col-xs-4">
-                <div class="input-group">
-                    <span class="input-group-addon">$</span>
-                    <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
-                </div>
-            </div>
-        </div>
-        <br>
+        <div class="input-group">
+            <span class="input-group-addon">Cost</span>
+            <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
+        </div><br>
+
+        <div class="input-group">
+            <span class="input-group-addon">Slot</span>
+            <input disabled type="text" class="form-control" ng-if="!newItem" value="{{item.type}}">
+            <select type="text" class="form-control" ng-if="newItem" 
+                ng-model="item.type" required ng-options="type for type in types">
+                <option value="">Select Slot</option>
+            </select>
+        </div><br>
 
         <div class="row">
             <div class="col-xs-6">
@@ -56,23 +57,10 @@
                     <input type="number" max="2" min="0" ng-model="item.slots" class="form-control">
                 </div>
             </div>
-        </div>   
-        <br>
-
-        <div class="input-group">
-            <span class="input-group-addon">Use</span>
-            <select class="form-control" ng-model="item.usage">
-            <option value="">N/A</option>
-            <option value="Turn">Turn</option>
-            <option value="Fight">Fight</option>
-            <option value="Adventure">Adventure</option>
-        </select>
-        <br>
-
-
+        </div>        
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-        <button type="button" class="btn btn-primary" ng-disabled="!item.name" ng-click="ok()">Apply</button>
+        <button type="button" class="btn btn-primary" ng-disabled="!item.name||!item.type" ng-click="ok()">Apply</button>
     </div>
 </div>

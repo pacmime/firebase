@@ -1,0 +1,17 @@
+<div class="mutations">
+    
+    <!-- list all -->
+    <div ng-repeat="(name, desc) in character.mutations" 
+        mutation name="{{name}}" desc="{{desc}}" on-save="onEdited(name, newName, newDesc)"></div>
+    
+    <br>
+    
+    <!-- add new -->
+    <form class="form">
+        <label>Add New Injury or Mutation</label>
+        <input type="text" class="form-control" placeholder="Name" ng-model="value.name">
+        <textarea rows="3" class="form-control" placeholder="Description" ng-model="value.desc"></textarea>
+        <button type="button" class="btn btn-success pull-right" ng-disabled="!value.name" ng-click="add()">Add</button>
+    </form>
+
+</div>

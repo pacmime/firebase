@@ -4,7 +4,7 @@
 
     angular.module("sob-character")
 
-    .directive('items', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+    .directive('clothing2', ['$timeout', '$uibModal', function($timeout, $uibModal) {
 
         return {
             scope: {
@@ -12,16 +12,23 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/items/items.html',
+            templateUrl: 'src/v2/clothing/clothing.html',
             
             controller: function($scope, $element) {
 
                 function update() {
+                    
                     var weight=0, darkstone=0;
-                    angular.forEach($scope.character.items, function(item) {
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        
+                        if(!item.type)
+                            item.type = type;
+
                         weight += item.weight||0;
                         darkstone += item.darkstone||0;
+                    
                     });
+
                     $scope.itemWeight = weight;
                     $scope.itemDarkstone = darkstone;
                 }
@@ -30,43 +37,48 @@
 
 
 
-                $scope.onEdited = function(name, item) {
+                $scope.onEdited = function(item, type) {
 
                     //if deleting item or renaming it
-                    if(!item || (item.name && item.name !== name)) {
-                        delete $scope.character.items[name];
-
-                        if(item && item.name)
-                            name = item.name;
-                    }
+                    if(!item)
+                        delete $scope.character.clothing[type];
 
                     if(item)
-                        $scope.character.items[name] = item;
+                        $scope.character.clothing[item.type] = item;
 
                     $scope.onSave();
                     update();
                 };
 
                 $scope.add = function() {
+                    
+                    var types = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        var index = types.indexOf(type);
+                        if(index >= 0)
+                            types.splice(index, 1);
+                    });
+
 
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'src/character/items/editor.html',
-                        controller: 'ItemEditor',
+                        templateUrl: 'src/character/clothing/editor.html',
+                        controller: 'ClothingEditor',
                         animation: false,
                         resolve: {
-                            item: function() {return null;}
+                            item: function() {return null;},
+                            types: function() {return types;}
                         }
                     });
 
                     modalInstance.result.then(function(item) {
-                        if(!item || !item.name) return;
-                        
-                        if(!$scope.character.items)
-                            $scope.character.items = {};
+                        if(!item || !item.name || !item.type) return;
 
+                        $scope.character.clothing = $scope.character.clothing || {};
+                        if($scope.character.clothing[item.type]) return;    //already has one
+                        
                         var obj = {};
-                        obj[item.name] = item;
-                        angular.merge($scope.character.items, obj);
+                        obj[item.type] = item;
+                        angular.merge($scope.character.clothing, obj);
 
                         $scope.onSave();
                         update();   //recalc weights
@@ -80,27 +92,26 @@
     }])
 
 
-    .directive('item', ['$uibModal', function($uibModal) {
+    .directive('clothingItem2', ['$uibModal', function($uibModal) {
 
         function Controller($scope, $element) {
 
             $scope.ctrl = this;
 
-            this.name = $scope.name;
-            this.item = $scope.item;
+            this.clothing = $scope.clothingItem;
             
             this.edit = function() {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'src/character/items/editor.html',
+                    templateUrl: 'src/character/clothing/editor.html',
                     controller: 'ItemEditor',
                     animation: false,
                     resolve: {
                         item: function() { 
-                            var copy = angular.copy($scope.item);
-                            copy.name = $scope.name;
+                            var copy = angular.copy($scope.clothingItem);
                             return copy; 
-                        }
+                        }, 
+                        types: function() {return [$scope.clothingItem.type];}
                     }
                 });
 
@@ -108,9 +119,9 @@
                     if(!item || !item.name) return; //cancel
                     
                     angular.forEach(item, function(value, key) {
-                        $scope.ctrl.item[key] = value;
+                        $scope.ctrl.clothing[key] = value;
                     });
-                    // console.log($scope.ctrl.item);
+                    // console.log($scope.ctrl.clothing);
                     $scope.ctrl.save();
                                         
                 }, function () { });
@@ -118,23 +129,23 @@
             };
 
             this.save = function() {
-                $scope.onSave({ item: this.item });
+                console.log("Saving...");
+                $scope.onSave({ item: this.clothing, type: this.clothing.type });
             };
 
             this.remove = function() {
-                $scope.onSave({ item: null });
+                $scope.onSave({ item: null, type: this.clothing.type });
             };
 
         }
 
         return {
             scope: {
-                name: "@",
-                item: "=",
+                clothingItem: "=",
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/items/item.html',
+            templateUrl: 'src/character/clothing/clothing-item.html',
             
             controller: Controller
         };

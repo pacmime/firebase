@@ -2,30 +2,32 @@
 
     "use strict";
 
-    angular.module("app", ['ngRoute', 'sob-home', 'sob-character'])
+    angular.module("app", ['ngRoute', 'ngAnimate', 'sob-home', 'sob-character'])
 
     .config(function myAppConfig ($routeProvider, $locationProvider) {
-        
+
         //default route if invalid one is supplied
-        $routeProvider
+
+        if(window.SOB && window.SOB.version === 2) {
+            $routeProvider.when('/:charId', { 
+                template: '<character></character>'
+            });
+
+        } else {
+            $routeProvider.when('/:charId', { 
+                templateUrl: 'src/character/character.html',
+                controller: 'CharacterController as ctrl'
+            });
+
+        }
         
-        .when('/:charId', {
-            templateUrl: 'src/character/character.html',
-            controller: 'CharacterController as ctrl'
-        })
-        
-        .when('/', {
+        $routeProvider.when('/', {
             templateUrl: 'src/home/home.html',
             controller: 'HomeController as ctrl'
         })
+        .otherwise({ redirectTo: "/" })
 
-        // .when('/login', {
-        //     templateUrl: 'src/login.html',
-        //     controller: 'LoginController as ctrl'
-        // })
 
-        .otherwise({ redirectTo: "/" });
-      
         //http://stackoverflow.com/questions/17895675/angularjs-html5mode-refresh-page-get-404
         // $locationProvider.html5Mode(true);
 

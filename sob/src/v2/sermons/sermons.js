@@ -14,7 +14,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/sermons/sermons.html',
+            templateUrl: 'src/v2/sermons/sermons.html',
             
             controller: function($scope, $element) {
 

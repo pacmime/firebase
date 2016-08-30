@@ -17,6 +17,8 @@
             error: null
         };
 
+        this.panel="char";
+
         //load the campaign
         this.charName = decodeURIComponent($routeParams.charId);
         this.character = CharacterRef(this.charName);

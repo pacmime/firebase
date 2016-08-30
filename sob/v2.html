@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <base href="/dev.html">
+        <title>Shadows of Brimstone Character App</title>
+        <link rel="shortcut icon" type="image/png" href="assets/item_darkstone.png">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/reflex.min.css">
+        <link rel="stylesheet" href="assets/style2.css">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav pull-right">
+              <li class="dropdown" login></li>
+            </ul>
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/dev.html#/">
+                S<span class="hidden-xs">hadows </span>o<span class="hidden-xs">f </span>B<span class="hidden-xs">rimstone</span> Char<span class="hidden-xs">acter</span>s</a>
+            </div>
+          </div>
+        </nav>
+
+        <div ng-view></div>
+
+
+        <script>
+            window.SOB = {
+                version: 2
+            };
+        </script>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-sanitize.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.js"></script>
+
+        <script src="assets/ui-bootstrap-tpls-1.3.2.min.js"></script>
+
+        <!-- Firebase -->
+        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+        <!--
+        <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDcsb0Ziu85j0BpIbicEmPTffR3H_RGb68",
+            authDomain: "intense-fire-8692.firebaseapp.com",
+            databaseURL: "https://intense-fire-8692.firebaseio.com",
+            storageBucket: "intense-fire-8692.appspot.com",
+          };
+          firebase.initializeApp(config);
+        </script>
+        -->
+        
+        <!-- AngularFire -->
+        <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
+
+
+        <script src="src/common.js"></script>
+        <script src="src/v2/character.js"></script>
+        <script src="src/v2/abilities/abilities.js"></script>
+        <script src="src/v2/clothing/clothing.js"></script>
+        <script src="src/v2/items/items.js"></script>
+        <script src="src/v2/mutations/mutations.js"></script>
+        <script src="src/v2/sermons/sermons.js"></script>
+        <script src="src/v2/sidebag/sidebag.js"></script>
+        <script src="src/home/home.js"></script>
+        <script src="src/main.js"></script>
+
+    </body>
+
+</html>

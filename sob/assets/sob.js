@@ -154,8 +154,8 @@
     .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
 
         $scope.value = value;
-        $scope.minimum = minimum || 0;
-        $scope.maximum = maximum || 9999;
+        $scope.minimum = minimum*1 || 0;
+        $scope.maximum = maximum*1 || 9999;
         
         $scope.change = function(v) { 
             if(v>0)
@@ -1516,7 +1516,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"pull-right\">\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "      </button>\n" +
+    "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "        <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "      </button>\n" +
@@ -1621,7 +1621,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "   <div class=\"pull-right\">\n" +
     "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "       </button>\n" +
+    "       </button>&nbsp;&nbsp;&nbsp;\n" +
     "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "           <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "       </button>\n" +
@@ -1958,13 +1958,13 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "           <div class=\"pull-right\">\n" +
     "               <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "                 <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "               </button>\n" +
+    "               </button>&nbsp;&nbsp;&nbsp;\n" +
     "               <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "               </button>\n" +
     "           </div>\n" +
-    "           <h5>{{name}}</h5>\n" +
-    "           <small>{{item.description}}  <em>({{item.source}})</em></small>\n" +
+    "           <h5>{{name}} <small>({{item.source}})</small></h5>\n" +
+    "           <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
     "       </div>\n" +
     "   </div>\n" +
     "</div>"
@@ -2017,7 +2017,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"pull-right\">\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "      </button>\n" +
+    "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "        <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "      </button>\n" +
@@ -2157,7 +2157,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "   <div class=\"pull-right\">\n" +
     "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "       </button>\n" +
+    "       </button>&nbsp;&nbsp;&nbsp;\n" +
     "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "           <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "       </button>\n" +
@@ -2319,8 +2319,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"stat\">\n" +
     "        <label>Capacity</label>\n" +
     "        <div editable-stat-value on-save=\"ctrl.save()\" \n" +
-    "            ng-model=\"ctrl.character.sidebag.capacity\"\n" +
-    "            maximum=\"{{ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
+    "            ng-model=\"ctrl.character.sidebag.capacity\"></div>\n" +
     "    </div>    \n" +
     "</div>"
   );

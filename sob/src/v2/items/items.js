@@ -12,7 +12,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/items/items.html',
+            templateUrl: 'src/v2/items/items.html',
             
             controller: function($scope, $element) {
 
