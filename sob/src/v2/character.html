@@ -188,6 +188,12 @@
 
         </div>
 
+        <br>
+        <br>
+        <br>
+        <br>
+        <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>
+
     </div>
 
     <div class="char__panel" ng-if="$ctrl.panel==='abil'">
@@ -230,26 +236,40 @@
         <div class="f-container f-justify-around">
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='char'}"
-                ng-click="$ctrl.panel='char'">Char</button>
+                ng-click="$ctrl.panel='char'">
+                <span class="glyphicon glyphicon-user"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='abil'}"
-                ng-click="$ctrl.panel='abil'">Abil</button>
+                ng-click="$ctrl.panel='abil'">
+                <span class="glyphicon glyphicon-flash"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-if="$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0"
                 ng-class="{active:$ctrl.panel==='sermons'}"
-                ng-click="$ctrl.panel='sermons'">Sermons</button>
+                ng-click="$ctrl.panel='sermons'">
+                <span class="glyphicon glyphicon-book"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='items'}"
-                ng-click="$ctrl.panel='items'">Items</button>
+                ng-click="$ctrl.panel='items'">
+                <span class="glyphicon glyphicon-gift"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='side'}"
-                ng-click="$ctrl.panel='side'">Side</button>
+                ng-click="$ctrl.panel='side'">
+                <span class="glyphicon glyphicon-briefcase"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='inj'}"
-                ng-click="$ctrl.panel='inj'">I/M</button>
+                ng-click="$ctrl.panel='inj'">
+                <span class="glyphicon glyphicon-alert"></span>
+            </button>
             <button type="button" class="f-cell f-equal" 
                 ng-class="{active:$ctrl.panel==='misc'}"
-                ng-click="$ctrl.panel='misc'">Misc</button>
+                ng-click="$ctrl.panel='misc'">
+                <span class="glyphicon glyphicon-comment"></span>
+            </button>
         </div>
     </div>
 

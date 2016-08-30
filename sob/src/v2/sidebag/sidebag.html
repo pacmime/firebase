@@ -8,14 +8,12 @@
             <label><span class="sprite sprite-{{option}}"></span> {{option}}</label>
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default"
+                    <button type="button" class="btn btn-danger"
                         ng-click="$ctrl.decrease(option)">&minus;</button>
                 </span>
-                <input type="number" min="0" class="form-control"
-                    ng-model="$ctrl.sidebag[option]" 
-                    ng-change="$ctrl.onChange($event, option)">
+                <input type="number" min="0" class="form-control" disabled ng-model="$ctrl.sidebag[option]">
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default"
+                    <button type="button" class="btn btn-success"
                         ng-click="$ctrl.increase(option)">&plus;</button>
                 </span>
             </div>

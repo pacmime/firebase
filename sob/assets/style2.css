@@ -258,7 +258,7 @@ body .navbar-default .navbar-nav>li>a {
     width: 128px;
 }
 .sidebag__option .input-group-btn .btn {
-    background-color: #eee;
+    opacity: 0.75;
 }
 
 

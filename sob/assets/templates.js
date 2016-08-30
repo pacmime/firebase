@@ -1653,6 +1653,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        </div>\n" +
     "\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>\n" +
+    "\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='abil'\">\n" +
@@ -1695,26 +1701,40 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div class=\"f-container f-justify-around\">\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='char'}\"\n" +
-    "                ng-click=\"$ctrl.panel='char'\">Char</button>\n" +
+    "                ng-click=\"$ctrl.panel='char'\">\n" +
+    "                <span class=\"glyphicon glyphicon-user\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='abil'}\"\n" +
-    "                ng-click=\"$ctrl.panel='abil'\">Abil</button>\n" +
+    "                ng-click=\"$ctrl.panel='abil'\">\n" +
+    "                <span class=\"glyphicon glyphicon-flash\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-if=\"$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0\"\n" +
     "                ng-class=\"{active:$ctrl.panel==='sermons'}\"\n" +
-    "                ng-click=\"$ctrl.panel='sermons'\">Sermons</button>\n" +
+    "                ng-click=\"$ctrl.panel='sermons'\">\n" +
+    "                <span class=\"glyphicon glyphicon-book\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='items'}\"\n" +
-    "                ng-click=\"$ctrl.panel='items'\">Items</button>\n" +
+    "                ng-click=\"$ctrl.panel='items'\">\n" +
+    "                <span class=\"glyphicon glyphicon-gift\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='side'}\"\n" +
-    "                ng-click=\"$ctrl.panel='side'\">Side</button>\n" +
+    "                ng-click=\"$ctrl.panel='side'\">\n" +
+    "                <span class=\"glyphicon glyphicon-briefcase\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='inj'}\"\n" +
-    "                ng-click=\"$ctrl.panel='inj'\">I/M</button>\n" +
+    "                ng-click=\"$ctrl.panel='inj'\">\n" +
+    "                <span class=\"glyphicon glyphicon-alert\"></span>\n" +
+    "            </button>\n" +
     "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "                ng-class=\"{active:$ctrl.panel==='misc'}\"\n" +
-    "                ng-click=\"$ctrl.panel='misc'\">Misc</button>\n" +
+    "                ng-click=\"$ctrl.panel='misc'\">\n" +
+    "                <span class=\"glyphicon glyphicon-comment\"></span>\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
@@ -2174,14 +2194,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <label><span class=\"sprite sprite-{{option}}\"></span> {{option}}</label>\n" +
     "            <div class=\"input-group\">\n" +
     "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                    <button type=\"button\" class=\"btn btn-danger\"\n" +
     "                        ng-click=\"$ctrl.decrease(option)\">&minus;</button>\n" +
     "                </span>\n" +
-    "                <input type=\"number\" min=\"0\" class=\"form-control\"\n" +
-    "                    ng-model=\"$ctrl.sidebag[option]\" \n" +
-    "                    ng-change=\"$ctrl.onChange($event, option)\">\n" +
+    "                <input type=\"number\" min=\"0\" class=\"form-control\" disabled ng-model=\"$ctrl.sidebag[option]\">\n" +
     "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                    <button type=\"button\" class=\"btn btn-success\"\n" +
     "                        ng-click=\"$ctrl.increase(option)\">&plus;</button>\n" +
     "                </span>\n" +
     "            </div>\n" +

@@ -36,6 +36,7 @@
 
             this.save = function() {
                 this.onSave();
+                this.max = this.getAvailableSidebagCapacity();
             };
 
             this.getAvailableSidebagCapacity = function() {
@@ -43,13 +44,35 @@
                 
                 var carrying = 0;
                 for(var i=0; i<this.options.length; ++i) {
-                    carrying += this.sidebag[this.options[i]] || 0;
+                    var option = this.options[i];
+                    carrying += this.sidebag[option] || 0;
                 }
                 
                 return this.sidebag.capacity - carrying;
                 
             };
 
+            this.increase = function(option) {
+                if(this.getAvailableSidebagCapacity() < 1) return;
+
+                var value = this.sidebag[option] || 0;
+                value += 1;
+                this.sidebag[option] = value;
+                this.save();
+            };
+
+            this.decrease = function(option) {
+                var value = this.sidebag[option] || 0;
+                if(value > 0) {
+                    value -= 1;
+                    this.sidebag[option] = value;
+                    this.save();
+                }
+            };
+
+            this.$onInit = function() {
+                this.max = this.getAvailableSidebagCapacity();
+            };
 
         }
 

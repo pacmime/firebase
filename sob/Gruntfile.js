@@ -23,6 +23,20 @@ module.exports = function(grunt) {
         'assets/templates.js'
     ];
 
+    var v2SourceFiles = [
+        "src/common.js",
+        "src/v2/character.js",
+        "src/v2/abilities/abilities.js",
+        "src/v2/clothing/clothing.js",
+        "src/v2/items/items.js",
+        "src/v2/sermons/sermons.js",
+        "src/v2/mutations/mutations.js",
+        "src/v2/sidebag/sidebag.js",
+        "src/home/home.js",
+        "src/main.js",
+        'assets/templates.js'
+    ];
+
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -73,6 +87,10 @@ module.exports = function(grunt) {
             main: {
                 src: sourceFiles,
                 dest: 'assets/sob.js'
+            },
+            v2: {
+                src: v2SourceFiles,
+                dest: 'assets/sob-v2.js'
             }
         },
 
@@ -82,7 +100,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'assets/sob.min.js': 'assets/sob.js'
+                    'assets/sob.min.js': 'assets/sob.js',
+                    'assets/sob-v2.min.js': 'assets/sob-v2.js'
                 }
             }
         },
