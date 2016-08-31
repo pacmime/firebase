@@ -1466,7 +1466,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"page f-container f-column f-justify-between\">\n" +
     "\n" +
     "    <div class=\"char__header\">\n" +
-    "        <div><label>Name: </label> {{$ctrl.charName}}</div>\n" +
+    "        <div class=\"char__name\"><label>Name: </label> {{$ctrl.charName}}</div>\n" +
     "        <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div>\n" +
     "        <div editable-input label=\"Keywords\" ng-model=\"$ctrl.character.keywords\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
@@ -1638,6 +1638,13 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
+    "                <div class=\"init f-cell\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <label>Init</label>\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.init\" minimum=\"1\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
     "                <div class=\"movement f-cell\">\n" +
     "                    <div class=\"stat stat--prepend-plus\">\n" +
     "                        <label>Move</label>\n" +
@@ -1645,10 +1652,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div class=\"stat f-cell\">\n" +
-    "                    <label>Init</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.init\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
     "            </div>\n" +
     "\n" +
     "        </div>\n" +
@@ -1744,28 +1747,38 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('v2/clothing/clothing-item.html',
     "<div class=\"clothing-item\">\n" +
-    "   <div class=\"pull-right\">\n" +
-    "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "    <div class=\"pull-right\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
     "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "       </button>&nbsp;&nbsp;&nbsp;\n" +
-    "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "        </button>&nbsp;&nbsp;&nbsp;\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "           <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
-    "       </button>\n" +
-    "   </div>\n" +
-    "   <h5>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
+    "    <h5>\n" +
     "       {{clothingItem.name}} \n" +
-    "       <small>{{clothingItem.type}}</small>\n" +
-    "   </h5>\n" +
-    "   <p><small>{{clothingItem.desc}}</small></p>\n" +
-    "   <p>\n" +
-    "       <small>\n" +
-    "           <em ng-if=\"clothingItem.source\"> ({{clothingItem.source}})</em>\n" +
-    "           <span class=\"sprite sprite-item_weight\"></span> {{clothingItem.weight}}\n" +
-    "           <span class=\"sprite sprite-item_darkstone\"></span> {{clothingItem.darkstone}}\n" +
-    "           <span class=\"sprite sprite-item_hands\"></span> {{clothingItem.hands}}\n" +
-    "           <span class=\"sprite sprite-item_slots\"></span> {{clothingItem.slots}}\n" +
-    "       </small>\n" +
-    "   </p>\n" +
+    "       <small>{{clothingItem.type}}</small> \n" +
+    "       <small><em>({{clothingItem.source}})</em></small>\n" +
+    "    </h5>\n" +
+    "    <p><small>{{clothingItem.desc}}</small></p>\n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div>\n" +
+    "            <span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!clothingItem.weight}\"></span> \n" +
+    "            {{clothingItem.weight}}\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!clothingItem.darkstone}\"></span> \n" +
+    "            {{clothingItem.darkstone}}\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!clothingItem.hands}\"></span> \n" +
+    "            {{clothingItem.hands}}\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!clothingItem.slots}\"></span> \n" +
+    "            {{clothingItem.slots}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "</div>"
   );
 
@@ -1804,20 +1817,24 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"What is the clothing's name?\">\n" +
     "        </div><br>\n" +
     "        \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\">\n" +
-    "        </div><br>\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Describe the clothing\"></textarea>\n" +
+    "        <br>\n" +
     "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Source</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Cost</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
-    "        </div><br>\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-8\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">Source</span>\n" +
+    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-4\">\n" +
+    "                <div class=\"input-group\">\n" +
+    "                    <span class=\"input-group-addon\">$</span>\n" +
+    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
     "\n" +
     "        <div class=\"input-group\">\n" +
     "            <span class=\"input-group-addon\">Slot</span>\n" +
@@ -1875,10 +1892,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        </div><br>\n" +
     "\n" +
     "        \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
-    "        </div><br>\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Provide a description\"></textarea>\n" +
+    "        <br>\n" +
     "\n" +
     "\n" +
     "        <div class=\"row\">\n" +
@@ -1945,39 +1960,35 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/items/item.html',
-    "<div class=\"item grid grid--bleed grid--wrap-reverse\">\n" +
-    "   <div class=\"grid__col-sm-3 grid__col-md-4\">\n" +
-    "       <div class=\"grid grid--justify-space-between\">\n" +
-    "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_weight\"></span> <br class=\"hidden-xs\"> {{item.weight}}</div>\n" +
-    "           </div>\n" +
-    "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_darkstone\"></span> <br class=\"hidden-xs\"> {{item.darkstone}}</div>\n" +
-    "           </div>\n" +
-    "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_hands\"></span> <br class=\"hidden-xs\"> {{item.hands}}</div>\n" +
-    "           </div>\n" +
-    "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_slots\"></span> <br class=\"hidden-xs\"> {{item.slots}}</div>\n" +
-    "           </div>\n" +
-    "           <div class=\"grid__col\"></div>\n" +
-    "       </div>\n" +
-    "   </div>\n" +
-    "   <div class=\"grid__col-sm-9 grid__col-md-8\">\n" +
-    "       <div>\n" +
-    "            <div class=\"pull-right\">\n" +
-    "               <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
-    "                 <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "               </button>&nbsp;&nbsp;&nbsp;\n" +
-    "               <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
-    "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
-    "               </button>\n" +
-    "            </div>\n" +
-    "            <h5>{{name}} <small>({{item.source}})</small></h5>\n" +
-    "            <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
-    "            <div ng-if=\"item.usage\"> <input type=\"checkbox\"> <small>(per {{item.usage}})</small> </div>\n" +
-    "       </div>\n" +
-    "   </div>\n" +
+    "<div class=\"item\">\n" +
+    "    <div class=\"\">\n" +
+    "        \n" +
+    "        <div class=\"pull-right\">\n" +
+    "           <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "           </button>&nbsp;&nbsp;&nbsp;\n" +
+    "           <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "                <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "           </button>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <h5>\n" +
+    "            {{name}} \n" +
+    "            <small><em>({{item.source}})</em></small>\n" +
+    "        </h5>\n" +
+    "        \n" +
+    "        <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
+    "        \n" +
+    "        <div ng-if=\"item.usage\"> <input type=\"checkbox\"> <small>(per {{item.usage}})</small> </div>\n" +
+    "        \n" +
+    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "            <div><span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!item.weight}\"></span> {{item.weight}}</div>\n" +
+    "            <div><span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!item.darkstone}\"></span> {{item.darkstone}}</div>\n" +
+    "            <div><span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!item.hands}\"></span> {{item.hands}}</div>\n" +
+    "            <div><span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!item.slots}\"></span> {{item.slots}}</div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
     "</div>"
   );
 
@@ -1995,6 +2006,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
     "        </small>\n" +
     "    </h4>\n" +
+    "    <hr>\n" +
     "\n" +
     "    <div ng-repeat=\"(name, item) in character.items\" item=\"item\" name=\"{{name}}\" on-save=\"onEdited(name, item)\"></div>\n" +
     "\n" +
@@ -2064,20 +2076,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Sermon Name\">\n" +
     "        </div><br>\n" +
     "\n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Type</span>\n" +
-    "            <select class=\"form-control\" ng-model=\"item.type\">\n" +
-    "                <option value=\"\">Select One</option>\n" +
-    "                <option value=\"Blessing\">Blessing</option>\n" +
-    "                <option value=\"Judgement\">Judgement</option>\n" +
-    "            </select>\n" +
-    "        </div><br>\n" +
-    "        \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Desc</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Description\">\n" +
-    "        </div><br>\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Provide a description\"></textarea>\n" +
+    "        <br>\n" +
     "\n" +
+    "        <select class=\"form-control\" ng-model=\"item.type\">\n" +
+    "            <option value=\"\">Select Type</option>\n" +
+    "            <option value=\"Blessing\">Blessing</option>\n" +
+    "            <option value=\"Judgement\">Judgement</option>\n" +
+    "        </select>\n" +
+    "        <br>\n" +
+    "        \n" +
     "        <div class=\"row\">\n" +
     "            <div class=\"col-xs-6\">\n" +
     "                <div class=\"input-group\">\n" +
@@ -2097,24 +2105,21 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <div class=\"row\">\n" +
     "            <div class=\"col-xs-6\">\n" +
     "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\">Range</span>\n" +
-    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.range\" placeholder=\"e.g, 6\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
     "                    <span class=\"input-group-addon\">XP</span>\n" +
     "                    <input type=\"number\" class=\"form-control\" ng-model=\"item.xp\" min=\"0\">\n" +
     "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-6\">\n" +
+    "                <div>Deadly? <input type=\"checkbox\" ng-model=\"item.deadly\" id=\"isDeadly\"> </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <br>\n" +
     "\n" +
     "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Deadly</span>\n" +
-    "            <input type=\"checkbox\" class=\"form-control\" ng-model=\"item.deadly\">\n" +
-    "        </div><br>\n" +
-    "\n" +
+    "            <span class=\"input-group-addon\">Range</span>\n" +
+    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.range\" placeholder=\"e.g, 6\">\n" +
+    "        </div>\n" +
+    "        \n" +
     "    </div>\n" +
     "    <div class=\"modal-footer\">\n" +
     "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
@@ -2166,13 +2171,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('v2/sermons/sermons.html',
     "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
     "    <br>\n" +
-    "    <div style=\"border-bottom: 1px solid #bbb;\">\n" +
+    "    <div>\n" +
     "        <strong>Faith:</strong> {{$parent.remainingFaith}} / {{$parent.character.faith}} \n" +
     "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
     "\n" +
     "        &nbsp;&nbsp;&nbsp;\n" +
     "        <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
     "    </div>\n" +
+    "    <hr>\n" +
     "\n" +
     "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
     "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
@@ -2187,12 +2193,24 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"sidebag\">\n" +
     "    \n" +
     "    <br>\n" +
-    "\n" +
+    "    <div class=\"clearfix\">\n" +
+    "        <div class=\"pull-right\">\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Capacity</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
+    "                    ng-model=\"$ctrl.sidebag.capacity\"></div>\n" +
+    "            </div>  \n" +
+    "        </div>\n" +
+    "        <h4>Sidebag</h4>\n" +
+    "    </div>\n" +
+    "    <br>\n" +
+    "    \n" +
     "    <div class=\"f-container f-justify-between f-wrap\">\n" +
     "    \n" +
     "        <div ng-repeat=\"option in $ctrl.options\" class=\"sidebag__option\">\n" +
     "            <label><span class=\"sprite sprite-{{option}}\"></span> {{option}}</label>\n" +
-    "            <div class=\"input-group\">\n" +
+    "\n" +
+    "            <!-- <div class=\"input-group\">\n" +
     "                <span class=\"input-group-btn\">\n" +
     "                    <button type=\"button\" class=\"btn btn-danger\"\n" +
     "                        ng-click=\"$ctrl.decrease(option)\">&minus;</button>\n" +
@@ -2202,107 +2220,17 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <button type=\"button\" class=\"btn btn-success\"\n" +
     "                        ng-click=\"$ctrl.increase(option)\">&plus;</button>\n" +
     "                </span>\n" +
-    "            </div>\n" +
+    "            </div> -->\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                        ng-click=\"$ctrl.decrease(option)\">&minus;</button>\n" +
+    "            <span class=\"option__display\">{{$ctrl.sidebag[option]}}</span>\n" +
+    "            <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                        ng-click=\"$ctrl.increase(option)\">&plus;</button>\n" +
     "        </div>\n" +
     "\n" +
-    "\n" +
-    "        <!--\n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.bandages\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-bandages\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.whiskey\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-whiskey\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.tonic\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-tonic\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.herbs\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-herb\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.dynamite\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-dynamite\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.flash\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-flash\"></span>\n" +
-    "        </div>    \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.fungus\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-fungus\"></span>\n" +
-    "        </div>    \n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.spices\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-spice\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.potions\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-potion\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.hatchets\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-hatchet\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.lanternOil\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-oil\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.exoticHerbs\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-exoticHerbs\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.tequila\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-tequila\"></span>\n" +
-    "        </div> \n" +
-    "        <div class=\"stat\">\n" +
-    "            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                ng-model=\"$ctrl.sidebag.cigars\"\n" +
-    "                maximum=\"{{$ctrl.getAvailableSidebagCapacity()}}\"></div>\n" +
-    "            <span class=\"sprite sprite-cigar\"></span>\n" +
-    "        </div>\n" +
-    "        --> \n" +
     "    </div>\n" +
-    "    <br>\n" +
-    "    <br>\n" +
-    "\n" +
-    "    <div class=\"stat\">\n" +
-    "        <label>Capacity</label>\n" +
-    "        <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "            ng-model=\"$ctrl.sidebag.capacity\"></div>\n" +
-    "    </div>    \n" +
+    "  \n" +
     "</div>"
   );
 

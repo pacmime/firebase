@@ -1,12 +1,24 @@
 <div class="sidebag">
     
     <br>
-
+    <div class="clearfix">
+        <div class="pull-right">
+            <div class="stat">
+                <label>Capacity</label>
+                <div editable-stat-value on-save="$ctrl.save()" 
+                    ng-model="$ctrl.sidebag.capacity"></div>
+            </div>  
+        </div>
+        <h4>Sidebag</h4>
+    </div>
+    <br>
+    
     <div class="f-container f-justify-between f-wrap">
     
         <div ng-repeat="option in $ctrl.options" class="sidebag__option">
             <label><span class="sprite sprite-{{option}}"></span> {{option}}</label>
-            <div class="input-group">
+
+            <!-- <div class="input-group">
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-danger"
                         ng-click="$ctrl.decrease(option)">&minus;</button>
@@ -16,105 +28,15 @@
                     <button type="button" class="btn btn-success"
                         ng-click="$ctrl.increase(option)">&plus;</button>
                 </span>
-            </div>
+            </div> -->
+
+            <button type="button" class="btn btn-default"
+                        ng-click="$ctrl.decrease(option)">&minus;</button>
+            <span class="option__display">{{$ctrl.sidebag[option]}}</span>
+            <button type="button" class="btn btn-default"
+                        ng-click="$ctrl.increase(option)">&plus;</button>
         </div>
 
-
-        <!--
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.bandages"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-bandages"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.whiskey"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-whiskey"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.tonic"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-tonic"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.herbs"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-herb"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.dynamite"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-dynamite"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.flash"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-flash"></span>
-        </div>    
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.fungus"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-fungus"></span>
-        </div>    
-
-
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.spices"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-spice"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.potions"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-potion"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.hatchets"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-hatchet"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.lanternOil"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-oil"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.exoticHerbs"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-exoticHerbs"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.tequila"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-tequila"></span>
-        </div> 
-        <div class="stat">
-            <div editable-stat-value on-save="$ctrl.save()" 
-                ng-model="$ctrl.sidebag.cigars"
-                maximum="{{$ctrl.getAvailableSidebagCapacity()}}"></div>
-            <span class="sprite sprite-cigar"></span>
-        </div>
-        --> 
     </div>
-    <br>
-    <br>
-
-    <div class="stat">
-        <label>Capacity</label>
-        <div editable-stat-value on-save="$ctrl.save()" 
-            ng-model="$ctrl.sidebag.capacity"></div>
-    </div>    
+  
 </div>

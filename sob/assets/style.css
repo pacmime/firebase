@@ -15,6 +15,11 @@ h2 { font-size: 1.75rem; }
 h1 { font-size: 2rem; }
 
 
+img { width: 100%; }
+.input-group-addon > img { width: auto; }
+
+
+
 body {
     font-size: 1rem;
     background: #E9E3CD;

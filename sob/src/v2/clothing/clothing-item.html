@@ -1,24 +1,34 @@
 <div class="clothing-item">
-   <div class="pull-right">
-       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
+    <div class="pull-right">
+        <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
            <span class="glyphicon glyphicon-trash"></span>
-       </button>&nbsp;&nbsp;&nbsp;
-       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
+        </button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
            <span class="glyphicon glyphicon-pencil"></span>
-       </button>
-   </div>
-   <h5>
+        </button>
+    </div>
+    <h5>
        {{clothingItem.name}} 
-       <small>{{clothingItem.type}}</small>
-   </h5>
-   <p><small>{{clothingItem.desc}}</small></p>
-   <p>
-       <small>
-           <em ng-if="clothingItem.source"> ({{clothingItem.source}})</em>
-           <span class="sprite sprite-item_weight"></span> {{clothingItem.weight}}
-           <span class="sprite sprite-item_darkstone"></span> {{clothingItem.darkstone}}
-           <span class="sprite sprite-item_hands"></span> {{clothingItem.hands}}
-           <span class="sprite sprite-item_slots"></span> {{clothingItem.slots}}
-       </small>
-   </p>
+       <small>{{clothingItem.type}}</small> 
+       <small><em>({{clothingItem.source}})</em></small>
+    </h5>
+    <p><small>{{clothingItem.desc}}</small></p>
+    <div class="f-container f-justify-between f-align-center">
+        <div>
+            <span class="sprite sprite-item_weight" ng-class="{disabled:!clothingItem.weight}"></span> 
+            {{clothingItem.weight}}
+        </div>
+        <div>
+            <span class="sprite sprite-item_darkstone" ng-class="{disabled:!clothingItem.darkstone}"></span> 
+            {{clothingItem.darkstone}}
+        </div>
+        <div>
+            <span class="sprite sprite-item_hands" ng-class="{disabled:!clothingItem.hands}"></span> 
+            {{clothingItem.hands}}
+        </div>
+        <div>
+            <span class="sprite sprite-item_slots" ng-class="{disabled:!clothingItem.slots}"></span> 
+            {{clothingItem.slots}}
+        </div>
+    </div>
 </div>

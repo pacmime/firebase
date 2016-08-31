@@ -9,20 +9,24 @@
             <input type="text" class="form-control" ng-model="item.name" placeholder="What is the clothing's name?">
         </div><br>
         
-        <div class="input-group">
-            <span class="input-group-addon">Desc</span>
-            <input type="text" class="form-control" ng-model="item.desc" placeholder="Describe the clothing">
-        </div><br>
+        <textarea rows="2" class="form-control" ng-model="item.desc" placeholder="Describe the clothing"></textarea>
+        <br>
 
-        <div class="input-group">
-            <span class="input-group-addon">Source</span>
-            <input type="text" class="form-control" ng-model="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
-        </div><br>
-
-        <div class="input-group">
-            <span class="input-group-addon">Cost</span>
-            <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
-        </div><br>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon">Source</span>
+                    <input type="text" class="form-control" ng-model="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
+                </div>
+            </div>
+        </div>
+        <br>
 
         <div class="input-group">
             <span class="input-group-addon">Slot</span>

@@ -10,6 +10,7 @@
             <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
         </small>
     </h4>
+    <hr>
 
     <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
 

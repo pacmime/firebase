@@ -46,7 +46,7 @@
                 $scope.add = function() {
                     
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'src/character/sermons/editor.html',
+                        templateUrl: 'src/v2/sermons/editor.html',
                         controller: 'ItemEditor',
                         animation: false,
                         resolve: {
@@ -109,7 +109,7 @@
             this.edit = function() {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'src/character/sermons/editor.html',
+                    templateUrl: 'src/v2/sermons/editor.html',
                     controller: 'ItemEditor',
                     animation: false,
                     resolve: {
@@ -187,7 +187,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/sermons/sermon.html',
+            templateUrl: 'src/v2/sermons/sermon.html',
             controller: Controller
         };
     }]);

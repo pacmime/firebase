@@ -50,7 +50,7 @@
                 $scope.add = function() {
 
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'src/character/items/editor.html',
+                        templateUrl: 'src/v2/items/editor.html',
                         controller: 'ItemEditor',
                         animation: false,
                         resolve: {
@@ -92,7 +92,7 @@
             this.edit = function() {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'src/character/items/editor.html',
+                    templateUrl: 'src/v2/items/editor.html',
                     controller: 'ItemEditor',
                     animation: false,
                     resolve: {
@@ -134,7 +134,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/items/item.html',
+            templateUrl: 'src/v2/items/item.html',
             
             controller: Controller
         };

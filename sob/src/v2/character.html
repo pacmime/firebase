@@ -1,7 +1,7 @@
 <div class="page f-container f-column f-justify-between">
 
     <div class="char__header">
-        <div><label>Name: </label> {{$ctrl.charName}}</div>
+        <div class="char__name"><label>Name: </label> {{$ctrl.charName}}</div>
         <div editable-input label="Class" ng-model="$ctrl.character.class" on-save="$ctrl.save()"></div>
         <div editable-input label="Keywords" ng-model="$ctrl.character.keywords" on-save="$ctrl.save()"></div>
     </div>
@@ -173,6 +173,13 @@
                     </div>
                 </div>
 
+                <div class="init f-cell">
+                    <div class="stat">
+                        <label>Init</label>
+                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.init" minimum="1"></div>
+                    </div>
+                </div>
+
                 <div class="movement f-cell">
                     <div class="stat stat--prepend-plus">
                         <label>Move</label>
@@ -180,10 +187,6 @@
                     </div>
                 </div>
 
-                <div class="stat f-cell">
-                    <label>Init</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.init" minimum="1"></div>
-                </div>
             </div>
 
         </div>

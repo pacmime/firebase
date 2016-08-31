@@ -61,7 +61,7 @@
 
 
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'src/character/clothing/editor.html',
+                        templateUrl: 'src/v2/clothing/editor.html',
                         controller: 'ClothingEditor',
                         animation: false,
                         resolve: {
@@ -103,7 +103,7 @@
             this.edit = function() {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'src/character/clothing/editor.html',
+                    templateUrl: 'src/v2/clothing/editor.html',
                     controller: 'ItemEditor',
                     animation: false,
                     resolve: {
@@ -145,7 +145,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/clothing/clothing-item.html',
+            templateUrl: 'src/v2/clothing/clothing-item.html',
             
             controller: Controller
         };

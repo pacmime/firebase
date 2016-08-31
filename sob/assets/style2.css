@@ -18,7 +18,7 @@ h1 { font-size: 2rem; }
 
 
 img { width: 100%; }
-
+.input-group-addon > img { width: auto; }
 
 
 
@@ -62,16 +62,17 @@ body .navbar>.container-fluid .navbar-brand {
     border-bottom: 1px solid #bbb;
 
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
+    flex-wrap: wrap;
 }
+.char__header .char__name { flex: 100%; }
+
 @media(min-width: 768px) {
-    .char__header { 
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: stretch;
-    }
+    .char__header { flex-wrap: none; }
+    .char__header .char__name { flex: auto; }
+
 }
 
 
@@ -148,7 +149,11 @@ body .navbar-default .navbar-nav>li>a {
 /* ------------ sections -------------- */
 
 .avatar {
-    width: 150px;
+    width: 100px;
+    max-height: 200px;
+}
+@media(min-width: 768px) {
+    .avatar { width: 150px; }
 }
 
 .attributes { 
@@ -182,7 +187,7 @@ body .navbar-default .navbar-nav>li>a {
     padding: 0.5em 0;
 }
 .grit { 
-    background-color: #5F4F4F;     
+    background-color: #9c7a3f;     
     padding: 0.5em 0;
 }
 
@@ -192,6 +197,12 @@ body .navbar-default .navbar-nav>li>a {
     flex-direction: column; 
     align-items: center; 
     justify-content: space-around;
+}
+@media(min-width: 768px) {
+    .general .f-cell {
+        flex: 50%;
+        text-align: center;
+    }
 }
 
 
@@ -261,6 +272,23 @@ body .navbar-default .navbar-nav>li>a {
     opacity: 0.75;
 }
 
+.option__display {
+    display: inline-block;
+    width: 32px;
+    text-align: center;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 0.3em 0;
+}
+.sidebag__option .btn:not(:last-child) {
+    border-radius: 4px 0 0 4px;
+    background-color: #eee;
+}
+.sidebag__option .btn:last-child {
+    border-radius: 0 4px 4px 0;
+    background-color: #ccc;
+}
 
 
 
@@ -336,7 +364,7 @@ body .navbar-default .navbar-nav>li>a {
     height:      100%;
     border-radius: 100%; 
     background:  #fff;
-    border: 1px solid #bbb;
+    border: 1px solid #777;
 }
 
 .stat .stat {
@@ -350,7 +378,9 @@ body .navbar-default .navbar-nav>li>a {
     font-size: 1em;
     box-shadow: 0 1px 3px #000;
     padding-top: 0.5em;
-    background: #ddd;
+    background: #333;
+    color: #fff;
+    font-weight: 700;
 }
 
 
@@ -803,5 +833,7 @@ body .navbar-default .navbar-nav>li>a {
     -o-transform: scale(0.5);
     -o-transform-origin: 0 0;
 }
+
+.sprite.disabled { opacity: 0.25; }
 
 /* ------------------------------------- */
