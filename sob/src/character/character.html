@@ -11,9 +11,12 @@
 
     <script>
         function useV2() {
-            var newPath = "/v2.html";
+            var newPath = "/sob/v2.html";
+
+            //development version
             if(~window.location.pathname.indexOf("dev"))
                 newPath = "/v2dev.html";
+
             window.location.pathname=newPath;
         }
     </script>
