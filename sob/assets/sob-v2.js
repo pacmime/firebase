@@ -1,3 +1,1591 @@
+(function(angular) {
+    "use strict";
+
+    angular.module('sob-common', [])
+
+    .constant('DataStoreUrl', "https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone")
+
+    .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(property, value) {
+                var ref = new Firebase(DataStoreUrl + "/chars");
+                if(property && value)
+                    ref.orderByChild(property).equalTo(value);
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("CharacterRef", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(name) {
+                var ref = new Firebase(DataStoreUrl + "/chars/" + name);
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("Auth", ["$firebaseAuth", 'DataStoreUrl',
+        function($firebaseAuth, DataStoreUrl) {
+            var ref = new Firebase(DataStoreUrl);
+            return $firebaseAuth(ref);
+        }
+    ])
+
+
+
+
+
+
+    .filter('encode', function() {
+        return function(value) {
+            return encodeURIComponent(value);
+        };
+    })
+
+    .filter('decode', function() {
+        return function(value) {
+            return decodeURIComponent(value);
+        };
+    })
+
+    .provider('responsiveHelper', ["$windowProvider", function ($windowProvider) {
+        
+        var $window  = $windowProvider.$get();
+
+        function Helper($window) {
+            this.window = $window;
+        }
+        Helper.prototype = {
+            getWidth: function() { return $window.innerWidth || $window.outerWidth; },
+            isXS: function () { var width = this.getWidth(); return width < 768; },
+            isSM: function () { var width = this.getWidth(); return width >= 768 && width < 992; },
+            isMD: function () { var width = this.getWidth(); return width >= 992 && width < 1200; },
+            isLG: function () { var width = this.getWidth(); return width >= 1200; }
+        };
+
+        var helper = new Helper($window);
+
+        this.$get = function() {
+            return helper;
+        };
+    }])
+
+    //directive which appends appropriate responsive breakpoint classNames to the element
+    // on which it's set
+    .directive('responsive', ['$window', 'responsiveHelper', function($window, responsiveHelper) {
+
+        return {
+            restrict: "A",
+            link: function($scope, $element, $attrs) {
+
+                function update(el, helper) {
+                    if(helper.isXS())
+                        el.addClass('responsive-xs');
+                    else
+                        el.removeClass('responsive-xs');
+
+                    if(helper.isSM())
+                        el.addClass('responsive-sm');
+                    else 
+                        el.removeClass('responsive-sm');
+
+                    if(helper.isMD())
+                        el.addClass('responsive-md');
+                    else 
+                        el.removeClass('responsive-md');
+
+                    if(helper.isLG())
+                        el.addClass('responsive-lg');
+                    else 
+                        el.removeClass('responsive-lg');
+                }
+
+                update($element, responsiveHelper);
+
+                var resizeFn = function() {
+                    update($element, responsiveHelper);
+                };
+
+                var w = angular.element($window);
+                var listener = w.on('resize', resizeFn);
+
+                $scope.$on('$destroy', function() {
+                    w.off('resize', resizeFn);
+                });
+
+            }
+        };
+
+    }])
+
+
+    .controller('ItemEditor', function($scope, $uibModalInstance, item) {
+
+        $scope.item = item;
+
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.item);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
+    .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
+
+        $scope.item = item;
+        $scope.types = types;
+        $scope.newItem = !item;
+
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.item);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
+
+    .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
+
+        $scope.value = value;
+        $scope.minimum = minimum*1 || 0;
+        $scope.maximum = maximum*1 || 9999;
+        
+        $scope.change = function(v) { 
+            if(v>0)
+                $scope.value = Math.min($scope.value + v, maximum); 
+            else
+                $scope.value = Math.max($scope.value + v, minimum); 
+        }
+        
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.value);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
+
+    .directive('editableStatValue', ['$uibModal', function($uibModal) {
+        return {
+            scope: {
+                onSave: '&',
+                minimum: '@',
+                maximum: '@'
+            },
+            restrict: 'A',
+            require: 'ngModel',
+            replace: true,
+            template: '<div class="value" ng-click="openKeypad()">{{display}}</div>',
+            link: function($scope, $element, $attrs, ngModelController) {
+
+                $scope.minimum = ($scope.minimum || 0)*1;
+                $scope.maximum = ($scope.maximum || 9999)*1;
+
+                ngModelController.$render = function() {
+                    $scope.display = ngModelController.$viewValue;
+                };
+
+                $scope.openKeypad = function() {
+
+                    var value = ngModelController.$modelValue || 0;
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/keypad.html',
+                        controller: 'KeyPad',
+                        animation: false,
+                        resolve: {
+                            value: function() { return value; },
+                            minimum: function() { return $scope.minimum; },
+                            maximum: function() { return $scope.maximum; }
+                        }
+                    });
+
+                    modalInstance.result.then(function(value) {
+                        
+                        ngModelController.$setViewValue(value);
+                        ngModelController.$render();
+                        if($scope.onSave)
+                            $scope.onSave();
+
+                    }, function () { });
+
+                };
+            }
+        };
+    }])
+
+
+
+    .directive('editableInput', ['$timeout', function($timeout) {
+
+        return {
+            restrict: 'AE',
+            require: 'ngModel',
+            scope: {
+                label: "@",
+                onSave: "&"
+            },
+            replace: true,
+            template: [
+                '<div class="editable-input">',
+                '  <label class="editable-input-label">{{::label}}</label>',
+                '  <span class="editable-input-display" ng-show="!editing" ng-click="edit()"></span>',
+
+                '    <form class="form" ng-show="editing">',
+                '      <div class="form-group">',
+                '        <div class="grid">', 
+                '          <div class="grid__col-auto grid__col--grow-2">',   
+                '            <input type="text" class="form-control editable-input-field" ',
+                '              ng-keyup="onKeyUp($event, $event.keyCode)"></input>',
+                '          </div>',
+                '          <div class="grid__col-auto">',
+                '            <div class="editable-input-buttons">',
+                '              <button type="button" class="btn btn-xs btn-link text-success" ng-disabled="error" ng-click="done()" tabindex="0">',
+                '                <span class="glyphicon glyphicon-ok"></span>',
+                '              </button>',
+                '              <button type="button" class="btn btn-xs btn-link text-danger" ng-click="cancel()"  tabindex="0">',
+                '                <span class="glyphicon glyphicon-remove"></span>',
+                '              </button>',
+                '            </div>',
+                '          </div>',
+                '        </div>',
+                '      </div>',
+                '    </form>',
+                '</div>'
+            ].join(' '),
+
+            link: function($scope, $element, $attrs, ngModelController) {
+
+                function update(newValue) {
+                    // call $parsers pipeline then update $modelValue
+                    ngModelController.$setViewValue(newValue);
+                    // update the local view
+                    ngModelController.$render();
+                }
+
+                // when model change, update our view (just update the div content)
+                ngModelController.$render = function() {
+
+                    var value = ngModelController.$viewValue;
+                    var display = (!value || !value.length || !value.trim().length) ? "Please enter a value" : value;
+                    $element.find('.editable-input-display').text(display);
+                    $element.find('.editable-input-field').val(value);
+                };
+
+
+                /* ------------- private methods --------------- */
+
+                $scope.edit = function() {
+                    $scope.editing=true;
+                    $timeout(function() {
+                        $element.find('.editable-input-field').focus().select();
+                    }, 200);
+                };
+                $scope.done = function() {
+                    //update display with new value
+                    var value = $element.find('.editable-input-field').val();
+                    update(value);
+                    $scope.editing=false;
+                    $scope.onSave();
+                };
+                $scope.cancel = function() {
+                    //reset input
+                    $element.find('.editable-input-field').val(ngModelController.$viewValue);
+                    $scope.editing=false;
+                };
+                
+                $scope.onKeyUp = function($event, code) {
+                    // console.log("Up " + code);
+                    if((code === undefined || code === 0) && $event.which !== undefined)
+                        code = $event.which;
+                    if(code === 13 && !$scope.error) $scope.done();  //enter
+                    else if(code === 27)             $scope.cancel();//esc
+                    
+                };
+
+            }
+        };
+
+    }])
+
+
+
+    .directive('imgSelector', function() {
+
+        function base64(file, callback){
+            var coolFile = {};
+            function readerOnload(e){
+                var base64 = btoa(e.target.result);
+                coolFile.base64 = base64;
+                callback(coolFile)
+            };
+
+            var reader = new FileReader();
+            reader.onload = readerOnload;
+
+            var file = file[0].files[0];
+            if(file.size > 100000) {
+                alert("Image is too large, should be less than 100 KB");
+                callback(null);
+                return;
+            }
+
+            coolFile.filetype = file.type;
+            coolFile.size = file.size;
+            coolFile.filename = file.name;
+            reader.readAsBinaryString(file);
+        }
+
+        return {
+            scope: {
+                onSave: '&'
+            },
+            require: 'ngModel',
+            template: [
+                '<form class="img-selector">',
+                '  <div class="image" title="click to change">',
+                '    <img src="assets/avatar.png">',
+                '  </div>',
+                '  <button type="button" class="btn btn-sm btn-success" ',
+                '    ng-if="imgData && isDirty()" ng-click="save()">save</button>',
+                '  <input type="file" class="hidden">',
+                '</form>'
+            ].join(' '),
+
+            link: function($scope, $element, $attrs, ngModelController) {
+
+                $scope.isDirty = function() {
+                    return ngModelController.$dirty;
+                }
+
+                function update() {
+                    if(!$scope.imgData) {return;}
+                    var image = '<img alt="avatar" src="' + $scope.imgData + '">';
+                    $element.find('.image').html(image);
+                    
+                }
+
+                $scope.save = function() {
+                    ngModelController.$setViewValue($scope.imgData);
+                    ngModelController.$setPristine();
+                    $scope.onSave();
+                }
+                
+                function onFileSelect() {
+
+                    console.log("selecting file");
+                    base64( $element.find('input'), function(data){
+
+                        if(!data) {
+                            $element.find('form')[0].reset();
+                            return;
+                        }
+
+                        $scope.$apply(function() {
+                            $scope.imgData = 'data:' + data.filetype + ';base64,' + data.base64;
+                            update();
+                            ngModelController.$setDirty();
+                        });
+                    });
+
+                }
+
+                var filePicker = $element.find('input');
+                $element.find('.image').on('click', function() {
+                    filePicker.trigger('click');
+                });
+                filePicker.on('change', onFileSelect);
+
+                ngModelController.$render = function() {
+                    if(!$scope.imgData) {
+                        $scope.imgData = ngModelController.$viewValue;
+                        update();
+                    }
+                };
+            }
+        };
+
+    })
+
+
+
+
+
+
+
+    .controller('LoginController', function($scope, $uibModalInstance, Auth) {
+
+        $scope.login = function() {
+            Auth.$authWithPassword({email: $scope.email, password: $scope.password})
+            .then(function(authData) {
+                console.log("Logged in");
+                $uibModalInstance.close();
+            })
+            .catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("unable to login: " + errorMessage);
+            });
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+
+    // // any time auth status updates, add the user data to scope
+    
+
+    })
+
+
+    .directive('login', ["$uibModal", "Auth", function($uibModal, Auth) {
+
+        return {
+        
+            template: [
+                '<a ng-if="!user" ng-click="doLogin()">Login</a>',
+                '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
+                '  role="button" aria-haspopup="true" aria-expanded="false">',
+                '  {{user.password.email}} <span class="caret"></span>',
+                '</a>',
+                '<ul ng-if="user" class="dropdown-menu">',
+                '  <li><a ng-click="doReset()">Reset Password</a></li>',
+                '  <li><a ng-click="doLogout()">Log out</a></li>',
+                '</ul>',
+                '</div>'
+            ].join(' '),
+
+            controller: function($scope) {
+
+
+                Auth.$onAuth(function(authData) {
+                    $scope.user = authData;
+                });
+
+                $scope.doLogout = function() {
+                    Auth.$unauth();
+                    $scope.user = null;
+                };
+
+                $scope.doLogin = function() {
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/login.html',
+                        controller: 'LoginController',
+                        resolve: {
+                            Auth: function() { return Auth; }
+                        }
+                    });
+
+                    modalInstance.result.then(function() {}, function () {});
+
+                };
+
+                $scope.doReset = function() {
+
+                    Auth.$resetPassword({ email : $scope.user.password.email }, function(error) {
+                        if (error === null) {
+                            alert("Password reset email sent");
+                        } else {
+                            alert("Error sending password reset email:", error);
+                        }
+                    });
+                }
+
+            }
+        };
+
+
+    }])
+
+
+    ;
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    var app = angular.module("sob-character", ['ngSanitize', 'ui.bootstrap', "firebase", 'sob-common']);
+
+
+    app.component('character', {
+
+        templateUrl: 'src/v2/character.html',
+        replace: true,
+
+        controller: function($routeParams, CharacterRef) {
+        
+            var self = this;
+            
+            this.displayOpts = {
+                loading: true,
+                message: null,
+                error: null
+            };
+
+            this.panel="char";
+
+            //load the campaign
+            this.charName = decodeURIComponent($routeParams.charId);
+            this.character = CharacterRef(this.charName);
+
+
+            this.onInputKeyPress = function($event) {
+                var key = $event.keyCode || $event.which;
+                if(key === 13) {    //enter
+                    // this.save();
+                }
+            };
+
+            this.save = function() {
+                this.character.$save();
+            };
+
+            this.getAvailableSidebagCapacity = function() {
+                if(!self.character.sidebag) return 0;
+                return self.character.sidebag.capacity - (
+                    (self.character.sidebag.bandages||0) + 
+                    (self.character.sidebag.whiskey||0) + 
+                    (self.character.sidebag.tonic||0) + 
+                    (self.character.sidebag.herbs||0) + 
+                    (self.character.sidebag.dynamite||0) + 
+                    (self.character.sidebag.flash||0) + 
+                    (self.character.sidebag.fungus||0) + 
+                    (self.character.sidebag.spices||0) +  
+                    (self.character.sidebag.potions||0) +  
+                    (self.character.sidebag.hatchets||0) + 
+                    (self.character.sidebag.lanternOil||0) + 
+                    (self.character.sidebag.exoticHerbs||0) +  
+                    (self.character.sidebag.tequila||0) + 
+                    (self.character.sidebag.cigars||0)
+                );
+                
+            };
+
+
+            this.$onInit = function() {
+
+                self.character.$loaded().then(function() {
+                    self.character.sidebag.spices = self.character.sidebag.spices || 0;
+                    self.character.sidebag.potions = self.character.sidebag.potions || 0;
+                    self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;
+                    self.character.sidebag.lanternOil = self.character.sidebag.lanternOil || 0;
+                    self.character.sidebag.exoticHerbs = self.character.sidebag.exoticHerbs || 0;
+                    self.character.sidebag.tequila = self.character.sidebag.tequila || 0;
+                    self.character.sidebag.cigars = self.character.sidebag.cigars || 0;
+                });
+
+            };
+
+        }
+
+    });
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character").directive('abilities', function() {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/abilities/abilities.html',
+            
+            controller: function($scope, $element) {
+
+                function init() {
+                    $scope.value = {name: null, desc: null};
+                }
+                init();
+                
+                $scope.add = function() {
+                    if(!$scope.value.name) return;
+                    $scope.character.abilities = $scope.character.abilities || {}
+                    $scope.character.abilities[$scope.value.name] = $scope.value.desc;
+                    $scope.onSave();
+                    init();
+                };
+
+                $scope.onEdited = function(name, newName, newDesc) {
+
+                    if(name !== newName) {
+                        //delete old property
+                        delete $scope.character.abilities[name];
+                    }
+
+                    if(newName && newDesc) 
+                        $scope.character.abilities[newName] = newDesc;
+
+                    $scope.onSave();
+                };
+
+
+            }
+        };
+    })
+
+
+    .directive('ability', function() {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            //remember original name just in case it changes
+            var originalName = $scope.name;
+            this.name = $scope.name;
+            this.desc = $scope.desc;
+            
+            this.edit = function() {
+                this.displayEditor = true;
+            };
+
+            this.save = function() {
+                $scope.onSave({
+                    newName: this.name, 
+                    newDesc: this.desc
+                });
+                this.displayEditor = false;
+            };
+
+            this.cancel = function() {
+                this.displayEditor = false;
+            };
+
+            this.remove = function() {
+                $scope.onSave({newName: null, newDesc: null});
+            };
+
+        }
+
+        return {
+            scope: {
+                // character: "=",
+                name: "@",
+                desc: "@",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/abilities/ability.html',
+            
+            controller: Controller
+        };
+    });
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character")
+
+    .directive('clothing2', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/clothing/clothing.html',
+            
+            controller: function($scope, $element) {
+
+                function update() {
+                    
+                    var weight=0, darkstone=0;
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        
+                        if(!item.type)
+                            item.type = type;
+
+                        weight += item.weight||0;
+                        darkstone += item.darkstone||0;
+                    
+                    });
+
+                    $scope.itemWeight = weight;
+                    $scope.itemDarkstone = darkstone;
+                }
+                
+                $scope.character.$loaded().then(update);
+
+
+
+                $scope.onEdited = function(item, type) {
+
+                    //if deleting item or renaming it
+                    if(!item)
+                        delete $scope.character.clothing[type];
+
+                    if(item)
+                        $scope.character.clothing[item.type] = item;
+
+                    $scope.onSave();
+                    update();
+                };
+
+                $scope.add = function() {
+                    
+                    var types = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+                    angular.forEach($scope.character.clothing, function(item, type) {
+                        var index = types.indexOf(type);
+                        if(index >= 0)
+                            types.splice(index, 1);
+                    });
+
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/v2/clothing/editor.html',
+                        controller: 'ClothingEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;},
+                            types: function() {return types;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(item) {
+                        if(!item || !item.name || !item.type) return;
+
+                        $scope.character.clothing = $scope.character.clothing || {};
+                        if($scope.character.clothing[item.type]) return;    //already has one
+                        
+                        var obj = {};
+                        obj[item.type] = item;
+                        angular.merge($scope.character.clothing, obj);
+
+                        $scope.onSave();
+                        update();   //recalc weights
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('clothingItem2', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.clothing = $scope.clothingItem;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/v2/clothing/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.clothingItem);
+                            return copy; 
+                        }, 
+                        types: function() {return [$scope.clothingItem.type];}
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.clothing[key] = value;
+                    });
+                    // console.log($scope.ctrl.clothing);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                console.log("Saving...");
+                $scope.onSave({ item: this.clothing, type: this.clothing.type });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ item: null, type: this.clothing.type });
+            };
+
+        }
+
+        return {
+            scope: {
+                clothingItem: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/clothing/clothing-item.html',
+            
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character")
+
+    .directive('items', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/items/items.html',
+            
+            controller: function($scope, $element) {
+
+                function update() {
+                    var weight=0, darkstone=0;
+                    angular.forEach($scope.character.items, function(item) {
+                        weight += item.weight||0;
+                        darkstone += item.darkstone||0;
+                    });
+                    $scope.itemWeight = weight;
+                    $scope.itemDarkstone = darkstone;
+                }
+                
+                $scope.character.$loaded().then(update);
+
+
+
+                $scope.onEdited = function(name, item) {
+
+                    //if deleting item or renaming it
+                    if(!item || (item.name && item.name !== name)) {
+                        delete $scope.character.items[name];
+
+                        if(item && item.name)
+                            name = item.name;
+                    }
+
+                    if(item)
+                        $scope.character.items[name] = item;
+
+                    $scope.onSave();
+                    update();
+                };
+
+                $scope.add = function() {
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/v2/items/editor.html',
+                        controller: 'ItemEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(item) {
+                        if(!item || !item.name) return;
+                        
+                        if(!$scope.character.items)
+                            $scope.character.items = {};
+
+                        var obj = {};
+                        obj[item.name] = item;
+                        angular.merge($scope.character.items, obj);
+
+                        $scope.onSave();
+                        update();   //recalc weights
+                        
+                    }, function () { });
+
+                };
+
+            }
+        };
+    }])
+
+
+    .directive('item', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.name = $scope.name;
+            this.item = $scope.item;
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/v2/items/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.item);
+                            copy.name = $scope.name;
+                            return copy; 
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(item) {
+                    if(!item || !item.name) return; //cancel
+                    
+                    angular.forEach(item, function(value, key) {
+                        $scope.ctrl.item[key] = value;
+                    });
+                    // console.log($scope.ctrl.item);
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                $scope.onSave({ item: this.item });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ item: null });
+            };
+
+        }
+
+        return {
+            scope: {
+                name: "@",
+                item: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/items/item.html',
+            
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character")
+
+
+
+    .directive('sermons', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/sermons/sermons.html',
+            
+            controller: function($scope, $element) {
+
+                
+                $scope.resetFaith = function() {
+                    $scope.remainingFaith = $scope.character.faith;
+                    // console.log("Resetting faith to " + $scope.remainingFaith);
+                    $scope.$broadcast('faith:reset', $scope.remainingFaith);
+                };
+
+                $scope.character.$loaded().then(function() {
+                    $scope.resetFaith();
+                });
+
+
+                $scope.onEdited = function(name, sermon) {
+                    if(!name) return;
+
+                    //if deleting item or renaming it
+                    if(name && !sermon)
+                        delete $scope.character.sermons[name];
+
+                    if(sermon)
+                        $scope.character.sermons[name] = sermon;
+
+                    $scope.onSave();
+                };
+
+                $scope.add = function() {
+                    
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/v2/sermons/editor.html',
+                        controller: 'ItemEditor',
+                        animation: false,
+                        resolve: {
+                            item: function() {return null;}
+                        }
+                    });
+
+                    modalInstance.result.then(function(sermon) {
+                        if(!sermon || !sermon.name) return;
+
+                        $scope.character.sermons = $scope.character.sermons || {};
+                        if($scope.character.sermons[sermon.name]) return;    //already has one
+                        
+                        var obj = {};
+                        obj[sermon.name] = sermon;
+                        angular.merge($scope.character.sermons, obj);
+
+                        $scope.onSave();
+                        
+                    }, function () { });
+
+                };
+
+
+                $scope.$on('faith:spent', function(event, amount) {
+                    // console.log("Spending " + amount + " faith");
+                    $scope.remainingFaith -= amount;
+                    // console.log("Remaining: " + $scope.remainingFaith);
+                    $scope.$broadcast('faith:available', $scope.remainingFaith);
+                });
+
+            }
+        };
+    }])
+
+
+    .directive('sermon', ['$uibModal', function($uibModal) {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            this.sermon = $scope.sermon;
+
+            this.status = {
+                available: true,
+                used: false
+            };
+
+            //mark sermon as used
+            this.use = function() {
+                this.status.available = false;
+                this.status.used = true;
+                $scope.$emit('faith:spent', this.sermon.cost);
+            };
+            this.spendExtraFaith = function() {
+                $scope.$emit('faith:spent', 1);  
+            };
+            
+            this.edit = function() {
+                
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/v2/sermons/editor.html',
+                    controller: 'ItemEditor',
+                    animation: false,
+                    resolve: {
+                        item: function() { 
+                            var copy = angular.copy($scope.sermon);
+                            return copy; 
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(sermon) {
+                    if(!sermon || !sermon.name) return; //cancel
+                    
+                    //apply changes to local version
+                    angular.forEach(sermon, function(value, key) {
+                        $scope.ctrl.sermon[key] = value;
+                    });
+                    
+                    $scope.ctrl.save();
+                                        
+                }, function () { });
+
+            };
+
+            this.save = function() {
+                console.log("Saving...");
+                $scope.onSave({ sermon: this.sermon, name: $scope.name });
+            };
+
+            this.remove = function() {
+                $scope.onSave({ sermon: null, name: $scope.name });
+            };
+
+            this.isAvailable = function() {
+                return this.status.available && !this.status.used;
+            };
+
+
+            //when total remaining faith changes
+            $scope.$on('faith:available', function(event, amount) {
+                
+                if(amount < $scope.sermon.cost) {
+                    //if remaining faith is insufficient
+                    $scope.ctrl.status.available = false;
+
+                } else if(!$scope.ctrl.status.used) {
+                    //if enough faith and not already used
+                    $scope.ctrl.status.available = true;
+                }
+            });
+
+            //when faith is reset (end of round)
+            $scope.$on('faith:reset', function(event, amount) {
+                $scope.ctrl.status.available = true;
+                $scope.ctrl.status.used = false;
+            });
+        }
+
+        // {
+        //     type: "blessing|judgement",
+        //     cost: 1,
+        //     check: 5+,
+        //     range: 'self',
+        //     xp: 10
+        //     deadly: false
+        //     name: "",
+        //     desc: ""
+        // }
+
+
+        return {
+            scope: {
+                name: "@",
+                sermon: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/sermons/sermon.html',
+            controller: Controller
+        };
+    }]);
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module("sob-character").directive('mutations', function() {
+
+        return {
+            scope: {
+                character: "=",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/v2/mutations/mutations-and-injuries.html',
+            
+            controller: function($scope, $element) {
+
+                function init() {
+                    $scope.value = {name: null, desc: null};
+                }
+                init();
+                
+                $scope.add = function() {
+                    if(!$scope.value.name) return;
+                    $scope.character.mutations = $scope.character.mutations || {}
+                    $scope.character.mutations[$scope.value.name] = $scope.value.desc;
+                    $scope.onSave();
+                    init();
+                };
+
+                $scope.onEdited = function(name, newName, newDesc) {
+
+                    if(name !== newName) {
+                        //delete old property
+                        delete $scope.character.mutations[name];
+                    }
+
+                    if(newName && newDesc) 
+                        $scope.character.mutations[newName] = newDesc;
+
+                    $scope.onSave();
+                };
+
+
+            }
+        };
+    })
+
+
+    .directive('mutation', function() {
+
+        function Controller($scope, $element) {
+
+            $scope.ctrl = this;
+
+            //remember original name just in case it changes
+            var originalName = $scope.name;
+            this.name = $scope.name;
+            this.desc = $scope.desc;
+            
+            this.edit = function() {
+                this.displayEditor = true;
+            };
+
+            this.save = function() {
+                $scope.onSave({
+                    newName: this.name, 
+                    newDesc: this.desc
+                });
+                this.displayEditor = false;
+            };
+
+            this.cancel = function() {
+                this.displayEditor = false;
+            };
+
+            this.remove = function() {
+                $scope.onSave({newName: null, newDesc: null});
+            };
+
+        }
+
+        return {
+            scope: {
+                name: "@",
+                desc: "@",
+                onSave: '&'
+            },
+            replace: true,
+            templateUrl: 'src/character/mutations/mutation.html',
+            
+            controller: Controller
+        };
+    });
+
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    angular.module('sob-character').component('sidebag', {
+
+        bindings: {
+            sidebag: '=',
+            onSave: '&'
+        },
+
+        templateUrl: 'src/v2/sidebag/sidebag.html',
+        replace: true,
+
+        controller: function() {
+
+            this.options = [
+                "bandages",
+                "whiskey",
+                "tonic",
+                "herbs",
+                "dynamite",
+                "flash",
+                "fungus",
+                "spices", 
+                "potions", 
+                "hatchets",
+                "lanternOil",
+                "exoticHerbs", 
+                "tequila",
+                "cigars",
+                "shatterGrenade",
+                "antiRad"
+            ];
+
+
+            this.save = function() {
+                this.onSave();
+                this.max = this.getAvailableSidebagCapacity();
+            };
+
+            this.getAvailableSidebagCapacity = function() {
+                if(!this.sidebag) return 0;
+                
+                var carrying = 0;
+                for(var i=0; i<this.options.length; ++i) {
+                    var option = this.options[i];
+                    carrying += this.sidebag[option] || 0;
+                }
+                
+                return this.sidebag.capacity - carrying;
+                
+            };
+
+            this.increase = function(option) {
+                if(this.getAvailableSidebagCapacity() < 1) return;
+
+                var value = this.sidebag[option] || 0;
+                value += 1;
+                this.sidebag[option] = value;
+                this.save();
+            };
+
+            this.decrease = function(option) {
+                var value = this.sidebag[option] || 0;
+                if(value > 0) {
+                    value -= 1;
+                    this.sidebag[option] = value;
+                    this.save();
+                }
+            };
+
+            this.$onInit = function() {
+                this.max = this.getAvailableSidebagCapacity();
+            };
+
+        }
+
+    });
+
+}) (angular);
+;
+(function(angular) {
+    
+    "use strict";
+
+    var app = angular.module("sob-home", ["firebase", "sob-common"]);
+
+    
+    
+    app.controller("HomeController", [
+        "$scope", "$timeout", "DataStore", "Auth",
+        function($scope, $timeout, DataStore, Auth) {
+        
+        var self = this;
+        
+        this.displayOpts = {
+            loading: true,
+            message: null,
+            error: null
+        };
+
+
+        Auth.$onAuth(function(authData) {
+            $scope.user = authData;
+
+            self.data = DataStore('userId', authData ? authData.uid : null);
+            self.data.$loaded().then(function() {
+                updateList();
+                self.displayOpts.loading = false;
+            }).catch(function(error) {
+                self.displayOpts.error = "Failed to load saved data: " + error.data;
+            });
+          
+
+        });
+
+        
+
+        function updateList() {
+            var chars = [];
+            angular.forEach(self.data, function(value, key) { 
+                if($scope.user && value.userId && value.userId === $scope.user.uid)
+                    chars.push(key); 
+            });
+            self.chars = chars;
+        }
+
+        this.createCharacter = function() {
+            var name = prompt("Name the character", "Joe Bob");
+            if(!name) {
+                alert("Characters must have a name");
+                return;
+            } else if(self.data[name]) {
+                alert("Name is already in use");
+                return;
+            }
+            
+            var json = getCharacterShell();
+            
+            //associate user id for restricting who can edit
+            json.userId = $scope.user.uid;  
+
+            self.data[name] = json;
+            self.data.$save().then(function() {
+                //navigate to the new char page
+                window.location = '#/' + encodeURIComponent(name);
+
+            }).catch(function(error) {
+                alert("Unable to create character because of an error");
+            });
+
+        };
+
+    }]);
+
+
+    function getCharacterShell() {
+        return {
+            "abilities" : {},
+            "class" : " ",
+            "clothing" : {
+                "Hat" : {},
+                "Face" : {},
+                "Shoulders" : {},
+                "Coat" : {},
+                "Torso": {},
+                "Gloves": {},
+                "Belt": {},
+                "Pants": {},
+                "Boots": {}
+            },
+            "combat" : 1,
+            "corruption" : {
+              "current" : 0,
+              "max" : 5
+            },
+            "darkstone" : 0,
+            "defense" : 5,
+            "faith" : 0,
+            "grit" : {
+              "current" : 1,
+              "max" : 2
+            },
+            "health" : {
+              "max" : 10,
+              "wounds" : 0
+            },
+            "init" : 2,
+            "items" : { },
+            "keywords" : " ",
+            "level" : 1,
+            "melee" : 5,
+            "movement" : 0,
+            "ranged" : 5,
+            "sanity" : {
+              "loss" : 0,
+              "max" : 10
+            },
+            "sidebag" : {
+              "capacity" : 5,
+              "whiskey" : 0,
+              "fungus": 0,
+              "tonic": 0,
+              "bandages": 0,
+              "herbs": 0,
+              "dynamite": 0,
+              "flash": 0
+            },
+            "stats" : {
+              "Agility" : 1,
+              "Cunning" : 1,
+              "Lore" : 1,
+              "Luck" : 1,
+              "Spirit" : 1,
+              "Strength" : 1
+            },
+            "wealth" : 0,
+            "willpower" : 5,
+            "xp" : 0
+        };
+    }
+
+
+}) (angular);
+;
+(function(angular) {
+
+    "use strict";
+
+    angular.module("app", ['ngRoute', 'ngAnimate', 'sob-home', 'sob-character'])
+
+    .config(function myAppConfig ($routeProvider, $locationProvider) {
+
+        //default route if invalid one is supplied
+
+        if(window.SOB && window.SOB.version === 2) {
+            $routeProvider.when('/:charId', { 
+                template: '<character></character>'
+            });
+
+        } else {
+            $routeProvider.when('/:charId', { 
+                templateUrl: 'src/character/character.html',
+                controller: 'CharacterController as ctrl'
+            });
+
+        }
+        
+        $routeProvider.when('/', {
+            templateUrl: 'src/home/home.html',
+            controller: 'HomeController as ctrl'
+        })
+        .otherwise({ redirectTo: "/" })
+
+
+        //http://stackoverflow.com/questions/17895675/angularjs-html5mode-refresh-page-get-404
+        // $locationProvider.html5Mode(true);
+
+        if(!(window.history && history.pushState))
+            console.log("Your browser does not support HTML5 mode");
+    })
+
+
+    // .service('Auth', function() {
+
+    //     var _currentUser = null;
+    //     firebase.auth().onAuthStateChanged(function(user) {
+    //         _currentUser = user;
+    //     });
+
+    //     return {
+    //         getUser: function() {return _currentUser;}
+    //     };
+    // })
+
+    // .run(['$rootScope', '$location', 'Auth', function($rootScope, $location, Auth) {
+
+    //     $rootScope.$on('$routeChangeStart', function (event) {
+
+    //         if (!Auth.getUser()) {
+    //             console.log('Not logged in');
+    //             event.preventDefault();
+    //             $location.path('/login');
+    //         }
+            
+    //     });
+
+    // }])
+
+    ;
+
+    
+})(angular);
+
+;
 angular.module('app').run(['$templateCache', function($templateCache) {
   'use strict';
 
@@ -121,17 +1709,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <ng-include src=\"'src/character/footer.html'\"></ng-include>\n" +
     "\n" +
-    "\n" +
-    "    <a onclick=\"useV2()\" class=\"pull-right\">Use Version 2 of the App</a>\n" +
-    "\n" +
-    "    <script>\n" +
-    "        function useV2() {\n" +
-    "            var newPath = \"/v2.html\";\n" +
-    "            if(~window.location.pathname.indexOf(\"dev\"))\n" +
-    "                newPath = \"/v2dev.html\";\n" +
-    "            window.location.pathname=newPath;\n" +
-    "        }\n" +
-    "    </script>\n" +
     "</div>"
   );
 
@@ -1642,7 +3219,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                \n" +
     "                <div class=\"xp f-cell\">\n" +
     "                    <div class=\"stat\">\n" +
-    "                        <div class=\"value--sm\" editable-stat-value on-save=\"$ctrl.onXP()\" ng-model=\"$ctrl.character.xp\"></div>\n" +
+    "                        <!-- <label>XP</label> -->\n" +
+    "                        <div class=\"value--sm\" editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.xp\"></div>\n" +
+    "                        <!-- <img src=\"assets/xp.png\"> -->\n" +
     "                        <span class=\"sprite sprite-xp\"></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -1673,41 +3252,30 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Abilities -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='abil'\">\n" +
     "        <div abilities character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Sermons -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='sermons'\">\n" +
     "        <div sermons character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Items and Clothing -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='items'\">\n" +
+    "\n" +
     "        <div class=\"items-panel\">\n" +
     "            <div items character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "            <div clothing-2 character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Sidebag -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='side'\">\n" +
     "        <sidebag sidebag=\"$ctrl.character.sidebag\" on-save=\"$ctrl.save()\"></sidebag>\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Injuries and Mutations -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='inj'\">\n" +
     "        <div mutations character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
-    "\n" +
-    "    <!-- Miscellaneous -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='misc'\">\n" +
     "        <div class=\"notes\">\n" +
     "            <h4>\n" +

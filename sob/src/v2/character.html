@@ -166,9 +166,7 @@
                 
                 <div class="xp f-cell">
                     <div class="stat">
-                        <!-- <label>XP</label> -->
-                        <div class="value--sm" editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.xp"></div>
-                        <!-- <img src="assets/xp.png"> -->
+                        <div class="value--sm" editable-stat-value on-save="$ctrl.onXP()" ng-model="$ctrl.character.xp"></div>
                         <span class="sprite sprite-xp"></span>
                     </div>
                 </div>
@@ -199,30 +197,41 @@
 
     </div>
 
+
+    <!-- Abilities -->
     <div class="char__panel" ng-if="$ctrl.panel==='abil'">
         <div abilities character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
+
+    <!-- Sermons -->
     <div class="char__panel" ng-if="$ctrl.panel==='sermons'">
         <div sermons character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
-    <div class="char__panel" ng-if="$ctrl.panel==='items'">
 
+    <!-- Items and Clothing -->
+    <div class="char__panel" ng-if="$ctrl.panel==='items'">
         <div class="items-panel">
             <div items character="$ctrl.character" on-save="$ctrl.save()"></div>
             <div clothing-2 character="$ctrl.character" on-save="$ctrl.save()"></div>
         </div>
     </div>
 
+
+    <!-- Sidebag -->
     <div class="char__panel" ng-if="$ctrl.panel==='side'">
         <sidebag sidebag="$ctrl.character.sidebag" on-save="$ctrl.save()"></sidebag>
     </div>
 
+
+    <!-- Injuries and Mutations -->
     <div class="char__panel" ng-if="$ctrl.panel==='inj'">
         <div mutations character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
+
+    <!-- Miscellaneous -->
     <div class="char__panel" ng-if="$ctrl.panel==='misc'">
         <div class="notes">
             <h4>

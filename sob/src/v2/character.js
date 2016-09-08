@@ -22,6 +22,8 @@
 
             this.panel="char";
 
+            this.xpLevels = [0, 500, 1000, 2000, 3000, 4500, 6000];
+
             //load the campaign
             this.charName = decodeURIComponent($routeParams.charId);
             this.character = CharacterRef(this.charName);
@@ -32,6 +34,16 @@
                 if(key === 13) {    //enter
                     // this.save();
                 }
+            };
+
+            this.onXP = function() {
+                //amount needed to reach next level
+                var xpToLevel = this.xpLevels[this.character.level];
+                if(this.character.xp >= xpToLevel) {
+                    this.character.level += 1;
+                    this.character.xp -= xpToLevel;
+                }
+                this.save();
             };
 
             this.save = function() {
