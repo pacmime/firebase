@@ -7,11 +7,13 @@
 
     .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
         function($firebaseObject, DataStoreUrl) {
-            return function(property, value) {
-                var ref = new Firebase(DataStoreUrl + "/chars");
-                if(property && value)
-                    ref.orderByChild(property).equalTo(value);
-                return $firebaseObject(ref);
+            return {
+                getCharsForUser: function(uid) {
+                    var root = firebase.database().ref();
+                    var ref = root.child('ShadowsOfBrimstone').child('chars');
+                    ref.orderByChild('uid').equalTo(uid);
+                    return $firebaseObject(ref);
+                }
             }
         }
     ])
@@ -19,20 +21,12 @@
     .factory("CharacterRef", ["$firebaseObject", 'DataStoreUrl',
         function($firebaseObject, DataStoreUrl) {
             return function(name) {
-                var ref = new Firebase(DataStoreUrl + "/chars/" + name);
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone').child('chars').child(name);
                 return $firebaseObject(ref);
             }
         }
     ])
-
-    .factory("Auth", ["$firebaseAuth", 'DataStoreUrl',
-        function($firebaseAuth, DataStoreUrl) {
-            var ref = new Firebase(DataStoreUrl);
-            return $firebaseAuth(ref);
-        }
-    ])
-
-
 
 
 
@@ -426,9 +420,10 @@
     .controller('LoginController', function($scope, $uibModalInstance, Auth) {
 
         $scope.login = function() {
-            Auth.$authWithPassword({email: $scope.email, password: $scope.password})
+            
+            Auth.$signInWithEmailAndPassword($scope.email, $scope.password)
             .then(function(authData) {
-                console.log("Logged in");
+                // console.log("Logged in");
                 $uibModalInstance.close();
             })
             .catch(function(error) {
@@ -442,14 +437,11 @@
             $uibModalInstance.dismiss('cancel');
         };
 
-
-    // // any time auth status updates, add the user data to scope
-    
-
     })
 
 
-    .directive('login', ["$uibModal", "Auth", function($uibModal, Auth) {
+
+    .directive('login', ["$uibModal", "$firebaseAuth", function($uibModal, $firebaseAuth) {
 
         return {
         
@@ -457,7 +449,7 @@
                 '<a ng-if="!user" ng-click="doLogin()">Login</a>',
                 '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
                 '  role="button" aria-haspopup="true" aria-expanded="false">',
-                '  {{user.password.email}} <span class="caret"></span>',
+                '  {{user.email}} <span class="caret"></span>',
                 '</a>',
                 '<ul ng-if="user" class="dropdown-menu">',
                 '  <li><a ng-click="doReset()">Reset Password</a></li>',
@@ -468,13 +460,14 @@
 
             controller: function($scope) {
 
-
-                Auth.$onAuth(function(authData) {
+                var auth = $firebaseAuth();
+                auth.$onAuthStateChanged(function(authData) {
                     $scope.user = authData;
+                    // console.log("User logged in " + authData.uid + " > " + authData.email);
                 });
 
                 $scope.doLogout = function() {
-                    Auth.$unauth();
+                    auth.$signOut();        //v2.x.x
                     $scope.user = null;
                 };
 
@@ -484,7 +477,7 @@
                         templateUrl: 'src/login.html',
                         controller: 'LoginController',
                         resolve: {
-                            Auth: function() { return Auth; }
+                            Auth: function() { return auth; }
                         }
                     });
 
@@ -494,7 +487,8 @@
 
                 $scope.doReset = function() {
 
-                    Auth.$resetPassword({ email : $scope.user.password.email }, function(error) {
+                    //v2.x.x
+                    auth.$sendPasswordResetEmail($scope.user.email, function(error) {
                         if (error === null) {
                             alert("Password reset email sent");
                         } else {

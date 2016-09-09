@@ -1,4 +1,5 @@
 <div class="mutation">
+  
   <div ng-if="!ctrl.displayEditor">
     <div class="pull-right">
       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
@@ -10,6 +11,7 @@
     </div>
     <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>
   </div>
+  
   <form ng-if="ctrl.displayEditor">
     <input type="text" class="form-control" ng-model="ctrl.name" placeholder="name">
     <textarea rows="3" class="form-control" ng-model="ctrl.desc" placeholder="value"></textarea>
@@ -20,5 +22,5 @@
       <span class="glyphicon glyphicon-remove"></span>
     </button>
   </form>
-  <br><br>
+  
 </div>

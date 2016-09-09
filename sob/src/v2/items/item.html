@@ -1,30 +1,26 @@
-<div class="item">
-    <div class="">
-        
-        <div class="pull-right">
-           <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
-                <span class="glyphicon glyphicon-trash"></span>
-           </button>&nbsp;&nbsp;&nbsp;
-           <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
-                <span class="glyphicon glyphicon-pencil"></span>
-           </button>
-        </div>
+<div class="item usage-{{item.usage|lowercase}}">
+    <div class="pull-right">
+       <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
+            <span class="glyphicon glyphicon-trash"></span>
+       </button>&nbsp;&nbsp;&nbsp;
+       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
+            <span class="glyphicon glyphicon-pencil"></span>
+       </button>
+    </div>
 
-        <h5>
-            {{name}} 
-            <small><em>({{item.source}})</em></small>
-        </h5>
-        
-        <small>{{item.description}}  <span ng-if="item.cost">${{item.cost}}</span></small>
-        
-        <div ng-if="item.usage"> <input type="checkbox"> <small>(per {{item.usage}})</small> </div>
-        
-        <div class="f-container f-justify-between f-align-center">
-            <div><span class="sprite sprite-item_weight" ng-class="{disabled:!item.weight}"></span> {{item.weight}}</div>
-            <div><span class="sprite sprite-item_darkstone" ng-class="{disabled:!item.darkstone}"></span> {{item.darkstone}}</div>
-            <div><span class="sprite sprite-item_hands" ng-class="{disabled:!item.hands}"></span> {{item.hands}}</div>
-            <div><span class="sprite sprite-item_slots" ng-class="{disabled:!item.slots}"></span> {{item.slots}}</div>
-        </div>
-
+    <h5>
+        {{name}} 
+        <small><em>({{item.source}})</em></small>
+    </h5>
+    
+    <small>{{item.description}}  <span ng-if="item.cost">${{item.cost}}</span></small>
+    
+    <div ng-if="item.usage"> <input type="checkbox"> <small>(per {{item.usage}})</small> </div>
+    
+    <div class="f-container f-justify-between f-align-center">
+        <div><span class="sprite sprite-item_weight" ng-class="{disabled:!item.weight}"></span> {{item.weight}}</div>
+        <div><span class="sprite sprite-item_darkstone" ng-class="{disabled:!item.darkstone}"></span> {{item.darkstone}}</div>
+        <div><span class="sprite sprite-item_hands" ng-class="{disabled:!item.hands}"></span> {{item.hands}}</div>
+        <div><span class="sprite sprite-item_slots" ng-class="{disabled:!item.slots}"></span> {{item.slots}}</div>
     </div>
 </div>

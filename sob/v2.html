@@ -44,9 +44,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-sanitize.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.js"></script>
 
-        <!-- Firebase -->
+        <!-- Firebase 2.x.x and AngularFire 1.x.x
         <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
         <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
+        -->
+        <!-- Firebase 3.x.x and AngularFire 2.x.x -->
+        <script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDcsb0Ziu85j0BpIbicEmPTffR3H_RGb68",
+            authDomain: "intense-fire-8692.firebaseapp.com",
+            databaseURL: "https://intense-fire-8692.firebaseio.com",
+            storageBucket: "intense-fire-8692.appspot.com",
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>
+
 
         <!-- plugins -->
         <script src="assets/ui-bootstrap-tpls-1.3.2.min.js"></script>

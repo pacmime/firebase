@@ -7,29 +7,34 @@
     
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "DataStore", "Auth",
-        function($scope, $timeout, DataStore, Auth) {
+        "$scope", "$timeout", "DataStore", "$firebaseAuth",
+        function($scope, $timeout, DataStore, $firebaseAuth) {
         
         var self = this;
         
         this.displayOpts = {
-            loading: true,
+            loading: false,
             message: null,
             error: null
         };
 
 
-        Auth.$onAuth(function(authData) {
+        var auth = $firebaseAuth();
+        auth.$onAuthStateChanged(function(authData) {
             $scope.user = authData;
 
-            self.data = DataStore('userId', authData ? authData.uid : null);
-            self.data.$loaded().then(function() {
-                updateList();
-                self.displayOpts.loading = false;
-            }).catch(function(error) {
-                self.displayOpts.error = "Failed to load saved data: " + error.data;
-            });
-          
+            if(authData && authData.uid) {
+                self.displayOpts.loading = true;
+                self.data = DataStore.getCharsForUser(authData.uid);
+                self.data.$loaded().then(function() {
+                    updateList();
+                    self.displayOpts.loading = false;
+                }).catch(function(error) {
+                    self.displayOpts.error = "Failed to load saved data: " + error.data;
+                });
+            } else if(self.data) {
+                self.data.$destroy();
+            }
 
         });
 

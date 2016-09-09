@@ -9,9 +9,31 @@
     </div>
     <hr>
 
+    <!--
     <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
         <div sermon="sermon" on-save="$parent.onEdited(name, sermon)"></div>
     </div>
-    <hr>
+    -->
+
+    <div class="sermons-container">
+
+        <div>
+            <h5>Blessings</h5>
+            <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+                <div ng-if="'Blessing'===sermon.type" sermon="sermon" on-save="$parent.onEdited(sermon.name, sermon)"></div>
+            </div>
+        </div>
+
+        <hr class="visible-xs-block">
+        
+        <div>
+            <h5>Judgements</h5>
+            <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+                <div ng-if="'Judgement'===sermon.type" sermon="sermon" on-save="$parent.onEdited(sermon.name, sermon)"></div>
+            </div>
+        </div>
+
+    </div>
+
     
 </div>

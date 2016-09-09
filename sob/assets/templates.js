@@ -126,9 +126,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <script>\n" +
     "        function useV2() {\n" +
-    "            var newPath = \"/v2.html\";\n" +
+    "            var newPath = \"/sob/v2.html\";\n" +
+    "\n" +
+    "            //development version\n" +
     "            if(~window.location.pathname.indexOf(\"dev\"))\n" +
     "                newPath = \"/v2dev.html\";\n" +
+    "\n" +
     "            window.location.pathname=newPath;\n" +
     "        }\n" +
     "    </script>\n" +
@@ -1338,6 +1341,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <h4 class=\"list-group-item-heading\">Characters</h4>\n" +
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
+    "        <a class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></a>\n" +
     "        <a ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\" href=\"#/{{name|encode}}\">{{name}}</a>\n" +
     "        <a class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
     "            Create a New Character\n" +
@@ -1427,6 +1431,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('v2/abilities/abilities.html',
     "<div class=\"abilities\">\n" +
+    "    <br>\n" +
     "    \n" +
     "    <!-- list abilities -->\n" +
     "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
@@ -1476,201 +1481,17 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('v2/character.html',
     "<div class=\"page f-container f-column f-justify-between\">\n" +
     "\n" +
+    "\n" +
     "    <div class=\"char__header\">\n" +
     "        <div class=\"char__name\"><label>Name: </label> {{$ctrl.charName}}</div>\n" +
     "        <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div>\n" +
     "        <div editable-input label=\"Keywords\" ng-model=\"$ctrl.character.keywords\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
+    "\n" +
+    "    <!-- Char -->\n" +
     "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='char'\">\n" +
-    "\n" +
-    "        <div class=\"f-container f-justify-between\">\n" +
-    "            <!-- avatar -->\n" +
-    "            <div class=\"f-cell\">\n" +
-    "                <div class=\"avatar\" img-selector ng-model=\"$ctrl.character.avatar\" on-save=\"$ctrl.save()\"></div>\n" +
-    "            </div>\n" +
-    "            <div class=\"f-cell attributes\">\n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Agility</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Agility\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Cunning</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Cunning\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Spirit</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Spirit\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "                \n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Strength</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Strength\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Lore</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Lore\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"stat\">\n" +
-    "                    <label>Luck</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Luck\" minimum=\"1\"></div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"f-container f-justify-between\">\n" +
-    "\n" +
-    "            <div class=\"f-cell f-cell-75p f-container f-wrap\">\n" +
-    "\n" +
-    "                <!-- COMBAT SECTION -->\n" +
-    "                <div class=\"combat f-container f-justify-around\">\n" +
-    "                    <span class=\"stat f-cell\">\n" +
-    "                        <label>Combat</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.combat\"></div>\n" +
-    "                    </span>\n" +
-    "\n" +
-    "                    <span class=\"stat stat--with-plus f-cell\">\n" +
-    "                        <label>Melee</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.melee\"></div>\n" +
-    "                    </span>\n" +
-    "                    <span class=\"stat stat--with-plus f-cell\">\n" +
-    "                        <label>Ranged</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.ranged\"></div>\n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                \n" +
-    "                <!-- HEALTH SECTION -->\n" +
-    "                <div class=\"health f-container f-justify-around\">\n" +
-    "                    \n" +
-    "                    <div class=\"f-cell has-stat-with-max\">\n" +
-    "                        <div class=\"stat f-cell\">\n" +
-    "                            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                                ng-model=\"$ctrl.character.health.wounds\"></div>\n" +
-    "                            <!-- <img src=\"assets/wound.png\">    --> \n" +
-    "                            <span class=\"sprite sprite-wound\"></span>\n" +
-    "\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.health.max\"></div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"f-cell stat stat--with-plus f-cell\">\n" +
-    "                        <label>Defense</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.defense\"></div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"f-cell stat stat--with-plus f-cell\">\n" +
-    "                        <label>Armor</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.armor\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                    \n" +
-    "                   \n" +
-    "                <!-- SANITY SECTION --> \n" +
-    "                <div class=\"sanity f-container f-justify-around\">\n" +
-    "                    \n" +
-    "                    <div class=\"f-cell has-stat-with-max\">\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <!-- <label>Loss</label> -->\n" +
-    "                            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                                ng-model=\"$ctrl.character.sanity.loss\"></div>\n" +
-    "                            <!-- <img src=\"assets/sanity.png\"> -->\n" +
-    "                            <span class=\"sprite sprite-sanity\"></span>\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.sanity.max\"></div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"f-cell stat stat--with-plus\">\n" +
-    "                        <label>Willpower</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.willpower\"></div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"f-cell stat stat--with-plus\">\n" +
-    "                        <label>Sp Armor</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.spiritArmor\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                    \n" +
-    "                <div class=\"other f-container f-justify-around\">\n" +
-    "\n" +
-    "                    <div class=\"faith f-cell\">\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Max Faith</label>\n" +
-    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.faith\"></div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"grit f-cell has-stat-with-max\">\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <label>Grit</label>\n" +
-    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.grit.current\"></div>\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.grit.max\"></div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "                    <div class=\"corruption f-cell has-stat-with-max\">\n" +
-    "                        <div class=\"stat\">\n" +
-    "                            <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
-    "                                ng-model=\"$ctrl.character.corruption.current\"></div>\n" +
-    "                            <span class=\"sprite sprite-corruption\"></span>\n" +
-    "                            <div class=\"stat\">\n" +
-    "                                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.corruption.max\"></div>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>  \n" +
-    "                \n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"general f-cell f-cell-25p f-container\">\n" +
-    "\n" +
-    "                <div class=\"level f-cell\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <label>Level</label>\n" +
-    "                        <div class=\"value\" editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.level\" minimum=\"1\">\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                \n" +
-    "                <div class=\"xp f-cell\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <div class=\"value--sm\" editable-stat-value on-save=\"$ctrl.onXP()\" ng-model=\"$ctrl.character.xp\"></div>\n" +
-    "                        <span class=\"sprite sprite-xp\"></span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"init f-cell\">\n" +
-    "                    <div class=\"stat\">\n" +
-    "                        <label>Init</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.init\" minimum=\"1\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"movement f-cell\">\n" +
-    "                    <div class=\"stat stat--prepend-plus\">\n" +
-    "                        <label>Move</label>\n" +
-    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.movement\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "        <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>\n" +
-    "\n" +
+    "        <div ng-include=\"'src/v2/panel-char.html'\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
@@ -1720,46 +1541,17 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "\n" +
-    "    <div class=\"char__footer\">\n" +
-    "        <div class=\"f-container f-justify-around\">\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='char'}\"\n" +
-    "                ng-click=\"$ctrl.panel='char'\">\n" +
-    "                <span class=\"glyphicon glyphicon-user\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='abil'}\"\n" +
-    "                ng-click=\"$ctrl.panel='abil'\">\n" +
-    "                <span class=\"glyphicon glyphicon-flash\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-if=\"$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0\"\n" +
-    "                ng-class=\"{active:$ctrl.panel==='sermons'}\"\n" +
-    "                ng-click=\"$ctrl.panel='sermons'\">\n" +
-    "                <span class=\"glyphicon glyphicon-book\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='items'}\"\n" +
-    "                ng-click=\"$ctrl.panel='items'\">\n" +
-    "                <span class=\"glyphicon glyphicon-gift\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='side'}\"\n" +
-    "                ng-click=\"$ctrl.panel='side'\">\n" +
-    "                <span class=\"glyphicon glyphicon-briefcase\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='inj'}\"\n" +
-    "                ng-click=\"$ctrl.panel='inj'\">\n" +
-    "                <span class=\"glyphicon glyphicon-alert\"></span>\n" +
-    "            </button>\n" +
-    "            <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "                ng-class=\"{active:$ctrl.panel==='misc'}\"\n" +
-    "                ng-click=\"$ctrl.panel='misc'\">\n" +
-    "                <span class=\"glyphicon glyphicon-comment\"></span>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
+    "    <!-- message display -->\n" +
+    "    <div class=\"message-display\" ng-if=\"$ctrl.displayOpts.message\">\n" +
+    "        <span class=\"glyphicon glyphicon-ok\"></span> {{$ctrl.displayOpts.message}}\n" +
     "    </div>\n" +
+    "    <div class=\"message-display is-error\" ng-if=\"$ctrl.displayOpts.error\">\n" +
+    "        <span class=\"glyphicon glyphicon-exclamation-sign\"></span> {{$ctrl.displayOpts.error}}\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <!-- footer buttons -->\n" +
+    "    <div ng-include=\"'src/v2/footer.html'\"></div>\n" +
     "\n" +
     "</div>"
   );
@@ -1778,7 +1570,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <h5>\n" +
     "       {{clothingItem.name}} \n" +
     "       <small>{{clothingItem.type}}</small> \n" +
-    "       <small><em>({{clothingItem.source}})</em></small>\n" +
+    "       <small ng-if=\"clothingItem.source\"><em>({{clothingItem.source}})</em></small>\n" +
     "    </h5>\n" +
     "    <p><small>{{clothingItem.desc}}</small></p>\n" +
     "    <div class=\"f-container f-justify-between f-align-center\">\n" +
@@ -1816,10 +1608,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
     "        </small>\n" +
     "    </h4>\n" +
-    "\n" +
-    "   <div ng-repeat=\"(type,item) in character.clothing\"> \n" +
-    "     <clothing-item-2 clothing-item=\"character.clothing[type]\" on-save=\"onEdited(item, type)\"></clothing-item-2>\n" +
-    "   </div>\n" +
+    "    <hr>\n" +
+    "    <div ng-repeat=\"(type,item) in character.clothing\"> \n" +
+    "        <clothing-item-2 clothing-item=\"character.clothing[type]\" on-save=\"onEdited(item, type)\"></clothing-item-2>\n" +
+    "    </div>\n" +
     "\n" +
     "</div>"
   );
@@ -1896,6 +1688,50 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name||!item.type\" ng-click=\"ok()\">Apply</button>\n" +
     "    </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('v2/footer.html',
+    "<div class=\"char__footer\">\n" +
+    "    <div class=\"f-container f-justify-around\">\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='char'}\"\n" +
+    "            ng-click=\"$ctrl.panel='char'\">\n" +
+    "            <span class=\"glyphicon glyphicon-user\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='abil'}\"\n" +
+    "            ng-click=\"$ctrl.panel='abil'\">\n" +
+    "            <span class=\"glyphicon glyphicon-flash\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-if=\"$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0\"\n" +
+    "            ng-class=\"{active:$ctrl.panel==='sermons'}\"\n" +
+    "            ng-click=\"$ctrl.panel='sermons'\">\n" +
+    "            <span class=\"glyphicon glyphicon-book\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='items'}\"\n" +
+    "            ng-click=\"$ctrl.panel='items'\">\n" +
+    "            <span class=\"glyphicon glyphicon-gift\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='side'}\"\n" +
+    "            ng-click=\"$ctrl.panel='side'\">\n" +
+    "            <span class=\"glyphicon glyphicon-briefcase\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='inj'}\"\n" +
+    "            ng-click=\"$ctrl.panel='inj'\">\n" +
+    "            <span class=\"glyphicon glyphicon-alert\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='misc'}\"\n" +
+    "            ng-click=\"$ctrl.panel='misc'\">\n" +
+    "            <span class=\"glyphicon glyphicon-comment\"></span>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
+    "</div>"
   );
 
 
@@ -1980,34 +1816,30 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/items/item.html',
-    "<div class=\"item\">\n" +
-    "    <div class=\"\">\n" +
-    "        \n" +
-    "        <div class=\"pull-right\">\n" +
-    "           <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
-    "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "           </button>&nbsp;&nbsp;&nbsp;\n" +
-    "           <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
-    "                <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
-    "           </button>\n" +
-    "        </div>\n" +
+    "<div class=\"item usage-{{item.usage|lowercase}}\">\n" +
+    "    <div class=\"pull-right\">\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "            <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "       </button>&nbsp;&nbsp;&nbsp;\n" +
+    "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
+    "            <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "       </button>\n" +
+    "    </div>\n" +
     "\n" +
-    "        <h5>\n" +
-    "            {{name}} \n" +
-    "            <small><em>({{item.source}})</em></small>\n" +
-    "        </h5>\n" +
-    "        \n" +
-    "        <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
-    "        \n" +
-    "        <div ng-if=\"item.usage\"> <input type=\"checkbox\"> <small>(per {{item.usage}})</small> </div>\n" +
-    "        \n" +
-    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
-    "            <div><span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!item.weight}\"></span> {{item.weight}}</div>\n" +
-    "            <div><span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!item.darkstone}\"></span> {{item.darkstone}}</div>\n" +
-    "            <div><span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!item.hands}\"></span> {{item.hands}}</div>\n" +
-    "            <div><span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!item.slots}\"></span> {{item.slots}}</div>\n" +
-    "        </div>\n" +
-    "\n" +
+    "    <h5>\n" +
+    "        {{name}} \n" +
+    "        <small><em>({{item.source}})</em></small>\n" +
+    "    </h5>\n" +
+    "    \n" +
+    "    <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
+    "    \n" +
+    "    <div ng-if=\"item.usage\"> <input type=\"checkbox\"> <small>(per {{item.usage}})</small> </div>\n" +
+    "    \n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div><span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!item.weight}\"></span> {{item.weight}}</div>\n" +
+    "        <div><span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!item.darkstone}\"></span> {{item.darkstone}}</div>\n" +
+    "        <div><span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!item.hands}\"></span> {{item.hands}}</div>\n" +
+    "        <div><span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!item.slots}\"></span> {{item.slots}}</div>\n" +
     "    </div>\n" +
     "</div>"
   );
@@ -2039,6 +1871,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('v2/mutations/mutation.html',
     "<div class=\"mutation\">\n" +
+    "  \n" +
     "  <div ng-if=\"!ctrl.displayEditor\">\n" +
     "    <div class=\"pull-right\">\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
@@ -2050,6 +1883,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <h5>{{ctrl.name}}</h5> <small>{{ctrl.desc}}</small>\n" +
     "  </div>\n" +
+    "  \n" +
     "  <form ng-if=\"ctrl.displayEditor\">\n" +
     "    <input type=\"text\" class=\"form-control\" ng-model=\"ctrl.name\" placeholder=\"name\">\n" +
     "    <textarea rows=\"3\" class=\"form-control\" ng-model=\"ctrl.desc\" placeholder=\"value\"></textarea>\n" +
@@ -2060,13 +1894,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "      <span class=\"glyphicon glyphicon-remove\"></span>\n" +
     "    </button>\n" +
     "  </form>\n" +
-    "  <br><br>\n" +
+    "  \n" +
     "</div>"
   );
 
 
   $templateCache.put('v2/mutations/mutations-and-injuries.html',
     "<div class=\"mutations\">\n" +
+    "    <br>\n" +
     "    \n" +
     "    <!-- list all -->\n" +
     "    <div ng-repeat=\"(name, desc) in character.mutations\" \n" +
@@ -2081,6 +1916,200 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
     "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
     "    </form>\n" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('v2/panel-char.html',
+    "<div>\n" +
+    "    <div class=\"f-container f-justify-between\">\n" +
+    "        <!-- avatar -->\n" +
+    "        <div class=\"f-cell\">\n" +
+    "            <div class=\"avatar\" img-selector ng-model=\"$ctrl.character.avatar\" on-save=\"$ctrl.save()\"></div>\n" +
+    "        </div>\n" +
+    "        <div class=\"f-cell attributes\">\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Agility</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Agility\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Cunning</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Cunning\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Spirit</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Spirit\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "            \n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Strength</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Strength\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Lore</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Lore\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat\">\n" +
+    "                <label>Luck</label>\n" +
+    "                <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.stats.Luck\" minimum=\"1\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"f-container f-justify-between\">\n" +
+    "\n" +
+    "        <div class=\"f-cell f-cell-75p f-container f-wrap\">\n" +
+    "\n" +
+    "            <!-- COMBAT SECTION -->\n" +
+    "            <div class=\"combat f-container f-justify-around\">\n" +
+    "                <span class=\"stat f-cell\">\n" +
+    "                    <label>Combat</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.combat\"></div>\n" +
+    "                </span>\n" +
+    "\n" +
+    "                <span class=\"stat stat--with-plus f-cell\">\n" +
+    "                    <label>Melee</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.melee\"></div>\n" +
+    "                </span>\n" +
+    "                <span class=\"stat stat--with-plus f-cell\">\n" +
+    "                    <label>Ranged</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.ranged\"></div>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            \n" +
+    "            <!-- HEALTH SECTION -->\n" +
+    "            <div class=\"health f-container f-justify-around\">\n" +
+    "                \n" +
+    "                <div class=\"f-cell has-stat-with-max\">\n" +
+    "                    <div class=\"stat f-cell\">\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
+    "                            ng-model=\"$ctrl.character.health.wounds\"></div>\n" +
+    "                        <!-- <img src=\"assets/wound.png\">    --> \n" +
+    "                        <span class=\"sprite sprite-wound\"></span>\n" +
+    "\n" +
+    "                        <div class=\"stat\">\n" +
+    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.health.max\"></div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"f-cell stat stat--with-plus f-cell\">\n" +
+    "                    <label>Defense</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.defense\"></div>\n" +
+    "                </div>\n" +
+    "                <div class=\"f-cell stat stat--with-plus f-cell\">\n" +
+    "                    <label>Armor</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.armor\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "                \n" +
+    "               \n" +
+    "            <!-- SANITY SECTION --> \n" +
+    "            <div class=\"sanity f-container f-justify-around\">\n" +
+    "                \n" +
+    "                <div class=\"f-cell has-stat-with-max\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <!-- <label>Loss</label> -->\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
+    "                            ng-model=\"$ctrl.character.sanity.loss\"></div>\n" +
+    "                        <!-- <img src=\"assets/sanity.png\"> -->\n" +
+    "                        <span class=\"sprite sprite-sanity\"></span>\n" +
+    "                        <div class=\"stat\">\n" +
+    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.sanity.max\"></div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"f-cell stat stat--with-plus\">\n" +
+    "                    <label>Willpower</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.willpower\"></div>\n" +
+    "                </div>\n" +
+    "                <div class=\"f-cell stat stat--with-plus\">\n" +
+    "                    <label>Sp Armor</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.spiritArmor\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "                \n" +
+    "            <div class=\"other f-container f-justify-around\">\n" +
+    "\n" +
+    "                <div class=\"faith f-cell\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <label>Faith</label>\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.faith\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"grit f-cell has-stat-with-max\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <label>Grit</label>\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.grit.current\"></div>\n" +
+    "                        <div class=\"stat\">\n" +
+    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.grit.max\"></div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                \n" +
+    "                <div class=\"corruption f-cell has-stat-with-max\">\n" +
+    "                    <div class=\"stat\">\n" +
+    "                        <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
+    "                            ng-model=\"$ctrl.character.corruption.current\"></div>\n" +
+    "                        <span class=\"sprite sprite-corruption\"></span>\n" +
+    "                        <div class=\"stat\">\n" +
+    "                            <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.corruption.max\"></div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>  \n" +
+    "            \n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"general f-cell f-cell-25p f-container\">\n" +
+    "\n" +
+    "            <div class=\"level f-cell\">\n" +
+    "                <div class=\"stat\">\n" +
+    "                    <label>Level</label>\n" +
+    "                    <div class=\"value\" editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.level\" minimum=\"1\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            \n" +
+    "            <div class=\"xp f-cell\">\n" +
+    "                <div class=\"stat\">\n" +
+    "                    <div class=\"value--sm\" editable-stat-value on-save=\"$ctrl.onXP()\" ng-model=\"$ctrl.character.xp\"></div>\n" +
+    "                    <span class=\"sprite sprite-xp\"></span>\n" +
+    "                    <div style=\"font-size:0.625em\"><span class=\"glyphicon glyphicon-arrow-up\"></span> at {{$ctrl.xpLevels[$ctrl.character.level]}}</div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"init f-cell\">\n" +
+    "                <div class=\"stat\">\n" +
+    "                    <label>Init</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.init\" minimum=\"1\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"movement f-cell\">\n" +
+    "                <div class=\"stat stat--prepend-plus\">\n" +
+    "                    <label>Move</label>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.movement\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>\n" +
     "\n" +
     "</div>"
   );
@@ -2200,10 +2229,32 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <hr>\n" +
     "\n" +
+    "    <!--\n" +
     "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
     "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
     "    </div>\n" +
-    "    <hr>\n" +
+    "    -->\n" +
+    "\n" +
+    "    <div class=\"sermons-container\">\n" +
+    "\n" +
+    "        <div>\n" +
+    "            <h5>Blessings</h5>\n" +
+    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "                <div ng-if=\"'Blessing'===sermon.type\" sermon=\"sermon\" on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <hr class=\"visible-xs-block\">\n" +
+    "        \n" +
+    "        <div>\n" +
+    "            <h5>Judgements</h5>\n" +
+    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "                <div ng-if=\"'Judgement'===sermon.type\" sermon=\"sermon\" on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
     "    \n" +
     "</div>"
   );
@@ -2243,10 +2294,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            </div> -->\n" +
     "\n" +
     "            <button type=\"button\" class=\"btn btn-default\"\n" +
-    "                        ng-click=\"$ctrl.decrease(option)\">&minus;</button>\n" +
+    "                ng-click=\"$ctrl.decrease(option)\"\n" +
+    "                ng-disabled=\"!$ctrl.sidebag[option]\">&minus;</button>\n" +
     "            <span class=\"option__display\">{{$ctrl.sidebag[option]}}</span>\n" +
     "            <button type=\"button\" class=\"btn btn-default\"\n" +
-    "                        ng-click=\"$ctrl.increase(option)\">&plus;</button>\n" +
+    "                ng-click=\"$ctrl.increase(option)\"\n" +
+    "                ng-disabled=\"!$ctrl.max\">&plus;</button>\n" +
     "        </div>\n" +
     "\n" +
     "    </div>\n" +

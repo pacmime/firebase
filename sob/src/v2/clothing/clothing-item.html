@@ -10,7 +10,7 @@
     <h5>
        {{clothingItem.name}} 
        <small>{{clothingItem.type}}</small> 
-       <small><em>({{clothingItem.source}})</em></small>
+       <small ng-if="clothingItem.source"><em>({{clothingItem.source}})</em></small>
     </h5>
     <p><small>{{clothingItem.desc}}</small></p>
     <div class="f-container f-justify-between f-align-center">

@@ -2,7 +2,9 @@
     
     "use strict";
 
-    angular.module("sob-character").directive('mutations', function() {
+    angular.module("sob-character")
+
+    .directive('mutations', function() {
 
         return {
             scope: {
@@ -86,7 +88,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/mutations/mutation.html',
+            templateUrl: 'src/v2/mutations/mutation.html',
             
             controller: Controller
         };

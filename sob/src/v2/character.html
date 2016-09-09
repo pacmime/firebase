@@ -1,200 +1,16 @@
 <div class="page f-container f-column f-justify-between">
 
+
     <div class="char__header">
         <div class="char__name"><label>Name: </label> {{$ctrl.charName}}</div>
         <div editable-input label="Class" ng-model="$ctrl.character.class" on-save="$ctrl.save()"></div>
         <div editable-input label="Keywords" ng-model="$ctrl.character.keywords" on-save="$ctrl.save()"></div>
     </div>
 
+
+    <!-- Char -->
     <div class="char__panel" ng-if="$ctrl.panel==='char'">
-
-        <div class="f-container f-justify-between">
-            <!-- avatar -->
-            <div class="f-cell">
-                <div class="avatar" img-selector ng-model="$ctrl.character.avatar" on-save="$ctrl.save()"></div>
-            </div>
-            <div class="f-cell attributes">
-                <div class="stat">
-                    <label>Agility</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Agility" minimum="1"></div>
-                </div>
-
-                <div class="stat">
-                    <label>Cunning</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Cunning" minimum="1"></div>
-                </div>
-
-                <div class="stat">
-                    <label>Spirit</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Spirit" minimum="1"></div>
-                </div>
-                
-                <div class="stat">
-                    <label>Strength</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Strength" minimum="1"></div>
-                </div>
-
-                <div class="stat">
-                    <label>Lore</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Lore" minimum="1"></div>
-                </div>
-
-                <div class="stat">
-                    <label>Luck</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Luck" minimum="1"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="f-container f-justify-between">
-
-            <div class="f-cell f-cell-75p f-container f-wrap">
-
-                <!-- COMBAT SECTION -->
-                <div class="combat f-container f-justify-around">
-                    <span class="stat f-cell">
-                        <label>Combat</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.combat"></div>
-                    </span>
-
-                    <span class="stat stat--with-plus f-cell">
-                        <label>Melee</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.melee"></div>
-                    </span>
-                    <span class="stat stat--with-plus f-cell">
-                        <label>Ranged</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.ranged"></div>
-                    </span>
-                </div>
-
-                
-                <!-- HEALTH SECTION -->
-                <div class="health f-container f-justify-around">
-                    
-                    <div class="f-cell has-stat-with-max">
-                        <div class="stat f-cell">
-                            <div editable-stat-value on-save="$ctrl.save()" 
-                                ng-model="$ctrl.character.health.wounds"></div>
-                            <!-- <img src="assets/wound.png">    --> 
-                            <span class="sprite sprite-wound"></span>
-
-                            <div class="stat">
-                                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.health.max"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="f-cell stat stat--with-plus f-cell">
-                        <label>Defense</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.defense"></div>
-                    </div>
-                    <div class="f-cell stat stat--with-plus f-cell">
-                        <label>Armor</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.armor"></div>
-                    </div>
-                </div>
-                    
-                   
-                <!-- SANITY SECTION --> 
-                <div class="sanity f-container f-justify-around">
-                    
-                    <div class="f-cell has-stat-with-max">
-                        <div class="stat">
-                            <!-- <label>Loss</label> -->
-                            <div editable-stat-value on-save="$ctrl.save()" 
-                                ng-model="$ctrl.character.sanity.loss"></div>
-                            <!-- <img src="assets/sanity.png"> -->
-                            <span class="sprite sprite-sanity"></span>
-                            <div class="stat">
-                                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.sanity.max"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="f-cell stat stat--with-plus">
-                        <label>Willpower</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.willpower"></div>
-                    </div>
-                    <div class="f-cell stat stat--with-plus">
-                        <label>Sp Armor</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.spiritArmor"></div>
-                    </div>
-                </div>
-
-                    
-                <div class="other f-container f-justify-around">
-
-                    <div class="faith f-cell">
-                        <div class="stat">
-                            <label>Max Faith</label>
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.faith"></div>
-                        </div>
-                    </div>
-
-                    <div class="grit f-cell has-stat-with-max">
-                        <div class="stat">
-                            <label>Grit</label>
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.grit.current"></div>
-                            <div class="stat">
-                                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.grit.max"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="corruption f-cell has-stat-with-max">
-                        <div class="stat">
-                            <div editable-stat-value on-save="$ctrl.save()" 
-                                ng-model="$ctrl.character.corruption.current"></div>
-                            <span class="sprite sprite-corruption"></span>
-                            <div class="stat">
-                                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.corruption.max"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>  
-                
-            </div>
-
-            <div class="general f-cell f-cell-25p f-container">
-
-                <div class="level f-cell">
-                    <div class="stat">
-                        <label>Level</label>
-                        <div class="value" editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.level" minimum="1">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="xp f-cell">
-                    <div class="stat">
-                        <div class="value--sm" editable-stat-value on-save="$ctrl.onXP()" ng-model="$ctrl.character.xp"></div>
-                        <span class="sprite sprite-xp"></span>
-                    </div>
-                </div>
-
-                <div class="init f-cell">
-                    <div class="stat">
-                        <label>Init</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.init" minimum="1"></div>
-                    </div>
-                </div>
-
-                <div class="movement f-cell">
-                    <div class="stat stat--prepend-plus">
-                        <label>Move</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.movement"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <br>
-        <br>
-        <br>
-        <br>
-        <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>
-
+        <div ng-include="'src/v2/panel-char.html'"></div>
     </div>
 
 
@@ -244,45 +60,16 @@
     </div>
 
 
-    <div class="char__footer">
-        <div class="f-container f-justify-around">
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='char'}"
-                ng-click="$ctrl.panel='char'">
-                <span class="glyphicon glyphicon-user"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='abil'}"
-                ng-click="$ctrl.panel='abil'">
-                <span class="glyphicon glyphicon-flash"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-if="$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0"
-                ng-class="{active:$ctrl.panel==='sermons'}"
-                ng-click="$ctrl.panel='sermons'">
-                <span class="glyphicon glyphicon-book"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='items'}"
-                ng-click="$ctrl.panel='items'">
-                <span class="glyphicon glyphicon-gift"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='side'}"
-                ng-click="$ctrl.panel='side'">
-                <span class="glyphicon glyphicon-briefcase"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='inj'}"
-                ng-click="$ctrl.panel='inj'">
-                <span class="glyphicon glyphicon-alert"></span>
-            </button>
-            <button type="button" class="f-cell f-equal" 
-                ng-class="{active:$ctrl.panel==='misc'}"
-                ng-click="$ctrl.panel='misc'">
-                <span class="glyphicon glyphicon-comment"></span>
-            </button>
-        </div>
+    <!-- message display -->
+    <div class="message-display" ng-if="$ctrl.displayOpts.message">
+        <span class="glyphicon glyphicon-ok"></span> {{$ctrl.displayOpts.message}}
     </div>
+    <div class="message-display is-error" ng-if="$ctrl.displayOpts.error">
+        <span class="glyphicon glyphicon-exclamation-sign"></span> {{$ctrl.displayOpts.error}}
+    </div>
+
+
+    <!-- footer buttons -->
+    <div ng-include="'src/v2/footer.html'"></div>
 
 </div>

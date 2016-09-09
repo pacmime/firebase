@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("app", ['ngRoute', 'ngAnimate', 'sob-home', 'sob-character'])
+    angular.module("app", ["firebase", 'ngRoute', 'ngAnimate', 'sob-home', 'sob-character'])
 
     .config(function myAppConfig ($routeProvider, $locationProvider) {
 

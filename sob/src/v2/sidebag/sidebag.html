@@ -31,10 +31,12 @@
             </div> -->
 
             <button type="button" class="btn btn-default"
-                        ng-click="$ctrl.decrease(option)">&minus;</button>
+                ng-click="$ctrl.decrease(option)"
+                ng-disabled="!$ctrl.sidebag[option]">&minus;</button>
             <span class="option__display">{{$ctrl.sidebag[option]}}</span>
             <button type="button" class="btn btn-default"
-                        ng-click="$ctrl.increase(option)">&plus;</button>
+                ng-click="$ctrl.increase(option)"
+                ng-disabled="!$ctrl.max">&plus;</button>
         </div>
 
     </div>

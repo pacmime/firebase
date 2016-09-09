@@ -87,7 +87,7 @@
                 onSave: '&'
             },
             replace: true,
-            templateUrl: 'src/character/abilities/ability.html',
+            templateUrl: 'src/v2/abilities/ability.html',
             
             controller: Controller
         };

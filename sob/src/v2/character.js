@@ -10,7 +10,7 @@
         templateUrl: 'src/v2/character.html',
         replace: true,
 
-        controller: function($routeParams, CharacterRef) {
+        controller: function($routeParams, $timeout, CharacterRef) {
         
             var self = this;
             
@@ -47,7 +47,21 @@
             };
 
             this.save = function() {
-                this.character.$save();
+                var success = function(ref) {
+                    self.displayOpts.message = "Saved!";
+                    $timeout(function() {
+                        self.displayOpts.message = null;
+                    }, 2000);
+                };
+                var failure = function(error) {
+                    console.log("There was an error saving the character: ");
+                    console.log(error);
+                    self.displayOpts.error = "Unable to save character";
+                    $timeout(function() {
+                        self.displayOpts.error = null;
+                    }, 5000);
+                };
+                this.character.$save().then(success, failure);
             };
 
             this.getAvailableSidebagCapacity = function() {

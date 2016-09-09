@@ -53,25 +53,54 @@ body .navbar>.container-fluid .navbar-brand {
 .page {
     height: 100%; 
     width: 100%;
-    padding-top: 52px;
+    padding-top: 57px;
+}
+@media(min-width:768px) {
+    .page {
+        padding-top: 52px;
+    }
 }
 
 .char__header { 
     background: #fff;
-    padding: 0.5em 1em; 
     border-bottom: 1px solid #bbb;
 
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     align-items: stretch;
     flex-wrap: wrap;
 }
-.char__header .char__name { flex: 100%; }
+.char__header .char__name { 
+    flex: 100%; 
+    height: 34px;
+    padding-top: 6px;
+}
+
+.char__header > div {
+    padding: 0 1em; 
+}
+.char__header .editable-input-display {
+    height: 34px;
+    vertical-align: middle;
+    padding-top: 4px;
+}
+.char__header [class*=grid__col-] {
+    padding: 0;
+}
 
 @media(min-width: 768px) {
-    .char__header { flex-wrap: none; }
-    .char__header .char__name { flex: auto; }
+    .char__header { 
+        flex-direction: row;
+        flex-wrap: none; 
+    }
+    .char__header .char__name { 
+        flex: auto; 
+        padding-top: 8px;
+    }
+    .char__header > div {
+        padding: 0.25em 1em; 
+    }
 
 }
 
@@ -79,7 +108,7 @@ body .navbar>.container-fluid .navbar-brand {
 .char__panel { 
     flex: 1; 
     overflow: auto; 
-    padding: 0 1em 1em;
+    padding: 0 0.5em 1em;
 }
 
 /*
@@ -101,6 +130,37 @@ body .navbar>.container-fluid .navbar-brand {
 
 
 
+
+.message-display {
+    position: absolute;
+    bottom: 3em;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: rgba(255,255,255,0.75);
+    color: #777;
+    padding: 0.5em;
+    z-index: 3000;
+    opacity: 1;
+}
+.message-display.is-error { 
+    background: #f00;
+    color: #fff;
+}
+/*.message-display.ng-enter, */
+.message-display.ng-leave {
+    transition:all ease-out 0.5s;
+}
+
+.message-display.ng-enter,
+.message-display.ng-leave.ng-leave-active {
+    opacity:0;
+}
+
+.message-display.ng-leave,
+.message-display.ng-enter.ng-enter-active {
+    opacity:1;
+}
 
 
 
@@ -149,8 +209,9 @@ body .navbar-default .navbar-nav>li>a {
 /* ------------ sections -------------- */
 
 .avatar {
-    width: 100px;
+    width:      100px;
     max-height: 200px;
+    overflow:   hidden;
 }
 @media(min-width: 768px) {
     .avatar { width: 150px; }
@@ -228,8 +289,8 @@ body .navbar-default .navbar-nav>li>a {
         align-items: center!important;
     }
     .combat { order: 1; }
-    .other { order: 2; }
-    .health { order: 3; }
+    .other { order: 3; }
+    .health { order: 2; }
     .sanity { order: 4; }
 
     .general.f-container { 
@@ -414,7 +475,7 @@ body .navbar-default .navbar-nav>li>a {
 
 .stat .value.value--sm {
     font-size:   1rem;
-    padding-top: 30%;
+    padding-top: 35%;
 }
 
 /* ----------------------------- */
@@ -426,12 +487,33 @@ body .navbar-default .navbar-nav>li>a {
 
 
 /* ---------- ITEMS ------------ */
-.item, .clothing-item, .ability, .sermon, .mutation {
-    border-bottom: 1px solid #bbb;
-    padding: 1em 0;
+
+
+.ability, .item, .clothing-item, .sermon, .mutation {
+    background: rgba(255,255,255,0.85);
+    margin: 0.25em 0;
+    padding: 0.5em;
+    border-radius: 0.25em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
-.items-panel {
+
+.item, .clothing-item, .ability, .sermon, .mutation {
+    /*border-bottom: 1px solid #bbb;*/
+    /*padding: 1em 0;*/
+}
+
+.item.usage-adventure {
+    border-left: 4px solid #000;
+}
+.item.usage-fight {
+    border-left: 4px solid #0f0;
+}
+.item.usage-turn {
+    border-left: 4px solid #0f0;
+}
+
+.items-panel, .sermons-container {
     display: flex;
     flex-direction: column;
 }
@@ -441,11 +523,11 @@ body .navbar-default .navbar-nav>li>a {
 }
 
 @media(min-width:768px) {
-    .items-panel {
+    .items-panel, .sermons-container {
         flex-direction: row;
         justify-content: space-between;
     }
-    [items], [clothing-2] {
+    [items], [clothing-2], .sermons-container>* {
         flex-basis: 48%;
         margin-top: 0;
     }
