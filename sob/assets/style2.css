@@ -64,30 +64,42 @@ body .navbar>.container-fluid .navbar-brand {
 .char__header { 
     background: #fff;
     border-bottom: 1px solid #bbb;
+    padding: 0.75em;
 
     display:flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: stretch;
     flex-wrap: wrap;
+
+    font-size: 0.875em;
 }
 .char__header .char__name { 
     flex: 100%; 
-    height: 34px;
-    padding-top: 6px;
+    height: 2em;  
 }
 
 .char__header > div {
-    padding: 0 1em; 
+    padding: 0; 
+    height: 2em;
+    flex: 1;
 }
 .char__header .editable-input-display {
-    height: 34px;
+    height: 2em;
     vertical-align: middle;
     padding-top: 4px;
 }
 .char__header [class*=grid__col-] {
     padding: 0;
 }
+
+.char__header .form-control.editable-input-field {
+    height: 2em;
+}
+.char__header .form-group .grid__col--grow-2 {
+    flex: 2;
+}
+
 
 @media(min-width: 768px) {
     .char__header { 
@@ -96,10 +108,9 @@ body .navbar>.container-fluid .navbar-brand {
     }
     .char__header .char__name { 
         flex: auto; 
-        padding-top: 8px;
     }
     .char__header > div {
-        padding: 0.25em 1em; 
+        padding: 0 1em; 
     }
 
 }
@@ -385,6 +396,16 @@ body .navbar-default .navbar-nav>li>a {
 .f-cell-25p { flex-basis: 25%; }
 .f-cell-50p { flex-basis: 50%; }
 .f-cell-75p { flex-basis: 75%; }
+
+
+
+
+.grid { 
+    display: flex;
+}
+[class*=grid__col-] {
+    flex: 1;
+}
 
 
 
