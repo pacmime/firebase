@@ -1,0 +1,253 @@
+<div class="c-character">
+
+    <div class="c-card always-shown">
+        <h4>{{$ctrl.character.name}}</h4>
+        <select class="form-control" ng-model="$ctrl.character.template" 
+            ng-options="tmpl for tmpl in $ctrl.templates"></select>
+    </div>
+
+    <div class="l-container">
+
+        <div class="l-column has-gutter">
+
+            <div class="c-aspects c-card is-shown">
+
+                <h5>High Concept</h5>
+                <textarea rows="2" class="form-control" 
+                    ng-model="$ctrl.character.aspects.highConcept"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-change="$ctrl.save()"></textarea>
+
+                <h5>Trouble</h5>
+                <textarea rows="2" class="form-control" 
+                    ng-model="$ctrl.character.aspects.trouble"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-change="$ctrl.save()"></textarea>
+
+                <h5>Other Aspects</h5>
+                <textarea rows="2" class="form-control" 
+                    ng-model="$ctrl.character.aspects.other"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-change="$ctrl.save()"></textarea>
+
+            </div>
+
+            <stress ng-model="$ctrl.character.stress" on-change="$ctrl.save()"></stress>
+
+            <consequences ng-model="$ctrl.character.consequences" on-change="$ctrl.save()"></consequences>
+
+            <div class="c-misc c-card is-shown">
+                
+                <form class="form-flex">
+                    <div class="form-group">
+                        <label for="powerLevel" class="control-label">Power Level</label>
+                        <select id="powerLevel" class="form-control" 
+                            ng-model="$ctrl.character.powerLevel"
+                            ng-change="$ctrl.onPowerLevelChange()">
+                            <option value="Feet in the Water">Feet in the Water</option>
+                            <option value="Waist Deep">Waist Deep</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="powerLevel" class="control-label">Skill Cap</label>
+                        {{$ctrl.character.skillCap}}
+                    </div>
+                    <div class="form-group">
+                        <label for="powerLevel" class="control-label">Base Refresh</label>
+                        {{$ctrl.character.baseRefresh}}
+                    </div>
+                    <div class="form-group">
+                        <label for="powerLevel" class="control-label">Adjusted Refresh</label>
+                        {{$ctrl.adjustedRefresh}}
+                    </div>
+                    <div class="form-group">
+                        <label for="powerLevel" class="control-label">Fate Points</label>
+                        <input type="number" min="0" class="form-control" 
+                            ng-model="$ctrl.character.fatePoints" 
+                            ng-change="$ctrl.save()">
+                    </div>
+                </form>
+                
+            </div>
+
+        </div>
+
+        <div class="l-column has-gutter">
+
+            <skills ng-model="$ctrl.character.skills" on-change="$ctrl.save()"></skills>
+
+            <powers ng-model="$ctrl.character.powers" on-change="$ctrl.save()"></powers>
+
+            <div class="c-ladder c-card">
+                <h4>The Ladder</h4>
+                <table>
+                    <tr><td>Legendary</td><td>+8</td></tr>
+                    <tr><td>Epic</td><td>+7</td></tr>
+                    <tr><td>Fantastic</td><td>+6</td></tr>
+                    <tr><td>Superb</td><td>+5</td></tr>
+                    <tr><td>Great</td><td>+4</td></tr>
+                    <tr><td>Good</td><td>+3</td></tr>
+                    <tr><td>Fair</td><td>+2</td></tr>
+                    <tr><td>Average</td><td>+1</td></tr>
+                    <tr><td>Mediocre</td><td>+0</td></tr>
+                    <tr><td>Poor</td><td>–1</td></tr>
+                    <tr><td>Terrible</td><td>–2</td></tr>
+                </table>
+            </div>
+
+        </div>  <!-- end of l-column -->
+
+    </div>  <!-- end of l-container -->
+
+
+    <div class="c-phases c-card">
+        
+        <h4>Background</h4>
+        <form class="form-flex">
+            <div class="form-group">
+                <label class="control-label">Events</label>
+                <textarea class="form-control" rows="2" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.background.events"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Aspect</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.background.aspect" placeholder="Aspect...">
+            </div>
+        </form>
+
+        <hr>
+        
+        <h4>Rising Conflict</h4>
+        <form class="form-flex">
+            <div class="form-group">
+                <label class="control-label">Events</label>
+                <textarea class="form-control" rows="2" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.conflict.events"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Aspect</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.conflict.aspect" placeholder="Aspect...">
+            </div>
+        </form>
+
+        <hr>
+        
+        <h4>Story</h4>
+        <form class="form-flex">
+            <div class="form-group">
+                <label class="control-label">Title</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.story.title" placeholder="Title...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Guest(s)</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.story.guest" placeholder="Guest Starring...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Events</label>
+                <textarea class="form-control" rows="2" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.story.events"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Aspect</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.story.aspect" placeholder="Aspect...">
+            </div>
+        </form>
+        <hr>
+        
+        <h4>Guest Star</h4>
+        <form class="form-flex">
+            <div class="form-group">
+                <label class="control-label">Title</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest1.title" placeholder="Title...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Guest(s)</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest1.guest" placeholder="Guest Starring...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Events</label>
+                <textarea class="form-control" rows="2" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest1.events"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Aspect</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest1.aspect" placeholder="Aspect...">
+            </div>
+        </form>
+        <hr>
+        
+        <h4>Guest Star Redux</h4>
+        <form class="form-flex">
+            <div class="form-group">
+                <label class="control-label">Title</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest2.title" placeholder="Title...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Guest(s)</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest2.guest" placeholder="Guest Starring...">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Events</label>
+                <textarea class="form-control" rows="2" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest2.events"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Aspect</label>
+                <input type="text" class="form-control" ng-change="$ctrl.save()" 
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.character.phases.guest2.aspect" placeholder="Aspect...">
+            </div>
+        </form>
+    </div>
+
+
+    <div class="c-notes c-card">
+        <h4>Notes</h4>
+        <textarea rows="10" class="form-control" 
+            ng-model="$ctrl.character.notes"
+            ng-model-options="{ debounce: 500 }"
+            ng-change="$ctrl.save()"></textarea>
+    </div>
+
+
+    <div class="c-indicator--save" ng-show="$ctrl.displayOpts.showSave">
+        Character changes saved
+    </div>
+
+    <div class="c-nav">
+        <button type="button" class="btn btn-link" onclick="show('.c-aspects,.c-misc', this)">home</button>
+        <button type="button" class="btn btn-link" onclick="show('.c-skills', this)">skills</button>
+        <button type="button" class="btn btn-link" onclick="show('.c-powers', this)">powers</button>
+        <button type="button" class="btn btn-link" onclick="show('.c-stress,.c-consequences', this)">stress</button>
+        <button type="button" class="btn btn-link" onclick="show('.c-phases,.c-notes', this)">notes</button>
+        <button type="button" class="btn btn-link" onclick="show('.c-ladder', this)">ladder</button>
+    </div>
+
+
+</div>

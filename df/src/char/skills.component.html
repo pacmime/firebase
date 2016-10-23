@@ -1,0 +1,83 @@
+<div class="c-skills c-card">
+
+    <h4>
+        Skills 
+        ({{$ctrl.ngModel.spent}}/{{$ctrl.ngModel.total}})
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"
+            title="Too many skills picked!"
+            ng-if="$ctrl.validateSpent()"></span>
+    </h4>
+
+    <div class="c-skill-group">
+        <div>
+            <label>Superb (+5)</label>
+            <small>
+                {{$ctrl.getSkillSlots('superb')}} Slots
+                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                    title="More skills needed below this group!"
+                    ng-if="$ctrl.validate('superb')"></span>
+            </small>
+        </div>
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.superb.choices"
+            ng-change="$ctrl.onChange()"></textarea>
+    </div>
+
+    <div class="c-skill-group">
+        <div>
+            <label>Great (+4)</label>
+            <small>
+                {{$ctrl.getSkillSlots('great')}} Slots
+                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                    title="More skills needed below this group!"
+                    ng-if="$ctrl.validate('great')"></span>
+            </small>
+        </div>
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.great.choices"
+            ng-change="$ctrl.onChange()"></textarea>
+    </div>
+
+    <div class="c-skill-group">
+        <div>
+            <label>Good (+3)</label>
+            <small>
+                {{$ctrl.getSkillSlots('good')}} Slots
+                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                    title="More skills needed below this group!"
+                    ng-if="$ctrl.validate('good')"></span>
+            </small>
+        </div>
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.good.choices"
+            ng-change="$ctrl.onChange()"></textarea>
+    </div>
+
+    <div class="c-skill-group">
+        <div>
+            <label>Fair (+2)</label>
+            <small>
+                {{$ctrl.getSkillSlots('fair')}} Slots
+                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                    title="More skills needed below this group!"
+                    ng-if="$ctrl.validate('fair')"></span>
+            </small>
+        </div>
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.fair.choices"
+            ng-change="$ctrl.onChange()"></textarea>
+    </div>
+
+    <div class="c-skill-group">
+        <div>
+            <label>Average (+1)</label>
+            <small>
+                {{$ctrl.getSkillSlots('average')}} Slots
+            </small>
+        </div>
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.average.choices"
+            ng-change="$ctrl.onChange()"></textarea>
+    </div>
+
+</div>

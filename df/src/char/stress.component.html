@@ -1,0 +1,62 @@
+<div class="c-stress c-card">
+                
+    <button type="button" class="c-btn c-btn--sm c-btn--info pull-right" ng-click="$ctrl.resetStress()">reset</button>
+    <h4>Stress</h4>
+
+    <h5>Physical</h5>
+    <div class="stress__track">
+        <input type="number" min="0" max="8" class="form-control"
+            ng-model="$ctrl.ngModel.physical.threshold"
+            ng-change="$ctrl.onChange()">
+        <div ng-repeat="i in [0,1,2,3,4,5,6,7]">
+            <div class="c-bubble" 
+                ng-class="{active:$ctrl.ngModel.physical.used[i],disabled:$ctrl.ngModel.physical.threshold<(i+1)}"
+                ng-click="$ctrl.toggleStress('physical',i)">
+            </div>
+        </div>
+    </div>
+
+    <h5>Mental</h5>
+    <div class="stress__track">
+        <input type="number" min="0" max="8" class="form-control"
+            ng-model="$ctrl.ngModel.mental.threshold"
+            ng-change="$ctrl.onChange()">
+        <div ng-repeat="i in [0,1,2,3,4,5,6,7]">
+            <div class="c-bubble" 
+                ng-class="{active:$ctrl.ngModel.mental.used[i],disabled:$ctrl.ngModel.mental.threshold<(i+1)}"
+                ng-click="$ctrl.toggleStress('mental',i)">
+            </div>
+        </div>
+    </div>
+
+    <h5>Social</h5>
+    <div class="stress__track">
+        <input type="number" min="0" max="8" class="form-control"
+            ng-model="$ctrl.ngModel.social.threshold"
+            ng-change="$ctrl.onChange()">
+        <div ng-repeat="i in [0,1,2,3,4,5,6,7]">
+            <div class="c-bubble" 
+                ng-class="{active:$ctrl.ngModel.social.used[i],disabled:$ctrl.ngModel.social.threshold<(i+1)}"
+                ng-click="$ctrl.toggleStress('social',i)">
+            </div>
+        </div>
+    </div>
+
+    <h5>Hunger</h5>
+    <div class="stress__track">
+        <input type="number" min="0" max="8" class="form-control"
+            ng-model="$ctrl.ngModel.hunger.threshold"
+            ng-change="$ctrl.onChange()">
+        <div ng-repeat="i in [0,1,2,3,4,5,6,7]">
+            <div class="c-bubble" 
+                ng-class="{active:$ctrl.ngModel.hunger.used[i],disabled:$ctrl.ngModel.hunger.threshold<(i+1)}"
+                ng-click="$ctrl.toggleStress('hunger',i)">
+            </div>
+        </div>
+    </div>
+
+    <h5>Armor</h5>
+    <textarea rows="2" class="form-control" 
+        ng-model="$ctrl.ngModel.armor" ng-change="$ctrl.onChange()"></textarea>
+
+</div>

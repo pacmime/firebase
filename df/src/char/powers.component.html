@@ -1,0 +1,46 @@
+<div class="c-powers c-card">
+
+    <button type="button" class="c-btn c-btn--info pull-right" ng-click="$ctrl.showEditor()">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+
+    <h4>Stunts &amp; Powers</h4>
+
+
+    <form class="form-flex c-editor" ng-if="$ctrl.displayOpts.showEditor">
+        <div class="form-group">
+            <label class="control-label" for="powerName">Name</label>
+            <input id="powerName" class="form-control" type="text" 
+                ng-model="$ctrl.newPower.name" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="powerCost">Cost</label>
+            <input id="powerCost" class="form-control" type="number" min="-8" max="0" 
+                ng-model="$ctrl.newPower.cost" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="powerMisc">Misc</label>
+            <input id="powerMisc" class="form-control" type="text" 
+                ng-model="$ctrl.newPower.misc">
+        </div>
+        <button type="button" class="btn btn-primary" 
+            ng-click="$ctrl.addPower()"
+            ng-class="{disabled:!$ctrl.newPower.name}">Add</button>
+        <button type="button" class="btn btn-default" ng-click="$ctrl.hideEditor()">Cancel</button>
+    </form>
+
+
+    <div ng-repeat="(name, power) in $ctrl.ngModel" class="c-power">
+        
+        <button type="button" class="c-btn c-btn--sm c-btn--danger pull-right" ng-click="$ctrl.removePower(name)">
+            <span class="glyphicon glyphicon-trash"></span>
+        </button>
+
+        <label>{{name}}</label> ({{power.cost}}) 
+        
+        <span ng-if="power.misc">- {{power.misc}}</span>
+
+    </div>
+
+
+</div>

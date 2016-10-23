@@ -1,0 +1,38 @@
+{
+  "name": "dresden.files",
+  "version": "0.0.1",
+  "authors": [
+    "Patrick Neal <patrickn@imagemattersllc.com>"
+  ],
+  "description": "GeoPlatform Metadata Editor Client Application",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "GeoPlatform"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.7",
+    "font-awesome": "~4.4.0",
+    "gp.style": "GeoPlatform/style#develop",
+    "gp.common": "GeoPlatform/ng-common#develop",
+    "jquery": "~2.1.4",
+    "angular": "~1.5.8",
+    "angular-route": "~1.5.8",
+    "angular-resource": "~1.5.8",
+    "angular-animate": "~1.5.8",
+    "angular-bootstrap": "~2.1.4",
+    "angular-file-upload": "~1.1.5",
+    "angular-ui-router": "~0.3.1",
+    "firebase": "3.3.2",
+    "angularfire": "2.0.2"
+  },
+  "resolutions": {
+    "angular": "1.5.8"
+  }
+}

@@ -1,0 +1,43 @@
+<div class="c-consequences c-card">
+
+    <button type="button" class="c-btn c-btn--info pull-right" ng-click="$ctrl.showConsequenceEditor()">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+
+    <h4>Consequences</h4>
+
+    <form class="form-flex c-editor" ng-if="$ctrl.displayOpts.showConsequenceEditor">
+        <div class="form-group">
+            <label class="control-label" for="consqType">Type</label>
+            <select id="consqType" class="form-control" ng-model="$ctrl.newConsequence.type" 
+                ng-change="$ctrl.updateNewConsequenceModifier()">
+                <option value="mild">Mild</option>
+                <option value="moderate">Moderate</option>
+                <option value="Severe">Severe</option>
+                <option value="Extreme">Extreme</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="consqAspect">Aspect</label>
+            <input id="consqAspect" class="form-control" type="text" 
+                ng-model="$ctrl.newConsequence.aspect" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="consqMod">Mod</label>
+            <input id="consqMod" class="form-control" type="text" 
+                ng-model="$ctrl.newConsequence.modifier" class="disabled">
+        </div>
+        <button type="button" class="btn btn-primary" 
+            ng-click="$ctrl.addConsequence()"
+            ng-class="{disabled:!$ctrl.newConsequence.aspect}">Add</button>
+        <button type="button" class="btn btn-default" ng-click="$ctrl.hideConquenceEditor()">Cancel</button>
+    </form>
+
+    <div ng-repeat="consq in $ctrl.getConsequences()">
+        [{{consq.type}}] <em>{{consq.aspect}}</em> ({{consq.modifier}}) 
+        <button type="button" class="btn btn-sm btn-danger" ng-click="$ctrl.removeConsequence(consq)">
+            <span class="glyphicon glyphicon-trash"></span>
+        </button>
+    </div>
+
+</div>

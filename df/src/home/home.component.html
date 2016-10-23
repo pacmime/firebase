@@ -1,0 +1,19 @@
+<div class="container">
+
+    <div class="alert alert-danger" ng-if="$ctrl.displayOpts.error">{{$ctrl.displayOpts.error}}</div>
+    
+    <div ng-if="$ctrl.displayOpts.loading">Fetching data...</div>
+    
+    <div class="list-group">
+        <div class="list-group-item disabled">
+            <h4 class="list-group-item-heading">Characters</h4>
+            <p class="list-group-item-text">Select a character from the list</p>
+        </div>
+        <a class="list-group-item" ng-if="!$ctrl.user"><em>Login to select from your available characters</em></a>
+        <a ng-repeat="name in $ctrl.chars" class="list-group-item" ui-sref="char({ id: '{{name}}' })">{{name}}</a>
+        <a class="list-group-item list-group-item-success" ng-if="user" ng-click="$ctrl.createCharacter()">
+            Create a New Character
+        </a>
+    </div>
+
+</div>
