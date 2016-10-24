@@ -113,11 +113,10 @@ gulp.task('copy', function() {
     gulp.src([
             "bower/jquery/dist/jquery.min.js",
             "bower/bootstrap/dist/js/bootstrap.min.js",
-            "bower/angular/angular.js",
+            "bower/angular/angular.min.js",
             "bower/angular-ui-router/release/angular-ui-router.min.js",
             "bower/angular-resource/angular-resource.min.js",
             "bower/angular-animate/angular-animate.min.js",
-            "bower/angular-file-upload/angular-file-upload.min.js",
             "bower/angular-bootstrap/ui-bootstrap-tpls.min.js",
             "bower/firebase/firebase.js",
             "src/firebase.config.js",

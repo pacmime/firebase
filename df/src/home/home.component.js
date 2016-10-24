@@ -6,11 +6,13 @@
 
     class HomeController {
 
-        constructor (DataStore, $firebaseAuth, $timeout) {
+        constructor (DataStore, CharacterShell, $firebaseAuth, $timeout, $state) {
             'ngInject';
 
             this.store = DataStore;
             this.auth = $firebaseAuth();
+            this.blankChar = CharacterShell;
+            this.state = $state;
 
         }
 
@@ -42,6 +44,13 @@
 
             this.auth.$onAuthStateChanged(callback);
         }
+
+        $onDestroy () {
+            this.store = null;
+            this.auth = null;
+            this.blankChar = null;
+            this.state = null;
+        }
         
 
         updateList () {
@@ -68,20 +77,31 @@
                 return;
             }
             
-            var json = getCharacterShell();
-            
             //associate user id for restricting who can edit
-            json.userId = $scope.user.uid;  
+
+            var json = angular.copy(this.blankChar);
+            json.userId = this.user.uid;  
+            json.name = name;
 
             this.data[name] = json;
-            this.data.$save().then(function() {
-                //navigate to the new char page
-                window.location = '#/' + encodeURIComponent(name);
+            this.data.$save().then( () => {
+                
+                this.state.go('char', {id: name});
+
+                // //navigate to the new char page
+                // window.location = '#/' + encodeURIComponent(name);
 
             }).catch(function(error) {
                 alert("Unable to create character because of an error");
             });
 
+        }
+
+        removeChar (name) {
+            this.data[name] = null;
+            this.data.$save().then( () => {
+                this.updateList();
+            });
         }
 
     }

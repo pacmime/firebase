@@ -25,10 +25,14 @@ h2 { font-size: 1.75rem; }
 h1 { font-size: 2rem; }
 
 
+a[ng-click], a[onclick], a[ui-sref] {
+    cursor: pointer;
+}
+
 
 body {
     font-size: 1rem;
-    background: #fffeeb;
+    background: #efefef;
 }
 
 
@@ -87,6 +91,69 @@ header {
 
 
 
+.l-page {
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    space-between;
+    align-items:        stretch;
+
+    height: 100%;
+    width: 100%;
+
+
+    & > .l-sidebar {
+        flex: 1;
+   
+        max-width: 0;
+        min-width: 0;
+        overflow-x: hidden;
+        transition: all ease 1s;
+        background: #333;
+        color: #fff;
+        box-shadow: 1px 0 3px rgba(0,0,0,0.5);
+        z-index: 999;
+
+
+        &.is-open {
+            max-width: 16em;
+            min-width: 16em;
+        }
+
+    }
+
+    & > .l-main {
+        flex: 1;
+        overflow: auto;
+
+        & > [ng-view],
+        & > [ui-view] {
+            height: 100%;
+            width: 100%;
+        }
+        /* note: any children should probably have padding applied */
+    }
+}
+@media(min-width:992px) {
+    .l-page > .l-sidebar {
+        max-width: 16em;
+        min-width: 16em;
+    }
+}
+
+#nav-button {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index:9999;
+}
+@media(min-width:992px) {
+    #nav-button { display: none; }
+}
+
+
+
+
+
 
 
 .l-container {
@@ -132,18 +199,26 @@ header {
     left:0;
     right:0;
     bottom:0;
-    padding: 50px 1em;
+    // padding: 50px 1em;
+    padding: 2em 1em;
     overflow-y: auto;
 }
 @media(min-width:768px) {
     .c-character {
         position: relative;
-        padding: 0 2em;
+        //padding: 0 2em;
+        padding: 1em 2em;
         top: 0;
     }
 }
 
 
+
+
+
+.form-control { 
+    background: #feffeb;
+}
 
 
 
@@ -220,6 +295,7 @@ header {
     border: 1px solid #777;
     border-radius: 100%;
     cursor: pointer;
+    background: #fff;
 
     &:hover {
         background:#e1efe3;
@@ -244,6 +320,7 @@ header {
         display: none;
         background: #efefef;
         border-color: #dedede;
+        cursor: default;
     }
 }
 @media(min-width:992px) {
@@ -344,7 +421,11 @@ header {
     justify-content: space-between;
     align-items: center;
 }
+
 .form-flex .control-label {
     width: 33%;
     max-width: 150px;
 }
+
+
+

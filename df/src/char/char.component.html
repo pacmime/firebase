@@ -3,7 +3,10 @@
     <div class="c-card always-shown">
         <h4>{{$ctrl.character.name}}</h4>
         <select class="form-control" ng-model="$ctrl.character.template" 
-            ng-options="tmpl for tmpl in $ctrl.templates"></select>
+            ng-options="tmpl for tmpl in $ctrl.templates"
+            ng-change="$ctrl.save()">
+            <option value="" disabled>Choose a template</option>
+        </select>
     </div>
 
     <div class="l-container">

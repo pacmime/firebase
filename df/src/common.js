@@ -478,6 +478,73 @@
     })
 
 
+    .component('loginMenu', {
+
+        template: [
+                '<div class="c-login-menu">',
+                '  <a ng-if="!$ctrl.user" ng-click="$ctrl.doLogin()">Login</a>',
+                '  <div ng-if="$ctrl.user" class="c-login__user">',
+                '    <small>{{$ctrl.user.email}}</small>',
+                '    <a class="btn btn-link" ng-click="$ctrl.doReset()" title="Reset Password">',
+                '      <span class="glyphicon glyphicon-envelope"></span>',
+                '    </a>',
+                '    <a class="btn btn-link" ng-click="$ctrl.doLogout()" title="Log Out">',
+                '      <span class="glyphicon glyphicon-log-out"></span>',
+                '    </a>',
+                '  </div>',
+                '</div>'
+            ].join(' '),
+
+        controller: function($uibModal, $firebaseAuth) {
+
+            this.$onInit = () => {
+                this.auth = $firebaseAuth();
+                this.auth.$onAuthStateChanged( (authData) => this.user = authData );
+            };
+
+            this.$onDestroy = () => {
+                this.auth = null;
+            };
+
+            this.doLogout = () => {
+                this.auth.$signOut();        //v2.x.x
+                this.user = null;
+            };
+
+            this.doLogin = () => {
+
+                var self = this;
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'login.html',
+                    controller: 'LoginController',
+                    resolve: {
+                        Auth: function() { return self.auth; }
+                    }
+                });
+
+                modalInstance.result.then(function() {}, function () {});
+
+            };
+
+            this.doReset = () => {
+
+                //v2.x.x
+                auth.$sendPasswordResetEmail(this.user.email, function(error) {
+                    if (error === null) {
+                        alert("Password reset email sent");
+                    } else {
+                        alert("Error sending password reset email:", error);
+                    }
+                });
+
+            };
+
+        }
+
+    })
+
+
+
     .constant('Templates', [
         'Pure Mortal',
         'Champion of God',

@@ -13,20 +13,23 @@
 
     <body>
         
-        <header>
+        <!-- <header>
             <login></login>
-            <h4>Dresden Files</h4>
-        </header>
+            <h4><a ui-sref="home">Dresden Files</a></h4>
+        </header> -->
 
-        <ui-view></ui-view>
-
-        <br>
-        <br>
-        <br>
-        <br>
-        <center><small>legaleeze goes here</small></center>
-
-
+        <div class="l-page">
+            <aside class="l-sidebar">
+                <sidebar></sidebar>
+            </aside>
+            <div class="l-main">
+                <button type="button" class="c-btn c-btn--danger" id="nav-button"
+                    onclick="$('.l-sidebar').toggleClass('is-open')">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </button>
+                <ui-view></ui-view>
+            </div>
+        </div>
 
         <script src="dist/js/dependencies.js"></script>
         <script src="dist/js/dresden.files.min.js"></script>

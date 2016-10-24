@@ -1,19 +1,29 @@
 <div class="container">
 
+
+    <h3>Dresden Files Character App</h3>
+    <p>Select a character from the list on the left or click 'New Character' to create one</p>
+
+
     <div class="alert alert-danger" ng-if="$ctrl.displayOpts.error">{{$ctrl.displayOpts.error}}</div>
     
-    <div ng-if="$ctrl.displayOpts.loading">Fetching data...</div>
+    <!-- <div ng-if="$ctrl.displayOpts.loading">Fetching data...</div>
     
     <div class="list-group">
         <div class="list-group-item disabled">
             <h4 class="list-group-item-heading">Characters</h4>
             <p class="list-group-item-text">Select a character from the list</p>
         </div>
-        <a class="list-group-item" ng-if="!$ctrl.user"><em>Login to select from your available characters</em></a>
-        <a ng-repeat="name in $ctrl.chars" class="list-group-item" ui-sref="char({ id: '{{name}}' })">{{name}}</a>
-        <a class="list-group-item list-group-item-success" ng-if="user" ng-click="$ctrl.createCharacter()">
+        <div class="list-group-item" ng-if="!$ctrl.user"><em>Login to select from your available characters</em></div>
+        <div ng-repeat="name in $ctrl.chars" class="list-group-item">
+            <button type="button" class="c-btn c-btn--sm c-btn--danger pull-right" ng-click="$ctrl.removeChar(name)">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            <a ui-sref="char({ id: '{{name}}' })">{{name}}</a>
+        </div>
+        <a class="list-group-item list-group-item-success" ng-if="$ctrl.user" ng-click="$ctrl.createCharacter()">
             Create a New Character
         </a>
-    </div>
+    </div> -->
 
 </div>
