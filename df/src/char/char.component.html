@@ -28,10 +28,17 @@
                     ng-change="$ctrl.save()"></textarea>
 
                 <h5>Other Aspects</h5>
-                <textarea rows="2" class="form-control" 
+                <div>
+                    <div>{{$ctrl.character.phases.background.aspect}}</div>
+                    <div>{{$ctrl.character.phases.conflict.aspect}}</div>
+                    <div>{{$ctrl.character.phases.story.aspect}}</div>
+                    <div>{{$ctrl.character.phases.guest1.aspect}}</div>
+                    <div>{{$ctrl.character.phases.guest2.aspect}}</div>
+                </div>
+                <!-- <textarea rows="2" class="form-control" 
                     ng-model="$ctrl.character.aspects.other"
                     ng-model-options="{ debounce: 500 }"
-                    ng-change="$ctrl.save()"></textarea>
+                    ng-change="$ctrl.save()"></textarea> -->
 
             </div>
 

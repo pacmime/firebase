@@ -1026,12 +1026,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <form class=\"form\">\n" +
     "            <div class=\"form-group\">\n" +
     "                <label for=\"email\">Email</label>\n" +
-    "                <input type=\"email\" name=\"email\" placeholder=\"Email address\" class=\"form-control\" ng-model=\"email\">\n" +
+    "                <input type=\"email\" id=\"email\" name=\"email\" placeholder=\"Email address\" \n" +
+    "                    class=\"form-control\" ng-model=\"email\"\n" +
+    "                    ng-keyup=\"onKeyUp($event, $event.keyCode)\">\n" +
     "            </div>\n" +
     "            <div class=\"form-group\">\n" +
     "                <label for=\"password\">Password</label>\n" +
-    "                <input type=\"password\" name=\"password\" placeholder=\"Password\" class=\"form-control\" ng-model=\"password\">\n" +
+    "                <input type=\"password\" id=\"password\" name=\"password\" \n" +
+    "                    placeholder=\"Password\" class=\"form-control\" ng-model=\"password\"\n" +
+    "                    ng-keyup=\"onKeyUp($event, $event.keyCode)\">\n" +
     "            </div>\n" +
+    "\n" +
+    "            <div ng-if=\"errorMessage\" class=\"text-danger\">{{errorMessage}}</div>\n" +
     "\n" +
     "            <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</button>\n" +
     "            <button type=\"button\" class=\"btn btn-primary\" ng-click=\"login()\">Login</button>\n" +

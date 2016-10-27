@@ -1,0 +1,61 @@
+
+.c-sidebar {
+    position: relative;
+    width: 16em;
+    height: 100%;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    display:flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .c-menu {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+
+    a {
+        color: #fff;
+    }
+}
+
+
+.c-menu .c-menu__option {
+    padding: 0.5em 1em;
+
+    .btn, .c-btn { display: none; }
+
+    &:hover {
+        background: #777;
+        
+        .btn, .c-btn { display: initial; }
+    }
+}
+.c-menu > h3, .c-menu > h4, .c-menu > h5 {
+    padding: 0 1em;
+}
+.c-menu > p {
+    padding: 0 1em;
+}
+
+
+
+
+
+
+.c-login-menu {
+    flex: 50px;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    background: #222;
+
+    .c-login__user {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+}

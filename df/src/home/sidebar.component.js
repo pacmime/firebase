@@ -4,7 +4,7 @@
 
 
 
-    class HomeController {
+    class NavController {
 
         constructor (DataStore, CharacterShell, $firebaseAuth, $timeout, $state) {
             'ngInject';
@@ -39,7 +39,6 @@
                     this.data.$loaded().then(loadback).catch(errback);
                 } else if(this.data) {
                     this.data.$destroy();
-                    this.updateList();
                 }
             };
 
@@ -108,9 +107,9 @@
     }
 
 
-    var app = angular.module("dresden.home").component("home", {
-        templateUrl: 'home/home.component.html',
-        controller: HomeController
+    var app = angular.module("dresden.home").component("sidebar", {
+        templateUrl: 'home/sidebar.component.html',
+        controller: NavController
     });
 
 }) (angular);

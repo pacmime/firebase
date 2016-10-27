@@ -32,8 +32,11 @@
                 }).catch(function(error) {
                     self.displayOpts.error = "Failed to load saved data: " + error.data;
                 });
-            } else if(self.data) {
-                self.data.$destroy();
+            } else {
+                if(self.data) {
+                    self.data.$destroy();
+                }
+                updateList();
             }
 
         });

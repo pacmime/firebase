@@ -1,0 +1,30 @@
+<nav class="c-sidebar">
+
+    <div class=" c-menu">
+
+        <h4>Dresden Files</h4>
+        
+        <hr>
+
+        <p ng-if="!$ctrl.user">
+            <em>Login to see a list of your available characters</em>
+        </p>
+        
+        <p ng-if="$ctrl.displayOpts.loading">Fetching data...</p>
+        
+        <div class="c-menu__option">
+            <a ng-if="$ctrl.user" ng-click="$ctrl.createCharacter()">New Character</a>
+        </div>
+        
+        <div ng-repeat="name in $ctrl.chars" class="c-menu__option">
+            <button type="button" class="c-btn c-btn--sm c-btn--danger pull-right" ng-click="$ctrl.removeChar(name)">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            <a ui-sref="char({ id: '{{name}}' })">{{name}}</a>
+        </div>
+    </div>
+
+
+    <login-menu></login-menu>
+
+</nav>

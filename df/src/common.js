@@ -388,19 +388,37 @@
 
 
 
-    .controller('LoginController', function($scope, $uibModalInstance, Auth) {
+    .controller('LoginController', function($scope, $uibModalInstance, $timeout, Auth) {
+
+        $timeout(function() {
+            $('#email').focus();
+        }, 500);
+
+        $scope.onKeyUp = function($event, code) {
+            // console.log("Up " + code);
+            if((code === undefined || code === 0) && $event.which !== undefined)
+                code = $event.which;
+            if(code === 13 &&       //enter
+                $scope.email && 
+                $scope.password) 
+                $scope.login();  
+            else if(code === 27)    //esc   
+                $scope.cancel();
+            
+        };
 
         $scope.login = function() {
             
             Auth.$signInWithEmailAndPassword($scope.email, $scope.password)
             .then(function(authData) {
                 // console.log("Logged in");
+                $scope.errorMessage = null;
                 $uibModalInstance.close();
             })
             .catch(function(error) {
                 var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log("unable to login: " + errorMessage);
+                $scope.errorMessage = error.message;
+                console.log("unable to login: " + $scope.errorMessage);
             });
         };
 

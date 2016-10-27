@@ -18,6 +18,7 @@
     "matchdep": "^0.3.0"
   },
   "scripts": {
-    
+    "preinstall": "bower install",
+    "dev": "grunt dev & http-server -p8080"
   }
 }
