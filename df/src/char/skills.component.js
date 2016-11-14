@@ -7,7 +7,7 @@
     class SkillsController {
 
         constructor () {
-            
+            this.editing = {};
         }
 
         $onInit () {
@@ -52,6 +52,23 @@
                     return this.getSkillSlots('fair') > this.getSkillSlots('average');
             }
             return false;   //valid
+        }
+
+
+        edit (group) {
+            this.editing[group] = true;
+            this.cache = this.cache || {};
+            this.cache[group] = this.ngModel[group].choices;
+        }
+
+        saveChanges (group) {
+            this.onChange();    //trigger save
+            this.editing[group] = false;
+        }
+
+        abortChanges (group) {
+            this.editing[group] = false;
+            this.ngModel[group].choices = this.cache[group];
         }
 
     }

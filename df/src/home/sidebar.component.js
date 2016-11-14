@@ -6,13 +6,15 @@
 
     class NavController {
 
-        constructor (DataStore, CharacterShell, $firebaseAuth, $timeout, $state) {
+        constructor (DataStore2, DataStore, CharacterShell, $firebaseAuth, $timeout, $state) {
             'ngInject';
 
+            // this.store = DataStore2;
             this.store = DataStore;
             this.auth = $firebaseAuth();
             this.blankChar = CharacterShell;
             this.state = $state;
+            this.timeout = $timeout;
 
         }
 
@@ -37,8 +39,12 @@
                     this.displayOpts.loading = true;
                     this.data = this.store.getCharsForUser(authData.uid);
                     this.data.$loaded().then(loadback).catch(errback);
+
                 } else if(this.data) {
+                    this.displayOpts.loading = false;
                     this.data.$destroy();
+                    this.updateList();
+
                 }
             };
 
@@ -83,18 +89,22 @@
             json.userId = this.user.uid;  
             json.name = name;
 
+            /* DATASTORE 1 */
             this.data[name] = json;
             this.data.$save().then( () => {
-                
                 this.state.go('char', {id: name});
-
-                // //navigate to the new char page
-                // window.location = '#/' + encodeURIComponent(name);
-
             }).catch(function(error) {
                 alert("Unable to create character because of an error");
             });
 
+
+            /* DATASTORE 2 */
+            // this.store.createCharacter(this.user.uid, json);
+            // this.state.go('char', {id: name});
+            // this.timeout( () => {
+            //     this.updateList();
+            // }, 200);
+            
         }
 
         removeChar (name) {

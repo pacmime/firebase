@@ -9,11 +9,18 @@
             <h4 class="list-group-item-heading">Characters</h4>
             <p class="list-group-item-text">Select a character from the list</p>
         </div>
-        <a class="list-group-item" ng-if="!user"><em>Login to select from your available characters</em></a>
-        <a ng-repeat="name in ctrl.chars" class="list-group-item" href="#/{{name|encode}}">{{name}}</a>
-        <a class="list-group-item list-group-item-success" ng-if="user" ng-click="ctrl.createCharacter()">
+        <div class="list-group-item" ng-if="!user"><em>Login to select from your available characters</em></div>
+        <div ng-repeat="name in ctrl.chars" class="list-group-item">
+            <button type="button" class="btn btn-sm btn-danger pull-right"
+                ng-click="ctrl.removeCharacter(name)">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            <a href="#/{{name|encode}}">{{name}}</a>
+            <a href="v2.html/#/{{name|encode}}" class="btn btn-link">(v2)</a>
+        </div>
+        <div class="list-group-item list-group-item-success" ng-if="user" ng-click="ctrl.createCharacter()">
             Create a New Character
-        </a>
+        </div>
     </div>
 
 </div>

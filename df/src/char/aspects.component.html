@@ -1,0 +1,56 @@
+<div class="c-aspects c-card is-shown">
+
+    <h4>High Concept</h4>
+    <div ng-if="!$ctrl.editing.highConcept">
+        {{$ctrl.ngModel.aspects.highConcept}} 
+        <button type="button" class="btn btn-link" ng-click="$ctrl.edit('highConcept')">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+    </div>
+    <div ng-if="$ctrl.editing.highConcept">
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.aspects.highConcept"
+            ng-model-options="{ debounce: 500 }"
+            ng-change="$ctrl.onChange()"></textarea>
+        <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-primary" 
+                ng-disabled="!$ctrl.ngModel.aspects.highConcept.length" 
+                ng-click="$ctrl.saveChanges('highConcept')">Done</button>
+            <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('highConcept')">Cancel</button>
+        </div>
+    </div>
+
+    <h4>Trouble</h4>
+    <div ng-if="!$ctrl.editing.trouble">
+        {{$ctrl.ngModel.aspects.trouble}} 
+        <button type="button" class="btn btn-link" ng-click="$ctrl.edit('trouble')">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+    </div>
+    <div ng-if="$ctrl.editing.trouble">
+        <textarea rows="2" class="form-control" 
+            ng-model="$ctrl.ngModel.aspects.trouble"
+            ng-model-options="{ debounce: 500 }"
+            ng-change="$ctrl.onChange()"></textarea>
+        <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-primary" 
+                ng-disabled="!$ctrl.ngModel.aspects.trouble.length" 
+                ng-click="$ctrl.saveChanges('trouble')">Done</button>
+            <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('trouble')">Cancel</button>
+        </div>
+    </div>
+
+    <h4>Other Aspects</h4>
+    <div>
+        <div>{{$ctrl.ngModel.phases.background.aspect}}</div>
+        <div>{{$ctrl.ngModel.phases.conflict.aspect}}</div>
+        <div>{{$ctrl.ngModel.phases.story.aspect}}</div>
+        <div>{{$ctrl.ngModel.phases.guest1.aspect}}</div>
+        <div>{{$ctrl.ngModel.phases.guest2.aspect}}</div>
+    </div>
+    <!-- <textarea rows="2" class="form-control" 
+        ng-model="$ctrl.character.aspects.other"
+        ng-model-options="{ debounce: 500 }"
+        ng-change="$ctrl.save()"></textarea> -->
+
+</div>

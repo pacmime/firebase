@@ -954,11 +954,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <h4 class=\"list-group-item-heading\">Characters</h4>\n" +
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
-    "        <a class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></a>\n" +
-    "        <a ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\" href=\"#/{{name|encode}}\">{{name}}</a>\n" +
-    "        <a class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
+    "        <div class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></div>\n" +
+    "        <div ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\">\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-danger pull-right\"\n" +
+    "                ng-click=\"ctrl.removeCharacter(name)\">\n" +
+    "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "            </button>\n" +
+    "            <a href=\"#/{{name|encode}}\">{{name}}</a>\n" +
+    "            <a href=\"v2.html/#/{{name|encode}}\" class=\"btn btn-link\">(v2)</a>\n" +
+    "        </div>\n" +
+    "        <div class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
     "            Create a New Character\n" +
-    "        </a>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "</div>"

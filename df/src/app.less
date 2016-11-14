@@ -92,6 +92,7 @@ header {
 
 
 .l-page {
+    position:           relative;
     display:            flex;
     flex-direction:     row;
     justify-content:    space-between;
@@ -102,12 +103,16 @@ header {
 
 
     & > .l-sidebar {
-        flex: 1;
-   
+        
+        position: absolute;
+        top: 0;
+        left:0;
+        bottom: 0;
+
         max-width: 0;
         min-width: 0;
         overflow-x: hidden;
-        transition: all ease 1s;
+        transition: all ease 0.5s;
         background: #333;
         color: #fff;
         box-shadow: 1px 0 3px rgba(0,0,0,0.5);
@@ -133,8 +138,10 @@ header {
         /* note: any children should probably have padding applied */
     }
 }
-@media(min-width:992px) {
+@media(min-width:1200px) {
     .l-page > .l-sidebar {
+        position: relative;
+        flex: 1;
         max-width: 16em;
         min-width: 16em;
     }
@@ -146,7 +153,7 @@ header {
     right: 0;
     z-index:9999;
 }
-@media(min-width:992px) {
+@media(min-width:1200px) {
     #nav-button { display: none; }
 }
 
@@ -420,6 +427,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    & > div {   //for display / editor subcomponents
+        flex: 1;
+    }
 }
 
 .form-flex .control-label {

@@ -45,10 +45,12 @@
 
         function updateList() {
             var chars = [];
-            angular.forEach(self.data, function(value, key) { 
-                if($scope.user && value.userId && value.userId === $scope.user.uid)
-                    chars.push(key); 
-            });
+            if(self.data) {
+                angular.forEach(self.data, function(value, key) { 
+                    if($scope.user && value.userId && value.userId === $scope.user.uid)
+                        chars.push(key); 
+                });
+            }
             self.chars = chars;
         }
 
@@ -76,6 +78,13 @@
                 alert("Unable to create character because of an error");
             });
 
+        };
+
+        this.removeCharacter = function(name) {
+            this.data[name] = null;
+            this.data.$save().then(function() {
+                updateList();
+            });
         };
 
     }]);

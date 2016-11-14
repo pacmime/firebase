@@ -37,6 +37,15 @@
                     this.displayOpts.loading = true;
                     this.data = this.store.getCharsForUser(authData.uid);
                     this.data.$loaded().then(loadback).catch(errback);
+
+                    // this.store.getCharsForUser(authData.uid).then( (data) => {
+                    //     this.data = data;
+                    //     this.updateList();
+                    // }, (error) => {
+                    //     this.displayOpts.error = error.data;
+                    // });
+
+
                 } else if(this.data) {
                     this.data.$destroy();
                     this.updateList();

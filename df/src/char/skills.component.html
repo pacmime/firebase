@@ -8,6 +8,37 @@
             ng-if="$ctrl.validateSpent()"></span>
     </h4>
 
+
+    <div class="c-skill-group" ng-repeat="group in ['superb','great','good','fair','average']">
+        <div>
+            <label>{{group}} (+{{5-$index}})</label>
+            <small>
+                {{$ctrl.getSkillSlots(group)}} Slots
+                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                    title="More skills needed below this group!"
+                    ng-if="$ctrl.validate(group)"></span>
+            </small>
+        </div>
+        <div ng-if="!$ctrl.editing[group]">
+            {{$ctrl.ngModel[group].choices}}
+            <button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.edit(group)">Edit</button>
+        </div>
+        <div ng-if="$ctrl.editing[group]">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel[group].choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges(group)">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges(group)">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<!--
     <div class="c-skill-group">
         <div>
             <label>Superb (+5)</label>
@@ -18,9 +49,15 @@
                     ng-if="$ctrl.validate('superb')"></span>
             </small>
         </div>
-        <textarea rows="2" class="form-control" 
-            ng-model="$ctrl.ngModel.superb.choices"
-            ng-change="$ctrl.onChange()"></textarea>
+        <div ng-if="$ctrl.editing.superb">{{$ctrl.ngModel.superb.choices}}</div>
+        <div ng-if="!$ctrl.editing.superb">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel.superb.choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('superb')">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('superb')">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <div class="c-skill-group">
@@ -33,9 +70,15 @@
                     ng-if="$ctrl.validate('great')"></span>
             </small>
         </div>
-        <textarea rows="2" class="form-control" 
-            ng-model="$ctrl.ngModel.great.choices"
-            ng-change="$ctrl.onChange()"></textarea>
+        <div ng-if="$ctrl.editing.great">{{$ctrl.ngModel.great.choices}}</div>
+        <div ng-if="!$ctrl.editing.great">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel.great.choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('great')">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('great')">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <div class="c-skill-group">
@@ -48,9 +91,15 @@
                     ng-if="$ctrl.validate('good')"></span>
             </small>
         </div>
-        <textarea rows="2" class="form-control" 
-            ng-model="$ctrl.ngModel.good.choices"
-            ng-change="$ctrl.onChange()"></textarea>
+        <div ng-if="$ctrl.editing.good">{{$ctrl.ngModel.good.choices}}</div>
+        <div ng-if="!$ctrl.editing.good">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel.good.choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('good')">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('good')">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <div class="c-skill-group">
@@ -63,9 +112,15 @@
                     ng-if="$ctrl.validate('fair')"></span>
             </small>
         </div>
-        <textarea rows="2" class="form-control" 
-            ng-model="$ctrl.ngModel.fair.choices"
-            ng-change="$ctrl.onChange()"></textarea>
+        <div ng-if="$ctrl.editing.fair">{{$ctrl.ngModel.fair.choices}}</div>
+        <div ng-if="!$ctrl.editing.fair">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel.fair.choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('fair')">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('fair')">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <div class="c-skill-group">
@@ -75,9 +130,16 @@
                 {{$ctrl.getSkillSlots('average')}} Slots
             </small>
         </div>
-        <textarea rows="2" class="form-control" 
-            ng-model="$ctrl.ngModel.average.choices"
-            ng-change="$ctrl.onChange()"></textarea>
+        <div ng-if="$ctrl.editing.average">{{$ctrl.ngModel.average.choices}}</div>
+        <div ng-if="!$ctrl.editing.average">
+            <textarea rows="2" class="form-control" 
+                ng-model="$ctrl.ngModel.average.choices"></textarea>
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('average')">Save</button>
+                <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('average')">Cancel</button>
+            </div>
+        </div>
     </div>
+-->
 
 </div>

@@ -109,6 +109,7 @@ header login {
   }
 }
 .l-page {
+  position: relative;
   display: -webkit-flex;
   display: -moz-box;
   display: flex;
@@ -126,13 +127,14 @@ header login {
   width: 100%;
 }
 .l-page > .l-sidebar {
-  -webkit-flex: 1;
-     -moz-box-flex: 1;
-          flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   max-width: 0;
   min-width: 0;
   overflow-x: hidden;
-  transition: all ease 1s;
+  transition: all ease 0.5s;
   background: #333;
   color: #fff;
   box-shadow: 1px 0 3px rgba(0, 0, 0, 0.5);
@@ -154,8 +156,12 @@ header login {
   height: 100%;
   width: 100%;
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
   .l-page > .l-sidebar {
+    position: relative;
+    -webkit-flex: 1;
+       -moz-box-flex: 1;
+            flex: 1;
     max-width: 16em;
     min-width: 16em;
   }
@@ -166,7 +172,7 @@ header login {
   right: 0;
   z-index: 9999;
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
   #nav-button {
     display: none;
   }
@@ -408,6 +414,11 @@ header login {
   -webkit-align-items: center;
      -moz-box-align: center;
           align-items: center;
+}
+.form-flex .form-group > div {
+  -webkit-flex: 1;
+     -moz-box-flex: 1;
+          flex: 1;
 }
 .form-flex .control-label {
   width: 33%;

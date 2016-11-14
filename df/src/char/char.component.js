@@ -6,10 +6,11 @@
 
     class CharController {
 
-        constructor (CharacterRef, PowerLevels, Templates, $firebaseAuth, $timeout, $stateParams) {
+        constructor (DataStore2, CharacterRef, PowerLevels, Templates, $firebaseAuth, $timeout, $stateParams) {
             'ngInject';
 
             this.charId = $stateParams.id;
+            // this.store = DataStore2;
             this.store = CharacterRef;
             this.auth = $firebaseAuth();
             this.levels = PowerLevels;
@@ -37,6 +38,7 @@
                 if(authData && authData.uid) {
                     this.displayOpts.loading = true;
                     this.character = this.store(this.charId);
+                    // this.character = this.store.getCharacter(authData.uid, this.charId);
                     this.character.$loaded().then(loadback).catch(errback);
 
                 } else if(this.character) {

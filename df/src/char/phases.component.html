@@ -1,0 +1,334 @@
+<div class="c-phases c-card">
+        
+    <h4>Background</h4>
+    <form class="form-flex">
+        <div class="form-group">
+            <label class="control-label">Events</label>
+            <div ng-if="!$ctrl.editing.background.events">
+                {{$ctrl.ngModel.background.events}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('background', 'events')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.background.events">
+                <textarea class="form-control" rows="2"
+                    ng-model="$ctrl.ngModel.background.events"></textarea>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('background', 'events')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('background', 'events')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Aspect</label>
+            <div ng-if="!$ctrl.editing.background.aspect">
+                {{$ctrl.ngModel.background.aspect}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('background', 'aspect')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.background.aspect">
+                <input type="text" class="form-control" 
+                    ng-model="$ctrl.ngModel.background.aspect" placeholder="Aspect...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('background', 'aspect')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('background', 'aspect')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+    
+    <h4>Rising Conflict</h4>
+    <form class="form-flex">
+        <div class="form-group">
+            <label class="control-label">Events</label>
+            <div ng-if="!$ctrl.editing.conflict.events">
+                {{$ctrl.ngModel.conflict.events}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('conflict','events')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.conflict.events">
+                <textarea class="form-control" rows="2"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.ngModel.conflict.events"></textarea>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('conflict','events')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('conflict','events')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Aspect</label>
+            <div ng-if="!$ctrl.editing.conflict.aspect">
+                {{$ctrl.ngModel.conflict.aspect}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('conflict', 'aspect')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.conflict.aspect">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.conflict.aspect" placeholder="Aspect...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('conflict', 'aspect')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('conflict', 'aspect')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+    
+    <h4>Story</h4>
+    <form class="form-flex">
+        <div class="form-group">
+            <label class="control-label">Title</label>
+            <div ng-if="!$ctrl.editing.story.title">
+                {{$ctrl.ngModel.story.title}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('story', 'title')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.story.title">
+                <input type="text" ng-model="$ctrl.ngModel.story.title" placeholder="Title...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('story', 'title')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('story', 'title')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Guest(s)</label>
+            <div ng-if="!$ctrl.editing.story.guest">
+                {{$ctrl.ngModel.story.guest}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('story', 'guest')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.story.guest">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.story.guest" placeholder="Guest Starring...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('story', 'guest')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('story', 'guest')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Events</label>
+            <div ng-if="!$ctrl.editing.story.events">
+                {{$ctrl.ngModel.story.events}}
+                <button type="button" class="btn btn-link" ng-click="$ctrl.edit('story')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.story.events">
+                <textarea class="form-control" rows="2"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.ngModel.story.events"></textarea>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('story')">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('story')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Aspect</label>
+            <div ng-if="!$ctrl.editing.story.aspect">
+                {{$ctrl.ngModel.story.aspect}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('story', 'aspect')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.story.aspect">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.story.aspect" placeholder="Aspect...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('story', 'aspect')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('story', 'aspect')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <hr>
+    
+    <h4>Guest Star</h4>
+    <form class="form-flex">
+        <div class="form-group">
+            <label class="control-label">Title</label>
+            <div ng-if="!$ctrl.editing.guest1.title">
+                {{$ctrl.ngModel.guest1.title}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest1', 'title')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest1.title">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest1.title" placeholder="Title...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest1', 'title')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest1', 'title')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Guest(s)</label>
+            <div ng-if="!$ctrl.editing.guest1.guest">
+                {{$ctrl.ngModel.guest1.guest}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest1', 'guest')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest1.guest">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest1.guest" placeholder="Guest Starring...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest1', 'guest')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest1', 'guest')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Events</label>
+            <div ng-if="!$ctrl.editing.guest1.events">
+                {{$ctrl.ngModel.guest1.events}}
+                <button type="button" class="btn btn-link" ng-click="$ctrl.edit('guest1','events')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest1.events">
+                <textarea class="form-control" rows="2"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.ngModel.guest1.events"></textarea>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('guest1','events')">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('guest1','events')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Aspect</label>
+            <div ng-if="!$ctrl.editing.guest1.aspect">
+                {{$ctrl.ngModel.guest1.aspect}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest1', 'aspect')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest1.aspect">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest1.aspect" placeholder="Aspect...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest1', 'aspect')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest1', 'aspect')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <hr>
+    
+    <h4>Guest Star Redux</h4>
+    <form class="form-flex">
+        <div class="form-group">
+            <label class="control-label">Title</label>
+            <div ng-if="!$ctrl.editing.guest2.title">
+                {{$ctrl.ngModel.guest2.title}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest2', 'title')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest2.title">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest2.title" placeholder="Title...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest2', 'title')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest2', 'title')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Guest(s)</label>
+            <div ng-if="!$ctrl.editing.guest2.guest">
+                {{$ctrl.ngModel.guest2.guest}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest2', 'guest')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest2.guest">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest2.guest" placeholder="Guest Starring...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest2', 'guest')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest2', 'guest')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Events</label>
+            <div ng-if="!$ctrl.editing.guest2.events">
+                {{$ctrl.ngModel.guest2.events}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest2','events')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest2.events">
+                <textarea class="form-control" rows="2"
+                    ng-model-options="{ debounce: 500 }"
+                    ng-model="$ctrl.ngModel.guest2.events"></textarea>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.saveChanges('guest2','events')">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.abortChanges('guest2','events')">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Aspect</label>
+            <div ng-if="!$ctrl.editing.guest2.aspect">
+                {{$ctrl.ngModel.guest2.aspect}}
+                <button type="button" class="btn btn-link" 
+                    ng-click="$ctrl.edit('guest2', 'aspect')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <div ng-if="$ctrl.editing.guest2.aspect">
+                <input type="text" class="form-control" ng-model="$ctrl.ngModel.guest2.aspect" placeholder="Aspect...">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary" 
+                        ng-click="$ctrl.saveChanges('guest2', 'aspect')">Save</button>
+                    <button type="button" class="btn btn-default" 
+                        ng-click="$ctrl.abortChanges('guest2', 'aspect')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

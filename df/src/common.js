@@ -31,6 +31,78 @@
 
 
 
+    .factory("DataStore2", ["$q", "$firebaseObject", 'DataStoreUrl',
+        function($q, $firebaseObject, DataStoreUrl) {
+            return {
+
+                getUserData: function(uid) {
+                    
+                    var deferred = $q.defer();
+
+                    // var root = firebase.database().ref().child('DresdenFiles/users');
+                    // var users = $firebaseObject(root);
+                    // users.$loaded(function() {
+
+                    //     if(!users[uid]) {
+
+                    //         users[uid] = { chars: {} };
+                    //         users.$save().then(function() {
+                    //             deferred.resolve($firebaseObject(users[uid]));
+                    //         }, function(error) {
+                    //             deferred.reject(error);
+                    //         });  
+                    //     } else {
+                    //         deferred.resolve($firebaseObject(users[uid]));
+                    //     }
+                        
+                    // });
+
+                    var ref = firebase.database().ref().child('DresdenFiles/users/' + uid);
+                    var user = $firebaseObject(ref);
+                    user.$loaded(function() {
+                        var exists = user.$value !== null;
+                        if(exists) {
+                            deferred.resolve(user);
+                            return;
+                        }
+                         
+                        var root = firebase.database().ref().child('DresdenFiles/users');
+                        root.child(uid).set({
+                            chars: {},
+                            uid: uid
+                        });
+
+                        user = $firebaseObject(root.child(uid));
+                        deferred.resolve(user);
+                        
+                    });
+
+                    return deferred.promise;
+                },
+
+                getCharsForUser: function(uid) {
+                    var ref = firebase.database().ref().child('DresdenFiles/users/' + uid + '/chars');
+                    return $firebaseObject(ref);
+                },
+
+                getCharacter: function(uid, name) {
+                    var ref = firebase.database().ref().child('DresdenFiles/users/' + uid + '/chars/' + name);
+                    return $firebaseObject(ref);
+                },
+
+                createCharacter: function(uid, character) {
+
+                    var ref = firebase.database().ref().child('DresdenFiles/users/' + uid + '/chars');
+                    ref.child(character.name).set(character);
+                    return $firebaseObject(ref.child(character.name));
+                    
+                }
+            }
+        }
+    ])
+
+
+
     .filter('encode', function() {
         return function(value) {
             return encodeURIComponent(value);
