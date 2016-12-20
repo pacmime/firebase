@@ -23,7 +23,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"ability\">\n" +
     "  <div ng-if=\"!ctrl.displayEditor\">\n" +
     "    <div class=\"pull-right\">\n" +
-    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "      <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "          <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "          <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "        </button>     \n" +
+    "      </div>\n" +
+    "      <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "        type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -142,7 +151,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/clothing/clothing-item.html',
     "<div class=\"clothing-item\">\n" +
     "   <div class=\"pull-right\">\n" +
-    "       <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "       <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "          <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "            <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "          </button>\n" +
+    "          <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "            <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "          </button>     \n" +
+    "        </div>\n" +
+    "        <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "          type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "           <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "       </button>&nbsp;&nbsp;&nbsp;\n" +
     "       <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -421,6 +439,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <input type=\"text\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Description\">\n" +
     "        </div><br>\n" +
     "\n" +
+    "        <input type=\"text\" class=\"form-control\" ng-model=\"item.keywords\" placeholder=\"Keywords\"><br>\n" +
     "\n" +
     "        <div class=\"row\">\n" +
     "            <div class=\"col-xs-8\">\n" +
@@ -442,7 +461,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"col-xs-6\">\n" +
     "                <div class=\"input-group\">\n" +
     "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.weight\" class=\"form-control\">\n" +
     "                </div><br>\n" +
     "\n" +
     "                <div class=\"input-group\">\n" +
@@ -454,12 +473,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"col-xs-6\">\n" +
     "                <div class=\"input-group\">\n" +
     "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.hands\" class=\"form-control\">\n" +
     "                </div><br>\n" +
     "            \n" +
     "                <div class=\"input-group\">\n" +
     "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                    <input type=\"number\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>   \n" +
@@ -507,15 +526,27 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "   <div class=\"grid__col-sm-9 grid__col-md-8\">\n" +
     "       <div>\n" +
     "            <div class=\"pull-right\">\n" +
-    "               <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "              <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                </button>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "                </button>     \n" +
+    "              </div>\n" +
+    "              <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "                type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "                 <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "               </button>&nbsp;&nbsp;&nbsp;\n" +
     "               <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "               </button>\n" +
     "            </div>\n" +
-    "            <h5>{{name}} <small>({{item.source}})</small></h5>\n" +
-    "            <small>{{item.description}}  <span ng-if=\"item.cost\">${{item.cost}}</span></small>\n" +
+    "            <h5>{{name}} <small>({{item.source}}) <span ng-if=\"item.cost\">${{item.cost}}</span></small></h5>\n" +
+    "            <small>\n" +
+    "              {{item.description}}  \n" +
+    "              <div ng-if=\"item.keywords\">{{item.keywords}}</div>\n" +
+    "            </small>\n" +
     "            <div ng-if=\"item.usage\"> <input type=\"checkbox\"> <small>(per {{item.usage}})</small> </div>\n" +
     "       </div>\n" +
     "   </div>\n" +
@@ -572,7 +603,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"mutation\">\n" +
     "  <div ng-if=\"!ctrl.displayEditor\">\n" +
     "    <div class=\"pull-right\">\n" +
-    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "      <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "          <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "          <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "        </button>     \n" +
+    "      </div>\n" +
+    "      <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "        type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -731,17 +771,42 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </p>\n" +
     "    <div>\n" +
     "        <div class=\"pull-right\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "            <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                </button>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "                </button>     \n" +
+    "              </div>\n" +
+    "              <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "                type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "            </button>&nbsp;&nbsp;&nbsp;\n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
     "                <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "            </button>\n" +
     "        </div>\n" +
+    "        \n" +
+    "        <!-- if not cast already and not empty or insufficient -->\n" +
     "        <button type=\"button\" class=\"btn btn-sm btn-info\" \n" +
-    "            ng-if=\"ctrl.isAvailable()\" ng-click=\"ctrl.use()\">use</button>\n" +
+    "            ng-if=\"ctrl.canCast()\" \n" +
+    "            ng-click=\"ctrl.use()\">cast</button>\n" +
+    "\n" +
+    "        <!-- if cast but not empty -->\n" +
     "        <button type=\"button\" class=\"btn btn-sm btn-warning\" \n" +
-    "            ng-if=\"ctrl.status.used\" ng-click=\"ctrl.spendExtraFaith()\">+faith</button>\n" +
+    "            ng-if=\"ctrl.canSpendExtraFaith()\" \n" +
+    "            ng-click=\"ctrl.spendExtraFaith()\">+faith</button>\n" +
+    "\n" +
+    "        <!-- if cast but no applied xp -->\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" \n" +
+    "            ng-if=\"ctrl.canApplyXP()\" ng-click=\"ctrl.applyXP()\">+xp</button>\n" +
+    "\n" +
+    "        <!-- if empty or not cast and insufficient -->\n" +
+    "        <span class=\"text-muted\" \n" +
+    "            ng-if=\"ctrl.isInsufficient()\">\n" +
+    "            <em>not enough faith</em>\n" +
+    "        </span>\n" +
     "    </div>\n" +
     "        \n" +
     "</div>"
@@ -752,7 +817,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
     "   <h4>\n" +
     "        <div class=\"pull-right\">\n" +
-    "            Faith: {{$parent.remainingFaith}} / {{$parent.character.faith}} \n" +
+    "            Faith: {{$parent.character.availableFaith}} / {{$parent.character.faith}} \n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
     "\n" +
     "            &nbsp;&nbsp;&nbsp;\n" +
@@ -1639,7 +1704,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <div class=\"col-xs-6\">\n" +
     "                        <div class=\"input-group\">\n" +
     "                            <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                            <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                            <input type=\"number\" min=\"0\" ng-model=\"item.weight\" class=\"form-control\">\n" +
     "                        </div>\n" +
     "                        <br>\n" +
     "                        <div class=\"input-group\">\n" +
@@ -1651,12 +1716,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <div class=\"col-xs-6\">\n" +
     "                        <div class=\"input-group\">\n" +
     "                            <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                            <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                            <input type=\"number\" min=\"0\" ng-model=\"item.hands\" class=\"form-control\">\n" +
     "                        </div>\n" +
     "                        <br>\n" +
     "                        <div class=\"input-group\">\n" +
     "                            <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                            <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                            <input type=\"number\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>   \n" +

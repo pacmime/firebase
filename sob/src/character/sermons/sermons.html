@@ -1,7 +1,7 @@
 <div class="sermons" ng-if="character.class && character.class.toLowerCase().indexOf('preacher')>=0">
    <h4>
         <div class="pull-right">
-            Faith: {{$parent.remainingFaith}} / {{$parent.character.faith}} 
+            Faith: {{$parent.character.availableFaith}} / {{$parent.character.faith}} 
             <button type="button" class="btn btn-sm btn-default" ng-click="$parent.resetFaith()">reset</button>
 
             &nbsp;&nbsp;&nbsp;

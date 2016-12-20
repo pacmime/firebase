@@ -1,7 +1,16 @@
 <div class="mutation">
   <div ng-if="!ctrl.displayEditor">
     <div class="pull-right">
-      <button type="button" class="btn btn-sm btn-danger" ng-click="ctrl.remove()">
+      <div class="btn-group" ng-if="ctrl.confirmingDelete">
+        <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.remove()">
+          <span class="glyphicon glyphicon-ok"></span>
+        </button>
+        <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.confirmingDelete=false">
+          <span class="glyphicon glyphicon-ban-circle"></span>
+        </button>     
+      </div>
+      <button ng-if="!ctrl.confirmingDelete"
+        type="button" class="btn btn-sm btn-danger" ng-click="ctrl.confirmingDelete=true">
         <span class="glyphicon glyphicon-trash"></span>
       </button>&nbsp;&nbsp;&nbsp;
       <button type="button" class="btn btn-sm btn-default" ng-click="ctrl.edit()">
