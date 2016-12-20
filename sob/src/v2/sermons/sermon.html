@@ -26,10 +26,28 @@
                 <span class="glyphicon glyphicon-pencil"></span>
             </button>
         </div>
+        
+        <!-- if not cast already and not empty or insufficient -->
         <button type="button" class="btn btn-sm btn-info" 
-            ng-if="ctrl.isAvailable()" ng-click="ctrl.use()">use</button>
+            ng-if="ctrl.canCast()" 
+            ng-click="ctrl.use()">cast</button>
+
+        <!-- if cast but not empty -->
         <button type="button" class="btn btn-sm btn-warning" 
-            ng-if="ctrl.status.used" ng-click="ctrl.spendExtraFaith()">+faith</button>
+            ng-if="ctrl.canSpendExtraFaith()" 
+            ng-click="ctrl.spendExtraFaith()">+faith</button>
+
+        <!-- if cast but no applied xp -->
+        <button type="button" class="btn btn-sm btn-default" 
+            ng-if="ctrl.canApplyXP()" ng-click="ctrl.applyXP()">+xp</button>
+
+        <!-- if empty or not cast and insufficient -->
+        <span class="text-muted" 
+            ng-if="ctrl.isInsufficient()">
+            <em>not enough faith</em>
+        </span>
+            
+        
     </div>
         
 </div>

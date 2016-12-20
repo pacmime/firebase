@@ -5,44 +5,51 @@
             <div class="avatar" img-selector ng-model="$ctrl.character.avatar" on-save="$ctrl.save()"></div>
         </div>
         <div class="f-cell attributes">
-            <div class="stat">
-                <label>Agility</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Agility" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Agility</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Agility" minimum="1"></div>
+                </div>
             </div>
-
-            <div class="stat">
-                <label>Cunning</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Cunning" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Cunning</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Cunning" minimum="1"></div>
+                </div>
             </div>
-
-            <div class="stat">
-                <label>Spirit</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Spirit" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Spirit</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Spirit" minimum="1"></div>
+                </div>
             </div>
-            
-            <div class="stat">
-                <label>Strength</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Strength" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Strength</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Strength" minimum="1"></div>
+                </div>
             </div>
-
-            <div class="stat">
-                <label>Lore</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Lore" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Lore</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Lore" minimum="1"></div>
+                </div>
             </div>
-
-            <div class="stat">
-                <label>Luck</label>
-                <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Luck" minimum="1"></div>
+            <div class="f-cell-33p">
+                <div class="stat stat-label-top">
+                    <label>Luck</label>
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Luck" minimum="1"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="f-container f-justify-between">
+    <div class="f-container f-justify-between" style="margin-top: 1em;">
 
         <div class="f-cell f-cell-75p f-container f-wrap">
 
             <!-- COMBAT SECTION -->
-            <div class="combat f-container f-justify-around">
+            <div class="combat f-container f-justify-around f-align-center">
                 <span class="stat f-cell">
                     <label>Combat</label>
                     <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.combat"></div>
@@ -60,7 +67,7 @@
 
             
             <!-- HEALTH SECTION -->
-            <div class="health f-container f-justify-around">
+            <div class="health f-container f-justify-around f-align-center">
                 
                 <div class="f-cell has-stat-with-max">
                     <div class="stat f-cell">
@@ -86,7 +93,7 @@
                 
                
             <!-- SANITY SECTION --> 
-            <div class="sanity f-container f-justify-around">
+            <div class="sanity f-container f-justify-around f-align-center">
                 
                 <div class="f-cell has-stat-with-max">
                     <div class="stat">
@@ -111,7 +118,7 @@
             </div>
 
                 
-            <div class="other f-container f-justify-around">
+            <div class="other f-container f-justify-around f-align-center">
 
                 <div class="faith f-cell">
                     <div class="stat">
@@ -160,6 +167,21 @@
                     <div class="value--sm" editable-stat-value on-save="$ctrl.onXP()" ng-model="$ctrl.character.xp"></div>
                     <span class="sprite sprite-xp"></span>
                     <div style="font-size:0.625em"><span class="glyphicon glyphicon-arrow-up"></span> at {{$ctrl.xpLevels[$ctrl.character.level]}}</div>
+                </div>
+            </div>
+
+            <div class="wealth f-cell">
+                <div class="stat">
+                    <div class="value--sm" editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.wealth"></div>
+                    <!-- <img src="assets/wealth.png"> -->
+                    <span class="sprite sprite-wealth"></span>
+                </div>
+            </div>
+
+            <div class="darkstone f-cell">
+                <div class="stat">
+                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.darkstone"></div>
+                    <img src="assets/darkstone.png">
                 </div>
             </div>
 

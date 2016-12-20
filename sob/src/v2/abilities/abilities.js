@@ -2,6 +2,7 @@
     
     "use strict";
 
+
     angular.module("sob-character").directive('abilities', function() {
 
         return {

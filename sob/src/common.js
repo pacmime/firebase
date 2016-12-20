@@ -150,12 +150,14 @@
         $scope.value = value;
         $scope.minimum = minimum*1 || 0;
         $scope.maximum = maximum*1 || 9999;
+        $scope.changes = "";
         
         $scope.change = function(v) { 
             if(v>0)
                 $scope.value = Math.min($scope.value + v, maximum); 
             else
                 $scope.value = Math.max($scope.value + v, minimum); 
+            $scope.changes += ($scope.changes.length ? ', ' : '') + (v>0?"+":"") + v;
         }
         
         $scope.ok = function () {

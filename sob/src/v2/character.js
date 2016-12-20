@@ -46,7 +46,9 @@
                 this.save();
             };
 
+
             this.save = function() {
+
                 var success = function(ref) {
                     self.displayOpts.message = "Saved!";
                     $timeout(function() {
@@ -89,6 +91,7 @@
             this.$onInit = function() {
 
                 self.character.$loaded().then(function() {
+                    
                     self.character.sidebag.spices = self.character.sidebag.spices || 0;
                     self.character.sidebag.potions = self.character.sidebag.potions || 0;
                     self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;

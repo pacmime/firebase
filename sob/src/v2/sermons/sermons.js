@@ -2,6 +2,31 @@
     
     "use strict";
 
+
+    var flags = {
+        empty:       1,    //no faith available
+        insufficient: 2,    //insufficient faith to cast
+        cast:        4,    //cast
+        xp:          8    //applied xp
+    };
+
+    function applyFlag(sermon, flag) {
+        sermon.status |= flag;
+        // console.log(sermon.name + ": " + sermon.status);
+    }
+    function removeFlag(sermon, flag) {
+        sermon.status &= ~flag;
+    }
+    function hasFlag(sermon, flag) {
+        return sermon.status & flag;
+    }
+    function clearFlags(sermon) {
+        sermon.status = 0;
+    }
+
+
+
+
     angular.module("sob-character")
 
 
@@ -18,16 +43,20 @@
             
             controller: function($scope, $element) {
 
+                //initialize if not already present on char object
+                if(typeof($scope.character.availableFaith) === 'undefined')
+                    $scope.character.availableFaith = $scope.character.faith;
                 
                 $scope.resetFaith = function() {
-                    $scope.remainingFaith = $scope.character.faith;
-                    // console.log("Resetting faith to " + $scope.remainingFaith);
-                    $scope.$broadcast('faith:reset', $scope.remainingFaith);
-                };
+                    $scope.character.availableFaith = $scope.character.faith;
+                    
+                    // console.log("Resetting faith to " + $scope.character.availableFaith);
+                    for(var name in $scope.character.sermons) {
+                        clearFlags($scope.character.sermons[name]);
+                    }
 
-                $scope.character.$loaded().then(function() {
-                    $scope.resetFaith();
-                });
+                    $scope.onSave();
+                };
 
 
                 $scope.onEdited = function(name, sermon) {
@@ -70,12 +99,44 @@
 
                 };
 
+                /** */
+                $scope.updateSermons = function() {
+                    var available = $scope.character.availableFaith;
 
-                $scope.$on('faith:spent', function(event, amount) {
-                    // console.log("Spending " + amount + " faith");
-                    $scope.remainingFaith -= amount;
-                    // console.log("Remaining: " + $scope.remainingFaith);
-                    $scope.$broadcast('faith:available', $scope.remainingFaith);
+                    for(var k in $scope.character.sermons) {
+                        var sermon = $scope.character.sermons[k];
+                        
+                        if(available === 0) {   //if no faith, doesn't matter
+                            // $scope.sermon.status = $scope.ctrl.status.UNAVAILABLE;
+                            applyFlag(sermon, flags.empty);
+
+                        } else {    //some faith left, but enough to cast ?
+
+                            removeFlag(sermon, flags.empty);
+
+                            if(available < sermon.cost) { 
+                                applyFlag(sermon, flags.insufficient);
+                            } else {
+                                removeFlag(sermon, flags.insufficient);
+                            }
+                        }
+                    }
+                };
+
+                $scope.$on('sermon:cast', function(event, name, cost) {
+                    console.log("Casting " + name + " for " + cost);
+                    applyFlag($scope.character.sermons[name], flags.cast);
+                    $scope.character.availableFaith -= cost;
+                    $scope.updateSermons();
+                    $scope.onSave();
+                });
+
+                $scope.$on('sermon:xp', function(event, name, xp) {
+                    if(isNaN(xp)) return;
+                    console.log("Applying " + xp + " XP for " + name);
+                    applyFlag($scope.character.sermons[name], flags.xp);
+                    $scope.character.xp += (xp*1);
+                    $scope.onSave();
                 });
 
             }
@@ -91,19 +152,22 @@
 
             this.sermon = $scope.sermon;
 
-            this.status = {
-                available: true,
-                used: false
-            };
+            // console.log(this.sermon.name + ": " + this.sermon.status);
 
             //mark sermon as used
             this.use = function() {
-                this.status.available = false;
-                this.status.used = true;
-                $scope.$emit('faith:spent', this.sermon.cost);
+                $scope.$emit('sermon:cast', $scope.sermon.name, $scope.sermon.cost);
+                // applyFlag($scope.sermon, flags.cast);
+                // console.log($scope.sermon.name + ": " + $scope.sermon.status);
+                // $scope.$emit('faith:spent', $scope.sermon.cost, $scope.sermon.name);
             };
             this.spendExtraFaith = function() {
-                $scope.$emit('faith:spent', 1);  
+                $scope.$emit('sermon:cast', $scope.sermon.name, 1);
+                // $scope.$emit('faith:spent', 1);  
+            };
+            this.applyXP = function() {
+                $scope.$emit('sermon:xp', $scope.sermon.name, $scope.sermon.xp);
+                // applyFlag(this.sermon, flags.xp);
             };
             
             this.edit = function() {
@@ -125,7 +189,7 @@
                     
                     //apply changes to local version
                     angular.forEach(sermon, function(value, key) {
-                        $scope.ctrl.sermon[key] = value;
+                        $scope.sermon[key] = value;
                     });
                     
                     $scope.ctrl.save();
@@ -136,48 +200,36 @@
 
             this.save = function() {
                 console.log("Saving...");
-                $scope.onSave({ sermon: this.sermon, name: $scope.name });
+                $scope.onSave({ sermon: $scope.sermon, name: $scope.name });
             };
 
             this.remove = function() {
                 $scope.onSave({ sermon: null, name: $scope.name });
             };
 
-            this.isAvailable = function() {
-                return this.status.available && !this.status.used;
+            this.canCast = function() {
+                return !hasFlag($scope.sermon, flags.cast) && 
+                       !hasFlag($scope.sermon, flags.empty) && 
+                       !hasFlag($scope.sermon, flags.insufficient);
+            };
+            this.hasCast = function() {
+                return ($scope.sermon.status & flags.cast);
+            };
+            this.canSpendExtraFaith = function() {
+                return hasFlag($scope.sermon, flags.cast) && !hasFlag($scope.sermon, flags.empty);
+            };
+            this.canApplyXP = function() {
+                return hasFlag($scope.sermon, flags.cast) && !hasFlag($scope.sermon, flags.xp);
+            }
+            this.xpApplied = function() {
+                return ($scope.sermon.status & flags.xp);
+            };
+            this.isInsufficient = function() {
+                return hasFlag($scope.sermon, flags.empty) || 
+                    ( hasFlag($scope.sermon, flags.insufficient) && !hasFlag($scope.sermon, flags.cast) );
             };
 
-
-            //when total remaining faith changes
-            $scope.$on('faith:available', function(event, amount) {
-                
-                if(amount < $scope.sermon.cost) {
-                    //if remaining faith is insufficient
-                    $scope.ctrl.status.available = false;
-
-                } else if(!$scope.ctrl.status.used) {
-                    //if enough faith and not already used
-                    $scope.ctrl.status.available = true;
-                }
-            });
-
-            //when faith is reset (end of round)
-            $scope.$on('faith:reset', function(event, amount) {
-                $scope.ctrl.status.available = true;
-                $scope.ctrl.status.used = false;
-            });
         }
-
-        // {
-        //     type: "blessing|judgement",
-        //     cost: 1,
-        //     check: 5+,
-        //     range: 'self',
-        //     xp: 10
-        //     deadly: false
-        //     name: "",
-        //     desc: ""
-        // }
 
 
         return {
