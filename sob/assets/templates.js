@@ -1319,7 +1319,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "       <small>{{clothingItem.type}}</small> \n" +
     "       <small ng-if=\"clothingItem.source\"><em>({{clothingItem.source}})</em></small>\n" +
     "    </h5>\n" +
-    "    <p><small>{{clothingItem.desc}}</small></p>\n" +
+    "    <p>\n" +
+    "        <small>\n" +
+    "            {{clothingItem.desc}}\n" +
+    "            <div ng-if=\"clothingItem.keywords\">{{clothingItem.keywords}}</div>\n" +
+    "        </small>\n" +
+    "    </p>\n" +
     "    <div class=\"f-container f-justify-between f-align-center\">\n" +
     "        <div>\n" +
     "            <span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!clothingItem.weight}\"></span> \n" +
@@ -1451,7 +1456,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
     "                <br>\n" +
     "                <label>Description</label>\n" +
-    "                <textarea rows=\"3\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Provide a description\"></textarea>\n" +
+    "                <textarea rows=\"3\" class=\"form-control\" ng-model=\"item.desc\" placeholder=\"Provide a description\"></textarea>\n" +
     "                <br>\n" +
     "                <label>Slot</label>\n" +
     "                <input disabled type=\"text\" class=\"form-control\" ng-if=\"!newItem\" value=\"{{item.type}}\">\n" +

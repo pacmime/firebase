@@ -21,7 +21,12 @@
        <small>{{clothingItem.type}}</small> 
        <small ng-if="clothingItem.source"><em>({{clothingItem.source}})</em></small>
     </h5>
-    <p><small>{{clothingItem.desc}}</small></p>
+    <p>
+        <small>
+            {{clothingItem.desc}}
+            <div ng-if="clothingItem.keywords">{{clothingItem.keywords}}</div>
+        </small>
+    </p>
     <div class="f-container f-justify-between f-align-center">
         <div>
             <span class="sprite sprite-item_weight" ng-class="{disabled:!clothingItem.weight}"></span> 
