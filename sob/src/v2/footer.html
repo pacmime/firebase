@@ -11,7 +11,7 @@
             <span class="glyphicon glyphicon-flash"></span>
         </button>
         <button type="button" class="f-cell f-equal" 
-            ng-if="$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0"
+            ng-if="$ctrl.canCastSermons()"
             ng-class="{active:$ctrl.panel==='sermons'}"
             ng-click="$ctrl.panel='sermons'">
             <span class="glyphicon glyphicon-book"></span>

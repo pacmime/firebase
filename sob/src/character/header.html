@@ -14,7 +14,14 @@
                 <!-- name, class, and keywords -->
                 <div class="grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-9">
                     <div><label>Name: </label> {{ctrl.charName}}</div>
-                    <div editable-input label="Class" ng-model="ctrl.character.class" on-save="ctrl.save()"></div>
+                    <div class="editable-input">
+                        <strong>Class: </strong> {{ctrl.charClass}}
+                        <!-- <select class="form-control" ng-model="ctrl.character.class" ng-change="ctrl.save()" 
+                            ng-options="item.id as item.name for item in ctrl.classes">
+                            <option value="">Select Class</option>
+                        </select> -->
+                    </div>
+                    <!-- <div editable-input label="Class" ng-model="ctrl.character.class" on-save="ctrl.save()"></div> -->
                     <div editable-input label="Keywords" ng-model="ctrl.character.keywords" on-save="ctrl.save()"></div>
                     <br>
                     <div>

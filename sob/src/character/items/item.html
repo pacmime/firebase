@@ -2,16 +2,28 @@
    <div class="grid__col-sm-3 grid__col-md-4">
        <div class="grid grid--justify-space-between">
            <div class="grid__col">
-               <div><span class="sprite sprite-item_weight"></span> <br class="hidden-xs"> {{item.weight}}</div>
+               <div>
+                  <span class="sprite sprite-item_weight" ng-class="{disabled:!item.weight}"></span> 
+                  <br class="hidden-xs"> {{item.weight}}
+                </div>
            </div>
            <div class="grid__col">
-               <div><span class="sprite sprite-item_darkstone"></span> <br class="hidden-xs"> {{item.darkstone}}</div>
+               <div>
+                  <span class="sprite sprite-item_darkstone" ng-class="{disabled:!item.darkstone}"></span> 
+                  <br class="hidden-xs"> {{item.darkstone}}
+                </div>
            </div>
            <div class="grid__col">
-               <div><span class="sprite sprite-item_hands"></span> <br class="hidden-xs"> {{item.hands}}</div>
+               <div>
+                  <span class="sprite sprite-item_hands" ng-class="{disabled:!item.hands}"></span> 
+                  <br class="hidden-xs"> {{item.hands}}
+                </div>
            </div>
            <div class="grid__col">
-               <div><span class="sprite sprite-item_slots"></span> <br class="hidden-xs"> {{item.slots}}</div>
+               <div>
+                  <span class="sprite sprite-item_slots" ng-class="{disabled:!item.slots}"></span> 
+                  <br class="hidden-xs"> {{item.slots}}
+                </div>
            </div>
            <div class="grid__col"></div>
        </div>
@@ -35,7 +47,7 @@
                  <span class="glyphicon glyphicon-pencil"></span>
                </button>
             </div>
-            <h5>{{name}} <small>({{item.source}}) <span ng-if="item.cost">${{item.cost}}</span></small></h5>
+            <h5>{{name}} <br><small>({{item.source}}) <span ng-if="item.cost">${{item.cost}}</span></small></h5>
             <small>
               {{item.description}}  
               <div ng-if="item.keywords">{{item.keywords}}</div>

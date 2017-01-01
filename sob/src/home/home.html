@@ -10,17 +10,31 @@
             <p class="list-group-item-text">Select a character from the list</p>
         </div>
         <div class="list-group-item" ng-if="!user"><em>Login to select from your available characters</em></div>
-        <div ng-repeat="name in ctrl.chars" class="list-group-item">
-            <button type="button" class="btn btn-sm btn-danger pull-right"
-                ng-click="ctrl.removeCharacter(name)">
-                <span class="glyphicon glyphicon-trash"></span>
-            </button>
-            <a href="#/{{name|encode}}">{{name}}</a>
-            <a href="v2.html#/{{name|encode}}" class="btn btn-link">(v2)</a>
+        <div ng-repeat="(id, obj) in ctrl.chars" class="list-group-item">
+            <div class=" pull-right">
+                <a href="#/{{id|encode}}" class="btn btn-sm btn-default">Version 1</a>
+                <button type="button" class="btn btn-sm btn-danger"
+                    ng-click="ctrl.removeCharacter(id)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </div>
+            <a href="v2.html#/{{id|encode}}">
+                {{obj.name}} 
+                <small ng-if="obj.className"><strong>[{{obj.className}}]</strong></small>
+            </a>
+            
         </div>
-        <div class="list-group-item list-group-item-success" ng-if="user" ng-click="ctrl.createCharacter()">
-            Create a New Character
+    </div>
+
+    <div class="f-container">
+        <div class="f-cell-2x">
+            <select class="form-control" 
+                ng-model="ctrl.newCharClass" 
+                ng-options="item.id as item.name for item in ctrl.classOptions">
+                <option value="">Create a New Character</option>
+            </select>
         </div>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.createCharacter()">Create</button>
     </div>
 
 </div>

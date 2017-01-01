@@ -1,9 +1,99 @@
 (function(angular) {
     "use strict";
 
+
+    window.UUID = function() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+    window.angularFireCopy = function(angularFireObj) {
+        var result = {};
+        for (var key in angularFireObj) {
+           if (key.indexOf('$') < 0 && angularFireObj.hasOwnProperty(key)) {
+              result[key] = angularFireObj[key];
+           };
+        }
+        return result;
+    }
+
+
     angular.module('sob-common', [])
 
     .constant('DataStoreUrl', "https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone")
+
+    .constant('ClassMap', {
+        "1455a125-99a3-4aeb-bd6c-0d66bce4b87c": "Gunslinger",
+        "2e2e4022-35c0-498c-ad78-8b87f5664026": "Cowboy",
+        "30d35552-bd40-444d-9558-df917fbc4398": "Drifter",
+        "3ec81ec0-56da-4e53-b9b6-cb71af815dbf": "Rancher",
+        "45b3ac67-15f6-4654-bba1-3c73493aa821": "US Marshal",
+        "48bdac8c-01a4-4284-ba73-775a79dda210": "Jargono Native",
+        "651350a6-d930-4372-9bce-1d200149362a": "Indian Scout",
+        "6bc4fc3a-4af5-4cf9-b6ad-8615501aca26": "Frontier Doc",
+        "6d198a74-1b2a-4f60-bf51-2c1e2d0ec2e1": "Prospector",
+        "7309fd50-b111-4d16-8a89-c500807b3472": "Law Man",
+        "7c791b38-c539-4964-890c-db925782933a": "Orphan",
+        "7fa50e95-f33d-43a8-b93b-501a7b3f3a3a": "Saloon Girl",
+        "c2c8ed0b-4104-44a2-9bfc-b403a7b70615": "Bandido",
+        "fa565014-f32b-46b4-9621-f2936d079b35": "Preacher"
+    })
+
+    .factory('ClassHelper', ["ClassMap", function(ClassMap) {
+        return {
+
+            getClassName: function(id) {
+                return ClassMap[id];
+            },
+            getClassId: function(className) {
+                if(typeof(className)==='undefined' || !className.length) return null;
+                var name = className.trim().replace(/\./g, '').replace(/\b[a-z]/g,function(f){return f.toUpperCase();});
+                
+                for(var id in ClassMap) {
+                    if(ClassMap[id] == name) return id;
+                }
+                console.log("Could not find '" + className + "' in map");
+                return null;
+            },
+            getClasses: function() {
+                var result = [];
+                for(var id in ClassMap)
+                    result.push({id: id, name: ClassMap[id]});
+                return result;
+            },
+
+            fixV3: function(name, character) {
+                
+                if('3' == character.version) return false;
+
+                //fix char ID if necessary
+                var classId = this.getClassId(character['class']);
+                if(classId) {
+                    character['class'] = classId;
+                }
+
+                //apply name as property (in prep for a move from using name as key in list)
+                character.name = character.name || name;
+
+                for(var name in character.abilities) {
+                    var value = character.abilities[name];
+                    delete character.abilities[name];
+                    character.abilities[UUID()] = { name: name, desc: value };
+                }
+
+                character.version = '3';
+                console.log("Fixed to version 3");
+                return true;
+                
+            },
+
+            getClassShell: function(classId) {
+
+            }
+        }
+    }])
 
     .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
         function($firebaseObject, DataStoreUrl) {
@@ -24,6 +114,52 @@
                 var root = firebase.database().ref();
                 var ref = root.child('ShadowsOfBrimstone').child('chars').child(name);
                 return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("CharacterOptions", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(type, classId) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/' + type + '/' + classId).orderByKey();
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("DBHelper", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(group) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/' + group);
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    /* 
+     * Factory used to create a copy of the starting "shell" for each character class.
+     * Usage: CharacterShell(classId).then(function(json) {...})
+     */
+    .factory("CharacterShell", ["$q", "$firebaseObject", 'DataStoreUrl',
+        function($q, $firebaseObject, DataStoreUrl) {
+            return function(classId) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/starting').child(classId);
+                var fbo = $firebaseObject(ref);
+
+                var deferred = $q.defer();
+                fbo.$loaded().then(function(snap) {
+                    var result = {};
+                    for (var key in snap) {
+                       if (key.indexOf('$') < 0 && snap.hasOwnProperty(key)) {
+                          result[key] = snap[key];
+                       };
+                    }
+                    deferred.resolve(result);
+                });
+                return deferred.promise;
             }
         }
     ])
@@ -536,8 +672,8 @@
 
     
     app.controller("CharacterController", [
-        "$scope", "$routeParams", "CharacterRef",
-        function($scope, $routeParams, CharacterRef) {
+        "$scope", "$routeParams", "CharacterRef", 'ClassHelper',
+        function($scope, $routeParams, CharacterRef, ClassHelper) {
         
         var self = this;
         
@@ -550,10 +686,29 @@
         this.panel="char";
 
         //load the campaign
-        this.charName = decodeURIComponent($routeParams.charId);
-        this.character = CharacterRef(this.charName);
+        this.character = CharacterRef(decodeURIComponent($routeParams.charId));
+
+        this.classes = ClassHelper.getClasses();
 
         this.character.$loaded().then(function() {
+
+            self.charName = self.character.name;
+            self.charClass = ClassHelper.getClassName(self.character.class);
+
+            //apply v3 fix
+            if(ClassHelper.fixV3(self.charName, self.character))
+                self.save();
+
+            self.character.sidebag.bandages = self.character.sidebag.bandages || 0;
+            self.character.sidebag.dynamite = self.character.sidebag.dynamite || 0;
+            self.character.sidebag.herbs = self.character.sidebag.herbs || 0;
+            self.character.sidebag.fungus = self.character.sidebag.fungus || 0;
+            self.character.sidebag.antiRad = self.character.sidebag.antiRad || 0;
+            self.character.sidebag.flash = self.character.sidebag.flash || 0;
+            self.character.sidebag.shatterGrenade = self.character.sidebag.shatterGrenade || 0;
+            self.character.sidebag.tonic = self.character.sidebag.tonic || 0;
+            self.character.sidebag.whiskey = self.character.sidebag.whiskey || 0;
+            self.character.sidebag = self.character.sidebag || {};
             self.character.sidebag.spices = self.character.sidebag.spices || 0;
             self.character.sidebag.potions = self.character.sidebag.potions || 0;
             self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;
@@ -572,31 +727,20 @@
 
 
         this.save = function() {
-            console.log("Saved");
             this.character.$save();
         };
 
         this.getAvailableSidebagCapacity = function() {
             if(!self.character.sidebag) return 0;
-            return self.character.sidebag.capacity - (
-                (self.character.sidebag.bandages||0) + 
-                (self.character.sidebag.whiskey||0) + 
-                (self.character.sidebag.tonic||0) + 
-                (self.character.sidebag.herbs||0) + 
-                (self.character.sidebag.dynamite||0) + 
-                (self.character.sidebag.flash||0) + 
-                (self.character.sidebag.fungus||0) + 
-                (self.character.sidebag.spices||0) +  
-                (self.character.sidebag.potions||0) +  
-                (self.character.sidebag.hatchets||0) + 
-                (self.character.sidebag.lanternOil||0) + 
-                (self.character.sidebag.exoticHerbs||0) +  
-                (self.character.sidebag.tequila||0) + 
-                (self.character.sidebag.cigars||0)
-            );
-
-            
+            var weight = 0;
+            for(var k in self.character.sidebag) {
+                if(self.character.sidebag.hasOwnProperty(k) && 'capacity' !== k) {
+                    weight += self.character.sidebag[k] || 0;
+                }
+            }
+            return self.character.sidebag.capacity - weight;
         };
+
 
     }])
 
@@ -664,7 +808,7 @@
     
     "use strict";
 
-    angular.module("sob-character").directive('abilities', function() {
+    angular.module("sob-character").directive('abilities', ['$q', 'CharacterOptions', function($q, CharacterOptions) {
 
         return {
             scope: {
@@ -676,36 +820,77 @@
             
             controller: function($scope, $element) {
 
-                function init() {
-                    $scope.value = {name: null, desc: null};
+                var charOptions = null;
+
+                $scope.character.$loaded().then(function() {
+                    charOptions = CharacterOptions('abilities', $scope.character.class);
+                    charOptions.$loaded().then(init);
+                });
+
+                function hasAbility(name) {
+                    for(var id in $scope.character.abilities) {
+                        if($scope.character.abilities[id].name == name) return true;
+                    }
+                    return false;
                 }
-                init();
+
+                function init() {
+
+                    $scope.newAbility = null;
+                    $scope.customAbility = {name: null, desc: null};    
+
+                    $scope.options = [];
+                    angular.forEach(charOptions, function(value, name) {
+                        if(typeof(value) === 'string') {
+                            var disabled = hasAbility(name);
+                            $scope.options.push({name : name, desc: value, disabled: disabled});
+                        } else {
+                            //if it requires a skill one doesn't have or can't be added multiple times...
+                            var disabled = !value.multi && hasAbility(name);
+                            if(!disabled && value.requires && !hasAbility(value.requires)) {
+                                name = name + " (requires " + value.requires + ")";
+                                disabled = true;
+                            }
+                            $scope.options.push({name : name, desc: value.value, disabled: disabled});
+                        }
+                    });
+                }
+                // init();
                 
                 $scope.add = function() {
-                    if(!$scope.value.name) return;
-                    $scope.character.abilities = $scope.character.abilities || {}
-                    $scope.character.abilities[$scope.value.name] = $scope.value.desc;
+                    if(!$scope.newAbility) return;
+                    $scope.character.abilities = $scope.character.abilities || {};
+                    $scope.character.abilities[UUID()] = {
+                        name: $scope.newAbility.name, 
+                        desc: $scope.newAbility.desc
+                    };
                     $scope.onSave();
                     init();
                 };
 
-                $scope.onEdited = function(name, newName, newDesc) {
+                $scope.addCustom = function() {
+                    if(!$scope.customAbility.name) return;
+                    $scope.character.abilities = $scope.character.abilities || {}
+                    $scope.character.abilities[UUID()] = $scope.customAbility;
+                    $scope.onSave();
+                    init();
+                };
 
-                    if(name !== newName) {
-                        //delete old property
-                        delete $scope.character.abilities[name];
+                $scope.onEdited = function(id, updated) {
+
+                    if(!updated) {  //remove ability
+                        delete $scope.character.abilities[id];
                     }
 
-                    if(newName && newDesc) 
-                        $scope.character.abilities[newName] = newDesc;
+                    if(updated) 
+                        $scope.character.abilities[id] = updated;
 
                     $scope.onSave();
                 };
 
-
             }
         };
-    })
+    }])
 
 
     .directive('ability', function() {
@@ -715,19 +900,16 @@
             $scope.ctrl = this;
 
             //remember original name just in case it changes
-            var originalName = $scope.name;
-            this.name = $scope.name;
-            this.desc = $scope.desc;
+            // var originalName = $scope.name;
+            this.name = $scope.ability.name;
+            this.desc = $scope.ability.desc;
             
             this.edit = function() {
                 this.displayEditor = true;
             };
 
             this.save = function() {
-                $scope.onSave({
-                    newName: this.name, 
-                    newDesc: this.desc
-                });
+                $scope.onSave({ updated: {name: this.name, desc: this.desc} });
                 this.displayEditor = false;
             };
 
@@ -736,16 +918,17 @@
             };
 
             this.remove = function() {
-                $scope.onSave({newName: null, newDesc: null});
+                $scope.onSave({updated: null});
             };
 
         }
 
         return {
             scope: {
+                ability: "=",
                 // character: "=",
-                name: "@",
-                desc: "@",
+                // name: "@",
+                // desc: "@",
                 onSave: '&'
             },
             replace: true,
@@ -1092,7 +1275,8 @@
 
 
 
-    .directive('sermons', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+    .directive('sermons', ['$timeout', '$uibModal', "ClassHelper", 'DBHelper', 
+        function($timeout, $uibModal, ClassHelper, DBHelper) {
 
         return {
             scope: {
@@ -1104,9 +1288,47 @@
             
             controller: function($scope, $element) {
 
-                //initialize if not already present on char object
-                if(typeof($scope.character.availableFaith) === 'undefined')
-                    $scope.character.availableFaith = $scope.character.faith;
+                $scope.canCast = false;
+                $scope.character.$loaded(function(chr) {
+                    $scope.canCast = $scope.character['class'] && 
+                        'Preacher' === ClassHelper.getClassName($scope.character['class']);
+
+                    init();
+                });
+
+                $scope.canCastSermons = function() { return $scope.canCast; };
+
+                function init() {
+
+                    $scope.newSermon = null;
+                    $scope.sermonOpts = [];
+
+                    if($scope.canCast) {
+                        DBHelper('sermons').$loaded(function(sermons) {
+                            var sms = angularFireCopy(sermons);
+                            for(var name in sms) {
+                                if(!$scope.character.sermons[name])
+                                    $scope.sermonOpts.push(sms[name]);
+                            }
+                        });
+
+                        //initialize if not already present on char object
+                        if(typeof($scope.character.availableFaith) === 'undefined')
+                            $scope.character.availableFaith = $scope.character.faith;
+                    }
+                    
+                }
+
+                $scope.hasAbility = function(name) {
+                    if($scope.character.abilities) {
+                        for(var id in $scope.character.abilities) {
+                            if($scope.character.abilities[id].name === name)
+                                return true;
+                        }
+                    }
+                    return false;
+                };
+
                 
                 $scope.resetFaith = function() {
                     $scope.character.availableFaith = $scope.character.faith;
@@ -1133,7 +1355,14 @@
                     $scope.onSave();
                 };
 
+
                 $scope.add = function() {
+                    $scope.character.sermons[$scope.newSermon.name] = $scope.newSermon;
+                    $scope.onSave();
+                    init();
+                };
+
+                $scope.addCustom = function() {
                     
                     var modalInstance = $uibModal.open({
                         templateUrl: 'src/character/sermons/editor.html',
@@ -1185,7 +1414,7 @@
                 };
 
                 $scope.$on('sermon:cast', function(event, name, cost) {
-                    console.log("Casting " + name + " for " + cost);
+                    // console.log("Casting " + name + " for " + cost);
                     applyFlag($scope.character.sermons[name], flags.cast);
                     $scope.character.availableFaith -= cost;
                     $scope.updateSermons();
@@ -1194,7 +1423,7 @@
 
                 $scope.$on('sermon:xp', function(event, name, xp) {
                     if(isNaN(xp)) return;
-                    console.log("Applying " + xp + " XP for " + name);
+                    // console.log("Applying " + xp + " XP for " + name);
                     applyFlag($scope.character.sermons[name], flags.xp);
                     $scope.character.xp += (xp*1);
                     $scope.onSave();
@@ -1261,11 +1490,11 @@
 
             this.save = function() {
                 console.log("Saving...");
-                $scope.onSave({ sermon: $scope.sermon, name: $scope.name });
+                $scope.onSave({ name: $scope.sermon.name, sermon: $scope.sermon });
             };
 
             this.remove = function() {
-                $scope.onSave({ sermon: null, name: $scope.name });
+                $scope.onSave({ name: $scope.sermon.name, sermon: null });
             };
 
             this.canCast = function() {
@@ -1308,208 +1537,12 @@
 
 }) (angular);
 
-// (function(angular) {
-    
-//     "use strict";
-
-//     angular.module("sob-character")
-
-
-
-//     .directive('sermons', ['$timeout', '$uibModal', function($timeout, $uibModal) {
-
-//         return {
-//             scope: {
-//                 character: "=",
-//                 onSave: '&'
-//             },
-//             replace: true,
-//             templateUrl: 'src/character/sermons/sermons.html',
-            
-//             controller: function($scope, $element) {
-
-                
-//                 $scope.resetFaith = function() {
-//                     $scope.remainingFaith = $scope.character.faith;
-//                     // console.log("Resetting faith to " + $scope.remainingFaith);
-//                     $scope.$broadcast('faith:reset', $scope.remainingFaith);
-//                 };
-
-//                 $scope.character.$loaded().then(function() {
-//                     $scope.resetFaith();
-//                 });
-
-
-//                 $scope.onEdited = function(name, sermon) {
-//                     if(!name) return;
-
-//                     //if deleting item or renaming it
-//                     if(name && !sermon)
-//                         delete $scope.character.sermons[name];
-
-//                     if(sermon)
-//                         $scope.character.sermons[name] = sermon;
-
-//                     $scope.onSave();
-//                 };
-
-//                 $scope.add = function() {
-                    
-//                     var modalInstance = $uibModal.open({
-//                         templateUrl: 'src/character/sermons/editor.html',
-//                         controller: 'ItemEditor',
-//                         animation: false,
-//                         resolve: {
-//                             item: function() {return null;}
-//                         }
-//                     });
-
-//                     modalInstance.result.then(function(sermon) {
-//                         if(!sermon || !sermon.name) return;
-
-//                         $scope.character.sermons = $scope.character.sermons || {};
-//                         if($scope.character.sermons[sermon.name]) return;    //already has one
-                        
-//                         var obj = {};
-//                         obj[sermon.name] = sermon;
-//                         angular.merge($scope.character.sermons, obj);
-
-//                         $scope.onSave();
-                        
-//                     }, function () { });
-
-//                 };
-
-
-//                 $scope.$on('faith:spent', function(event, amount) {
-//                     // console.log("Spending " + amount + " faith");
-//                     $scope.remainingFaith -= amount;
-//                     // console.log("Remaining: " + $scope.remainingFaith);
-//                     $scope.$broadcast('faith:available', $scope.remainingFaith);
-//                 });
-
-//             }
-//         };
-//     }])
-
-
-//     .directive('sermon', ['$uibModal', function($uibModal) {
-
-//         function Controller($scope, $element) {
-
-//             $scope.ctrl = this;
-
-//             this.sermon = $scope.sermon;
-
-//             this.status = {
-//                 available: true,
-//                 used: false
-//             };
-
-//             //mark sermon as used
-//             this.use = function() {
-//                 this.status.available = false;
-//                 this.status.used = true;
-//                 $scope.$emit('faith:spent', this.sermon.cost);
-//             };
-//             this.spendExtraFaith = function() {
-//                 $scope.$emit('faith:spent', 1);  
-//             };
-            
-//             this.edit = function() {
-                
-//                 var modalInstance = $uibModal.open({
-//                     templateUrl: 'src/character/sermons/editor.html',
-//                     controller: 'ItemEditor',
-//                     animation: false,
-//                     resolve: {
-//                         item: function() { 
-//                             var copy = angular.copy($scope.sermon);
-//                             return copy; 
-//                         }
-//                     }
-//                 });
-
-//                 modalInstance.result.then(function(sermon) {
-//                     if(!sermon || !sermon.name) return; //cancel
-                    
-//                     //apply changes to local version
-//                     angular.forEach(sermon, function(value, key) {
-//                         $scope.ctrl.sermon[key] = value;
-//                     });
-                    
-//                     $scope.ctrl.save();
-                                        
-//                 }, function () { });
-
-//             };
-
-//             this.save = function() {
-//                 console.log("Saving...");
-//                 $scope.onSave({ sermon: this.sermon, name: $scope.name });
-//             };
-
-//             this.remove = function() {
-//                 $scope.onSave({ sermon: null, name: $scope.name });
-//             };
-
-//             this.isAvailable = function() {
-//                 return this.status.available && !this.status.used;
-//             };
-
-
-//             //when total remaining faith changes
-//             $scope.$on('faith:available', function(event, amount) {
-                
-//                 if(amount < $scope.sermon.cost) {
-//                     //if remaining faith is insufficient
-//                     $scope.ctrl.status.available = false;
-
-//                 } else if(!$scope.ctrl.status.used) {
-//                     //if enough faith and not already used
-//                     $scope.ctrl.status.available = true;
-//                 }
-//             });
-
-//             //when faith is reset (end of round)
-//             $scope.$on('faith:reset', function(event, amount) {
-//                 $scope.ctrl.status.available = true;
-//                 $scope.ctrl.status.used = false;
-//             });
-//         }
-
-//         // {
-//         //     type: "blessing|judgement",
-//         //     cost: 1,
-//         //     check: 5+,
-//         //     range: 'self',
-//         //     xp: 10
-//         //     deadly: false
-//         //     name: "",
-//         //     desc: ""
-//         // }
-
-
-//         return {
-//             scope: {
-//                 name: "@",
-//                 sermon: "=",
-//                 onSave: '&'
-//             },
-//             replace: true,
-//             templateUrl: 'src/character/sermons/sermon.html',
-//             controller: Controller
-//         };
-//     }]);
-
-
-// }) (angular);
 ;
 (function(angular) {
     
     "use strict";
 
-    angular.module("sob-character").directive('mutations', function() {
+    angular.module("sob-character").directive('mutations', ['DBHelper', function(DBHelper) {
 
         return {
             scope: {
@@ -1521,17 +1554,79 @@
             
             controller: function($scope, $element) {
 
+                $scope.mimOpts = [];
+
+                DBHelper('mutations').$loaded(function(mutations) {
+                    for(var key in mutations) {
+                        if(key.indexOf("$")<0 && typeof(mutations[key]) == 'object') {
+                            $scope.mimOpts.push({
+                                name: mutations[key].name, 
+                                desc: mutations[key].desc, 
+                                group: "Mutations"
+                            });
+                        }
+                    }
+                    DBHelper('injuries').$loaded(function(injuries) {
+                        for(var key in injuries) {
+                            if(key.indexOf("$")<0 && typeof(injuries[key]) == 'object') {
+                                $scope.mimOpts.push({
+                                    name: injuries[key].name, 
+                                    desc: injuries[key].desc, 
+                                    group: "Injuries"
+                                });
+                            }
+                        }
+                        DBHelper('madness').$loaded(function(madness) {
+                            for(var key in madness) {
+                                if(key.indexOf("$")<0 && typeof(madness[key]) == 'object') {
+                                    $scope.mimOpts.push({
+                                        name: madness[key].name, 
+                                        desc: madness[key].desc, 
+                                        group: "Madness"
+                                    });
+                                }
+                            }
+
+                            refreshOptions();
+                        });
+                    });
+                });
+
+                $scope.newMutation = null;
                 function init() {
-                    $scope.value = {name: null, desc: null};
+                    $scope.newMutation = null;
+                    $scope.customMutation = {name: null, desc: null};
                 }
                 init();
+
+                function refreshOptions() {
+                    if($scope.character.mutations) {
+                        //disable option if character already has this mutation, injury, or madness
+                        angular.forEach($scope.mimOpts, function(opt) {
+                            opt.disabled = $scope.character.mutations[opt.name];
+                        });
+                    }
+                }
                 
                 $scope.add = function() {
-                    if(!$scope.value.name) return;
+                    if(!$scope.newMutation.name) return;
                     $scope.character.mutations = $scope.character.mutations || {}
-                    $scope.character.mutations[$scope.value.name] = $scope.value.desc;
+                    $scope.character.mutations[$scope.newMutation.name] = $scope.newMutation.desc;
                     $scope.onSave();
                     init();
+                    refreshOptions();
+                };
+
+                $scope.addCustom = function() {
+                    if(!$scope.value.name) return;
+                    $scope.character.mutations = $scope.character.mutations || {}
+                    if($scope.character.mutations[$scope.customMutation.name]) {
+                        alert("Character already has a mutation, injury, or madness with that name");
+                        return;
+                    }$scope.character.mutations[$scope.value.name] = $scope.value.desc;
+                    $scope.onSave();
+                    init();
+                    refreshOptions();
                 };
 
                 $scope.onEdited = function(name, newName, newDesc) {
@@ -1550,7 +1645,7 @@
 
             }
         };
-    })
+    }])
 
 
     .directive('mutation', function() {
@@ -1611,8 +1706,8 @@
     
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "DataStore", "$firebaseAuth",
-        function($scope, $timeout, DataStore, $firebaseAuth) {
+        "$scope", "$timeout", "DataStore", "$firebaseAuth", "ClassHelper", "CharacterShell",
+        function($scope, $timeout, DataStore, $firebaseAuth, ClassHelper, CharacterShell) {
         
         var self = this;
         
@@ -1622,6 +1717,7 @@
             error: null
         };
 
+        this.classOptions = ClassHelper.getClasses();
 
         var auth = $firebaseAuth();
         auth.$onAuthStateChanged(function(authData) {
@@ -1648,38 +1744,45 @@
         
 
         function updateList() {
-            var chars = [];
+            var chars = {};
             if(self.data) {
                 angular.forEach(self.data, function(value, key) { 
                     if($scope.user && value.userId && value.userId === $scope.user.uid)
-                        chars.push(key); 
+                        chars[key] = {
+                            name: (value.name || /* hack for pre-v3 chars */key), 
+                            className: ClassHelper.getClassName(value['class'])
+                        }; 
                 });
             }
             self.chars = chars;
         }
 
         this.createCharacter = function() {
-            var name = prompt("Name the character", "Joe Bob");
-            if(!name) {
-                alert("Characters must have a name");
-                return;
-            } else if(self.data[name]) {
-                alert("Name is already in use");
-                return;
-            }
             
-            var json = getCharacterShell();
-            
-            //associate user id for restricting who can edit
-            json.userId = $scope.user.uid;  
+            // var json = getCharacterShell();
+            CharacterShell(this.newCharClass).then(function(json) {
 
-            self.data[name] = json;
-            self.data.$save().then(function() {
-                //navigate to the new char page
-                window.location = '#/' + encodeURIComponent(name);
+                var name = prompt("Name the character", "Joe Bob");
+                if(!name) {
+                    alert("Characters must have a name");
+                    return;
+                } 
 
-            }).catch(function(error) {
-                alert("Unable to create character because of an error");
+                //associate user id for restricting who can edit
+                json.userId = $scope.user.uid;  
+                json.name = name;
+
+                // console.log(json);
+                var charId = UUID();
+                self.data[charId] = json;
+                self.data.$save().then(function() {
+                    //navigate to the new char page
+                    // window.location = '#/' + encodeURIComponent(name);
+                    window.location = '#/' + charId;
+
+                }).catch(function(error) {
+                    alert("Unable to create character because of an error");
+                });
             });
 
         };
@@ -1839,15 +1942,29 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/abilities/abilities.html',
     "<div class=\"abilities\">\n" +
     "    <h4>Abilities</h4>\n" +
-    "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
-    "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
+    "    <div ng-repeat=\"(id, ability) in character.abilities\" \n" +
+    "        ability=\"ability\" on-save=\"onEdited(id, updated)\"></div>\n" +
     "\n" +
     "    <hr>\n" +
     "    \n" +
     "    <form class=\"form\">\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        \n" +
+    "        <label>Add Ability</label>\n" +
+    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "            <div class=\"f-cell-2x\">\n" +
+    "                <select class=\"form-control\" ng-model=\"newAbility\" \n" +
+    "                    ng-options=\"item as item.name disable when item.disabled for item in options\">\n" +
+    "                    <option value=\"\">Select New Ability</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newAbility\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <label>Add Custom Ability</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customAbility.name\">\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customAbility.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customAbility.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -2198,7 +2315,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <!-- name, class, and keywords -->\n" +
     "                <div class=\"grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-9\">\n" +
     "                    <div><label>Name: </label> {{ctrl.charName}}</div>\n" +
-    "                    <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div>\n" +
+    "                    <div class=\"editable-input\">\n" +
+    "                        <strong>Class: </strong> {{ctrl.charClass}}\n" +
+    "                        <!-- <select class=\"form-control\" ng-model=\"ctrl.character.class\" ng-change=\"ctrl.save()\" \n" +
+    "                            ng-options=\"item.id as item.name for item in ctrl.classes\">\n" +
+    "                            <option value=\"\">Select Class</option>\n" +
+    "                        </select> -->\n" +
+    "                    </div>\n" +
+    "                    <!-- <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div> -->\n" +
     "                    <div editable-input label=\"Keywords\" ng-model=\"ctrl.character.keywords\" on-save=\"ctrl.save()\"></div>\n" +
     "                    <br>\n" +
     "                    <div>\n" +
@@ -2344,16 +2468,28 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "   <div class=\"grid__col-sm-3 grid__col-md-4\">\n" +
     "       <div class=\"grid grid--justify-space-between\">\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_weight\"></span> <br class=\"hidden-xs\"> {{item.weight}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!item.weight}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.weight}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_darkstone\"></span> <br class=\"hidden-xs\"> {{item.darkstone}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!item.darkstone}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.darkstone}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_hands\"></span> <br class=\"hidden-xs\"> {{item.hands}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!item.hands}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.hands}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_slots\"></span> <br class=\"hidden-xs\"> {{item.slots}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!item.slots}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.slots}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\"></div>\n" +
     "       </div>\n" +
@@ -2377,7 +2513,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "               </button>\n" +
     "            </div>\n" +
-    "            <h5>{{name}} <small>({{item.source}}) <span ng-if=\"item.cost\">${{item.cost}}</span></small></h5>\n" +
+    "            <h5>{{name}} <br><small>({{item.source}}) <span ng-if=\"item.cost\">${{item.cost}}</span></small></h5>\n" +
     "            <small>\n" +
     "              {{item.description}}  \n" +
     "              <div ng-if=\"item.keywords\">{{item.keywords}}</div>\n" +
@@ -2478,10 +2614,23 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "    <hr>\n" +
     "    \n" +
+    "    <label>Add Mutation, Injury, or Madness</label>\n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newMutation\" \n" +
+    "                ng-options=\"item as item.name group by item.group disable when item.disabled for item in mimOpts\">\n" +
+    "                <option value=\"\">Select One</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newMutation\" ng-click=\"add()\">Add</button>\n" +
+    "    </div>\n" +
+    "    <br>\n" +
+    "\n" +
     "    <form class=\"form\">\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Custom Mutation, Injury, or Madness</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customMutation.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customMutation.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customMutation.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -2649,22 +2798,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('character/sermons/sermons.html',
-    "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
+    "<div class=\"sermons\" ng-if=\"canCastSermons()\">\n" +
     "   <h4>\n" +
     "        <div class=\"pull-right\">\n" +
     "            Faith: {{$parent.character.availableFaith}} / {{$parent.character.faith}} \n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
-    "\n" +
-    "            &nbsp;&nbsp;&nbsp;\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
-    "\n" +
     "        </div>\n" +
     "        Sermons\n" +
     "    </h4>\n" +
-    "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
-    "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
+    "    <div ng-repeat=\"(key,sermon) in $parent.character.sermons\"> \n" +
+    "        <div sermon=\"sermon\" on-save=\"$parent.$parent.onEdited(name, sermon)\"></div>\n" +
     "    </div>\n" +
     "    <hr>\n" +
+    "\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-xs-10\">\n" +
+    "            <select class=\"form-control\" ng-model=\"$parent.newSermon\" \n" +
+    "                ng-options=\"sermon as sermon.name for sermon in $parent.sermonOpts\">\n" +
+    "                <option value=\"\">Add Sermon</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-xs-2\">\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                ng-disabled=\"!$parent.newSermon\" ng-click=\"$parent.add()\">Add</button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "    \n" +
     "</div>"
   );
@@ -2855,17 +3013,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
     "        <div class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></div>\n" +
-    "        <div ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-danger pull-right\"\n" +
-    "                ng-click=\"ctrl.removeCharacter(name)\">\n" +
-    "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "            </button>\n" +
-    "            <a href=\"#/{{name|encode}}\">{{name}}</a>\n" +
-    "            <a href=\"v2.html#/{{name|encode}}\" class=\"btn btn-link\">(v2)</a>\n" +
+    "        <div ng-repeat=\"(id, obj) in ctrl.chars\" class=\"list-group-item\">\n" +
+    "            <div class=\" pull-right\">\n" +
+    "                <a href=\"#/{{id|encode}}\" class=\"btn btn-sm btn-default\">Version 1</a>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-danger\"\n" +
+    "                    ng-click=\"ctrl.removeCharacter(id)\">\n" +
+    "                    <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "            <a href=\"v2.html#/{{id|encode}}\">\n" +
+    "                {{obj.name}} \n" +
+    "                <small ng-if=\"obj.className\"><strong>[{{obj.className}}]</strong></small>\n" +
+    "            </a>\n" +
+    "            \n" +
     "        </div>\n" +
-    "        <div class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
-    "            Create a New Character\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"f-container\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" \n" +
+    "                ng-model=\"ctrl.newCharClass\" \n" +
+    "                ng-options=\"item.id as item.name for item in ctrl.classOptions\">\n" +
+    "                <option value=\"\">Create a New Character</option>\n" +
+    "            </select>\n" +
     "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-click=\"ctrl.createCharacter()\">Create</button>\n" +
     "    </div>\n" +
     "\n" +
     "</div>"
@@ -2993,17 +3165,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <br>\n" +
     "    \n" +
     "    <!-- list abilities -->\n" +
-    "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
-    "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
+    "    <div ng-repeat=\"(id, ability) in character.abilities\" \n" +
+    "        ability=\"ability\" on-save=\"onEdited(id, updated)\"></div>\n" +
     "\n" +
     "    <br>\n" +
     "    \n" +
     "    <!-- add new -->\n" +
     "    <form class=\"form\">\n" +
-    "        <label>Add New Ability</label>\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Ability</label>\n" +
+    "\n" +
+    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "            <div class=\"f-cell-2x\">\n" +
+    "                <select class=\"form-control\" ng-model=\"newAbility\" \n" +
+    "                    ng-options=\"item as item.name disable when item.disabled for item in options\">\n" +
+    "                    <option value=\"\">Select New Ability</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newAbility\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <label>Add Custom Ability</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customAbility.name\">\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customAbility.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customAbility.name\" ng-click=\"addCustom()\">Add</button>\n" +
+    "\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -3055,9 +3241,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"glyphicon glyphicon-option-horizontal\"></span>\n" +
     "        </button>\n" +
     "        <div class=\"char__name\">\n" +
-    "            <label>Name: </label> {{$ctrl.charName}}\n" +
+    "            <label>Name: </label> {{$ctrl.character.name}}\n" +
     "        </div>\n" +
-    "        <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div>\n" +
+    "\n" +
+    "        <div class=\"editable-input\">\n" +
+    "            <strong>Class: </strong> {{$ctrl.charClass}}\n" +
+    "            <!-- <select class=\"form-control\" ng-model=\"$ctrl.character.class\" ng-change=\"$ctrl.save()\" \n" +
+    "                ng-options=\"item.id as item.name for item in $ctrl.classes\">\n" +
+    "                <option value=\"\">Select Class</option>\n" +
+    "            </select> -->\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <!-- <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div> -->\n" +
     "        <div editable-input label=\"Keys\" ng-model=\"$ctrl.character.keywords\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
@@ -3377,7 +3572,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"glyphicon glyphicon-flash\"></span>\n" +
     "        </button>\n" +
     "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "            ng-if=\"$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0\"\n" +
+    "            ng-if=\"$ctrl.canCastSermons()\"\n" +
     "            ng-class=\"{active:$ctrl.panel==='sermons'}\"\n" +
     "            ng-click=\"$ctrl.panel='sermons'\">\n" +
     "            <span class=\"glyphicon glyphicon-book\"></span>\n" +
@@ -3696,6 +3891,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <h5>\n" +
+    "        <!-- <input type=\"checkbox\" ng-model=\"item.equipped\"> --> \n" +
     "        {{name}} \n" +
     "        <small>\n" +
     "            <em>\n" +
@@ -3707,7 +3903,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </h5>\n" +
     "    \n" +
     "    <div ng-if=\"item.description\"><small>{{item.description}}</small></div>\n" +
-    "    <div ng-if=\"item.keywords\"><small>{{item.keywords}}</small></div>\n" +
+    "    <div ng-if=\"item.keywords\"><small><em>{{item.keywords}}</em></small></div>\n" +
     "    \n" +
     "    <span ng-if=\"item.usage\">\n" +
     "        <input type=\"checkbox\"> <small>(per {{item.usage}})</small>\n" +
@@ -3752,7 +3948,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  \n" +
     "  <div ng-if=\"!ctrl.displayEditor\">\n" +
     "    <div class=\"pull-right\">\n" +
-    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "      <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "          <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "          <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "        </button>     \n" +
+    "      </div>\n" +
+    "      <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "        type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -3788,11 +3993,23 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <br>\n" +
     "    \n" +
     "    <!-- add new -->\n" +
+    "    <label>Add Mutation, Injury, or Madness</label>\n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newMutation\" \n" +
+    "                ng-options=\"item as item.name group by item.group disable when item.disabled for item in mimOpts\">\n" +
+    "                <option value=\"\">Select One</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newMutation\" ng-click=\"add()\">Add</button>\n" +
+    "    </div>\n" +
+    "    <br>\n" +
+    "\n" +
     "    <form class=\"form\">\n" +
-    "        <label>Add New Injury or Mutation</label>\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Custom Mutation, Injury, or Madness</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customMutation.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customMutation.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customMutation.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -4145,15 +4362,15 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('v2/sermons/sermon.html',
     "<div class=\"sermon\" ng-class=\"{disabled:!ctrl.isAvailable()}\">\n" +
     "    <h5>\n" +
+    "        <span ng-if=\"sermon.deadly\">\n" +
+    "            <span class=\"glyphicon glyphicon-exclamation-sign\" title=\"Dangerous!\"></span> \n" +
+    "        </span>\n" +
     "        {{sermon.name}} \n" +
     "        <small>{{sermon.type}}</small>\n" +
     "    </h5>\n" +
     "    <p>\n" +
     "        <small>\n" +
     "            <div>\n" +
-    "                <span ng-if=\"sermon.deadly\">\n" +
-    "                    <span class=\"glyphicon glyphicon-exclamation-sign\" title=\"Dangerous!\"></span>&nbsp;&nbsp;&nbsp;\n" +
-    "                </span>\n" +
     "                <strong>[{{sermon.check}}+]</strong>&nbsp;&nbsp;&nbsp;\n" +
     "                <strong>Cost: </strong> {{sermon.cost}}&nbsp;&nbsp;&nbsp;\n" +
     "                <strong>XP: </strong> {{sermon.xp}}&nbsp;&nbsp;&nbsp;\n" +
@@ -4164,7 +4381,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </p>\n" +
     "    <div>\n" +
     "        <div class=\"pull-right\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "            <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                </button>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "                </button>     \n" +
+    "              </div>\n" +
+    "              <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "                type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "            </button>&nbsp;&nbsp;&nbsp;\n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -4200,45 +4426,49 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/sermons/sermons.html',
-    "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
+    "<div class=\"sermons\">\n" +
     "    <br>\n" +
     "    <div>\n" +
-    "        <strong>Faith:</strong> {{$parent.character.availableFaith}} / {{$parent.character.faith}} \n" +
-    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
+    "        <strong>Faith:</strong> {{character.availableFaith}} / {{character.faith}} \n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"resetFaith()\">reset</button>\n" +
     "\n" +
     "        &nbsp;&nbsp;&nbsp;\n" +
-    "        <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
+    "        <div class=\"pull-right f-container f-align-center\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newSermon\" \n" +
+    "                ng-options=\"sermon as sermon.name for sermon in sermonOpts\">\n" +
+    "                <option value=\"\">Add Sermon</option>\n" +
+    "            </select>\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                ng-disabled=\"!newSermon\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <hr>\n" +
-    "\n" +
-    "    <!--\n" +
-    "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
-    "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
-    "    </div>\n" +
-    "    -->\n" +
     "\n" +
     "    <div class=\"sermons-container\">\n" +
     "\n" +
     "        <div>\n" +
     "            <h5>\n" +
     "                Blessings\n" +
-    "                <small ng-if=\"$parent.character.abilities.Missionary\">Missionary: re-roll one die when casting blessings</small>\n" +
+    "                <small ng-if=\"hasAbility('Missionary')\">Missionary: re-roll one die when casting blessings</small>\n" +
     "            </h5>\n" +
-    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "            <div ng-repeat=\"(name,sermon) in character.sermons\"> \n" +
     "                <div ng-if=\"'Blessing'===sermon.type\" \n" +
     "                    sermon=\"sermon\" \n" +
-    "                    on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "                    on-save=\"onEdited(name, sermon)\"></div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
     "        <hr class=\"visible-xs-block\">\n" +
     "        \n" +
     "        <div>\n" +
-    "            <h5>Judgements</h5>\n" +
-    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "            <h5>\n" +
+    "                Judgements\n" +
+    "                <small ng-if=\"hasAbility('Firebrand')\">Firebrand: re-roll one die when casting judgements</small>\n" +
+    "            </h5>\n" +
+    "            <div ng-repeat=\"(name,sermon) in character.sermons\"> \n" +
     "                <div ng-if=\"'Judgement'===sermon.type\" \n" +
     "                    sermon=\"sermon\" \n" +
-    "                    on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "                    on-save=\"onEdited(name, sermon)\"></div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +

@@ -18,6 +18,7 @@
     </div>
 
     <h5>
+        <!-- <input type="checkbox" ng-model="item.equipped"> --> 
         {{name}} 
         <small>
             <em>
@@ -29,7 +30,7 @@
     </h5>
     
     <div ng-if="item.description"><small>{{item.description}}</small></div>
-    <div ng-if="item.keywords"><small>{{item.keywords}}</small></div>
+    <div ng-if="item.keywords"><small><em>{{item.keywords}}</em></small></div>
     
     <span ng-if="item.usage">
         <input type="checkbox"> <small>(per {{item.usage}})</small>

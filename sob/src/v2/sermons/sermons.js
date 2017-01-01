@@ -31,7 +31,7 @@
 
 
 
-    .directive('sermons', ['$timeout', '$uibModal', function($timeout, $uibModal) {
+    .directive('sermons', ['$timeout', '$uibModal', 'DBHelper', function($timeout, $uibModal, DBHelper) {
 
         return {
             scope: {
@@ -43,10 +43,33 @@
             
             controller: function($scope, $element) {
 
+                function init() {
+                    $scope.newSermon = null;
+                    $scope.sermonOpts = [];
+                    DBHelper('sermons').$loaded(function(sermons) {
+                        var sms = angularFireCopy(sermons);
+                        for(var name in sms) {
+                            if(!$scope.character.sermons[name])
+                                $scope.sermonOpts.push(sms[name]);
+                        }
+                    });
+                }
+                init();
+
                 //initialize if not already present on char object
                 if(typeof($scope.character.availableFaith) === 'undefined')
                     $scope.character.availableFaith = $scope.character.faith;
                 
+                $scope.hasAbility = function(name) {
+                    if($scope.character.abilities) {
+                        for(var id in $scope.character.abilities) {
+                            if($scope.character.abilities[id].name === name)
+                                return true;
+                        }
+                    }
+                    return false;
+                };
+
                 $scope.resetFaith = function() {
                     $scope.character.availableFaith = $scope.character.faith;
                     
@@ -73,6 +96,12 @@
                 };
 
                 $scope.add = function() {
+                    $scope.character.sermons[$scope.newSermon.name] = $scope.newSermon;
+                    $scope.onSave();
+                    init();
+                };
+
+                $scope.addCustom = function() {
                     
                     var modalInstance = $uibModal.open({
                         templateUrl: 'src/v2/sermons/editor.html',
@@ -200,11 +229,11 @@
 
             this.save = function() {
                 console.log("Saving...");
-                $scope.onSave({ sermon: $scope.sermon, name: $scope.name });
+                $scope.onSave({ name: $scope.sermon.name, sermon: $scope.sermon });
             };
 
             this.remove = function() {
-                $scope.onSave({ sermon: null, name: $scope.name });
+                $scope.onSave({ name: $scope.sermon.name, sermon: null });
             };
 
             this.canCast = function() {

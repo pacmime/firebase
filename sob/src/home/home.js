@@ -7,8 +7,8 @@
     
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "DataStore", "$firebaseAuth",
-        function($scope, $timeout, DataStore, $firebaseAuth) {
+        "$scope", "$timeout", "DataStore", "$firebaseAuth", "ClassHelper", "CharacterShell",
+        function($scope, $timeout, DataStore, $firebaseAuth, ClassHelper, CharacterShell) {
         
         var self = this;
         
@@ -18,6 +18,7 @@
             error: null
         };
 
+        this.classOptions = ClassHelper.getClasses();
 
         var auth = $firebaseAuth();
         auth.$onAuthStateChanged(function(authData) {
@@ -44,38 +45,45 @@
         
 
         function updateList() {
-            var chars = [];
+            var chars = {};
             if(self.data) {
                 angular.forEach(self.data, function(value, key) { 
                     if($scope.user && value.userId && value.userId === $scope.user.uid)
-                        chars.push(key); 
+                        chars[key] = {
+                            name: (value.name || /* hack for pre-v3 chars */key), 
+                            className: ClassHelper.getClassName(value['class'])
+                        }; 
                 });
             }
             self.chars = chars;
         }
 
         this.createCharacter = function() {
-            var name = prompt("Name the character", "Joe Bob");
-            if(!name) {
-                alert("Characters must have a name");
-                return;
-            } else if(self.data[name]) {
-                alert("Name is already in use");
-                return;
-            }
             
-            var json = getCharacterShell();
-            
-            //associate user id for restricting who can edit
-            json.userId = $scope.user.uid;  
+            // var json = getCharacterShell();
+            CharacterShell(this.newCharClass).then(function(json) {
 
-            self.data[name] = json;
-            self.data.$save().then(function() {
-                //navigate to the new char page
-                window.location = '#/' + encodeURIComponent(name);
+                var name = prompt("Name the character", "Joe Bob");
+                if(!name) {
+                    alert("Characters must have a name");
+                    return;
+                } 
 
-            }).catch(function(error) {
-                alert("Unable to create character because of an error");
+                //associate user id for restricting who can edit
+                json.userId = $scope.user.uid;  
+                json.name = name;
+
+                // console.log(json);
+                var charId = UUID();
+                self.data[charId] = json;
+                self.data.$save().then(function() {
+                    //navigate to the new char page
+                    // window.location = '#/' + encodeURIComponent(name);
+                    window.location = '#/' + charId;
+
+                }).catch(function(error) {
+                    alert("Unable to create character because of an error");
+                });
             });
 
         };

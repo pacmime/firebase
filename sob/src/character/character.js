@@ -6,8 +6,8 @@
 
     
     app.controller("CharacterController", [
-        "$scope", "$routeParams", "CharacterRef",
-        function($scope, $routeParams, CharacterRef) {
+        "$scope", "$routeParams", "CharacterRef", 'ClassHelper',
+        function($scope, $routeParams, CharacterRef, ClassHelper) {
         
         var self = this;
         
@@ -20,10 +20,29 @@
         this.panel="char";
 
         //load the campaign
-        this.charName = decodeURIComponent($routeParams.charId);
-        this.character = CharacterRef(this.charName);
+        this.character = CharacterRef(decodeURIComponent($routeParams.charId));
+
+        this.classes = ClassHelper.getClasses();
 
         this.character.$loaded().then(function() {
+
+            self.charName = self.character.name;
+            self.charClass = ClassHelper.getClassName(self.character.class);
+
+            //apply v3 fix
+            if(ClassHelper.fixV3(self.charName, self.character))
+                self.save();
+
+            self.character.sidebag.bandages = self.character.sidebag.bandages || 0;
+            self.character.sidebag.dynamite = self.character.sidebag.dynamite || 0;
+            self.character.sidebag.herbs = self.character.sidebag.herbs || 0;
+            self.character.sidebag.fungus = self.character.sidebag.fungus || 0;
+            self.character.sidebag.antiRad = self.character.sidebag.antiRad || 0;
+            self.character.sidebag.flash = self.character.sidebag.flash || 0;
+            self.character.sidebag.shatterGrenade = self.character.sidebag.shatterGrenade || 0;
+            self.character.sidebag.tonic = self.character.sidebag.tonic || 0;
+            self.character.sidebag.whiskey = self.character.sidebag.whiskey || 0;
+            self.character.sidebag = self.character.sidebag || {};
             self.character.sidebag.spices = self.character.sidebag.spices || 0;
             self.character.sidebag.potions = self.character.sidebag.potions || 0;
             self.character.sidebag.hatchets = self.character.sidebag.hatchets || 0;
@@ -42,31 +61,20 @@
 
 
         this.save = function() {
-            console.log("Saved");
             this.character.$save();
         };
 
         this.getAvailableSidebagCapacity = function() {
             if(!self.character.sidebag) return 0;
-            return self.character.sidebag.capacity - (
-                (self.character.sidebag.bandages||0) + 
-                (self.character.sidebag.whiskey||0) + 
-                (self.character.sidebag.tonic||0) + 
-                (self.character.sidebag.herbs||0) + 
-                (self.character.sidebag.dynamite||0) + 
-                (self.character.sidebag.flash||0) + 
-                (self.character.sidebag.fungus||0) + 
-                (self.character.sidebag.spices||0) +  
-                (self.character.sidebag.potions||0) +  
-                (self.character.sidebag.hatchets||0) + 
-                (self.character.sidebag.lanternOil||0) + 
-                (self.character.sidebag.exoticHerbs||0) +  
-                (self.character.sidebag.tequila||0) + 
-                (self.character.sidebag.cigars||0)
-            );
-
-            
+            var weight = 0;
+            for(var k in self.character.sidebag) {
+                if(self.character.sidebag.hasOwnProperty(k) && 'capacity' !== k) {
+                    weight += self.character.sidebag[k] || 0;
+                }
+            }
+            return self.character.sidebag.capacity - weight;
         };
+
 
     }])
 

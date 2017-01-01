@@ -2,7 +2,7 @@
     
     "use strict";
 
-    angular.module("sob-character").directive('abilities', function() {
+    angular.module("sob-character").directive('abilities', ['$q', 'CharacterOptions', function($q, CharacterOptions) {
 
         return {
             scope: {
@@ -14,36 +14,77 @@
             
             controller: function($scope, $element) {
 
-                function init() {
-                    $scope.value = {name: null, desc: null};
+                var charOptions = null;
+
+                $scope.character.$loaded().then(function() {
+                    charOptions = CharacterOptions('abilities', $scope.character.class);
+                    charOptions.$loaded().then(init);
+                });
+
+                function hasAbility(name) {
+                    for(var id in $scope.character.abilities) {
+                        if($scope.character.abilities[id].name == name) return true;
+                    }
+                    return false;
                 }
-                init();
+
+                function init() {
+
+                    $scope.newAbility = null;
+                    $scope.customAbility = {name: null, desc: null};    
+
+                    $scope.options = [];
+                    angular.forEach(charOptions, function(value, name) {
+                        if(typeof(value) === 'string') {
+                            var disabled = hasAbility(name);
+                            $scope.options.push({name : name, desc: value, disabled: disabled});
+                        } else {
+                            //if it requires a skill one doesn't have or can't be added multiple times...
+                            var disabled = !value.multi && hasAbility(name);
+                            if(!disabled && value.requires && !hasAbility(value.requires)) {
+                                name = name + " (requires " + value.requires + ")";
+                                disabled = true;
+                            }
+                            $scope.options.push({name : name, desc: value.value, disabled: disabled});
+                        }
+                    });
+                }
+                // init();
                 
                 $scope.add = function() {
-                    if(!$scope.value.name) return;
-                    $scope.character.abilities = $scope.character.abilities || {}
-                    $scope.character.abilities[$scope.value.name] = $scope.value.desc;
+                    if(!$scope.newAbility) return;
+                    $scope.character.abilities = $scope.character.abilities || {};
+                    $scope.character.abilities[UUID()] = {
+                        name: $scope.newAbility.name, 
+                        desc: $scope.newAbility.desc
+                    };
                     $scope.onSave();
                     init();
                 };
 
-                $scope.onEdited = function(name, newName, newDesc) {
+                $scope.addCustom = function() {
+                    if(!$scope.customAbility.name) return;
+                    $scope.character.abilities = $scope.character.abilities || {}
+                    $scope.character.abilities[UUID()] = $scope.customAbility;
+                    $scope.onSave();
+                    init();
+                };
 
-                    if(name !== newName) {
-                        //delete old property
-                        delete $scope.character.abilities[name];
+                $scope.onEdited = function(id, updated) {
+
+                    if(!updated) {  //remove ability
+                        delete $scope.character.abilities[id];
                     }
 
-                    if(newName && newDesc) 
-                        $scope.character.abilities[newName] = newDesc;
+                    if(updated) 
+                        $scope.character.abilities[id] = updated;
 
                     $scope.onSave();
                 };
 
-
             }
         };
-    })
+    }])
 
 
     .directive('ability', function() {
@@ -53,19 +94,16 @@
             $scope.ctrl = this;
 
             //remember original name just in case it changes
-            var originalName = $scope.name;
-            this.name = $scope.name;
-            this.desc = $scope.desc;
+            // var originalName = $scope.name;
+            this.name = $scope.ability.name;
+            this.desc = $scope.ability.desc;
             
             this.edit = function() {
                 this.displayEditor = true;
             };
 
             this.save = function() {
-                $scope.onSave({
-                    newName: this.name, 
-                    newDesc: this.desc
-                });
+                $scope.onSave({ updated: {name: this.name, desc: this.desc} });
                 this.displayEditor = false;
             };
 
@@ -74,16 +112,17 @@
             };
 
             this.remove = function() {
-                $scope.onSave({newName: null, newDesc: null});
+                $scope.onSave({updated: null});
             };
 
         }
 
         return {
             scope: {
+                ability: "=",
                 // character: "=",
-                name: "@",
-                desc: "@",
+                // name: "@",
+                // desc: "@",
                 onSave: '&'
             },
             replace: true,

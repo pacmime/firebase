@@ -1,18 +1,27 @@
-<div class="sermons" ng-if="character.class && character.class.toLowerCase().indexOf('preacher')>=0">
+<div class="sermons" ng-if="canCastSermons()">
    <h4>
         <div class="pull-right">
             Faith: {{$parent.character.availableFaith}} / {{$parent.character.faith}} 
             <button type="button" class="btn btn-sm btn-default" ng-click="$parent.resetFaith()">reset</button>
-
-            &nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-sm btn-success pull-right" ng-click="$parent.add()">Add</button>
-
         </div>
         Sermons
     </h4>
-    <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
-        <div sermon="sermon" on-save="$parent.onEdited(name, sermon)"></div>
+    <div ng-repeat="(key,sermon) in $parent.character.sermons"> 
+        <div sermon="sermon" on-save="$parent.$parent.onEdited(name, sermon)"></div>
     </div>
     <hr>
+
+    <div class="row">
+        <div class="col-xs-10">
+            <select class="form-control" ng-model="$parent.newSermon" 
+                ng-options="sermon as sermon.name for sermon in $parent.sermonOpts">
+                <option value="">Add Sermon</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <button type="button" class="btn btn-sm btn-success" 
+                ng-disabled="!$parent.newSermon" ng-click="$parent.add()">Add</button>
+        </div>
+    </div>
     
 </div>

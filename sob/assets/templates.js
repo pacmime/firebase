@@ -4,15 +4,29 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('character/abilities/abilities.html',
     "<div class=\"abilities\">\n" +
     "    <h4>Abilities</h4>\n" +
-    "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
-    "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
+    "    <div ng-repeat=\"(id, ability) in character.abilities\" \n" +
+    "        ability=\"ability\" on-save=\"onEdited(id, updated)\"></div>\n" +
     "\n" +
     "    <hr>\n" +
     "    \n" +
     "    <form class=\"form\">\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        \n" +
+    "        <label>Add Ability</label>\n" +
+    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "            <div class=\"f-cell-2x\">\n" +
+    "                <select class=\"form-control\" ng-model=\"newAbility\" \n" +
+    "                    ng-options=\"item as item.name disable when item.disabled for item in options\">\n" +
+    "                    <option value=\"\">Select New Ability</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newAbility\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <label>Add Custom Ability</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customAbility.name\">\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customAbility.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customAbility.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -363,7 +377,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <!-- name, class, and keywords -->\n" +
     "                <div class=\"grid__col-xs-7 grid__col-sm-8 grid__col-md-9 grid__col-lg-9\">\n" +
     "                    <div><label>Name: </label> {{ctrl.charName}}</div>\n" +
-    "                    <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div>\n" +
+    "                    <div class=\"editable-input\">\n" +
+    "                        <strong>Class: </strong> {{ctrl.charClass}}\n" +
+    "                        <!-- <select class=\"form-control\" ng-model=\"ctrl.character.class\" ng-change=\"ctrl.save()\" \n" +
+    "                            ng-options=\"item.id as item.name for item in ctrl.classes\">\n" +
+    "                            <option value=\"\">Select Class</option>\n" +
+    "                        </select> -->\n" +
+    "                    </div>\n" +
+    "                    <!-- <div editable-input label=\"Class\" ng-model=\"ctrl.character.class\" on-save=\"ctrl.save()\"></div> -->\n" +
     "                    <div editable-input label=\"Keywords\" ng-model=\"ctrl.character.keywords\" on-save=\"ctrl.save()\"></div>\n" +
     "                    <br>\n" +
     "                    <div>\n" +
@@ -509,16 +530,28 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "   <div class=\"grid__col-sm-3 grid__col-md-4\">\n" +
     "       <div class=\"grid grid--justify-space-between\">\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_weight\"></span> <br class=\"hidden-xs\"> {{item.weight}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_weight\" ng-class=\"{disabled:!item.weight}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.weight}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_darkstone\"></span> <br class=\"hidden-xs\"> {{item.darkstone}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_darkstone\" ng-class=\"{disabled:!item.darkstone}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.darkstone}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_hands\"></span> <br class=\"hidden-xs\"> {{item.hands}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_hands\" ng-class=\"{disabled:!item.hands}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.hands}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\">\n" +
-    "               <div><span class=\"sprite sprite-item_slots\"></span> <br class=\"hidden-xs\"> {{item.slots}}</div>\n" +
+    "               <div>\n" +
+    "                  <span class=\"sprite sprite-item_slots\" ng-class=\"{disabled:!item.slots}\"></span> \n" +
+    "                  <br class=\"hidden-xs\"> {{item.slots}}\n" +
+    "                </div>\n" +
     "           </div>\n" +
     "           <div class=\"grid__col\"></div>\n" +
     "       </div>\n" +
@@ -542,7 +575,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                 <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
     "               </button>\n" +
     "            </div>\n" +
-    "            <h5>{{name}} <small>({{item.source}}) <span ng-if=\"item.cost\">${{item.cost}}</span></small></h5>\n" +
+    "            <h5>{{name}} <br><small>({{item.source}}) <span ng-if=\"item.cost\">${{item.cost}}</span></small></h5>\n" +
     "            <small>\n" +
     "              {{item.description}}  \n" +
     "              <div ng-if=\"item.keywords\">{{item.keywords}}</div>\n" +
@@ -643,10 +676,23 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        mutation name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
     "    <hr>\n" +
     "    \n" +
+    "    <label>Add Mutation, Injury, or Madness</label>\n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newMutation\" \n" +
+    "                ng-options=\"item as item.name group by item.group disable when item.disabled for item in mimOpts\">\n" +
+    "                <option value=\"\">Select One</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newMutation\" ng-click=\"add()\">Add</button>\n" +
+    "    </div>\n" +
+    "    <br>\n" +
+    "\n" +
     "    <form class=\"form\">\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Custom Mutation, Injury, or Madness</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customMutation.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customMutation.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customMutation.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -814,22 +860,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('character/sermons/sermons.html',
-    "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
+    "<div class=\"sermons\" ng-if=\"canCastSermons()\">\n" +
     "   <h4>\n" +
     "        <div class=\"pull-right\">\n" +
     "            Faith: {{$parent.character.availableFaith}} / {{$parent.character.faith}} \n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
-    "\n" +
-    "            &nbsp;&nbsp;&nbsp;\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
-    "\n" +
     "        </div>\n" +
     "        Sermons\n" +
     "    </h4>\n" +
-    "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
-    "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
+    "    <div ng-repeat=\"(key,sermon) in $parent.character.sermons\"> \n" +
+    "        <div sermon=\"sermon\" on-save=\"$parent.$parent.onEdited(name, sermon)\"></div>\n" +
     "    </div>\n" +
     "    <hr>\n" +
+    "\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-xs-10\">\n" +
+    "            <select class=\"form-control\" ng-model=\"$parent.newSermon\" \n" +
+    "                ng-options=\"sermon as sermon.name for sermon in $parent.sermonOpts\">\n" +
+    "                <option value=\"\">Add Sermon</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-xs-2\">\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                ng-disabled=\"!$parent.newSermon\" ng-click=\"$parent.add()\">Add</button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "    \n" +
     "</div>"
   );
@@ -1020,17 +1075,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
     "        <div class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></div>\n" +
-    "        <div ng-repeat=\"name in ctrl.chars\" class=\"list-group-item\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-danger pull-right\"\n" +
-    "                ng-click=\"ctrl.removeCharacter(name)\">\n" +
-    "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
-    "            </button>\n" +
-    "            <a href=\"#/{{name|encode}}\">{{name}}</a>\n" +
-    "            <a href=\"v2.html#/{{name|encode}}\" class=\"btn btn-link\">(v2)</a>\n" +
+    "        <div ng-repeat=\"(id, obj) in ctrl.chars\" class=\"list-group-item\">\n" +
+    "            <div class=\" pull-right\">\n" +
+    "                <a href=\"#/{{id|encode}}\" class=\"btn btn-sm btn-default\">Version 1</a>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-danger\"\n" +
+    "                    ng-click=\"ctrl.removeCharacter(id)\">\n" +
+    "                    <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "            <a href=\"v2.html#/{{id|encode}}\">\n" +
+    "                {{obj.name}} \n" +
+    "                <small ng-if=\"obj.className\"><strong>[{{obj.className}}]</strong></small>\n" +
+    "            </a>\n" +
+    "            \n" +
     "        </div>\n" +
-    "        <div class=\"list-group-item list-group-item-success\" ng-if=\"user\" ng-click=\"ctrl.createCharacter()\">\n" +
-    "            Create a New Character\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"f-container\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" \n" +
+    "                ng-model=\"ctrl.newCharClass\" \n" +
+    "                ng-options=\"item.id as item.name for item in ctrl.classOptions\">\n" +
+    "                <option value=\"\">Create a New Character</option>\n" +
+    "            </select>\n" +
     "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-click=\"ctrl.createCharacter()\">Create</button>\n" +
     "    </div>\n" +
     "\n" +
     "</div>"
@@ -1158,17 +1227,31 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <br>\n" +
     "    \n" +
     "    <!-- list abilities -->\n" +
-    "    <div ng-repeat=\"(name, desc) in character.abilities\" \n" +
-    "        ability name=\"{{name}}\" desc=\"{{desc}}\" on-save=\"onEdited(name, newName, newDesc)\"></div>\n" +
+    "    <div ng-repeat=\"(id, ability) in character.abilities\" \n" +
+    "        ability=\"ability\" on-save=\"onEdited(id, updated)\"></div>\n" +
     "\n" +
     "    <br>\n" +
     "    \n" +
     "    <!-- add new -->\n" +
     "    <form class=\"form\">\n" +
-    "        <label>Add New Ability</label>\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Ability</label>\n" +
+    "\n" +
+    "        <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "            <div class=\"f-cell-2x\">\n" +
+    "                <select class=\"form-control\" ng-model=\"newAbility\" \n" +
+    "                    ng-options=\"item as item.name disable when item.disabled for item in options\">\n" +
+    "                    <option value=\"\">Select New Ability</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newAbility\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <label>Add Custom Ability</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customAbility.name\">\n" +
+    "        <textarea rows=\"2\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customAbility.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customAbility.name\" ng-click=\"addCustom()\">Add</button>\n" +
+    "\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -1220,9 +1303,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"glyphicon glyphicon-option-horizontal\"></span>\n" +
     "        </button>\n" +
     "        <div class=\"char__name\">\n" +
-    "            <label>Name: </label> {{$ctrl.charName}}\n" +
+    "            <label>Name: </label> {{$ctrl.character.name}}\n" +
     "        </div>\n" +
-    "        <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div>\n" +
+    "\n" +
+    "        <div class=\"editable-input\">\n" +
+    "            <strong>Class: </strong> {{$ctrl.charClass}}\n" +
+    "            <!-- <select class=\"form-control\" ng-model=\"$ctrl.character.class\" ng-change=\"$ctrl.save()\" \n" +
+    "                ng-options=\"item.id as item.name for item in $ctrl.classes\">\n" +
+    "                <option value=\"\">Select Class</option>\n" +
+    "            </select> -->\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <!-- <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div> -->\n" +
     "        <div editable-input label=\"Keys\" ng-model=\"$ctrl.character.keywords\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
@@ -1542,7 +1634,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <span class=\"glyphicon glyphicon-flash\"></span>\n" +
     "        </button>\n" +
     "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
-    "            ng-if=\"$ctrl.character.class && $ctrl.character.class.toLowerCase().indexOf('preacher')>=0\"\n" +
+    "            ng-if=\"$ctrl.canCastSermons()\"\n" +
     "            ng-class=\"{active:$ctrl.panel==='sermons'}\"\n" +
     "            ng-click=\"$ctrl.panel='sermons'\">\n" +
     "            <span class=\"glyphicon glyphicon-book\"></span>\n" +
@@ -1861,6 +1953,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <h5>\n" +
+    "        <!-- <input type=\"checkbox\" ng-model=\"item.equipped\"> --> \n" +
     "        {{name}} \n" +
     "        <small>\n" +
     "            <em>\n" +
@@ -1872,7 +1965,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </h5>\n" +
     "    \n" +
     "    <div ng-if=\"item.description\"><small>{{item.description}}</small></div>\n" +
-    "    <div ng-if=\"item.keywords\"><small>{{item.keywords}}</small></div>\n" +
+    "    <div ng-if=\"item.keywords\"><small><em>{{item.keywords}}</em></small></div>\n" +
     "    \n" +
     "    <span ng-if=\"item.usage\">\n" +
     "        <input type=\"checkbox\"> <small>(per {{item.usage}})</small>\n" +
@@ -1917,7 +2010,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  \n" +
     "  <div ng-if=\"!ctrl.displayEditor\">\n" +
     "    <div class=\"pull-right\">\n" +
-    "      <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "      <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "          <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "          <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "        </button>     \n" +
+    "      </div>\n" +
+    "      <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "        type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "        <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "      </button>&nbsp;&nbsp;&nbsp;\n" +
     "      <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -1953,11 +2055,23 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <br>\n" +
     "    \n" +
     "    <!-- add new -->\n" +
+    "    <label>Add Mutation, Injury, or Madness</label>\n" +
+    "    <div class=\"f-container f-justify-between f-align-center\">\n" +
+    "        <div class=\"f-cell-2x\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newMutation\" \n" +
+    "                ng-options=\"item as item.name group by item.group disable when item.disabled for item in mimOpts\">\n" +
+    "                <option value=\"\">Select One</option>\n" +
+    "            </select>\n" +
+    "        </div>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!newMutation\" ng-click=\"add()\">Add</button>\n" +
+    "    </div>\n" +
+    "    <br>\n" +
+    "\n" +
     "    <form class=\"form\">\n" +
-    "        <label>Add New Injury or Mutation</label>\n" +
-    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"value.name\">\n" +
-    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"value.desc\"></textarea>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!value.name\" ng-click=\"add()\">Add</button>\n" +
+    "        <label>Add Custom Mutation, Injury, or Madness</label>\n" +
+    "        <input type=\"text\" class=\"form-control\" placeholder=\"Name\" ng-model=\"customMutation.name\">\n" +
+    "        <textarea rows=\"3\" class=\"form-control\" placeholder=\"Description\" ng-model=\"customMutation.desc\"></textarea>\n" +
+    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-disabled=\"!customMutation.name\" ng-click=\"addCustom()\">Add</button>\n" +
     "    </form>\n" +
     "\n" +
     "</div>"
@@ -2310,15 +2424,15 @@ angular.module('app').run(['$templateCache', function($templateCache) {
   $templateCache.put('v2/sermons/sermon.html',
     "<div class=\"sermon\" ng-class=\"{disabled:!ctrl.isAvailable()}\">\n" +
     "    <h5>\n" +
+    "        <span ng-if=\"sermon.deadly\">\n" +
+    "            <span class=\"glyphicon glyphicon-exclamation-sign\" title=\"Dangerous!\"></span> \n" +
+    "        </span>\n" +
     "        {{sermon.name}} \n" +
     "        <small>{{sermon.type}}</small>\n" +
     "    </h5>\n" +
     "    <p>\n" +
     "        <small>\n" +
     "            <div>\n" +
-    "                <span ng-if=\"sermon.deadly\">\n" +
-    "                    <span class=\"glyphicon glyphicon-exclamation-sign\" title=\"Dangerous!\"></span>&nbsp;&nbsp;&nbsp;\n" +
-    "                </span>\n" +
     "                <strong>[{{sermon.check}}+]</strong>&nbsp;&nbsp;&nbsp;\n" +
     "                <strong>Cost: </strong> {{sermon.cost}}&nbsp;&nbsp;&nbsp;\n" +
     "                <strong>XP: </strong> {{sermon.xp}}&nbsp;&nbsp;&nbsp;\n" +
@@ -2329,7 +2443,16 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </p>\n" +
     "    <div>\n" +
     "        <div class=\"pull-right\">\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.remove()\">\n" +
+    "            <div class=\"btn-group\" ng-if=\"ctrl.confirmingDelete\">\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-success\" ng-click=\"ctrl.remove()\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                </button>\n" +
+    "                <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.confirmingDelete=false\">\n" +
+    "                  <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "                </button>     \n" +
+    "              </div>\n" +
+    "              <button ng-if=\"!ctrl.confirmingDelete\"\n" +
+    "                type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"ctrl.confirmingDelete=true\">\n" +
     "                <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "            </button>&nbsp;&nbsp;&nbsp;\n" +
     "            <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"ctrl.edit()\">\n" +
@@ -2365,45 +2488,49 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/sermons/sermons.html',
-    "<div class=\"sermons\" ng-if=\"character.class && character.class.toLowerCase().indexOf('preacher')>=0\">\n" +
+    "<div class=\"sermons\">\n" +
     "    <br>\n" +
     "    <div>\n" +
-    "        <strong>Faith:</strong> {{$parent.character.availableFaith}} / {{$parent.character.faith}} \n" +
-    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"$parent.resetFaith()\">reset</button>\n" +
+    "        <strong>Faith:</strong> {{character.availableFaith}} / {{character.faith}} \n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-default\" ng-click=\"resetFaith()\">reset</button>\n" +
     "\n" +
     "        &nbsp;&nbsp;&nbsp;\n" +
-    "        <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$parent.add()\">Add</button>\n" +
+    "        <div class=\"pull-right f-container f-align-center\">\n" +
+    "            <select class=\"form-control\" ng-model=\"newSermon\" \n" +
+    "                ng-options=\"sermon as sermon.name for sermon in sermonOpts\">\n" +
+    "                <option value=\"\">Add Sermon</option>\n" +
+    "            </select>\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                ng-disabled=\"!newSermon\" ng-click=\"add()\">Add</button>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <hr>\n" +
-    "\n" +
-    "    <!--\n" +
-    "    <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
-    "        <div sermon=\"sermon\" on-save=\"$parent.onEdited(name, sermon)\"></div>\n" +
-    "    </div>\n" +
-    "    -->\n" +
     "\n" +
     "    <div class=\"sermons-container\">\n" +
     "\n" +
     "        <div>\n" +
     "            <h5>\n" +
     "                Blessings\n" +
-    "                <small ng-if=\"$parent.character.abilities.Missionary\">Missionary: re-roll one die when casting blessings</small>\n" +
+    "                <small ng-if=\"hasAbility('Missionary')\">Missionary: re-roll one die when casting blessings</small>\n" +
     "            </h5>\n" +
-    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "            <div ng-repeat=\"(name,sermon) in character.sermons\"> \n" +
     "                <div ng-if=\"'Blessing'===sermon.type\" \n" +
     "                    sermon=\"sermon\" \n" +
-    "                    on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "                    on-save=\"onEdited(name, sermon)\"></div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
     "        <hr class=\"visible-xs-block\">\n" +
     "        \n" +
     "        <div>\n" +
-    "            <h5>Judgements</h5>\n" +
-    "            <div ng-repeat=\"(name,sermon) in $parent.character.sermons\"> \n" +
+    "            <h5>\n" +
+    "                Judgements\n" +
+    "                <small ng-if=\"hasAbility('Firebrand')\">Firebrand: re-roll one die when casting judgements</small>\n" +
+    "            </h5>\n" +
+    "            <div ng-repeat=\"(name,sermon) in character.sermons\"> \n" +
     "                <div ng-if=\"'Judgement'===sermon.type\" \n" +
     "                    sermon=\"sermon\" \n" +
-    "                    on-save=\"$parent.onEdited(sermon.name, sermon)\"></div>\n" +
+    "                    on-save=\"onEdited(name, sermon)\"></div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +

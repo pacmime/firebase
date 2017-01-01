@@ -4,7 +4,7 @@
 
     angular.module("sob-character")
 
-    .directive('mutations', function() {
+    .directive('mutations', ['DBHelper', function(DBHelper) {
 
         return {
             scope: {
@@ -16,17 +16,82 @@
             
             controller: function($scope, $element) {
 
+
+                $scope.mimOpts = [];
+
+                DBHelper('mutations').$loaded(function(mutations) {
+                    for(var key in mutations) {
+                        if(key.indexOf("$")<0 && typeof(mutations[key]) == 'object') {
+                            $scope.mimOpts.push({
+                                name: mutations[key].name, 
+                                desc: mutations[key].desc, 
+                                group: "Mutations"
+                            });
+                        }
+                    }
+                    DBHelper('injuries').$loaded(function(injuries) {
+                        for(var key in injuries) {
+                            if(key.indexOf("$")<0 && typeof(injuries[key]) == 'object') {
+                                $scope.mimOpts.push({
+                                    name: injuries[key].name, 
+                                    desc: injuries[key].desc, 
+                                    group: "Injuries"
+                                });
+                            }
+                        }
+                        DBHelper('madness').$loaded(function(madness) {
+                            for(var key in madness) {
+                                if(key.indexOf("$")<0 && typeof(madness[key]) == 'object') {
+                                    $scope.mimOpts.push({
+                                        name: madness[key].name, 
+                                        desc: madness[key].desc, 
+                                        group: "Madness"
+                                    });
+                                }
+                            }
+
+                            refreshOptions();
+                        });
+                    });
+                });
+
+                
+                $scope.newMutation = null;
                 function init() {
-                    $scope.value = {name: null, desc: null};
+                    $scope.newMutation = null;
+                    $scope.customMutation = {name: null, desc: null};
                 }
                 init();
+
+                function refreshOptions() {
+                    if($scope.character.mutations) {
+                        //disable option if character already has this mutation, injury, or madness
+                        angular.forEach($scope.mimOpts, function(opt) {
+                            opt.disabled = $scope.character.mutations[opt.name];
+                        });
+                    }
+                }
                 
                 $scope.add = function() {
-                    if(!$scope.value.name) return;
+                    if(!$scope.newMutation.name) return;
                     $scope.character.mutations = $scope.character.mutations || {}
-                    $scope.character.mutations[$scope.value.name] = $scope.value.desc;
+                    $scope.character.mutations[$scope.newMutation.name] = $scope.newMutation.desc;
                     $scope.onSave();
                     init();
+                    refreshOptions();
+                };
+
+                $scope.addCustom = function() {
+                    if(!$scope.customMutation.name) return;
+                    $scope.character.mutations = $scope.character.mutations || {}
+                    if($scope.character.mutations[$scope.customMutation.name]) {
+                        alert("Character already has a mutation, injury, or madness with that name");
+                        return;
+                    }
+                    $scope.character.mutations[$scope.customMutation.name] = $scope.customMutation.desc;
+                    $scope.onSave();
+                    init();
+                    refreshOptions();
                 };
 
                 $scope.onEdited = function(name, newName, newDesc) {
@@ -45,7 +110,7 @@
 
             }
         };
-    })
+    }])
 
 
     .directive('mutation', function() {

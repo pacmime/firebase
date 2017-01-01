@@ -1,42 +1,46 @@
-<div class="sermons" ng-if="character.class && character.class.toLowerCase().indexOf('preacher')>=0">
+<div class="sermons">
     <br>
     <div>
-        <strong>Faith:</strong> {{$parent.character.availableFaith}} / {{$parent.character.faith}} 
-        <button type="button" class="btn btn-sm btn-default" ng-click="$parent.resetFaith()">reset</button>
+        <strong>Faith:</strong> {{character.availableFaith}} / {{character.faith}} 
+        <button type="button" class="btn btn-sm btn-default" ng-click="resetFaith()">reset</button>
 
         &nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-sm btn-success pull-right" ng-click="$parent.add()">Add</button>
+        <div class="pull-right f-container f-align-center">
+            <select class="form-control" ng-model="newSermon" 
+                ng-options="sermon as sermon.name for sermon in sermonOpts">
+                <option value="">Add Sermon</option>
+            </select>
+            <button type="button" class="btn btn-sm btn-success" 
+                ng-disabled="!newSermon" ng-click="add()">Add</button>
+        </div>
     </div>
     <hr>
-
-    <!--
-    <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
-        <div sermon="sermon" on-save="$parent.onEdited(name, sermon)"></div>
-    </div>
-    -->
 
     <div class="sermons-container">
 
         <div>
             <h5>
                 Blessings
-                <small ng-if="$parent.character.abilities.Missionary">Missionary: re-roll one die when casting blessings</small>
+                <small ng-if="hasAbility('Missionary')">Missionary: re-roll one die when casting blessings</small>
             </h5>
-            <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+            <div ng-repeat="(name,sermon) in character.sermons"> 
                 <div ng-if="'Blessing'===sermon.type" 
                     sermon="sermon" 
-                    on-save="$parent.onEdited(sermon.name, sermon)"></div>
+                    on-save="onEdited(name, sermon)"></div>
             </div>
         </div>
 
         <hr class="visible-xs-block">
         
         <div>
-            <h5>Judgements</h5>
-            <div ng-repeat="(name,sermon) in $parent.character.sermons"> 
+            <h5>
+                Judgements
+                <small ng-if="hasAbility('Firebrand')">Firebrand: re-roll one die when casting judgements</small>
+            </h5>
+            <div ng-repeat="(name,sermon) in character.sermons"> 
                 <div ng-if="'Judgement'===sermon.type" 
                     sermon="sermon" 
-                    on-save="$parent.onEdited(sermon.name, sermon)"></div>
+                    on-save="onEdited(name, sermon)"></div>
             </div>
         </div>
 

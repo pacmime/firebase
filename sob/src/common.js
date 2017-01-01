@@ -1,9 +1,99 @@
 (function(angular) {
     "use strict";
 
+
+    window.UUID = function() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+    window.angularFireCopy = function(angularFireObj) {
+        var result = {};
+        for (var key in angularFireObj) {
+           if (key.indexOf('$') < 0 && angularFireObj.hasOwnProperty(key)) {
+              result[key] = angularFireObj[key];
+           };
+        }
+        return result;
+    }
+
+
     angular.module('sob-common', [])
 
     .constant('DataStoreUrl', "https://intense-fire-8692.firebaseio.com/ShadowsOfBrimstone")
+
+    .constant('ClassMap', {
+        "1455a125-99a3-4aeb-bd6c-0d66bce4b87c": "Gunslinger",
+        "2e2e4022-35c0-498c-ad78-8b87f5664026": "Cowboy",
+        "30d35552-bd40-444d-9558-df917fbc4398": "Drifter",
+        "3ec81ec0-56da-4e53-b9b6-cb71af815dbf": "Rancher",
+        "45b3ac67-15f6-4654-bba1-3c73493aa821": "US Marshal",
+        "48bdac8c-01a4-4284-ba73-775a79dda210": "Jargono Native",
+        "651350a6-d930-4372-9bce-1d200149362a": "Indian Scout",
+        "6bc4fc3a-4af5-4cf9-b6ad-8615501aca26": "Frontier Doc",
+        "6d198a74-1b2a-4f60-bf51-2c1e2d0ec2e1": "Prospector",
+        "7309fd50-b111-4d16-8a89-c500807b3472": "Law Man",
+        "7c791b38-c539-4964-890c-db925782933a": "Orphan",
+        "7fa50e95-f33d-43a8-b93b-501a7b3f3a3a": "Saloon Girl",
+        "c2c8ed0b-4104-44a2-9bfc-b403a7b70615": "Bandido",
+        "fa565014-f32b-46b4-9621-f2936d079b35": "Preacher"
+    })
+
+    .factory('ClassHelper', ["ClassMap", function(ClassMap) {
+        return {
+
+            getClassName: function(id) {
+                return ClassMap[id];
+            },
+            getClassId: function(className) {
+                if(typeof(className)==='undefined' || !className.length) return null;
+                var name = className.trim().replace(/\./g, '').replace(/\b[a-z]/g,function(f){return f.toUpperCase();});
+                
+                for(var id in ClassMap) {
+                    if(ClassMap[id] == name) return id;
+                }
+                console.log("Could not find '" + className + "' in map");
+                return null;
+            },
+            getClasses: function() {
+                var result = [];
+                for(var id in ClassMap)
+                    result.push({id: id, name: ClassMap[id]});
+                return result;
+            },
+
+            fixV3: function(name, character) {
+                
+                if('3' == character.version) return false;
+
+                //fix char ID if necessary
+                var classId = this.getClassId(character['class']);
+                if(classId) {
+                    character['class'] = classId;
+                }
+
+                //apply name as property (in prep for a move from using name as key in list)
+                character.name = character.name || name;
+
+                for(var name in character.abilities) {
+                    var value = character.abilities[name];
+                    delete character.abilities[name];
+                    character.abilities[UUID()] = { name: name, desc: value };
+                }
+
+                character.version = '3';
+                console.log("Fixed to version 3");
+                return true;
+                
+            },
+
+            getClassShell: function(classId) {
+
+            }
+        }
+    }])
 
     .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
         function($firebaseObject, DataStoreUrl) {
@@ -24,6 +114,52 @@
                 var root = firebase.database().ref();
                 var ref = root.child('ShadowsOfBrimstone').child('chars').child(name);
                 return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("CharacterOptions", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(type, classId) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/' + type + '/' + classId).orderByKey();
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    .factory("DBHelper", ["$firebaseObject", 'DataStoreUrl',
+        function($firebaseObject, DataStoreUrl) {
+            return function(group) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/' + group);
+                return $firebaseObject(ref);
+            }
+        }
+    ])
+
+    /* 
+     * Factory used to create a copy of the starting "shell" for each character class.
+     * Usage: CharacterShell(classId).then(function(json) {...})
+     */
+    .factory("CharacterShell", ["$q", "$firebaseObject", 'DataStoreUrl',
+        function($q, $firebaseObject, DataStoreUrl) {
+            return function(classId) {
+                var root = firebase.database().ref();
+                var ref = root.child('ShadowsOfBrimstone/db/starting').child(classId);
+                var fbo = $firebaseObject(ref);
+
+                var deferred = $q.defer();
+                fbo.$loaded().then(function(snap) {
+                    var result = {};
+                    for (var key in snap) {
+                       if (key.indexOf('$') < 0 && snap.hasOwnProperty(key)) {
+                          result[key] = snap[key];
+                       };
+                    }
+                    deferred.resolve(result);
+                });
+                return deferred.promise;
             }
         }
     ])

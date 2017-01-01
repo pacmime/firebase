@@ -523,6 +523,7 @@ table thead img { width: 1.5em; }
     display: inline-block;
     vertical-align: bottom;
 }
+.sprite.disabled { opacity: 0.25; }
 
 .sprite-bandages {
     width: 55px;

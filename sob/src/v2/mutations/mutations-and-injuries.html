@@ -8,11 +8,23 @@
     <br>
     
     <!-- add new -->
+    <label>Add Mutation, Injury, or Madness</label>
+    <div class="f-container f-justify-between f-align-center">
+        <div class="f-cell-2x">
+            <select class="form-control" ng-model="newMutation" 
+                ng-options="item as item.name group by item.group disable when item.disabled for item in mimOpts">
+                <option value="">Select One</option>
+            </select>
+        </div>
+        <button type="button" class="btn btn-success pull-right" ng-disabled="!newMutation" ng-click="add()">Add</button>
+    </div>
+    <br>
+
     <form class="form">
-        <label>Add New Injury or Mutation</label>
-        <input type="text" class="form-control" placeholder="Name" ng-model="value.name">
-        <textarea rows="3" class="form-control" placeholder="Description" ng-model="value.desc"></textarea>
-        <button type="button" class="btn btn-success pull-right" ng-disabled="!value.name" ng-click="add()">Add</button>
+        <label>Add Custom Mutation, Injury, or Madness</label>
+        <input type="text" class="form-control" placeholder="Name" ng-model="customMutation.name">
+        <textarea rows="3" class="form-control" placeholder="Description" ng-model="customMutation.desc"></textarea>
+        <button type="button" class="btn btn-success pull-right" ng-disabled="!customMutation.name" ng-click="addCustom()">Add</button>
     </form>
 
 </div>
