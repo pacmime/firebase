@@ -9,8 +9,9 @@
         <title>Shadows of Brimstone Character App</title>
         <link rel="shortcut icon" type="image/png" href="assets/item_darkstone.png">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/reflex.min.css">
-        <link rel="stylesheet" href="assets/style.css">
+        <!-- <link rel="stylesheet" href="assets/reflex.min.css">
+        <link rel="stylesheet" href="assets/style.css"> -->
+        <link rel="stylesheet" href="assets/style2.css">
     </head>
 
     <body>
@@ -28,13 +29,11 @@
 
         <div ng-view></div>
 
-        <br>
-        <br>
-        <br>
-        <br>
-        <center><small>Shadows of Brimstone is a registered trademark of Flying Frog Productions.</small></center>
-
-
+        <script>
+            window.SOB = {
+                version: 2
+            };
+        </script>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -66,6 +65,7 @@
         <script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>
 
 
+        <!--
         <script src="src/common.js"></script>
         <script src="src/character/character.js"></script>
         <script src="src/character/abilities/abilities.js"></script>
@@ -73,6 +73,18 @@
         <script src="src/character/items/items.js"></script>
         <script src="src/character/mutations/mutations.js"></script>
         <script src="src/character/sermons/sermons.js"></script>
+        <script src="src/home/home.js"></script>
+        <script src="src/main.js"></script>
+        -->
+
+        <script src="src/common.js"></script>
+        <script src="src/v2/character.js"></script>
+        <script src="src/v2/abilities/abilities.js"></script>
+        <script src="src/v2/clothing/clothing.js"></script>
+        <script src="src/v2/items/items.js"></script>
+        <script src="src/v2/mutations/mutations.js"></script>
+        <script src="src/v2/sermons/sermons.js"></script>
+        <script src="src/v2/sidebag/sidebag.js"></script>
         <script src="src/home/home.js"></script>
         <script src="src/main.js"></script>
 

@@ -21,6 +21,7 @@
             };
 
             this.panel="char";
+            this.showAll=false;
 
             this.xpLevels = [0, 500, 1000, 2000, 3000, 4500, 6000];
 

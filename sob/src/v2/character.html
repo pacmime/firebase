@@ -1,68 +1,66 @@
-<div class="page f-container f-column f-justify-between">
+<div class="page" ng-class="{'f-container f-column f-justify-between':!$ctrl.showAll}">
 
 
     <div class="char__header">
-        <button type="button" class="btn btn-sm pull-right" onClick="$(this).closest('.char__header').toggleClass('expanded')">
+        <button type="button" class="btn btn-sm btn-link pull-right" onClick="$(this).closest('.char__header').toggleClass('expanded')">
             <span class="glyphicon glyphicon-option-horizontal"></span>
         </button>
-        <div class="char__name">
-            <label>Name: </label> {{$ctrl.character.name}}
-        </div>
-
-        <div class="editable-input">
-            <strong>Class: </strong> {{$ctrl.charClass}}
-            <!-- <select class="form-control" ng-model="$ctrl.character.class" ng-change="$ctrl.save()" 
-                ng-options="item.id as item.name for item in $ctrl.classes">
-                <option value="">Select Class</option>
-            </select> -->
-        </div>
-
-        <!-- <div editable-input label="Class" ng-model="$ctrl.character.class" on-save="$ctrl.save()"></div> -->
+        <div class="char__name"><label>Name: </label> {{$ctrl.character.name}}</div>
+        <div class="editable-input"><strong>Class: </strong> {{$ctrl.charClass}}</div>
         <div editable-input label="Keys" ng-model="$ctrl.character.keywords" on-save="$ctrl.save()"></div>
+        <div class="editable-input">
+            <button type="button" class="btn btn-sm btn-info pull-right" ng-click="$ctrl.showAll=!$ctrl.showAll">
+                <span class="glyphicon" 
+                    ng-class="{'glyphicon-sort-by-attributes':!$ctrl.showAll,'glyphicon-phone':$ctrl.showAll}"></span>
+            </button>
+        </div>
     </div>
 
 
     <!-- Char -->
-    <div class="char__panel" ng-if="$ctrl.panel==='char'">
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='char'">
         <div ng-include="'src/v2/panel-char.html'"></div>
     </div>
 
 
     <!-- Abilities -->
-    <div class="char__panel" ng-if="$ctrl.panel==='abil'">
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='abil'">
+        <h3 ng-if="$ctrl.showAll">Abilities</h3>
         <div abilities character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
 
     <!-- Sermons -->
-    <div class="char__panel" ng-if="$ctrl.panel==='sermons'">
+    <div class="char__panel" ng-if="$ctrl.canCastSermons()&&($ctrl.showAll||$ctrl.panel==='sermons')">
+        <h3 ng-if="$ctrl.showAll">Sermons</h3>
         <div sermons character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
 
     <!-- Items and Clothing -->
-    <div class="char__panel" ng-if="$ctrl.panel==='items'">
-        <div class="items-panel">
-            <div items character="$ctrl.character" on-save="$ctrl.save()"></div>
-            <div clothing-2 character="$ctrl.character" on-save="$ctrl.save()"></div>
-        </div>
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='items'">
+        <h3 ng-if="$ctrl.showAll">Items</h3>
+        <div items character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
 
     <!-- Sidebag -->
-    <div class="char__panel" ng-if="$ctrl.panel==='side'">
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='side'">
+        <h3 ng-if="$ctrl.showAll">Sidebag</h3>
         <sidebag sidebag="$ctrl.character.sidebag" on-save="$ctrl.save()"></sidebag>
     </div>
 
 
     <!-- Injuries and Mutations -->
-    <div class="char__panel" ng-if="$ctrl.panel==='inj'">
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='inj'">
+        <h3 ng-if="$ctrl.showAll">Mutations, Injuries, &amp; Madness</h3>
         <div mutations character="$ctrl.character" on-save="$ctrl.save()"></div>
     </div>
 
 
     <!-- Miscellaneous -->
-    <div class="char__panel" ng-if="$ctrl.panel==='misc'">
+    <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='misc'">
+        <h3 ng-if="$ctrl.showAll">Miscellaneous</h3>
         <div class="notes">
             <h4>
                 <button type="button" class="btn btn-sm btn-success pull-right" ng-click="$ctrl.save()">Save</button>
@@ -70,6 +68,40 @@
             </h4>
             <textarea name="notes" rows="10" placeholder="Enter any notes about this character" class="form-control"
                 ng-model="$ctrl.character.notes"></textarea>
+        </div>
+    </div>
+
+    <div class="char__panel" ng-if="$ctrl.panel==='combat'">
+        <div class="combat-panel">
+            <h4> Combat</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <button type="button" class="btn btn-sm btn-success">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </th>
+                        <th>Combat</th>
+                        <th>Dmg</th>
+                        <th>Condition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td>5</td>
+                        <td>d6+2</td>
+                        <td>vs Undead</td>
+                    </tr>
+                </tbody>
+            </table>
+            
         </div>
     </div>
 
@@ -84,6 +116,6 @@
 
 
     <!-- footer buttons -->
-    <div ng-include="'src/v2/footer.html'"></div>
+    <div ng-if="!$ctrl.showAll" ng-include="'src/v2/footer.html'"></div>
 
 </div>

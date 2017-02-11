@@ -31,10 +31,36 @@
             ng-click="$ctrl.panel='inj'">
             <span class="glyphicon glyphicon-alert"></span>
         </button>
+
+        <!-- <div class="f-cell f-equal btn-group dropup">
+          <button type="button" class="dropdown-toggle" data-toggle="dropdown" 
+          aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-option-horizontal"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li>
+                <a ng-click="$ctrl.panel='misc'">
+                    <span class="glyphicon glyphicon-comment"></span> Notes
+                </a>
+            </li>
+            <li>
+                <a ng-click="$ctrl.panel='combat'">
+                    <span class="glyphicon glyphicon-fire"></span> Combat
+                </a>
+            </li>
+          </ul>
+        </div> -->
+
         <button type="button" class="f-cell f-equal" 
             ng-class="{active:$ctrl.panel==='misc'}"
             ng-click="$ctrl.panel='misc'">
             <span class="glyphicon glyphicon-comment"></span>
         </button>
+        <!--
+        <button type="button" class="f-cell f-equal" 
+            ng-class="{active:$ctrl.panel==='combat'}"
+            ng-click="$ctrl.panel='combat'">
+            <span class="glyphicon glyphicon-file"></span>
+        </button> -->
     </div>
 </div>

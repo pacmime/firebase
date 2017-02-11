@@ -16,27 +16,23 @@
     <div class="f-container f-justify-between f-wrap">
     
         <div ng-repeat="option in $ctrl.options" class="sidebag__option">
-            <label><span class="sprite sprite-{{option}}"></span> {{option}}</label>
-
-            <!-- <div class="input-group">
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-danger"
-                        ng-click="$ctrl.decrease(option)">&minus;</button>
-                </span>
-                <input type="number" min="0" class="form-control" disabled ng-model="$ctrl.sidebag[option]">
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-success"
-                        ng-click="$ctrl.increase(option)">&plus;</button>
-                </span>
-            </div> -->
-
-            <button type="button" class="btn btn-default"
-                ng-click="$ctrl.decrease(option)"
-                ng-disabled="!$ctrl.sidebag[option]">&minus;</button>
-            <span class="option__display">{{$ctrl.sidebag[option]}}</span>
-            <button type="button" class="btn btn-default"
-                ng-click="$ctrl.increase(option)"
-                ng-disabled="!$ctrl.max">&plus;</button>
+            <label>
+                <span class="sprite sprite-{{option.label}}"></span> {{option.label}}
+            </label>
+            <div class="sidebag__control">
+                <button type="button" class="btn btn-default"
+                    ng-click="$ctrl.decrease(option.label)"
+                    ng-disabled="!$ctrl.sidebag[option.label]">
+                    &minus;
+                </button>
+                <span class="option__display">{{$ctrl.sidebag[option.label]}}</span>
+                <button type="button" class="btn btn-default"
+                    ng-click="$ctrl.increase(option.label)"
+                    ng-disabled="!$ctrl.max">
+                    &plus;
+                </button>
+            </div>
+            <small class="help-block">{{option.description}}</small>
         </div>
 
     </div>

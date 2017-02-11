@@ -1,20 +1,44 @@
-<div class="items">
+<div class="items-panel">
     
-    <br>
-    <h4>
-        <button type="button" class="btn btn-success pull-right" ng-click="add()">Add</button>
-    
-        Items 
-        <small>
-            <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;
-            <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
-        </small>
-    </h4>
-    <hr>
+    <div class="items">
+        <br>
+        <h4>
+            <button type="button" class="btn btn-success pull-right" ng-click="add()">Add</button>    
+            Items 
+            <small>
+                <span class="sprite sprite-item_weight"></span> {{itemWeight}} &nbsp;
+                <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
+            </small>
+        </h4>
+        <hr>
+        <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
+        <hr>
+    </div>
 
-    <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
 
-    <hr>
+    <div class="clothing">
+        <br>
+        <br>
+        <h4>
+            <button type="button" class="btn btn-sm btn-default pull-right"
+                ng-if="needsMigration()"
+                ng-click="migrateClothing()">
+                Update Clothing
+            </button>
+            Clothing
+        </h4>
+        <div ng-repeat="slot in ['hat','face','shoulders','coat','torso','belt','gloves','boots']">
+            <label>{{slot}}</label>
+            <select class="form-control"
+                ng-model="character.clothing[slot]" 
+                ng-change="onClothingChange(slot)"
+                ng-options="item as item.name for item in getClothingOptions(slot) track by item.name">
+                <option value="">Equip Slot</option>
+            </select>
+            <br>
+        </div>
 
-    
+    </div>
+
+
 </div>

@@ -195,7 +195,9 @@
             <div class="movement f-cell">
                 <div class="stat stat--prepend-plus">
                     <label>Move</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.movement"></div>
+                    <div editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.movement" 
+                        minimum="-25"></div>
                 </div>
             </div>
 

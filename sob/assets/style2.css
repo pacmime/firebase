@@ -223,7 +223,8 @@ body .navbar-default .navbar-nav>li>a {
 
 /* ------------ footer --------------- */
 
-.char__footer button {
+.char__footer button,
+.char__footer .dropup {
     color: #fff;
     cursor: pointer;
     height: 44px;
@@ -234,6 +235,7 @@ body .navbar-default .navbar-nav>li>a {
 .char__footer button.active {
     background-color: #4578cc;
 }
+
 
 
 
@@ -365,6 +367,7 @@ body .navbar-default .navbar-nav>li>a {
     justify-content: space-between;
     align-items: center;
     flex-basis: 100%;
+    flex-wrap: wrap;
     margin: 0.25em 1em;
 }
 @media(min-width: 768px) {
@@ -378,9 +381,14 @@ body .navbar-default .navbar-nav>li>a {
     }
 }
 
-.sidebag__option label  {
-    flex: 1;
+.sidebag__option label { flex: 1; }
+
+.sidebag__option .sidebag__control {
+    display: flex;
+    flex-direction: row;
 }
+.sidebag__option .help-block { flex-basis: 100%; }
+
 .sidebag__option .input-group {
     width: 128px;
 }
@@ -621,11 +629,27 @@ body .navbar-default .navbar-nav>li>a {
         flex-direction: row;
         justify-content: space-between;
     }
-    [items], [clothing-2], .sermons-container>* {
+    .sermons-container>* {
         flex-basis: 48%;
         margin-top: 0;
     }
+
+    .items-panel > .items { 
+        flex: 1; 
+        margin-top: 0;
+    } 
+    .items-panel > .clothing {
+        flex: 1;
+        margin-left: 2em;
+        margin-top: 0;
+    }
 }
+@media(min-width:992px) {
+    .items-panel > .items { 
+        flex: 2; 
+    }
+}
+
 
 
 

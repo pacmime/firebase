@@ -28,6 +28,51 @@
                 
                 $scope.character.$loaded().then(update);
 
+                $scope.onClothingChange = function(slot) {
+                    // console.log(JSON.stringify($scope.character.clothing[slot]));
+                    $scope.onSave();
+                };
+
+                $scope.getClothingOptions = function(slot) {
+
+                    var options = [];
+                    angular.forEach($scope.character.items, function(item) {
+                        if(slot === item.slot)
+                            options.push(angular.copy(item));
+                    });
+                    return options;
+                };
+
+
+                $scope.needsMigration = function() {
+
+                    if(typeof($scope.character.version) === 'number') {
+                        return $scope.character.version < 4;
+                    } else {
+                        return $scope.character.version && $scope.character.version.split('.')[0]*1 < 4;   // 'x.y.z'
+                    }
+                };
+
+                $scope.migrateClothing = function() {
+                    angular.forEach($scope.character.clothing, function(clothing, slot) {
+                        console.log("Checking " + clothing.name);
+                        if(!$scope.character.items[clothing.name]) {
+                            console.log("Migrating " + clothing.name);
+                            //set slot
+                            clothing.slot = slot;
+                            //update keywords to mention slot
+                            clothing.keywords = clothing.keywords || "Clothing";
+                            if(clothing.keywords.toLowerCase().indexOf(slot)<0)
+                                clothing.keywords += ", " + slot;
+                            $scope.character.items[clothing.name] = clothing;
+
+                        } else {
+                            console.log("Already an item");
+                        }
+                    });
+                    $scope.character.version = 4;
+                    $scope.onSave();
+                };
 
 
                 $scope.onEdited = function(name, item) {
@@ -49,6 +94,7 @@
 
                 $scope.add = function() {
 
+                    
                     var modalInstance = $uibModal.open({
                         templateUrl: 'src/v2/items/editor.html',
                         controller: 'ItemEditor',
@@ -80,7 +126,7 @@
     }])
 
 
-    .directive('item', ['$uibModal', function($uibModal) {
+    .directive('item', ['$window', '$uibModal', function($window, $uibModal) {
 
         function Controller($scope, $element) {
 
@@ -88,7 +134,18 @@
 
             this.name = $scope.name;
             this.item = $scope.item;
+
+            //
+            $window.SOBCharItemsUsage = $window.SOBCharItemsUsage || {};
+            $window.SOBCharItemsUsage[this.name] = $window.SOBCharItemsUsage[this.name] || false;
+
+            this.used = $window.SOBCharItemsUsage[this.name];
             
+            this.toggleUsed = function() {
+                $window.SOBCharItemsUsage[this.name] = this.used;
+            };
+            //--------------------------------
+
             this.edit = function() {
                 
                 var modalInstance = $uibModal.open({

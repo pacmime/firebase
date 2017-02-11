@@ -18,10 +18,10 @@
     </div>
 
     <h5>
-        <!-- <input type="checkbox" ng-model="item.equipped"> --> 
         {{name}} 
         <small>
             <em>
+                <span ng-if="item.slot">[{{item.slot}}]</span> 
                 <span ng-if="item.source">{{item.source}}</span>
                 &nbsp;
                 <span ng-if="item.cost">${{item.cost}}</span>
@@ -33,7 +33,10 @@
     <div ng-if="item.keywords"><small><em>{{item.keywords}}</em></small></div>
     
     <span ng-if="item.usage">
-        <input type="checkbox"> <small>(per {{item.usage}})</small>
+        <input type="checkbox" 
+            ng-model="ctrl.used"
+            ng-change="ctrl.toggleUsed()"> 
+        <small>(per {{item.usage}})</small>
     </span>
     
     <div class="f-container f-justify-between f-align-center">

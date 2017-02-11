@@ -3,93 +3,15 @@
         <h5 class="modal-title">Edit Item</h5>
     </div>
     <div class="modal-body">
-
-        <!-- 
-        <div class="input-group">
-            <span class="input-group-addon">Name</span>
-            <input type="text" class="form-control" ng-model="item.name" placeholder="Name">
-        </div><br>
-
-        
-        <textarea rows="2" class="form-control" ng-model="item.description" placeholder="Provide a description"></textarea>
-        <br>
-
-
-        <div class="row">
-            <div class="col-xs-6 col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                    <input type="text" class="form-control" ng-model="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-4">
-                <div class="input-group">
-                    <span class="input-group-addon">$</span>
-                    <input type="text" class="form-control" ng-model="item.cost" placeholder="Optionally, specify the cost">
-                </div>
-            </div>
-        </div>
-        <br>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="input-group">
-                    <span class="input-group-addon"><img src="assets/item_weight.png" height="16"></span>
-                    <input type="number" min="0" max="2" ng-model="item.weight" class="form-control">
-                </div><br>
-
-                <div class="input-group">
-                    <span class="input-group-addon"><img src="assets/item_darkstone.png" height="16"></span>
-                    <input type="number" min="0" ng-model="item.darkstone" class="form-control">
-                    </label>
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="input-group">
-                    <span class="input-group-addon"><img src="assets/item_hands.png" height="16"></span>
-                    <input type="number" min="0" max="2" ng-model="item.hands" class="form-control">
-                </div><br>
-            
-                <div class="input-group">
-                    <span class="input-group-addon"><img src="assets/item_slots.png" height="16"></span>
-                    <input type="number" max="2" min="0" ng-model="item.slots" class="form-control">
-                </div>
-            </div>
-        </div>   
-        <br>
-
-        <div class="row">
-            <div class="col-xs-6 col-sm-4">
-                <div class="input-group">
-                    <span class="input-group-addon">Use</span>
-                    <select class="form-control" ng-model="item.usage">
-                        <option value="">N/A</option>
-                        <option value="Turn">Turn</option>
-                        <option value="Fight">Fight</option>
-                        <option value="Adventure">Adventure</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></span>
-                    <input type="text" class="form-control" ng-model="item.keywords" placeholder="Keywords">
-                </div>
-            </div>
-        </div>
-        <br> 
-        -->
-
-
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#first" aria-controls="first" role="tab" data-toggle="tab">Basic</a>
+                <a data-target="#first" aria-controls="first" role="tab" data-toggle="tab">Basic</a>
             </li>
             <li role="presentation">
-                <a href="#second" aria-controls="second" role="tab" data-toggle="tab">Adv</a>
+                <a data-target="#second" aria-controls="second" role="tab" data-toggle="tab">Adv</a>
             </li>
             <li role="presentation">
-                <a href="#third" aria-controls="third" role="tab" data-toggle="tab">Stats</a>
+                <a data-target="#third" aria-controls="third" role="tab" data-toggle="tab">Stats</a>
             </li>
             <!-- <li role="presentation">
                 <a href="#bonuses" aria-controls="bonuses" role="tab" data-toggle="tab">Bonuses</a>
@@ -105,6 +27,9 @@
                 <br>
                 <label>Description</label>
                 <textarea rows="4" class="form-control" ng-model="item.description" placeholder="Provide a description"></textarea>
+                <br>
+                <label>Keywords</label>    
+                <input type="text" class="form-control" ng-model="item.keywords" placeholder="Keywords">
             </div>
             <div role="tabpanel" class="tab-pane" id="second">
                 <br>
@@ -119,8 +44,11 @@
                     <option value="Adventure">Adventure</option>
                 </select>
                 <br>
-                <label>Keywords</label>    
-                <input type="text" class="form-control" ng-model="item.keywords" placeholder="Keywords">
+                <label>Slot</label>
+                <select type="text" class="form-control" ng-model="item.slot" 
+                    ng-options="slot for slot in slots">
+                    <option value="">Select Slot (optional)</option>
+                </select>
             </div>
             <div role="tabpanel" class="tab-pane" id="third">
                 <br>

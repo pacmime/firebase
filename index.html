@@ -6,17 +6,90 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <base href="/">
-        <title>Char Apps</title>
+        <title>Character Apps</title>
+
+        <style>
+
+            body { 
+                background: #dedede; 
+            }
+
+            /* ---------- flex ------------ */
+            .f-container { 
+                display: flex; 
+                align-items: stretch;
+                justify-content: space-between;
+            }
+
+            .f-column { flex-direction: column; }
+            .f-row { flex-direction: row; }
+
+            .f-wrap { flex-wrap: wrap; }
+            .f-wrap-reverse { flex-wrap-reverse; }
+
+            .f-align-start { align-items: flex-start; }
+            .f-align-end { align-items: flex-end; }
+            .f-align-center { align-items: center; }
+            .f-align-stretch { align-items: stretch; }
+
+            .f-justify-start { justify-content: flex-start; }
+            .f-justify-end { justify-content: flex-end; }
+            .f-justify-around { justify-content: space-around; }
+            .f-justify-between { justify-content: space-between; }
+
+            .f-cell { }
+            .f-cell-2x { flex-grow: 2; }
+
+            .f-cell-25p { flex-basis: 25%; }
+            .f-cell-50p { flex-basis: 50%; }
+            .f-cell-75p { flex-basis: 75%; }
+            .f-cell-33p { flex: 33%; }
+
+
+            .card {
+                border: 1px solid #777;
+                border-radius: 4px;
+                width: 200px;
+                margin: 1em;
+                background: #fff;
+                box-shadow: 0 1px 12px rgba(0,0,0,0.5);
+            }
+            .card h3 { text-align:center; }
+
+        </style>
     </head>
 
     <body>
-	<br>
-	<br>
-	<h3><a href="swia/index.html">Star Wars</a></h3>
-	<br>
-	<h3><a href="sob/index.html">Shadows of Brimstone</a></h3>
-	<br>
-	<h3><a href="df/index.html">Dresden Files</a></h3>
+    	<br>
+    	<br>
+
+        <div class="f-container f-row f-justify-around f-align-start f-wrap">
+            
+            <a href="swia/index.html" class="card f-cell">
+                <img src="swia/assets/logo.png" style="width:100%;">
+                <h3>Imperial Assault</h3>
+            </a>
+
+            <a href="sob/index.html" class="card f-cell">
+                <img src="sob/assets/logo.jpg" style="width:100%;">
+                <h3>Shadows of Brimstone</h3>
+            </a>
+
+            <a href="df/index.html" class="card f-cell">
+                <img src="df/dist/logo.jpg" style="width:100%;">
+                <h3>Dresden Files</h3>
+            </a>
+        </div>
+
+        <br><br><br><br><br>
+        <center>
+            <small>
+                Star Wars Imperial Assault is a registered trademark of Fantasy Flight Games.<br>
+                Shadows of Brimstone is a trademark of Flying Frog Productions.<br>
+                Dresden Files RPG is a trademark of Evil Hat Productions.
+            </small>
+        </center>
+
     </body>
 
 </html>

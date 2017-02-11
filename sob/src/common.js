@@ -2,6 +2,9 @@
     "use strict";
 
 
+    var CHAR_VERSION = 4;
+
+
     window.UUID = function() {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -66,7 +69,9 @@
 
             fixV3: function(name, character) {
                 
-                if('3' == character.version) return false;
+                if('3' == character.version || 
+                    (typeof(character.version) === 'number' && character.version >= 3)) 
+                    return false;
 
                 //fix char ID if necessary
                 var classId = this.getClassId(character['class']);
@@ -83,7 +88,7 @@
                     character.abilities[UUID()] = { name: name, desc: value };
                 }
 
-                character.version = '3';
+                character.version = 3;
                 console.log("Fixed to version 3");
                 return true;
                 
@@ -151,7 +156,9 @@
 
                 var deferred = $q.defer();
                 fbo.$loaded().then(function(snap) {
-                    var result = {};
+                    var result = {
+                        version: CHAR_VERSION
+                    };
                     for (var key in snap) {
                        if (key.indexOf('$') < 0 && snap.hasOwnProperty(key)) {
                           result[key] = snap[key];
@@ -253,7 +260,8 @@
     .controller('ItemEditor', function($scope, $uibModalInstance, item) {
 
         $scope.item = item;
-
+        $scope.slots = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+        
         $scope.ok = function () {
             $uibModalInstance.close($scope.item);
         };

@@ -2,6 +2,9 @@
     "use strict";
 
 
+    var CHAR_VERSION = 4;
+
+
     window.UUID = function() {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -66,7 +69,9 @@
 
             fixV3: function(name, character) {
                 
-                if('3' == character.version) return false;
+                if('3' == character.version || 
+                    (typeof(character.version) === 'number' && character.version >= 3)) 
+                    return false;
 
                 //fix char ID if necessary
                 var classId = this.getClassId(character['class']);
@@ -83,7 +88,7 @@
                     character.abilities[UUID()] = { name: name, desc: value };
                 }
 
-                character.version = '3';
+                character.version = 3;
                 console.log("Fixed to version 3");
                 return true;
                 
@@ -151,7 +156,9 @@
 
                 var deferred = $q.defer();
                 fbo.$loaded().then(function(snap) {
-                    var result = {};
+                    var result = {
+                        version: CHAR_VERSION
+                    };
                     for (var key in snap) {
                        if (key.indexOf('$') < 0 && snap.hasOwnProperty(key)) {
                           result[key] = snap[key];
@@ -253,7 +260,8 @@
     .controller('ItemEditor', function($scope, $uibModalInstance, item) {
 
         $scope.item = item;
-
+        $scope.slots = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+        
         $scope.ok = function () {
             $uibModalInstance.close($scope.item);
         };
@@ -1714,7 +1722,8 @@
         this.displayOpts = {
             loading: false,
             message: null,
-            error: null
+            error: null,
+            confirmDelete: {}
         };
 
         this.classOptions = ClassHelper.getClasses();
@@ -1744,17 +1753,20 @@
         
 
         function updateList() {
-            var chars = {};
+            var chars = [];
             if(self.data) {
                 angular.forEach(self.data, function(value, key) { 
-                    if($scope.user && value.userId && value.userId === $scope.user.uid)
-                        chars[key] = {
+                    if($scope.user && value.userId && value.userId === $scope.user.uid) {
+                        chars.push({
+                            id: key,
                             name: (value.name || /* hack for pre-v3 chars */key), 
-                            className: ClassHelper.getClassName(value['class'])
-                        }; 
+                            className: ClassHelper.getClassName(value['class']),
+                            level: value.level
+                        }); 
+                    }
                 });
             }
-            self.chars = chars;
+            self.chars = chars.sort(function(a,b) { return a.level<b.level; });
         }
 
         this.createCharacter = function() {
@@ -3013,19 +3025,35 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <p class=\"list-group-item-text\">Select a character from the list</p>\n" +
     "        </div>\n" +
     "        <div class=\"list-group-item\" ng-if=\"!user\"><em>Login to select from your available characters</em></div>\n" +
-    "        <div ng-repeat=\"(id, obj) in ctrl.chars\" class=\"list-group-item\">\n" +
-    "            <div class=\" pull-right\">\n" +
-    "                <a href=\"#/{{id|encode}}\" class=\"btn btn-sm btn-default\">Version 1</a>\n" +
-    "                <button type=\"button\" class=\"btn btn-sm btn-danger\"\n" +
-    "                    ng-click=\"ctrl.removeCharacter(id)\">\n" +
+    "        <div ng-repeat=\"char in ctrl.chars\" class=\"list-group-item f-container f-row f-justify-between\">\n" +
+    "            <a href=\"#/{{char.id|encode}}\" class=\"f-cell f-container f-align-center\">\n" +
+    "                {{char.name}} &nbsp;&nbsp;&nbsp;\n" +
+    "                <small ng-if=\"char.className\">level {{char.level}} <strong>{{char.className}}</strong></small>\n" +
+    "            </a>\n" +
+    "            <div>\n" +
+    "                <!-- <a href=\"#/{{char.id|encode}}\" class=\"btn btn-sm btn-default\">Version 1</a> -->\n" +
+    "                \n" +
+    "                <!-- <button type=\"button\" class=\"btn btn-sm btn-danger\"\n" +
+    "                    ng-click=\"ctrl.removeCharacter(char.id)\">\n" +
+    "                    <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "                </button> -->\n" +
+    "\n" +
+    "                <div class=\"btn-group\" ng-if=\"ctrl.confirmDelete[char.id]\">\n" +
+    "                    <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                        ng-click=\"ctrl.removeCharacter(char.id)\">\n" +
+    "                        <span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "                    </button>\n" +
+    "                    <button type=\"button\" class=\"btn btn-sm btn-default\" \n" +
+    "                        ng-click=\"ctrl.confirmDelete[char.id]=false\">\n" +
+    "                        <span class=\"glyphicon glyphicon-ban-circle\"></span>\n" +
+    "                    </button>     \n" +
+    "                </div>\n" +
+    "                <button ng-if=\"!ctrl.confirmDelete[char.id]\"\n" +
+    "                    type=\"button\" class=\"btn btn-sm btn-danger\" \n" +
+    "                        ng-click=\"ctrl.confirmDelete[char.id]=true\">\n" +
     "                    <span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "                </button>\n" +
     "            </div>\n" +
-    "            <a href=\"v2.html#/{{id|encode}}\">\n" +
-    "                {{obj.name}} \n" +
-    "                <small ng-if=\"obj.className\"><strong>[{{obj.className}}]</strong></small>\n" +
-    "            </a>\n" +
-    "            \n" +
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
@@ -3233,71 +3261,69 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/character.html',
-    "<div class=\"page f-container f-column f-justify-between\">\n" +
+    "<div class=\"page\" ng-class=\"{'f-container f-column f-justify-between':!$ctrl.showAll}\">\n" +
     "\n" +
     "\n" +
     "    <div class=\"char__header\">\n" +
-    "        <button type=\"button\" class=\"btn btn-sm pull-right\" onClick=\"$(this).closest('.char__header').toggleClass('expanded')\">\n" +
+    "        <button type=\"button\" class=\"btn btn-sm btn-link pull-right\" onClick=\"$(this).closest('.char__header').toggleClass('expanded')\">\n" +
     "            <span class=\"glyphicon glyphicon-option-horizontal\"></span>\n" +
     "        </button>\n" +
-    "        <div class=\"char__name\">\n" +
-    "            <label>Name: </label> {{$ctrl.character.name}}\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"editable-input\">\n" +
-    "            <strong>Class: </strong> {{$ctrl.charClass}}\n" +
-    "            <!-- <select class=\"form-control\" ng-model=\"$ctrl.character.class\" ng-change=\"$ctrl.save()\" \n" +
-    "                ng-options=\"item.id as item.name for item in $ctrl.classes\">\n" +
-    "                <option value=\"\">Select Class</option>\n" +
-    "            </select> -->\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <!-- <div editable-input label=\"Class\" ng-model=\"$ctrl.character.class\" on-save=\"$ctrl.save()\"></div> -->\n" +
+    "        <div class=\"char__name\"><label>Name: </label> {{$ctrl.character.name}}</div>\n" +
+    "        <div class=\"editable-input\"><strong>Class: </strong> {{$ctrl.charClass}}</div>\n" +
     "        <div editable-input label=\"Keys\" ng-model=\"$ctrl.character.keywords\" on-save=\"$ctrl.save()\"></div>\n" +
+    "        <div class=\"editable-input\">\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-info pull-right\" ng-click=\"$ctrl.showAll=!$ctrl.showAll\">\n" +
+    "                <span class=\"glyphicon\" \n" +
+    "                    ng-class=\"{'glyphicon-sort-by-attributes':!$ctrl.showAll,'glyphicon-phone':$ctrl.showAll}\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Char -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='char'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='char'\">\n" +
     "        <div ng-include=\"'src/v2/panel-char.html'\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Abilities -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='abil'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='abil'\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Abilities</h3>\n" +
     "        <div abilities character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Sermons -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='sermons'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.canCastSermons()&&($ctrl.showAll||$ctrl.panel==='sermons')\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Sermons</h3>\n" +
     "        <div sermons character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Items and Clothing -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='items'\">\n" +
-    "        <div class=\"items-panel\">\n" +
-    "            <div items character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
-    "            <div clothing-2 character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
-    "        </div>\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='items'\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Items</h3>\n" +
+    "        <div items character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Sidebag -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='side'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='side'\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Sidebag</h3>\n" +
     "        <sidebag sidebag=\"$ctrl.character.sidebag\" on-save=\"$ctrl.save()\"></sidebag>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Injuries and Mutations -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='inj'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='inj'\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Mutations, Injuries, &amp; Madness</h3>\n" +
     "        <div mutations character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <!-- Miscellaneous -->\n" +
-    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='misc'\">\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.showAll||$ctrl.panel==='misc'\">\n" +
+    "        <h3 ng-if=\"$ctrl.showAll\">Miscellaneous</h3>\n" +
     "        <div class=\"notes\">\n" +
     "            <h4>\n" +
     "                <button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"$ctrl.save()\">Save</button>\n" +
@@ -3305,6 +3331,40 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            </h4>\n" +
     "            <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
     "                ng-model=\"$ctrl.character.notes\"></textarea>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"char__panel\" ng-if=\"$ctrl.panel==='combat'\">\n" +
+    "        <div class=\"combat-panel\">\n" +
+    "            <h4> Combat</h4>\n" +
+    "\n" +
+    "            <table class=\"table\">\n" +
+    "                <thead>\n" +
+    "                    <tr>\n" +
+    "                        <th>\n" +
+    "                            <button type=\"button\" class=\"btn btn-sm btn-success\">\n" +
+    "                                <span class=\"glyphicon glyphicon-plus\"></span>\n" +
+    "                            </button>\n" +
+    "                        </th>\n" +
+    "                        <th>Combat</th>\n" +
+    "                        <th>Dmg</th>\n" +
+    "                        <th>Condition</th>\n" +
+    "                    </tr>\n" +
+    "                </thead>\n" +
+    "                <tbody>\n" +
+    "                    <tr>\n" +
+    "                        <td>\n" +
+    "                            <button type=\"button\" class=\"btn btn-sm btn-default\">\n" +
+    "                                <span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "                            </button>\n" +
+    "                        </td>\n" +
+    "                        <td>5</td>\n" +
+    "                        <td>d6+2</td>\n" +
+    "                        <td>vs Undead</td>\n" +
+    "                    </tr>\n" +
+    "                </tbody>\n" +
+    "            </table>\n" +
+    "            \n" +
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
@@ -3319,7 +3379,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "\n" +
     "    <!-- footer buttons -->\n" +
-    "    <div ng-include=\"'src/v2/footer.html'\"></div>\n" +
+    "    <div ng-if=\"!$ctrl.showAll\" ng-include=\"'src/v2/footer.html'\"></div>\n" +
     "\n" +
     "</div>"
   );
@@ -3592,11 +3652,37 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            ng-click=\"$ctrl.panel='inj'\">\n" +
     "            <span class=\"glyphicon glyphicon-alert\"></span>\n" +
     "        </button>\n" +
+    "\n" +
+    "        <!-- <div class=\"f-cell f-equal btn-group dropup\">\n" +
+    "          <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" \n" +
+    "          aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+    "            <span class=\"glyphicon glyphicon-option-horizontal\"></span>\n" +
+    "          </button>\n" +
+    "          <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
+    "            <li>\n" +
+    "                <a ng-click=\"$ctrl.panel='misc'\">\n" +
+    "                    <span class=\"glyphicon glyphicon-comment\"></span> Notes\n" +
+    "                </a>\n" +
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <a ng-click=\"$ctrl.panel='combat'\">\n" +
+    "                    <span class=\"glyphicon glyphicon-fire\"></span> Combat\n" +
+    "                </a>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </div> -->\n" +
+    "\n" +
     "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
     "            ng-class=\"{active:$ctrl.panel==='misc'}\"\n" +
     "            ng-click=\"$ctrl.panel='misc'\">\n" +
     "            <span class=\"glyphicon glyphicon-comment\"></span>\n" +
     "        </button>\n" +
+    "        <!--\n" +
+    "        <button type=\"button\" class=\"f-cell f-equal\" \n" +
+    "            ng-class=\"{active:$ctrl.panel==='combat'}\"\n" +
+    "            ng-click=\"$ctrl.panel='combat'\">\n" +
+    "            <span class=\"glyphicon glyphicon-file\"></span>\n" +
+    "        </button> -->\n" +
     "    </div>\n" +
     "</div>"
   );
@@ -3608,93 +3694,15 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <h5 class=\"modal-title\">Edit Item</h5>\n" +
     "    </div>\n" +
     "    <div class=\"modal-body\">\n" +
-    "\n" +
-    "        <!-- \n" +
-    "        <div class=\"input-group\">\n" +
-    "            <span class=\"input-group-addon\">Name</span>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
-    "        </div><br>\n" +
-    "\n" +
-    "        \n" +
-    "        <textarea rows=\"2\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Provide a description\"></textarea>\n" +
-    "        <br>\n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-6 col-sm-8\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-map-marker\"></span></span>\n" +
-    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6 col-sm-4\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\">$</span>\n" +
-    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <br>\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.weight\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
-    "                    </label>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" min=\"0\" max=\"2\" ng-model=\"item.hands\" class=\"form-control\">\n" +
-    "                </div><br>\n" +
-    "            \n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                    <input type=\"number\" max=\"2\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>   \n" +
-    "        <br>\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-xs-6 col-sm-4\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\">Use</span>\n" +
-    "                    <select class=\"form-control\" ng-model=\"item.usage\">\n" +
-    "                        <option value=\"\">N/A</option>\n" +
-    "                        <option value=\"Turn\">Turn</option>\n" +
-    "                        <option value=\"Fight\">Fight</option>\n" +
-    "                        <option value=\"Adventure\">Adventure</option>\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-xs-6 col-sm-8\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-tag\"></span></span>\n" +
-    "                    <input type=\"text\" class=\"form-control\" ng-model=\"item.keywords\" placeholder=\"Keywords\">\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <br> \n" +
-    "        -->\n" +
-    "\n" +
-    "\n" +
     "        <ul class=\"nav nav-tabs\" role=\"tablist\">\n" +
     "            <li role=\"presentation\" class=\"active\">\n" +
-    "                <a href=\"#first\" aria-controls=\"first\" role=\"tab\" data-toggle=\"tab\">Basic</a>\n" +
+    "                <a data-target=\"#first\" aria-controls=\"first\" role=\"tab\" data-toggle=\"tab\">Basic</a>\n" +
     "            </li>\n" +
     "            <li role=\"presentation\">\n" +
-    "                <a href=\"#second\" aria-controls=\"second\" role=\"tab\" data-toggle=\"tab\">Adv</a>\n" +
+    "                <a data-target=\"#second\" aria-controls=\"second\" role=\"tab\" data-toggle=\"tab\">Adv</a>\n" +
     "            </li>\n" +
     "            <li role=\"presentation\">\n" +
-    "                <a href=\"#third\" aria-controls=\"third\" role=\"tab\" data-toggle=\"tab\">Stats</a>\n" +
+    "                <a data-target=\"#third\" aria-controls=\"third\" role=\"tab\" data-toggle=\"tab\">Stats</a>\n" +
     "            </li>\n" +
     "            <!-- <li role=\"presentation\">\n" +
     "                <a href=\"#bonuses\" aria-controls=\"bonuses\" role=\"tab\" data-toggle=\"tab\">Bonuses</a>\n" +
@@ -3710,6 +3718,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <br>\n" +
     "                <label>Description</label>\n" +
     "                <textarea rows=\"4\" class=\"form-control\" ng-model=\"item.description\" placeholder=\"Provide a description\"></textarea>\n" +
+    "                <br>\n" +
+    "                <label>Keywords</label>    \n" +
+    "                <input type=\"text\" class=\"form-control\" ng-model=\"item.keywords\" placeholder=\"Keywords\">\n" +
     "            </div>\n" +
     "            <div role=\"tabpanel\" class=\"tab-pane\" id=\"second\">\n" +
     "                <br>\n" +
@@ -3724,8 +3735,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <option value=\"Adventure\">Adventure</option>\n" +
     "                </select>\n" +
     "                <br>\n" +
-    "                <label>Keywords</label>    \n" +
-    "                <input type=\"text\" class=\"form-control\" ng-model=\"item.keywords\" placeholder=\"Keywords\">\n" +
+    "                <label>Slot</label>\n" +
+    "                <select type=\"text\" class=\"form-control\" ng-model=\"item.slot\" \n" +
+    "                    ng-options=\"slot for slot in slots\">\n" +
+    "                    <option value=\"\">Select Slot (optional)</option>\n" +
+    "                </select>\n" +
     "            </div>\n" +
     "            <div role=\"tabpanel\" class=\"tab-pane\" id=\"third\">\n" +
     "                <br>\n" +
@@ -3891,10 +3905,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <h5>\n" +
-    "        <!-- <input type=\"checkbox\" ng-model=\"item.equipped\"> --> \n" +
     "        {{name}} \n" +
     "        <small>\n" +
     "            <em>\n" +
+    "                <span ng-if=\"item.slot\">[{{item.slot}}]</span> \n" +
     "                <span ng-if=\"item.source\">{{item.source}}</span>\n" +
     "                &nbsp;\n" +
     "                <span ng-if=\"item.cost\">${{item.cost}}</span>\n" +
@@ -3906,7 +3920,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div ng-if=\"item.keywords\"><small><em>{{item.keywords}}</em></small></div>\n" +
     "    \n" +
     "    <span ng-if=\"item.usage\">\n" +
-    "        <input type=\"checkbox\"> <small>(per {{item.usage}})</small>\n" +
+    "        <input type=\"checkbox\" \n" +
+    "            ng-model=\"ctrl.used\"\n" +
+    "            ng-change=\"ctrl.toggleUsed()\"> \n" +
+    "        <small>(per {{item.usage}})</small>\n" +
     "    </span>\n" +
     "    \n" +
     "    <div class=\"f-container f-justify-between f-align-center\">\n" +
@@ -3920,25 +3937,49 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('v2/items/items.html',
-    "<div class=\"items\">\n" +
+    "<div class=\"items-panel\">\n" +
     "    \n" +
-    "    <br>\n" +
-    "    <h4>\n" +
-    "        <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>\n" +
-    "    \n" +
-    "        Items \n" +
-    "        <small>\n" +
-    "            <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
-    "            <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
-    "        </small>\n" +
-    "    </h4>\n" +
-    "    <hr>\n" +
+    "    <div class=\"items\">\n" +
+    "        <br>\n" +
+    "        <h4>\n" +
+    "            <button type=\"button\" class=\"btn btn-success pull-right\" ng-click=\"add()\">Add</button>    \n" +
+    "            Items \n" +
+    "            <small>\n" +
+    "                <span class=\"sprite sprite-item_weight\"></span> {{itemWeight}} &nbsp;\n" +
+    "                <span class=\"sprite sprite-item_darkstone\"></span> {{itemDarkstone}}\n" +
+    "            </small>\n" +
+    "        </h4>\n" +
+    "        <hr>\n" +
+    "        <div ng-repeat=\"(name, item) in character.items\" item=\"item\" name=\"{{name}}\" on-save=\"onEdited(name, item)\"></div>\n" +
+    "        <hr>\n" +
+    "    </div>\n" +
     "\n" +
-    "    <div ng-repeat=\"(name, item) in character.items\" item=\"item\" name=\"{{name}}\" on-save=\"onEdited(name, item)\"></div>\n" +
     "\n" +
-    "    <hr>\n" +
+    "    <div class=\"clothing\">\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <h4>\n" +
+    "            <button type=\"button\" class=\"btn btn-sm btn-default pull-right\"\n" +
+    "                ng-if=\"needsMigration()\"\n" +
+    "                ng-click=\"migrateClothing()\">\n" +
+    "                Update Clothing\n" +
+    "            </button>\n" +
+    "            Clothing\n" +
+    "        </h4>\n" +
+    "        <div ng-repeat=\"slot in ['hat','face','shoulders','coat','torso','belt','gloves','boots']\">\n" +
+    "            <label>{{slot}}</label>\n" +
+    "            <select class=\"form-control\"\n" +
+    "                ng-model=\"character.clothing[slot]\" \n" +
+    "                ng-change=\"onClothingChange(slot)\"\n" +
+    "                ng-options=\"item as item.name for item in getClothingOptions(slot) track by item.name\">\n" +
+    "                <option value=\"\">Equip Slot</option>\n" +
+    "            </select>\n" +
+    "            <br>\n" +
+    "        </div>\n" +
     "\n" +
-    "    \n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
     "</div>"
   );
 
@@ -4214,7 +4255,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"movement f-cell\">\n" +
     "                <div class=\"stat stat--prepend-plus\">\n" +
     "                    <label>Move</label>\n" +
-    "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.movement\"></div>\n" +
+    "                    <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
+    "                        ng-model=\"$ctrl.character.movement\" \n" +
+    "                        minimum=\"-25\"></div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "\n" +
@@ -4498,27 +4541,23 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"f-container f-justify-between f-wrap\">\n" +
     "    \n" +
     "        <div ng-repeat=\"option in $ctrl.options\" class=\"sidebag__option\">\n" +
-    "            <label><span class=\"sprite sprite-{{option}}\"></span> {{option}}</label>\n" +
-    "\n" +
-    "            <!-- <div class=\"input-group\">\n" +
-    "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-danger\"\n" +
-    "                        ng-click=\"$ctrl.decrease(option)\">&minus;</button>\n" +
-    "                </span>\n" +
-    "                <input type=\"number\" min=\"0\" class=\"form-control\" disabled ng-model=\"$ctrl.sidebag[option]\">\n" +
-    "                <span class=\"input-group-btn\">\n" +
-    "                    <button type=\"button\" class=\"btn btn-success\"\n" +
-    "                        ng-click=\"$ctrl.increase(option)\">&plus;</button>\n" +
-    "                </span>\n" +
-    "            </div> -->\n" +
-    "\n" +
-    "            <button type=\"button\" class=\"btn btn-default\"\n" +
-    "                ng-click=\"$ctrl.decrease(option)\"\n" +
-    "                ng-disabled=\"!$ctrl.sidebag[option]\">&minus;</button>\n" +
-    "            <span class=\"option__display\">{{$ctrl.sidebag[option]}}</span>\n" +
-    "            <button type=\"button\" class=\"btn btn-default\"\n" +
-    "                ng-click=\"$ctrl.increase(option)\"\n" +
-    "                ng-disabled=\"!$ctrl.max\">&plus;</button>\n" +
+    "            <label>\n" +
+    "                <span class=\"sprite sprite-{{option.label}}\"></span> {{option.label}}\n" +
+    "            </label>\n" +
+    "            <div class=\"sidebag__control\">\n" +
+    "                <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                    ng-click=\"$ctrl.decrease(option.label)\"\n" +
+    "                    ng-disabled=\"!$ctrl.sidebag[option.label]\">\n" +
+    "                    &minus;\n" +
+    "                </button>\n" +
+    "                <span class=\"option__display\">{{$ctrl.sidebag[option.label]}}</span>\n" +
+    "                <button type=\"button\" class=\"btn btn-default\"\n" +
+    "                    ng-click=\"$ctrl.increase(option.label)\"\n" +
+    "                    ng-disabled=\"!$ctrl.max\">\n" +
+    "                    &plus;\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "            <small class=\"help-block\">{{option.description}}</small>\n" +
     "        </div>\n" +
     "\n" +
     "    </div>\n" +

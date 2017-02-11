@@ -15,7 +15,8 @@
         this.displayOpts = {
             loading: false,
             message: null,
-            error: null
+            error: null,
+            confirmDelete: {}
         };
 
         this.classOptions = ClassHelper.getClasses();
@@ -45,17 +46,20 @@
         
 
         function updateList() {
-            var chars = {};
+            var chars = [];
             if(self.data) {
                 angular.forEach(self.data, function(value, key) { 
-                    if($scope.user && value.userId && value.userId === $scope.user.uid)
-                        chars[key] = {
+                    if($scope.user && value.userId && value.userId === $scope.user.uid) {
+                        chars.push({
+                            id: key,
                             name: (value.name || /* hack for pre-v3 chars */key), 
-                            className: ClassHelper.getClassName(value['class'])
-                        }; 
+                            className: ClassHelper.getClassName(value['class']),
+                            level: value.level
+                        }); 
+                    }
                 });
             }
-            self.chars = chars;
+            self.chars = chars.sort(function(a,b) { return a.level<b.level; });
         }
 
         this.createCharacter = function() {
