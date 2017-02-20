@@ -6,6 +6,11 @@
             <span class="glyphicon glyphicon-user"></span>
         </button>
         <button type="button" class="f-cell f-equal" 
+            ng-class="{active:$ctrl.panel==='attacks'}"
+            ng-click="$ctrl.panel='attacks'">
+            <span class="glyphicon glyphicon-fire"></span>
+        </button>
+        <button type="button" class="f-cell f-equal" 
             ng-class="{active:$ctrl.panel==='abil'}"
             ng-click="$ctrl.panel='abil'">
             <span class="glyphicon glyphicon-flash"></span>
@@ -56,11 +61,6 @@
             ng-click="$ctrl.panel='misc'">
             <span class="glyphicon glyphicon-comment"></span>
         </button>
-        <!--
-        <button type="button" class="f-cell f-equal" 
-            ng-class="{active:$ctrl.panel==='combat'}"
-            ng-click="$ctrl.panel='combat'">
-            <span class="glyphicon glyphicon-file"></span>
-        </button> -->
+        
     </div>
 </div>

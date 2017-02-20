@@ -1,0 +1,128 @@
+<div class="attack-panel">
+
+    <div class="f-container f-align-center">    
+        <h3 class="f-cell">Attacks</h3>
+        <button class="btn btn-success" ng-click="$ctrl.add()">Add</button>
+    </div>
+
+    <div class="attack__item" ng-repeat="(id,attack) in $ctrl.character.attacks">
+
+        <div class="f-container f-align-center">
+            <div class="f-cell-2x">
+                <input type="text" class="form-control" 
+                    ng-model="attack.name" 
+                    ng-change="$ctrl.onChange()"
+                    placeholder="Name this attack">
+            </div>
+            <div class="f-cell">&nbsp;&nbsp;</div>
+
+            <button type="button" class="btn btn-sm btn-info" 
+                ng-disabled="!attack.type||!attack.attack||!attack.damage"
+                ng-click="$ctrl.roll(id)">
+                Roll
+            </button>
+            <div class="f-cell">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            
+            <div class="btn-group" ng-if="$ctrl.confirmingDelete[id]">
+                <button type="button" class="btn btn-sm btn-success" ng-click="$ctrl.remove(id)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.confirmingDelete[id]=false">
+                    <span class="glyphicon glyphicon-ban-circle"></span>
+                </button>     
+            </div>
+            <button ng-if="!$ctrl.confirmingDelete[id]"
+                type="button" class="btn btn-sm btn-danger" ng-click="$ctrl.confirmingDelete[id]=true">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        </div>
+
+        <div class="attack__item__row">
+
+            <div class="f-cell f-container f-align-center">
+                
+                <div class="f-cell-1x">
+                    <select class="form-control" 
+                        ng-model="attack.type"
+                        ng-change="$ctrl.onChange()" required>
+                        <option value="melee">Melee</option>
+                        <option value="ranged">Ranged</option>
+                    </select>
+                </div>
+                <div class="f-cell">&nbsp;</div>
+                
+
+                <label class="f-cell">Att: </label>
+                <div class="f-cell">&nbsp;</div>
+                <div class="f-cell-1x">
+                    <input type="text" class="form-control" required
+                        ng-model="attack.attack" 
+                        ng-change="$ctrl.onChange()" 
+                        placeholder="2D6">
+                </div>
+                <div class="f-cell">&nbsp;</div>
+                
+                
+                <label class="f-cell">Dmg: </label>
+                <div class="f-cell">&nbsp;</div>
+                <div class="f-cell-1x">
+                    <input type="text" class="form-control" required
+                        ng-model="attack.damage"  
+                        ng-change="$ctrl.onChange()"
+                        placeholder="D6">
+                </div>
+                
+            </div>
+    
+            <div class="f-cell-1x f-container f-align-center">
+                <label class="f-cell">Misc: </label>
+                <div class="f-cell">&nbsp;</div>
+                <div class="f-cell-2x">
+                    <input type="text" class="form-control" 
+                        ng-model="attack.description"
+                        ng-model-options="{debounce:500}"
+                        ng-change="$ctrl.onChange()"
+                        placeholder="bonuses, conditionals, etc">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="attack__item__row f-align-start" ng-if="$ctrl.rollResults[id]">
+
+
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-start">
+                <small><strong>Hit(s): </strong></small>
+                <div>
+                    <button ng-repeat="hit in $ctrl.rollResults[id].hits track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollHit(id, $index)">
+                        {{hit}}
+                    </button>
+                </div>
+            </div>
+
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-start">
+                <small><strong>Dmg: </strong></small>
+                <div>
+                    <button ng-repeat="dmg in $ctrl.rollResults[id].dmg track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollDmg(id, $index)"
+                        ng-disabled="$ctrl.rollResults[id].hits[$index]<$ctrl.rollResults[id].attack.target">
+                        {{dmg}}
+                    </button>
+                </div>
+                <small><strong>&nbsp;({{$ctrl.rollResults[id].dmg|sum}})</strong></small>
+            </div>
+            
+            <div class="f-cell">&nbsp;</div>
+
+            <button type="button" class="f-cell btn btn-sm btn-default"
+                ng-click="$ctrl.rollResults[id]=null">clear</button>
+            <div class="f-cell">&nbsp;</div>
+
+        </div>
+        
+    </div>
+    
+</div>

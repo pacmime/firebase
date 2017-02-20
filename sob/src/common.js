@@ -186,6 +186,18 @@
         };
     })
 
+    .filter('sum', function() {
+        return function(arr) {
+            if(arr && typeof(arr.push) !== 'undefined') {
+                var result = 0;
+                for(var i=0; i<arr.length; ++i) 
+                    result += isNaN(arr[i]) ? 0 : arr[i]*1;
+                return result;
+            }
+            return 0;
+        };
+    })
+
     .provider('responsiveHelper', ["$windowProvider", function ($windowProvider) {
         
         var $window  = $windowProvider.$get();
@@ -260,7 +272,7 @@
     .controller('ItemEditor', function($scope, $uibModalInstance, item) {
 
         $scope.item = item;
-        $scope.slots = ['hat','face','shoulders','coat','torso','belt','gloves','boots'];
+        $scope.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
         
         $scope.ok = function () {
             $uibModalInstance.close($scope.item);
@@ -377,18 +389,18 @@
             },
             replace: true,
             template: [
-                '<div class="editable-input">',
-                '  <label class="editable-input-label">{{::label}}</label>',
-                '  <span class="editable-input-display" ng-show="!editing" ng-click="edit()"></span>',
+                '<div class="editable-input f-container f-justify-between f-align-center">',
+                '   <label class="editable-input-label f-cell">{{::label}}</label>',
+                '   <span class="editable-input-display f-cell-1x" ng-show="!editing" ng-click="edit()"></span>',
 
-                '    <form class="form" ng-show="editing">',
+                '   <form class="form f-cell-1x" ng-show="editing">',
                 '      <div class="form-group">',
-                '        <div class="grid">', 
-                '          <div class="grid__col-auto grid__col--grow-2">',   
+                '        <div class="f-container">', 
+                '          <div class="f-cell-1x">',   
                 '            <input type="text" class="form-control editable-input-field" ',
                 '              ng-keyup="onKeyUp($event, $event.keyCode)"></input>',
                 '          </div>',
-                '          <div class="grid__col-auto">',
+                '          <div class="f-cell">',
                 '            <div class="editable-input-buttons">',
                 '              <button type="button" class="btn btn-xs btn-link text-success" ng-disabled="error" ng-click="done()" tabindex="0">',
                 '                <span class="glyphicon glyphicon-ok"></span>',

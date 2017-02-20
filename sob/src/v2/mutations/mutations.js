@@ -17,6 +17,10 @@
             controller: function($scope, $element) {
 
 
+                $scope.mutations = [];
+                $scope.injuries = [];
+                $scope.madness = [];
+
                 $scope.mimOpts = [];
 
                 DBHelper('mutations').$loaded(function(mutations) {
@@ -27,6 +31,7 @@
                                 desc: mutations[key].desc, 
                                 group: "Mutations"
                             });
+                            $scope.mutations.push(mutations[key].name);
                         }
                     }
                     DBHelper('injuries').$loaded(function(injuries) {
@@ -37,6 +42,7 @@
                                     desc: injuries[key].desc, 
                                     group: "Injuries"
                                 });
+                                $scope.injuries.push(injuries[key].name);
                             }
                         }
                         DBHelper('madness').$loaded(function(madness) {
@@ -47,6 +53,7 @@
                                         desc: madness[key].desc, 
                                         group: "Madness"
                                     });
+                                    $scope.madness.push(madness[key].name);
                                 }
                             }
 
@@ -107,29 +114,40 @@
                     $scope.onSave();
                 };
 
+                $scope.getType = function(name) {
+                    if(~$scope.mutations.indexOf(name)) return 'mutation';
+                    if(~$scope.injuries.indexOf(name)) return 'injury';
+                    if(~$scope.madness.indexOf(name)) return 'madness';
+                    return '';
+                };
 
             }
         };
     }])
 
 
-    .directive('mutation', function() {
+    .component('mutation', {
 
-        function Controller($scope, $element) {
-
-            $scope.ctrl = this;
+        bindings: {
+            name: "@",
+            desc: "@",
+            type: '@',
+            onSave: '&'
+        },
+        
+        templateUrl: 'src/v2/mutations/mutation.html',
+        
+        controller: function () {
 
             //remember original name just in case it changes
-            var originalName = $scope.name;
-            this.name = $scope.name;
-            this.desc = $scope.desc;
-            
+            this.originalName = this.name;
+
             this.edit = function() {
                 this.displayEditor = true;
             };
 
             this.save = function() {
-                $scope.onSave({
+                this.onSave({
                     newName: this.name, 
                     newDesc: this.desc
                 });
@@ -141,22 +159,11 @@
             };
 
             this.remove = function() {
-                $scope.onSave({newName: null, newDesc: null});
+                this.onSave({newName: null, newDesc: null});
             };
 
         }
 
-        return {
-            scope: {
-                name: "@",
-                desc: "@",
-                onSave: '&'
-            },
-            replace: true,
-            templateUrl: 'src/v2/mutations/mutation.html',
-            
-            controller: Controller
-        };
     });
 
 

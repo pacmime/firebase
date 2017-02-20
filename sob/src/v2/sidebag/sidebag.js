@@ -45,9 +45,10 @@
                 var carrying = 0;
                 for(var i=0; i<this.options.length; ++i) {
                     var option = this.options[i];
-                    carrying += this.sidebag[option] || 0;
+                    carrying += this.sidebag[option.label] || 0;
                 }
-                
+                console.log("Carrying: " + carrying);
+                this.carrying = carrying;
                 return this.sidebag.capacity - carrying;
                 
             };

@@ -1,15 +1,16 @@
 <div class="sidebag">
     
     <br>
-    <div class="clearfix">
-        <div class="pull-right">
+    <div class="f-container f-row f-align-center">
+        <h4 class="f-cell-1x">Sidebag</h4>
+        <div class="sidebag__carrying">{{$ctrl.carrying}} / </div>
+        <div>
             <div class="stat">
                 <label>Capacity</label>
                 <div editable-stat-value on-save="$ctrl.save()" 
                     ng-model="$ctrl.sidebag.capacity"></div>
             </div>  
         </div>
-        <h4>Sidebag</h4>
     </div>
     <br>
     
