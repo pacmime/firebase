@@ -5,6 +5,12 @@
         <button class="btn btn-success" ng-click="$ctrl.add()">Add</button>
     </div>
 
+
+    <!-- 
+        ==================
+            ATTACKS
+        ==================
+    -->
     <div class="attack__item" ng-repeat="(id,attack) in $ctrl.character.attacks">
 
         <div class="f-container f-align-center">
@@ -90,7 +96,6 @@
 
         <div class="attack__item__row f-align-start" ng-if="$ctrl.rollResults[id]">
 
-
             <div class="f-cell-1x f-container f-row f-justify-start f-align-start">
                 <small><strong>Hit(s): </strong></small>
                 <div>
@@ -123,6 +128,136 @@
 
         </div>
         
+    </div>
+
+
+
+
+
+
+    <!-- 
+        ==================
+            DYNAMITE
+        ==================
+    -->
+    <div class="attack__item f-container f-align-center f-justify-start">
+
+        <div class="f-container f-align-center f-justify-start">
+
+            <button type="button" class="btn btn-default" ng-click="$ctrl.roll('dynamite')">Dynamite!</button>
+            &nbsp;&nbsp;&nbsp;
+
+            <small>Range: {{$ctrl.character.stats.Strength+3}}</small>
+            
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <div ng-if="$ctrl.rollResults['dynamite']" class="f-container f-align-center f-wrap">
+            
+            <!-- to-hit -->
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-center">
+                <small><strong>Hit: </strong></small>
+                <div>
+                    <button ng-repeat="hit in $ctrl.rollResults['dynamite'].hits track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollHit('dynamite', $index)">
+                        {{hit}}
+                    </button>
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+
+            <!-- damage -->
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-center">
+                <small><strong>Dmg: </strong></small>
+                <div>
+                    <button ng-repeat="dmg in $ctrl.rollResults['dynamite'].dmg track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollDmg('dynamite', $index)"
+                        ng-disabled="$ctrl.rollResults['dynamite'].hits[$index]<$ctrl.rollResults['dynamite'].attack.target">
+                        {{dmg}}
+                    </button>
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+
+            <!-- num bounces -->
+            <strong ng-if="$ctrl.rollResults['dynamite'].bounces.length">
+                <small>{{$ctrl.rollResults['dynamite'].bounces.length}} bounce(s): </small>
+            </strong>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <!-- bounces -->
+            <div ng-repeat="bounce in $ctrl.rollResults['dynamite'].bounces track by $index">
+                <span class="glyphicon glyphicon-arrow-up {{bounce}}"></span>&nbsp;&nbsp;
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <button type="button" class="f-cell btn btn-sm btn-default"
+                ng-if="$ctrl.rollResults['dynamite']"
+                ng-click="$ctrl.rollResults['dynamite']=null">
+                clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 
+        ==================
+            HATCHETS
+        ==================
+    -->
+    <div class="attack__item f-container f-align-center f-justify-start">
+
+        <div class="f-container f-align-center f-justify-start">
+
+            <button type="button" class="btn btn-default" ng-click="$ctrl.roll('hatchet')">Hatchet</button>
+            &nbsp;&nbsp;&nbsp;
+
+            <small>Range: {{$ctrl.character.stats.Strength+3}}</small>
+            
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <div ng-if="$ctrl.rollResults['hatchet']" class="f-container f-align-center f-wrap">
+            
+            <!-- to-hit -->
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-center">
+                <small><strong>Hit: </strong></small>
+                <div>
+                    <button ng-repeat="hit in $ctrl.rollResults['hatchet'].hits track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollHit('hatchet', $index)">
+                        {{hit}}
+                    </button>
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+
+            <!-- damage -->
+            <div class="f-cell-1x f-container f-row f-justify-start f-align-center">
+                <small><strong>Dmg: </strong></small>
+                <div>
+                    <button ng-repeat="dmg in $ctrl.rollResults['hatchet'].dmg track by $index"
+                        type="button" class="btn btn-default btn-die"
+                        ng-click="$ctrl.rerollDmg('hatchet', $index)"
+                        ng-disabled="$ctrl.rollResults['hatchet'].hits[$index]<$ctrl.rollResults['hatchet'].attack.target">
+                        {{dmg}}
+                    </button>
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+
+            <button type="button" class="f-cell btn btn-sm btn-default"
+                ng-if="$ctrl.rollResults['hatchet']"
+                ng-click="$ctrl.rollResults['hatchet']=null">
+                clear
+            </button>
+
+        </div>
+
     </div>
     
 </div>

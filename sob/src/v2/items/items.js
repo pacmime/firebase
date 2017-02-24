@@ -74,6 +74,11 @@
                     $scope.onSave();
                 };
 
+                if($scope.needsMigration()) {
+                    console.log("Migrating clothing automatically");
+                    $scope.migrateClothing();
+                }
+
 
                 $scope.onEdited = function(name, item) {
 

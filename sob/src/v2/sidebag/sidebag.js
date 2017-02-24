@@ -29,7 +29,7 @@
                 {label:"exoticHerbs",  description: "discard to remove D3 corruption points"},
                 {label:"tequila", description: "discard to heal 2D6 sanity from yourself or adjacent hero"},
                 {label:"cigars", description: "discard to gain armor 3+ until the end of the turn"},
-                {label:"shatterGrenade", description: ""},
+                {label:"shatterGrenade", description: "discard to throw like Dynamite. Any model hit takes D3 Wounds ignoring Defense and gains a Stunned token (-1 Defense). At the start of activation, remove 1 Stunned marker on a roll of 4+."},
                 {label:"antiRad", description: ""}
             ];
 
@@ -47,7 +47,7 @@
                     var option = this.options[i];
                     carrying += this.sidebag[option.label] || 0;
                 }
-                console.log("Carrying: " + carrying);
+                
                 this.carrying = carrying;
                 return this.sidebag.capacity - carrying;
                 

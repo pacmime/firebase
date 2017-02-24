@@ -1135,7 +1135,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        \n" +
     "                <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-100)\" ng-disable=\"value==minimum\">-100</button>\n" +
     "                <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-50)\" ng-disable=\"value==minimum\">-50</button>\n" +
-    "                <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-25)\" ng-disable=\"value==minimum\">-25</button>\n" +
+    "                <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-20)\" ng-disable=\"value==minimum\">-20</button>\n" +
     "                <br>\n" +
     "\n" +
     "                <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
@@ -1148,7 +1148,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(10)\">+10</button>\n" +
     "                <br>\n" +
     "                \n" +
-    "                <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(25)\">+25</button>\n" +
+    "                <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(20)\">+20</button>\n" +
     "                <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(50)\">+50</button>\n" +
     "                <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(100)\">+100</button>\n" +
     "                <br>\n" +
@@ -1160,31 +1160,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <!--\n" +
-    "            <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-50)\" ng-disable=\"value==minimum\">-50</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-10)\" ng-disable=\"value==minimum\">-10</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-5)\" ng-disable=\"value==minimum\">-5</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-danger\" ng-click=\"change(-1)\" ng-disable=\"value==minimum\">-1</button>\n" +
-    "            <br>\n" +
-    "\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(1)\">+1</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(2)\">+2</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(3)\">+3</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(4)\">+4</button>\n" +
-    "            <br>\n" +
-    "            \n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(5)\">+5</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(10)\">+10</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(15)\">+15</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(20)\">+20</button>\n" +
-    "            <br>\n" +
-    "            \n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(25)\">+25</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(30)\">+30</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(50)\">+50</button>\n" +
-    "            <button type=\"button\" class=\"btn btn-success\" ng-click=\"change(100)\">+100</button>\n" +
-    "            <br><br>\n" +
-    "        -->\n" +
     "\n" +
     "        <div class=\"manual-entry\">\n" +
     "            <div class=\"input-group\">\n" +
@@ -1318,6 +1293,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "        <button class=\"btn btn-success\" ng-click=\"$ctrl.add()\">Add</button>\n" +
     "    </div>\n" +
     "\n" +
+    "\n" +
+    "    <!-- \n" +
+    "        ==================\n" +
+    "            ATTACKS\n" +
+    "        ==================\n" +
+    "    -->\n" +
     "    <div class=\"attack__item\" ng-repeat=\"(id,attack) in $ctrl.character.attacks\">\n" +
     "\n" +
     "        <div class=\"f-container f-align-center\">\n" +
@@ -1403,7 +1384,6 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"attack__item__row f-align-start\" ng-if=\"$ctrl.rollResults[id]\">\n" +
     "\n" +
-    "\n" +
     "            <div class=\"f-cell-1x f-container f-row f-justify-start f-align-start\">\n" +
     "                <small><strong>Hit(s): </strong></small>\n" +
     "                <div>\n" +
@@ -1436,6 +1416,136 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "        </div>\n" +
     "        \n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "    <!-- \n" +
+    "        ==================\n" +
+    "            DYNAMITE\n" +
+    "        ==================\n" +
+    "    -->\n" +
+    "    <div class=\"attack__item f-container f-align-center f-justify-start\">\n" +
+    "\n" +
+    "        <div class=\"f-container f-align-center f-justify-start\">\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.roll('dynamite')\">Dynamite!</button>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <small>Range: {{$ctrl.character.stats.Strength+3}}</small>\n" +
+    "            \n" +
+    "        </div>\n" +
+    "        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "        <div ng-if=\"$ctrl.rollResults['dynamite']\" class=\"f-container f-align-center f-wrap\">\n" +
+    "            \n" +
+    "            <!-- to-hit -->\n" +
+    "            <div class=\"f-cell-1x f-container f-row f-justify-start f-align-center\">\n" +
+    "                <small><strong>Hit: </strong></small>\n" +
+    "                <div>\n" +
+    "                    <button ng-repeat=\"hit in $ctrl.rollResults['dynamite'].hits track by $index\"\n" +
+    "                        type=\"button\" class=\"btn btn-default btn-die\"\n" +
+    "                        ng-click=\"$ctrl.rerollHit('dynamite', $index)\">\n" +
+    "                        {{hit}}\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <!-- damage -->\n" +
+    "            <div class=\"f-cell-1x f-container f-row f-justify-start f-align-center\">\n" +
+    "                <small><strong>Dmg: </strong></small>\n" +
+    "                <div>\n" +
+    "                    <button ng-repeat=\"dmg in $ctrl.rollResults['dynamite'].dmg track by $index\"\n" +
+    "                        type=\"button\" class=\"btn btn-default btn-die\"\n" +
+    "                        ng-click=\"$ctrl.rerollDmg('dynamite', $index)\"\n" +
+    "                        ng-disabled=\"$ctrl.rollResults['dynamite'].hits[$index]<$ctrl.rollResults['dynamite'].attack.target\">\n" +
+    "                        {{dmg}}\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <!-- num bounces -->\n" +
+    "            <strong ng-if=\"$ctrl.rollResults['dynamite'].bounces.length\">\n" +
+    "                <small>{{$ctrl.rollResults['dynamite'].bounces.length}} bounce(s): </small>\n" +
+    "            </strong>\n" +
+    "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <!-- bounces -->\n" +
+    "            <div ng-repeat=\"bounce in $ctrl.rollResults['dynamite'].bounces track by $index\">\n" +
+    "                <span class=\"glyphicon glyphicon-arrow-up {{bounce}}\"></span>&nbsp;&nbsp;\n" +
+    "            </div>\n" +
+    "            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"f-cell btn btn-sm btn-default\"\n" +
+    "                ng-if=\"$ctrl.rollResults['dynamite']\"\n" +
+    "                ng-click=\"$ctrl.rollResults['dynamite']=null\">\n" +
+    "                clear\n" +
+    "            </button>\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <!-- \n" +
+    "        ==================\n" +
+    "            HATCHETS\n" +
+    "        ==================\n" +
+    "    -->\n" +
+    "    <div class=\"attack__item f-container f-align-center f-justify-start\">\n" +
+    "\n" +
+    "        <div class=\"f-container f-align-center f-justify-start\">\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.roll('hatchet')\">Hatchet</button>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <small>Range: {{$ctrl.character.stats.Strength+3}}</small>\n" +
+    "            \n" +
+    "        </div>\n" +
+    "        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "        <div ng-if=\"$ctrl.rollResults['hatchet']\" class=\"f-container f-align-center f-wrap\">\n" +
+    "            \n" +
+    "            <!-- to-hit -->\n" +
+    "            <div class=\"f-cell-1x f-container f-row f-justify-start f-align-center\">\n" +
+    "                <small><strong>Hit: </strong></small>\n" +
+    "                <div>\n" +
+    "                    <button ng-repeat=\"hit in $ctrl.rollResults['hatchet'].hits track by $index\"\n" +
+    "                        type=\"button\" class=\"btn btn-default btn-die\"\n" +
+    "                        ng-click=\"$ctrl.rerollHit('hatchet', $index)\">\n" +
+    "                        {{hit}}\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <!-- damage -->\n" +
+    "            <div class=\"f-cell-1x f-container f-row f-justify-start f-align-center\">\n" +
+    "                <small><strong>Dmg: </strong></small>\n" +
+    "                <div>\n" +
+    "                    <button ng-repeat=\"dmg in $ctrl.rollResults['hatchet'].dmg track by $index\"\n" +
+    "                        type=\"button\" class=\"btn btn-default btn-die\"\n" +
+    "                        ng-click=\"$ctrl.rerollDmg('hatchet', $index)\"\n" +
+    "                        ng-disabled=\"$ctrl.rollResults['hatchet'].hits[$index]<$ctrl.rollResults['hatchet'].attack.target\">\n" +
+    "                        {{dmg}}\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            &nbsp;&nbsp;&nbsp;\n" +
+    "\n" +
+    "            <button type=\"button\" class=\"f-cell btn btn-sm btn-default\"\n" +
+    "                ng-if=\"$ctrl.rollResults['hatchet']\"\n" +
+    "                ng-click=\"$ctrl.rollResults['hatchet']=null\">\n" +
+    "                clear\n" +
+    "            </button>\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
     "    </div>\n" +
     "    \n" +
     "</div>"
@@ -2032,14 +2142,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"clothing\">\n" +
     "        <br>\n" +
     "        <br>\n" +
-    "        <h4>\n" +
-    "            <button type=\"button\" class=\"btn btn-sm btn-default pull-right\"\n" +
-    "                ng-if=\"needsMigration()\"\n" +
-    "                ng-click=\"migrateClothing()\">\n" +
-    "                Update Clothing\n" +
-    "            </button>\n" +
-    "            Clothing\n" +
-    "        </h4>\n" +
+    "        <h4>Clothing</h4>\n" +
     "        <div ng-repeat=\"slot in ['hat','face','shoulders','coat','torso','belt','pants','gloves','boots']\">\n" +
     "            <label>{{slot}}</label>\n" +
     "            <select class=\"form-control\"\n" +
@@ -2187,7 +2290,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"f-container f-justify-between\" style=\"margin-top: 1em;\">\n" +
     "\n" +
-    "        <div class=\"f-cell f-cell-75p f-container f-wrap\">\n" +
+    "        <div class=\"f-cell f-cell-66p f-container f-wrap\">\n" +
     "\n" +
     "            <!-- COMBAT SECTION -->\n" +
     "            <div class=\"combat f-container f-justify-around f-align-center\">\n" +
@@ -2293,7 +2396,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            \n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"general f-cell f-cell-25p f-container\">\n" +
+    "        <div class=\"general f-cell f-cell-33p f-container\">\n" +
     "\n" +
     "            <div class=\"level f-cell\">\n" +
     "                <div class=\"stat\">\n" +
@@ -2322,7 +2425,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div class=\"darkstone f-cell\">\n" +
     "                <div class=\"stat\">\n" +
     "                    <div editable-stat-value on-save=\"$ctrl.save()\" ng-model=\"$ctrl.character.darkstone\"></div>\n" +
-    "                    <img src=\"assets/darkstone.png\">\n" +
+    "                    <img class=\"sprite-darkstone\" src=\"assets/darkstone.png\">\n" +
     "                </div>\n" +
     "            </div>\n" +
     "\n" +
@@ -2334,7 +2437,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "\n" +
     "            <div class=\"movement f-cell\">\n" +
-    "                <div class=\"stat stat--prepend-plus\">\n" +
+    "                <div class=\"stat\" ng-class=\"{'stat--prepend-plus':$ctrl.character.movement>=0}\">\n" +
     "                    <label>Move</label>\n" +
     "                    <div editable-stat-value on-save=\"$ctrl.save()\" \n" +
     "                        ng-model=\"$ctrl.character.movement\" \n" +

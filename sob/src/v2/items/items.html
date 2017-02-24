@@ -19,14 +19,7 @@
     <div class="clothing">
         <br>
         <br>
-        <h4>
-            <button type="button" class="btn btn-sm btn-default pull-right"
-                ng-if="needsMigration()"
-                ng-click="migrateClothing()">
-                Update Clothing
-            </button>
-            Clothing
-        </h4>
+        <h4>Clothing</h4>
         <div ng-repeat="slot in ['hat','face','shoulders','coat','torso','belt','pants','gloves','boots']">
             <label>{{slot}}</label>
             <select class="form-control"

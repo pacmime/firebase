@@ -46,7 +46,7 @@
 
     <div class="f-container f-justify-between" style="margin-top: 1em;">
 
-        <div class="f-cell f-cell-75p f-container f-wrap">
+        <div class="f-cell f-cell-66p f-container f-wrap">
 
             <!-- COMBAT SECTION -->
             <div class="combat f-container f-justify-around f-align-center">
@@ -152,7 +152,7 @@
             
         </div>
 
-        <div class="general f-cell f-cell-25p f-container">
+        <div class="general f-cell f-cell-33p f-container">
 
             <div class="level f-cell">
                 <div class="stat">
@@ -181,7 +181,7 @@
             <div class="darkstone f-cell">
                 <div class="stat">
                     <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.darkstone"></div>
-                    <img src="assets/darkstone.png">
+                    <img class="sprite-darkstone" src="assets/darkstone.png">
                 </div>
             </div>
 
@@ -193,7 +193,7 @@
             </div>
 
             <div class="movement f-cell">
-                <div class="stat stat--prepend-plus">
+                <div class="stat" ng-class="{'stat--prepend-plus':$ctrl.character.movement>=0}">
                     <label>Move</label>
                     <div editable-stat-value on-save="$ctrl.save()" 
                         ng-model="$ctrl.character.movement" 

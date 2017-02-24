@@ -476,7 +476,8 @@ body .navbar-default .navbar-nav>li>a {
 .f-cell-25p { flex-basis: 25%; }
 .f-cell-50p { flex-basis: 50%; }
 .f-cell-75p { flex-basis: 75%; }
-.f-cell-33p { flex: 33%; }
+.f-cell-66p { flex-basis: 66%; }
+.f-cell-33p { flex-basis: 33%; }
 
 
 
@@ -493,17 +494,17 @@ body .navbar-default .navbar-nav>li>a {
 /* --------- STAT ------------- */
 
 
+
 .has-stat-with-max {
-    width: 110px;
-    text-align: center;
+    width: 90px;
 }
 
 
 .stat {
     position:   relative;
     display:    inline-block;
-    width:      64px;
-    height:     64px;
+    width:      3rem;
+    height:     3rem;
     text-align: center;
     vertical-align: top;
 }
@@ -520,15 +521,15 @@ body .navbar-default .navbar-nav>li>a {
     z-index: 3;
 }
 .stat.stat-label-top label {
-    top: 0;
-    height: 10px;
-    font-size: 1em;
+    top: -0.25em;
+    height: 1em;
+    font-size: 0.875em;
 }
 .stat .value {
     position: relative;
-    font-size:   2em;
-    margin:      0;
-    padding-top: 0.25em;
+    font-size: 1.75em;
+    margin: 0;
+    padding-top: 0.125em;
     width:       100%;
     height:      100%;
     border-radius: 100%; 
@@ -569,6 +570,7 @@ body .navbar-default .navbar-nav>li>a {
     bottom: -12px;
     left:   -12px;
     z-index: 2;
+    transform: scaleX(0.75) scaleY(0.75);
 }
 
 .stat.stat--with-plus [editable-stat-value]:after {
@@ -588,25 +590,76 @@ body .navbar-default .navbar-nav>li>a {
 
 .stat .value.value--sm {
     font-size:   1rem;
-    padding-top: 35%;
+    padding-top: .75em;
 }
 
 .attributes .f-cell-33p { 
     text-align: center;
 }
+
+
+
+/* at higher resolutions, make the stats larger */
+
 @media (min-width:768px) {
+
     .attributes .stat {
         width:      96px;
         height:     96px;
         font-size: 1.5em;
     }
-}
-/*@media (min-width:992px) {
-    .attributes .stat {
-        width:      96px;
-        height:     96px;
+
+    .has-stat-with-max {
+        width: auto;
+        text-align: center;
     }
-}*/
+
+    .stat {
+        width:      5rem;
+        height:     5rem;
+    }
+
+    .stat label {
+        position: absolute;
+        font-size: 1em;
+    }
+
+    .stat .value {
+        font-size:   2.5em;
+        margin:      0;
+        padding-top: 0.25em;
+    }
+
+    .stat .sprite {
+        bottom: -.25em;
+        left: -.25em;
+        transform: scaleX(1.25) scaleY(1.25);
+    }
+
+    .stat .value.value--sm {
+        font-size:   1.5em;
+        padding-top: 1em;
+    }
+
+    .stat.stat-label-top label {
+        top: 0;
+        height: 10px;
+        font-size: 1em;
+    }
+
+    .stat .stat {
+        top:    -1.25em;
+        right:  -1.25em;
+        width:  3em;
+        height: 3em;
+    }
+
+    .stat .stat .value {
+        font-size: 1.25em;
+    }
+
+}
+
 
 /* ----------------------------- */
 
@@ -805,10 +858,10 @@ body .navbar-default .navbar-nav>li>a {
 .img-selector .image img {
     width:      100%;
 }
-.img-selector .image button {
+.img-selector button {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    top: 0;
+    right: 0;
 }
 @media (min-width: 768px) {
     .img-selector .image img {
@@ -828,6 +881,12 @@ body .navbar-default .navbar-nav>li>a {
 
 
 /* ----------- SPRITES ------------- */
+
+img.sprite-darkstone {
+    left: -.25em;
+    bottom: -.25em;
+}
+
 
 .sprite {
     background-image: url(spritesheet.png);
@@ -1092,3 +1151,18 @@ body .navbar-default .navbar-nav>li>a {
 .sprite.disabled { opacity: 0.25; }
 
 /* ------------------------------------- */
+
+
+
+
+
+
+.glyphicon-arrow-up.up {  }
+.glyphicon-arrow-up.up-right { transform: rotateZ(45deg); }
+.glyphicon-arrow-up.right { transform: rotateZ(90deg); }
+.glyphicon-arrow-up.down-right { transform: rotateZ(135deg); }
+.glyphicon-arrow-up.down { transform: rotateZ(180deg); }
+.glyphicon-arrow-up.down-left { transform: rotateZ(-135deg); }
+.glyphicon-arrow-up.left { transform: rotateZ(-90deg); }
+.glyphicon-arrow-up.up-left { transform: rotateZ(-45deg); }
+
