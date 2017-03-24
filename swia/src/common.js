@@ -23,7 +23,7 @@
 
 
 
-    var app = angular.module("common", ["firebase", 'ngSanitize']);
+    var app = angular.module("common", ["firebase", 'ngSanitize', 'ui.bootstrap']);
 
     app.factory("CampaignChoices", ["$firebaseObject",
         function($firebaseObject) {
@@ -144,6 +144,113 @@
             };
 
         }
-    })
+    });
+
+
+
+
+    app.controller('LoginController', function($scope, $uibModalInstance, $timeout, Auth) {
+
+        $timeout(function() {
+            $('#email').focus();
+        }, 500);
+
+        $scope.onKeyUp = function($event, code) {
+            // console.log("Up " + code);
+            if((code === undefined || code === 0) && $event.which !== undefined)
+                code = $event.which;
+            if(code === 13 &&       //enter
+                $scope.email && 
+                $scope.password) 
+                $scope.login();  
+            else if(code === 27)    //esc   
+                $scope.cancel();
+            
+        };
+
+        $scope.login = function() {
+            
+            Auth.$signInWithEmailAndPassword($scope.email, $scope.password)
+            .then(function(authData) {
+                // console.log("Logged in");
+                $scope.errorMessage = null;
+                $uibModalInstance.close();
+            })
+            .catch(function(error) {
+                var errorCode = error.code;
+                $scope.errorMessage = error.message;
+                console.log("unable to login: " + $scope.errorMessage);
+            });
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    });
+
+
+
+    app.directive('login', ["$uibModal", "$firebaseAuth", function($uibModal, $firebaseAuth) {
+
+        return {
+        
+            template: [
+                '<a ng-if="!user" ng-click="doLogin()">Login</a>',
+                '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
+                '  role="button" aria-haspopup="true" aria-expanded="false">',
+                '  {{user.email}} <span class="caret"></span>',
+                '</a>',
+                '<ul ng-if="user" class="dropdown-menu">',
+                '  <li><a ng-click="doReset()">Reset Password</a></li>',
+                '  <li><a ng-click="doLogout()">Log out</a></li>',
+                '</ul>',
+                '</div>'
+            ].join(' '),
+
+            controller: function($scope) {
+
+                var auth = $firebaseAuth();
+                auth.$onAuthStateChanged(function(authData) {
+                    $scope.user = authData;
+                    // console.log("User logged in " + authData.uid + " > " + authData.email);
+                });
+
+                $scope.doLogout = function() {
+                    auth.$signOut();        //v2.x.x
+                    $scope.user = null;
+                };
+
+                $scope.doLogin = function() {
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'src/login.html',
+                        controller: 'LoginController',
+                        resolve: {
+                            Auth: function() { return auth; }
+                        }
+                    });
+
+                    modalInstance.result.then(function() {}, function () {});
+
+                };
+
+                $scope.doReset = function() {
+
+                    //v2.x.x
+                    auth.$sendPasswordResetEmail($scope.user.email, function(error) {
+                        if (error === null) {
+                            alert("Password reset email sent");
+                        } else {
+                            alert("Error sending password reset email:", error);
+                        }
+                    });
+                }
+
+            }
+        };
+
+
+    }]);
 
 }) (angular);

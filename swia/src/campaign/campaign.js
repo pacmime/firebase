@@ -9,16 +9,37 @@
         
         templateUrl: 'src/campaign/campaign.html',
 
-        controller: function($routeParams, Campaign, CharacterChoices) {
+        controller: function($routeParams, $firebaseAuth, Campaign, CharacterChoices) {
         
             this.$onInit = function() {
                 this.displayOpts = {
-                    loading: true,
+                    loading: false,
                     message: null,
                     error: null,
                     displayChoices: false
                 };
 
+                // check that user is authenticated
+                var auth = $firebaseAuth();
+                auth.$onAuthStateChanged( (authData) => {
+                    this.user = authData;
+                    if(authData && authData.uid) {
+                        //if so, load campaigns information
+                        this.updateList();
+                    } else {
+                        //otherwise, forget currently loaded campaigns info
+                        if(this.campaign) {
+                            this.campaign.$destroy();
+                        }
+                    }
+                });
+                
+            };
+
+            this.updateList = function() {
+
+                this.displayOpts.loading = true;
+                
                 //load the campaign
                 var campaignName = this.campId = decodeURIComponent($routeParams.id);
                 this.campaign = Campaign(campaignName);

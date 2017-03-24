@@ -15,7 +15,9 @@
     </div>
 
     <button type="button" class="btn btn-primary"
-        title="Create a new campaign" ng-click="$ctrl.createCampaign()">
+        title="Create a new campaign" 
+        ng-click="$ctrl.createCampaign()"
+        ng-if="$ctrl.user.uid">
         New Campaign
     </button>
             
