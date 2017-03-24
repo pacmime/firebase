@@ -1,0 +1,20 @@
+<div class="items">
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Purchase Items</h5>
+        <div ng-repeat="(name,item) in $ctrl.items" class="list-group-item">
+            <h5 class="list-group-heading">
+                <button type="button" class="btn btn-sm btn-success pull-right" 
+                    ng-disabled="$ctrl.credits<item.cost"
+                    ng-click="$ctrl.purchase(item)">
+                    ${{item.cost}}
+                </button>
+                [{{item.group}}] {{name}}
+            </h5>
+            <div class="list-group-text">
+                <div ng-bind-html="item.effects|listify|iconify"></div>
+                <div ng-bind-html="item.description|listify|iconify"></div>
+                <div ng-bind-html="item.attack|colorize|iconify"></div>
+            </div>
+        </div>
+    </div>
+</div>

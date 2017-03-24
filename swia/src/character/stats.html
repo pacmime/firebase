@@ -1,0 +1,90 @@
+<div>
+    <div ng-if="!$ctrl.character.imperial">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="stat">
+                    <div class="btn-group-vertical pull-right">
+                        <button type="button" class="btn btn-default" ng-click="$ctrl.increaseStat('health')">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="$ctrl.decreaseStat('health')">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+
+                    <h5 style="color: #f00">Health</h5>
+                    {{$ctrl.character.stats.health}} / {{$ctrl.character[$ctrl.character.condition].health}}
+            
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="stat">
+                    <div class="btn-group-vertical pull-right">
+                        <button type="button" class="btn btn-default" ng-click="$ctrl.increaseStat('strain')">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="$ctrl.decreaseStat('strain')">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                    <h5 style="color:#00f">Strain</h5> 
+                    {{$ctrl.character.stats.strain}} / {{$ctrl.character[$ctrl.character.condition].endurance}}
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="stat"><h5>Speed</h5> {{$ctrl.character[$ctrl.character.condition].speed}}</div>
+            </div>
+            <div class="col-sm-3">
+                <div class="stat">
+                    <h5>Defense</h5> 
+                    <div ng-bind-html="$ctrl.character[$ctrl.character.condition].defense | colorize"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="skill" title="Strength">
+                    <span class="glyphicon glyphicon-hand-up"></span> 
+                    <span ng-bind-html="$ctrl.character[$ctrl.character.condition].actions.strength | colorize"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="skill" title="Insight">
+                    <span class="glyphicon glyphicon-eye-open"></span> 
+                    <span ng-bind-html="$ctrl.character[$ctrl.character.condition].actions.insight | colorize"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="skill" title="Tech">
+                    <span class="glyphicon glyphicon-wrench"></span> 
+                    <span ng-bind-html="$ctrl.character[$ctrl.character.condition].actions.tech | colorize"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="$ctrl.character.imperial">
+        <div class="f-container f-justify-between f-align-stretch">
+            <div class="stat f-cell-50p">
+                <div class="btn-group-vertical pull-right">
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.increaseThreat()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.decreaseThreat()">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+                <h5 style="color: #f00">Threat</h5>
+                {{$ctrl.character.threat}}
+            </div>
+            <div class="stat f-cell-50p">
+                <div class="btn-group-vertical pull-right">
+                    <button type="button" class="btn btn-default" ng-click="$ctrl.increaseRound()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+                <h5 style="color: #f00">Round</h5>
+                {{$ctrl.round||1}}
+            </div>
+        </div>
+    </div>
+</div>

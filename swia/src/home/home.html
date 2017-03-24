@@ -1,21 +1,21 @@
 <div class="container">
 
-    <div class="alert alert-danger" ng-if="ctrl.displayOpts.error">{{ctrl.displayOpts.error}}</div>
+    <div class="alert alert-danger" ng-if="$ctrl.displayOpts.error">{{$ctrl.displayOpts.error}}</div>
     
-    <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
+    <div ng-if="$ctrl.displayOpts.loading">Fetching data...</div>
     
     <div class="list-group">
         <div class="list-group-item disabled">
             <h4 class="list-group-item-heading">Campaigns</h4>
             <p class="list-group-item-text">First, select a campaign. From there you will have access to your character in that campaign or be able to create a new character for use in that campaign.</p>
         </div>
-        <a ng-repeat="campaign in ctrl.campaigns" class="list-group-item" href="#/campaign/{{campaign.name}}">
-            {{campaign.name}} ({{campaign.numChars}})
+        <a ng-repeat="(name,campaign) in $ctrl.campaigns" class="list-group-item" href="#/campaign/{{name}}">
+            {{name}}
         </a>
     </div>
 
     <button type="button" class="btn btn-primary"
-        title="Create a new campaign" ng-click="ctrl.createCampaign()">
+        title="Create a new campaign" ng-click="$ctrl.createCampaign()">
         New Campaign
     </button>
             

@@ -1902,7 +1902,7 @@
                 if('dynamite' === id) {
                     result.attack = this.parseAttackStats(id);
                     result.bounces = this.rollBounces();
-                } else if('hatchet') {
+                } else if('hatchet' === id) {
                     result.attack = this.parseAttackStats(id);
                 } else {
                     var combat = this.character.attacks[id];
@@ -3937,6 +3937,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
     "                ng-model=\"$ctrl.character.notes\"></textarea>\n" +
     "        </div>\n" +
+    "        <hr>\n" +
+    "        <div class=\"f-container f-wrap\">\n" +
+    "            <loot class=\"f-cell-1x-sm\" character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></loot>\n" +
+    "            <scavenge class=\"f-cell-1x-sm\" character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></scavenge>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
@@ -4459,6 +4464,68 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('v2/loot/loot.html',
+    "<div class=\"c-loot\">\n" +
+    "    <h3>\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$ctrl.rollForLoot()\">Roll!</button>\n" +
+    "        Loot\n" +
+    "    </h3>\n" +
+    "    <div ng-if=\"$ctrl.lootRolled\">\n" +
+    "        <div><small>'Apply' will grant 20 XP in addition to any loot-specific rewards</small></div>\n" +
+    "        <div><small>'Clear' will abort current loot roll (and any rewards and XP)</small></div>\n" +
+    "        <br>\n" +
+    "    </div>\n" +
+    "    <div class=\"loot\" ng-if=\"$ctrl.lootRolled\">\n" +
+    "\n" +
+    "        <label>{{$ctrl.lootRolled.label}}</label>\n" +
+    "        <p>{{$ctrl.lootRolled.description}}</p>\n" +
+    "        <div><em ng-if=\"$ctrl.lootRolled.value\">(Rolled {{$ctrl.lootRolled.value}})</em></div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <button type=\"button\" class=\"btn btn-info\" \n" +
+    "            ng-click=\"$ctrl.applyLoot()\">\n" +
+    "            Apply <span ng-if=\"$ctrl.lootRolled.value\">with value rolled</span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.clearLoot()\">\n" +
+    "            Clear <span ng-if=\"$ctrl.lootRolled.apply\">without applying</span>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('v2/loot/scavenge.html',
+    "<div class=\"c-scavenge\">\n" +
+    "    <h3>\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$ctrl.rollForScavenge()\">Roll!</button>\n" +
+    "        Scavenge\n" +
+    "    </h3>\n" +
+    "    <div ng-if=\"$ctrl.scavengeRolled\">\n" +
+    "        <div><small>'Apply' will grant 10 XP in addition to any rewards or penalties</small></div>\n" +
+    "        <div><small>'Clear' will abort current roll (and any rewards, penalties, and XP)</small></div>\n" +
+    "        <br>\n" +
+    "    </div>\n" +
+    "    <div class=\"scavenge\" ng-if=\"$ctrl.scavengeRolled\">\n" +
+    "\n" +
+    "        <label>{{$ctrl.scavengeRolled.label}}</label>\n" +
+    "        <p>{{$ctrl.scavengeRolled.description}}</p>\n" +
+    "        <div><em ng-if=\"$ctrl.scavengeRolled.value\">(Rolled {{$ctrl.scavengeRolled.value}})</em></div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <button type=\"button\" class=\"btn btn-info\" \n" +
+    "            ng-click=\"$ctrl.applyScavenge()\">\n" +
+    "            Apply <span ng-if=\"$ctrl.scavengeRolled.value\">with value rolled</span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.clearScavenge()\">\n" +
+    "            Clear <span ng-if=\"$ctrl.scavengeRolled.apply\">without applying</span>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
     "</div>"
   );
 

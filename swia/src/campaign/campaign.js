@@ -2,96 +2,93 @@
     
     "use strict";
 
-    var app = angular.module("campaign", ["firebase"]);
-
-    app.factory("Campaign", ["$firebaseObject",
-        function($firebaseObject) {
-            return function(campaign) {
-                var ref = new Firebase("https://intense-fire-8692.firebaseio.com/saved/" + campaign);
-                return $firebaseObject(ref);
-            }
-        }
-    ]);
-
-    app.factory("CharacterChoices", ["$firebaseArray",
-        function($firebaseArray) {
-
-            var ref = new Firebase("https://intense-fire-8692.firebaseio.com/base/characters");
-
-            // this uses AngularFire to create the synchronized array
-            return $firebaseArray(ref);
-        }
-    ]);
+    var app = angular.module("campaign", ["common"]);
 
 
-    app.controller("CampaignController", [
-        "$scope", "$routeParams", "Campaign", "CharacterChoices", 
-        function($scope, $routeParams, Campaign, CharacterChoices) {
+    app.component("swiaCampaign", {
         
-        var self = this;
+        templateUrl: 'src/campaign/campaign.html',
+
+        controller: function($routeParams, Campaign, CharacterChoices) {
         
-        this.displayOpts = {
-            loading: true,
-            message: null,
-            error: null,
-            displayChoices: false
-        };
+            this.$onInit = function() {
+                this.displayOpts = {
+                    loading: true,
+                    message: null,
+                    error: null,
+                    displayChoices: false
+                };
 
-        //load the campaign
-        var campaignName = this.campId = decodeURIComponent($routeParams.id);
-        this.campaign = Campaign(campaignName);
-        this.campaign.$loaded().then(function() {
-            self.displayOpts.loading = false;
-        }).catch(function(error) {
-            self.displayOpts.loading = false;
-            self.displayOpts.error = error.data;
-        });
+                //load the campaign
+                var campaignName = this.campId = decodeURIComponent($routeParams.id);
+                this.campaign = Campaign(campaignName);
+                this.campaign.$loaded().then( () => {
+                    this.displayOpts.loading = false;
+                }).catch(function(error) {
+                    this.displayOpts.loading = false;
+                    this.displayOpts.error = error.data;
+                });
 
 
-        //load base class options
-        this.choices = CharacterChoices;
-        
+                //load base class options
+                this.choices = CharacterChoices;
+            };
+            
 
-        //is this character already chosen in this campaign?
-        this.campaignHasChar = function(character) {
-            var charName = character.name;
-            for(var id in this.campaign) {
-                if(this.campaign[id] && this.campaign[id].name && 
-                    this.campaign[id].name===charName)
-                    return true;
-            }
-            return false;
-        };
-
-        //create char from base classes
-        this.createFrom = function(character) {
-
-            //hide choice list
-            self.displayOpts.displayChoices = false;
-                
-            var id = Math.floor(Math.random()*999999);
-
-            //append character to loaded campaign
-            self.campaign[id] = {
-                name: character.name,
-                condition: "normal",
-                stats: {
-                    strain: 0,
-                    health: character.normal.health
-                },
-                weapons: [character.weapons[0]]
+            //is this character already chosen in this campaign?
+            this.hasCharacter = function(name) {
+                var found = false;
+                var isImperial = ~name.indexOf('Imperial Officer');
+                angular.forEach(this.campaign.characters, function(character, key) {
+                    if(found) return;
+                    found = character.name === name || 
+                            (isImperial && character.name === 'Imperial Officer');
+                });
+                return found;
             };
 
-            //and save the now changed campaign
-            campaign.$save().then(function() {
-                updateCampaignList();
-                self.displayOpts.message = "Character created";
-            }).catch(function(error) {
-                self.error = "Failed to save new character: " + error.data;
-            });
+            //create char from base classes
+            this.createFrom = function(character) {
 
-        };
+                //hide choice list
+                this.displayOpts.displayChoices = false;
+                    
+                var id = UUID();
 
-    }]);
+                //append character to loaded campaign
+                this.campaign.characters = this.campaign.characters || {};
+                this.campaign.characters[id] = this.prepChar(character);
+
+                //and save the now changed campaign
+                this.campaign.$save()
+                    .then( () => {
+                        this.displayOpts.message = "Character created";
+                    }).catch( (error) => {
+                        this.displayOpts.error = "Failed to save new character: " + error.data;
+                    });
+
+            };
+
+            this.prepChar = function(character) {
+                var result = angularFireCopy(character);
+                if(result.name === 'Imperial Officer') {
+                    //clear non-starting abilities
+                    angular.forEach(result.abilities, function(name, ability) {
+                        if(ability.cost > 0)
+                            result[name] = null;
+                    });
+
+                } else {
+                    result.abilities = {};
+                    result.condition = "normal";
+                    result.stats = {
+                        strain: 0,
+                        health: character.normal.health
+                    };
+                }
+                return result;
+            }
+        }
+    });
 
 }) (angular);

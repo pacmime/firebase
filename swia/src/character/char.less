@@ -1,0 +1,207 @@
+.char { 
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+.char .image {
+    background-size: cover;
+}
+.char.wounded .image {
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+}
+.char .details {
+    width: 100%;
+    height: auto;
+}
+.char .abilities, 
+.char .items {
+    width: 100%;
+}
+.char .label {
+    display: block;
+    width: 100%;
+    background: rgba(255,255,255,0.75);
+    color: #000;
+    text-align: left;
+}
+.char .stats {
+    width: 100%;
+    background: #000;
+    padding: 12px;
+    border: 2px solid #fff;
+    border-radius: 24px 0 0 0;
+    border-bottom: none;
+    border-right: none;
+}
+.char .stat {
+    border-radius: 8px;
+    background: #fff;
+    text-align: center;
+    padding: 8px 0;
+    height: 75px;
+    margin-bottom: 12px;
+}
+.char .skill {
+    background: #fff;
+    border-radius: 8px;
+    text-align: center;
+    height: 36px;
+    padding: 8px;
+}
+
+
+
+
+
+
+@media(max-width:767px) {
+    .char .image {
+        height: 200px;
+    }
+}
+
+@media(min-width:768px) {
+
+    swia-character {
+        height: 100%;
+    }
+
+    .char { 
+        width: 90%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-content: stretch;
+    }
+
+    .char .top-row {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .char .bot-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        background-color: #999;
+    }
+
+    .char .image {
+        flex: 1;
+        height: 100%;
+        position: relative;
+
+        .dice {
+            position: absolute;
+            bottom: 1em;
+            right: 0;
+
+            display: flex;
+            align-items: flex-end;
+        }
+    }
+
+
+    .char .details {
+        flex: 1;
+        height: 100%;
+
+        border: 2px solid #000;
+        overflow: auto;
+    }
+
+    .char swia-abilities, 
+    .char swia-items {
+        height: 100%;
+        width: 100%;
+    }
+
+    .char .abilities,
+    .char .items {
+        width: 100%;
+    }
+    .char .label {
+        flex: 1;
+        display: block;
+        z-index:3;
+        border-radius: 0;
+        padding: 12px;
+    }
+    .char .stats {
+        flex: 2;
+    }
+}
+
+
+
+
+
+
+
+
+// @media(min-width:768px) {
+//     .char { 
+//         width: 768px;
+//         height: 500px;
+//     }
+//     .char .image {
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         height: 100%;
+//         width: 50%;
+//     }
+//     .char .abilities {
+//         position: absolute;
+//         right: 0;
+//         top: 0;
+//         border: 2px solid #000;
+//         overflow: auto;
+//         width: 50%;
+//         height: 70%;
+//     }
+//     .char .label {
+//         display: block;
+//         position: absolute;
+//         bottom: 0;
+//         left: 0;
+//         width: 33%;
+//         height: 15%;
+//         z-index:3;
+//         border-radius: 0;
+//         padding: 12px;
+//     }
+//     .char .stats {
+//         position: absolute;
+//         bottom: 0;
+//         right: 0%;
+//         width: 67%;
+//         height: 30%;
+//     }
+// }
+// @media(min-width:992px) {
+//     .char { 
+//         width: 992px;
+//         height: 600px;
+//     }
+//     .char .image {
+//         width: 50%;
+//     }
+//     .char .abilities {
+//         width: 50%;
+//         height: 75%;
+//     }
+//     .char .label {
+//         width: 33%;
+//         height: 15%;
+//     }
+//     .char .stats {
+//         width: 67%;
+//         height: 25%;
+//     }
+// }

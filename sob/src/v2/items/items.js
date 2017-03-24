@@ -28,7 +28,22 @@
                 
                 $scope.character.$loaded().then(update);
 
+                /**
+                 * fired when user changes a clothing slot
+                 */
                 $scope.onClothingChange = function(slot) {
+
+                    var name = $scope.character.clothing[slot] ? $scope.character.clothing[slot].name : null;
+                    angular.forEach($scope.character.items, function(item) {
+                
+                        //mark item selected as selected
+                        if(name && item.slot === slot && item.name === name) {
+                            item.equipped = true;
+                        } else if(item.slot === slot) {
+                            item.equipped = false;
+                        }
+                    });
+
                     // console.log(JSON.stringify($scope.character.clothing[slot]));
                     $scope.onSave();
                 };
@@ -105,7 +120,12 @@
                         controller: 'ItemEditor',
                         animation: false,
                         resolve: {
-                            item: function() {return null;}
+                            item: function() {
+                                return {
+                                    name: null, description: null, keywords: null, source: null,
+                                    usage: null, slot: null, weight: 0, darkstone: 0, slots: 0, cost: 0, hands: 0
+                                };
+                            }
                         }
                     });
 

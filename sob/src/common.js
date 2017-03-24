@@ -271,34 +271,59 @@
 
     .controller('ItemEditor', function($scope, $uibModalInstance, item) {
 
-        $scope.item = item;
-        $scope.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
+        $scope.$ctrl = this;
+
+        this.item = item;
+        this.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
+
+        this.ok = function () {
+            $uibModalInstance.close(this.item);
+        };
+
+        this.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+        this.addModifier = function() {
+            this.item.modifiers = this.item.modifiers || {};
+            this.item.modifiers[UUID()] = {affects: null, value: 0};
+        };
+        this.removeModifier = function(id) {
+            delete this.item.modifiers[id];
+        };
+
+        // $scope.item = item;
+        // $scope.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
         
-        $scope.ok = function () {
-            $uibModalInstance.close($scope.item);
-        };
+        // $scope.ok = function () {
+        //     $uibModalInstance.close($scope.item);
+        // };
 
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
+        // $scope.cancel = function () {
+        //     $uibModalInstance.dismiss('cancel');
+        // };
 
-    })
-
-    .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
-
-        $scope.item = item;
-        $scope.types = types;
-        $scope.newItem = !item;
-
-        $scope.ok = function () {
-            $uibModalInstance.close($scope.item);
-        };
-
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
+        // $scope.addModifier = function() {
+        //     $scope.item.modifiers = $scope.item.modifiers || {};
+        //     $scope.item.modifiers[Math.random()*9999] = {affects: null, value: 0};
+        // };
+        // $scope.removeModifier = function(id) {
+        //     $scope.item.modifiers[id] = null;
+        // };
 
     })
+
+    // .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
+    //     $scope.item = item;
+    //     $scope.types = types;
+    //     $scope.newItem = !item;
+    //     $scope.ok = function () {
+    //         $uibModalInstance.close($scope.item);
+    //     };
+    //     $scope.cancel = function () {
+    //         $uibModalInstance.dismiss('cancel');
+    //     };
+    // })
 
 
     .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
@@ -506,7 +531,7 @@
             template: [
                 '<form class="img-selector">',
                 '  <div class="image" title="click to change">',
-                '    <img src="assets/avatar.png">',
+                '    <img src="assets/img/avatar.png">',
                 '  </div>',
                 '  <button type="button" class="btn btn-sm btn-success" ',
                 '    ng-if="imgData && isDirty()" ng-click="save()">save</button>',

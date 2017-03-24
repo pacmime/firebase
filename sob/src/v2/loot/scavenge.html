@@ -1,0 +1,27 @@
+<div class="c-scavenge">
+    <h3>
+        <button type="button" class="btn btn-default pull-right" ng-click="$ctrl.rollForScavenge()">Roll!</button>
+        Scavenge
+    </h3>
+    <div ng-if="$ctrl.scavengeRolled">
+        <div><small>'Apply' will grant 10 XP in addition to any rewards or penalties</small></div>
+        <div><small>'Clear' will abort current roll (and any rewards, penalties, and XP)</small></div>
+        <br>
+    </div>
+    <div class="scavenge" ng-if="$ctrl.scavengeRolled">
+
+        <label>{{$ctrl.scavengeRolled.label}}</label>
+        <p>{{$ctrl.scavengeRolled.description}}</p>
+        <div><em ng-if="$ctrl.scavengeRolled.value">(Rolled {{$ctrl.scavengeRolled.value}})</em></div>
+
+        <br>
+
+        <button type="button" class="btn btn-info" 
+            ng-click="$ctrl.applyScavenge()">
+            Apply <span ng-if="$ctrl.scavengeRolled.value">with value rolled</span>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="$ctrl.clearScavenge()">
+            Clear <span ng-if="$ctrl.scavengeRolled.apply">without applying</span>
+        </button>
+    </div>
+</div>

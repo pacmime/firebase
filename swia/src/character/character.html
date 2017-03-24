@@ -1,85 +1,156 @@
-<div class="container">
-
-    <div class="char {{ctrl.character.condition}}">
-
-        <div class="label">
-            <div class="pull-right">
-                {{ctrl.character.xp}} XP
-                <button type="button" class="btn btn-link btn-xs" ng-click="ctrl.increaseXP()" title="earn XP">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </div>
-            <h4>{{ctrl.character.name}}</h4>
-            <h6>{{ctrl.baseData['class']}}</h6>
-        </div>
-
-        <img class="image" src="assets/{{ctrl.baseData.image}}">
-
-        <abilities />
+<div class="char {{$ctrl.character.condition}}">
+    <div class="top-row">
         
-        <div class="stats">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="stat">
-                        <div class="btn-group-vertical pull-right">
-                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.increaseStat('health')">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.decreaseStat('health')">
-                                <span class="glyphicon glyphicon-minus"></span>
-                            </button>
-                        </div>
+        <div class="image" style="background-image: url(assets/img/{{$ctrl.character.image}})">
+            <button type="button" class="btn btn-lg btn-img btn-default" data-toggle="button">
+                <img src="assets/img/activation.ready.png" class="when-not-active">
+                <img src="assets/img/activation.used.png" class="when-active">
+            </button>
 
-                        <h5 style="color: #f00">Health</h5>
-                        {{ctrl.character.stats.health}} / {{ctrl.baseData[ctrl.character.condition].health}}
-                
-                    </div>
+            <div class="dice hidden-xs">
+                <div class="f-cell-1x">
+                    <swia-die color="red"></swia-die><swia-die color="red"></swia-die>
                 </div>
-                <div class="col-sm-3">
-                    <div class="stat">
-                        <div class="btn-group-vertical pull-right">
-                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.increaseStat('strain')">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" ng-click="ctrl.decreaseStat('strain')">
-                                <span class="glyphicon glyphicon-minus"></span>
-                            </button>
-                        </div>
-                        <h5 style="color:#00f">Strain</h5> 
-                        {{ctrl.character.stats.strain}} / {{ctrl.baseData[ctrl.character.condition].endurance}}
-                    </div>
+                <div class="f-cell-1x">
+                    <swia-die color="blue"></swia-die><swia-die color="blue"></swia-die>
                 </div>
-                <div class="col-sm-3">
-                    <div class="stat"><h5>Speed</h5> {{ctrl.baseData[ctrl.character.condition].speed}}</div>
+                <div class="f-cell-1x">
+                    <swia-die color="green"></swia-die><swia-die color="green"></swia-die>
                 </div>
-                <div class="col-sm-3">
-                    <div class="stat">
-                        <h5>Defense</h5> 
-                        <div ng-bind-html="ctrl.baseData[ctrl.character.condition].defense | colorize"></div>
-                    </div>
+                <div class="f-cell-1x">
+                    <swia-die color="yellow"></swia-die><swia-die color="yellow"></swia-die>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="skill" title="Strength">
-                        <span class="glyphicon glyphicon-hand-up"></span> 
-                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.strength | colorize"></span>
-                    </div>
+                <div class="f-cell-1x">
+                    <swia-die color="black"></swia-die><swia-die color="black"></swia-die>
                 </div>
-                <div class="col-sm-4">
-                    <div class="skill" title="Insight">
-                        <span class="glyphicon glyphicon-eye-open"></span> 
-                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.insight | colorize"></span>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="skill" title="Tech">
-                        <span class="glyphicon glyphicon-wrench"></span> 
-                        <span ng-bind-html="ctrl.baseData[ctrl.character.condition].actions.tech | colorize"></span>
-                    </div>
+                <div class="f-cell-1x">
+                    <swia-die color="white"></swia-die>
                 </div>
             </div>
         </div>
-      
+
+        <div class="label visible-xs">
+            <h4>
+                <div class="pull-right">
+                    {{$ctrl.character.xp||0}} XP
+                    <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.increaseXP()" title="earn XP">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+                {{$ctrl.character.name}}<br><small>{{$ctrl.character['class']}}</small>
+            </h4>
+        </div>
+
+        <ng-include src="'src/character/stats-xs.html'" class="stats visible-xs"></ng-include>
+        <div class="visible-xs">
+            <swia-die color="red"></swia-die>
+            <swia-die color="blue"></swia-die>
+            <swia-die color="green"></swia-die>
+            <swia-die color="yellow"></swia-die>
+            <swia-die color="black"></swia-die>
+            <swia-die color="white"></swia-die>
+        </div>
+
+        <div class="details">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a data-target="#purchased" role="tab" data-toggle="tab">Details</a>
+                </li>
+                <li role="presentation">
+                    <a data-target="#abilities" role="tab" data-toggle="tab">Purchase Abilities</a>
+                </li>
+                <li role="presentation" ng-if="!$ctrl.character.imperial">
+                    <a data-target="#items" role="tab" data-toggle="tab">Purchase Items</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="purchased">
+                    <ng-include src="'src/character/abilities.html'"></ng-include>
+                    <ng-include src="'src/character/items.html'"></ng-include>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="abilities">
+                    <swia-available-abilities character="$ctrl.character" on-purchase="$ctrl.purchaseAbility(ability)">
+                    </swia-available-abilities>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="items">
+                    <swia-available-items credits="{{$ctrl.character.credits}}" on-purchase="$ctrl.purchaseItem(item)">
+                    </swia-available-items>
+                </div>
+            </div>
+
+            <!-- <swia-agendas character="$ctrl.character" ng-if="$ctrl.character.imperial"></swia-agendas> -->
+        </div>
     </div>
+    <div class="bot-row hidden-xs">
+        <div class="label">
+            <h4>
+                <div class="pull-right">
+                    {{$ctrl.character.xp||0}} XP
+                    <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.increaseXP()" title="earn XP">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+                {{$ctrl.character.name}}<br>
+                <small>{{$ctrl.character['class']}}</small>
+            </h4>
+            <a href="#/campaign/{{$ctrl.campaign}}">{{$ctrl.campaign}} Campaign</a>
+        </div>
+
+        <ng-include src="'src/character/stats.html'" class="stats"></ng-include>
+    </div>
+
+
+    <!--
+    <div>
+        <div class="sprite sprite-red-1"></div>
+        <div class="sprite sprite-red-2"></div>
+        <div class="sprite sprite-red-3"></div>
+        <div class="sprite sprite-red-4"></div>
+        <div class="sprite sprite-red-5"></div>
+        <div class="sprite sprite-red-6"></div>
+    </div>
+    <div>
+        <div class="sprite sprite-blue-1"></div>
+        <div class="sprite sprite-blue-2"></div>
+        <div class="sprite sprite-blue-3"></div>
+        <div class="sprite sprite-blue-4"></div>
+        <div class="sprite sprite-blue-5"></div>
+        <div class="sprite sprite-blue-6"></div>
+    </div>
+    <div>
+        <div class="sprite sprite-green-1"></div>
+        <div class="sprite sprite-green-2"></div>
+        <div class="sprite sprite-green-3"></div>
+        <div class="sprite sprite-green-4"></div>
+        <div class="sprite sprite-green-5"></div>
+        <div class="sprite sprite-green-6"></div>
+    </div>
+    <div>
+        <div class="sprite sprite-yellow-1"></div>
+        <div class="sprite sprite-yellow-2"></div>
+        <div class="sprite sprite-yellow-3"></div>
+        <div class="sprite sprite-yellow-4"></div>
+        <div class="sprite sprite-yellow-5"></div>
+        <div class="sprite sprite-yellow-6"></div>
+    </div>
+    <div>
+        <div class="sprite sprite-black-1"></div>
+        <div class="sprite sprite-black-2"></div>
+        <div class="sprite sprite-black-3"></div>
+        <div class="sprite sprite-black-4"></div>
+        <div class="sprite sprite-black-5"></div>
+        <div class="sprite sprite-black-6"></div>
+    </div>
+    <div>
+        <div class="sprite sprite-white-1"></div>
+        <div class="sprite sprite-white-2"></div>
+        <div class="sprite sprite-white-3"></div>
+        <div class="sprite sprite-white-4"></div>
+        <div class="sprite sprite-white-5"></div>
+        <div class="sprite sprite-white-6"></div>
+    </div>
+    -->
+    
 </div>

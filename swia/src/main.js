@@ -9,16 +9,13 @@
         //default route if invalid one is supplied
         $routeProvider
         .when('/', {
-            templateUrl: 'src/home/home.html',
-            controller: 'HomeController as ctrl'
+            template: "<swia-home></swia-home>"
         })
         .when('/campaign/:campId/:charId', {
-            templateUrl: 'src/character/character.html',
-            controller: 'CharacterController as ctrl'
+            template: '<swia-character></swia-character>'
         })
         .when('/campaign/:id', {
-            templateUrl: 'src/campaign/campaign.html',
-            controller: 'CampaignController as ctrl'
+            template: '<swia-campaign></swia-campaign>'
         })
         
         .otherwise({ redirectTo: "/" });

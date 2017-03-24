@@ -7,11 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <base href="/dev.html">
         <title>Shadows of Brimstone Character App</title>
-        <link rel="shortcut icon" type="image/png" href="assets/item_darkstone.png">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <!-- <link rel="stylesheet" href="assets/reflex.min.css">
-        <link rel="stylesheet" href="assets/style.css"> -->
-        <link rel="stylesheet" href="assets/style2.css">
+        <link rel="shortcut icon" type="image/png" href="assets/img/item_darkstone.png">
+        <link rel="stylesheet" href="assets/css/brimstone.css">
     </head>
 
     <body>
@@ -35,21 +32,26 @@
             };
         </script>
 
+
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/angular-route/angular-route.min.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script src="bower_components/firebase/firebase.js"></script>
+        <script src="src/firebase.config.js"></script>
+        <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+        
+        <!--
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-sanitize.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.js"></script>
-
         <script src="assets/ui-bootstrap-tpls-1.3.2.min.js"></script>
-
-        <!-- Firebase 2.x.x and AngularFire 1.x.x
-        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-        <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
-        -->
-        <!-- Firebase 3.x.x and AngularFire 2.x.x -->
         <script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
         <script>
           // Initialize Firebase
@@ -61,20 +63,7 @@
           };
           firebase.initializeApp(config);
         </script>
-        
         <script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>
-
-
-        <!--
-        <script src="src/common.js"></script>
-        <script src="src/character/character.js"></script>
-        <script src="src/character/abilities/abilities.js"></script>
-        <script src="src/character/clothing/clothing.js"></script>
-        <script src="src/character/items/items.js"></script>
-        <script src="src/character/mutations/mutations.js"></script>
-        <script src="src/character/sermons/sermons.js"></script>
-        <script src="src/home/home.js"></script>
-        <script src="src/main.js"></script>
         -->
 
         <script src="src/common.js"></script>
@@ -86,6 +75,7 @@
         <script src="src/v2/sermons/sermons.js"></script>
         <script src="src/v2/sidebag/sidebag.js"></script>
         <script src="src/v2/attacks/attacks.js"></script>
+        <script src="src/v2/loot/loot.js"></script>
         <script src="src/home/home.js"></script>
         <script src="src/main.js"></script>
 

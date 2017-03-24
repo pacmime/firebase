@@ -34,3 +34,11 @@ node_modules
 
 bower
 bower_components
+
+sob/assets/css
+sob/assets/js
+sob/assets/fonts
+swia/assets/css
+swia/assets/js
+swia/assets/fonts
+

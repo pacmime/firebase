@@ -5,46 +5,29 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <base href="/">
+        <base href="/swia/">
         <title>Star Wars Imperial Assault Character App</title>
-        <link rel="shortcut icon" type="image/png" href="assets/favicon.png">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/style.css">
+        <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+        <link rel="stylesheet" href="assets/css/swia.css">
     </head>
 
     <body>
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="#/goHome">Imperial Assault Characters</a>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <small class="pull-right hidden-xs">
+                    Star Wars, Star Wars Imperial Assault, and its contents are properties of the Disney Corporation and Fantasy Flight Games.
+                </small>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#/goHome">Imperial Assault Characters</a>
+                </div>
             </div>
-          </div>
         </nav>
 
         <div ng-view></div>
 
-
-	<br>
-	<br>
-	<br>
-	<br>
-	<center><small>Star Wars, Star Wars Imperial Assault, and its contents are properties of Disney and Fantasy Flight Games.</small></center>
-
-        <!-- Bootstrap -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-        <!-- Angular -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-sanitize.js"></script>
-
-        <!-- Firebase -->
-        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-        <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
-
-        <!-- Application -->
-        <script src="assets/sw.min.js"></script>
+        <script src="assets/js/dependencies.js"></script>
+        <script src="assets/js/swia.min.js"></script>
+        <script src="assets/js/templates.js"></script>
 
     </body>
 

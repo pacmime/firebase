@@ -33,6 +33,7 @@ module.exports = function(grunt) {
         "src/v2/mutations/mutations.js",
         "src/v2/sidebag/sidebag.js",
         "src/v2/attacks/attacks.js",
+        "src/v2/loot/loot.js",
         "src/home/home.js",
         "src/main.js",
         'assets/templates.js'

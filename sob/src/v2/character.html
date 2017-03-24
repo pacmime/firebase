@@ -80,6 +80,11 @@
             <textarea name="notes" rows="10" placeholder="Enter any notes about this character" class="form-control"
                 ng-model="$ctrl.character.notes"></textarea>
         </div>
+        <hr>
+        <div class="f-container f-wrap">
+            <loot class="f-cell-1x-sm" character="$ctrl.character" on-save="$ctrl.save()"></loot>
+            <scavenge class="f-cell-1x-sm" character="$ctrl.character" on-save="$ctrl.save()"></scavenge>
+        </div>
     </div>
 
 

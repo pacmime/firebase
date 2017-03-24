@@ -18,7 +18,7 @@
     </div>
 
     <h5>
-        {{name}} 
+        <input type="checkbox" ng-model="item.equipped" ng-change="ctrl.save()"> {{name}} 
         <small>
             <em>
                 <span ng-if="item.slot">[{{item.slot}}]</span> 

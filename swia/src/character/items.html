@@ -1,0 +1,14 @@
+<div class="items">
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Items</h5>
+        <div ng-repeat="(name,weapon) in $ctrl.character.weapons" class="list-group-item">
+            <h5 class="list-group-item-heading">
+                <span class="pull-right" ng-bind-html="weapon.attack|colorize|iconify"></span> 
+                {{name}} 
+                <small>( {{weapon.type}} )</small>
+            </h5>
+            <small ng-if="weapon.effects" ng-bind-html="weapon.effects|listify|iconify"></small>
+            <em ng-if="weapon.description"><br><small ng-bind-html="weapon.description"></small></em>
+        </div>
+    </div>
+</div>

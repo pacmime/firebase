@@ -1635,6 +1635,11 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <textarea name=\"notes\" rows=\"10\" placeholder=\"Enter any notes about this character\" class=\"form-control\"\n" +
     "                ng-model=\"$ctrl.character.notes\"></textarea>\n" +
     "        </div>\n" +
+    "        <hr>\n" +
+    "        <div class=\"f-container f-wrap\">\n" +
+    "            <loot class=\"f-cell-1x-sm\" character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></loot>\n" +
+    "            <scavenge class=\"f-cell-1x-sm\" character=\"$ctrl.character\" on-save=\"$ctrl.save()\"></scavenge>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
@@ -1973,6 +1978,9 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <li role=\"presentation\">\n" +
     "                <a data-target=\"#third\" aria-controls=\"third\" role=\"tab\" data-toggle=\"tab\">Stats</a>\n" +
     "            </li>\n" +
+    "            <li role=\"presentation\">\n" +
+    "                <a data-target=\"#fourth\" aria-controls=\"fourth\" role=\"tab\" data-toggle=\"tab\">Mods</a>\n" +
+    "            </li>\n" +
     "        </ul>\n" +
     "\n" +
     "        <!-- Tab panes -->\n" +
@@ -1980,27 +1988,27 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "            <div role=\"tabpanel\" class=\"tab-pane active\" id=\"first\">\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Name</label>\n" +
-    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"item.name\" placeholder=\"Name\">\n" +
+    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"$ctrl.item.name\" placeholder=\"Name\">\n" +
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Description</label>\n" +
-    "                    <textarea rows=\"3\" class=\"form-control input-sm\" ng-model=\"item.description\" \n" +
+    "                    <textarea rows=\"3\" class=\"form-control input-sm\" ng-model=\"$ctrl.item.description\" \n" +
     "                        placeholder=\"Provide a description\">\n" +
     "                    </textarea>\n" +
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Keywords</label>    \n" +
-    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"item.keywords\" placeholder=\"Keywords\">\n" +
+    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"$ctrl.item.keywords\" placeholder=\"Keywords\">\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div role=\"tabpanel\" class=\"tab-pane\" id=\"second\">\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Source</label>\n" +
-    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
+    "                    <input type=\"text\" class=\"form-control input-sm\" ng-model=\"$ctrl.item.source\" placeholder=\"Source (eg, 'General Store' or 'Targa Plateau')\">\n" +
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Use</label>\n" +
-    "                    <select class=\"form-control input-sm\" ng-model=\"item.usage\">\n" +
+    "                    <select class=\"form-control input-sm\" ng-model=\"$ctrl.item.usage\">\n" +
     "                        <option value=\"\">N/A</option>\n" +
     "                        <option value=\"Turn\">Turn</option>\n" +
     "                        <option value=\"Fight\">Fight</option>\n" +
@@ -2009,8 +2017,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
     "                    <label>Clothing Slot</label>\n" +
-    "                    <select type=\"text\" class=\"form-control input-sm\" ng-model=\"item.slot\" \n" +
-    "                        ng-options=\"slot for slot in slots\">\n" +
+    "                    <select type=\"text\" class=\"form-control input-sm\" ng-model=\"$ctrl.item.slot\" \n" +
+    "                        ng-options=\"slot for slot in $ctrl.slots\">\n" +
     "                        <option value=\"\">Select Slot (optional)</option>\n" +
     "                    </select>\n" +
     "                </div>\n" +
@@ -2020,7 +2028,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                    <label>Cost</label>\n" +
     "                    <div class=\"input-group input-group-sm\">\n" +
     "                        <span class=\"input-group-addon\">$</span>\n" +
-    "                        <input type=\"text\" class=\"form-control\" ng-model=\"item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
+    "                        <input type=\"text\" class=\"form-control\" ng-model=\"$ctrl.item.cost\" placeholder=\"Optionally, specify the cost\">\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"row\">\n" +
@@ -2028,13 +2036,13 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                        <div class=\"form-group\">\n" +
     "                            <div class=\"input-group input-group-sm\">\n" +
     "                                <span class=\"input-group-addon\"><img src=\"assets/item_weight.png\" height=\"16\"></span>\n" +
-    "                                <input type=\"number\" min=\"0\" ng-model=\"item.weight\" class=\"form-control\">\n" +
+    "                                <input type=\"number\" min=\"0\" ng-model=\"$ctrl.item.weight\" class=\"form-control\">\n" +
     "                            </div>\n" +
     "                        </div>\n" +
     "                        <div class=\"form-group\">\n" +
     "                            <div class=\"input-group input-group-sm\">\n" +
     "                                <span class=\"input-group-addon\"><img src=\"assets/item_darkstone.png\" height=\"16\"></span>\n" +
-    "                                <input type=\"number\" min=\"0\" ng-model=\"item.darkstone\" class=\"form-control\">\n" +
+    "                                <input type=\"number\" min=\"0\" ng-model=\"$ctrl.item.darkstone\" class=\"form-control\">\n" +
     "                                </label>\n" +
     "                            </div>\n" +
     "                        </div>\n" +
@@ -2043,17 +2051,58 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "                        <div class=\"form-group\">\n" +
     "                            <div class=\"input-group input-group-sm\">\n" +
     "                                <span class=\"input-group-addon\"><img src=\"assets/item_hands.png\" height=\"16\"></span>\n" +
-    "                                <input type=\"number\" min=\"0\" ng-model=\"item.hands\" class=\"form-control\">\n" +
+    "                                <input type=\"number\" min=\"0\" ng-model=\"$ctrl.item.hands\" class=\"form-control\">\n" +
     "                            </div>\n" +
     "                        </div>\n" +
     "                        <div class=\"form-group\">\n" +
     "                            <div class=\"input-group input-group-sm\">\n" +
     "                                <span class=\"input-group-addon\"><img src=\"assets/item_slots.png\" height=\"16\"></span>\n" +
-    "                                <input type=\"number\" min=\"0\" ng-model=\"item.slots\" class=\"form-control\">\n" +
+    "                                <input type=\"number\" min=\"0\" ng-model=\"$ctrl.item.slots\" class=\"form-control\">\n" +
     "                            </div>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>   \n" +
+    "                <br>\n" +
+    "            </div>\n" +
+    "            <div role=\"tabpanel\" class=\"tab-pane\" id=\"fourth\">\n" +
+    "                <h6 class=\"f-container f-row f-justify-between f-align-end\">\n" +
+    "                    Modifiers\n" +
+    "                    <button type=\"button\" class=\"btn btn-sm btn-success\" \n" +
+    "                        ng-click=\"$ctrl.addModifier()\">&plus;</button>\n" +
+    "                </h6><br>\n" +
+    "                <div class=\"form-group f-container f-row f-align-center f-justify-between\" \n" +
+    "                    ng-repeat=\"(id,modifier) in $ctrl.item.modifiers\">\n" +
+    "                    <div class=\"f-cell-50p\" id=\"modifier-{{id}}\">\n" +
+    "                        <select class=\"form-control input-sm\" ng-model=\"modifier.affects\">\n" +
+    "                            <option value=\"\">Select</option>\n" +
+    "                            <option value=\"Agility\">Agility</option>\n" +
+    "                            <option value=\"Cunning\">Cunning</option>\n" +
+    "                            <option value=\"Spirit\">Spirit</option>\n" +
+    "                            <option value=\"Strength\">Strength</option>\n" +
+    "                            <option value=\"Lore\">Lore</option>\n" +
+    "                            <option value=\"Luck\">Luck</option>\n" +
+    "                            <option value=\"init\">Initiative</option>\n" +
+    "                            <option value=\"move\">Movement</option>\n" +
+    "                            <option value=\"combat\">Combat</option>\n" +
+    "                            <option value=\"health\">Max Health</option>\n" +
+    "                            <option value=\"sanity\">Max Sanity</option>\n" +
+    "                            <option value=\"corruption\">Max Corruption</option>\n" +
+    "                            <option value=\"grit\">Max Grit</option>\n" +
+    "                            <option value=\"faith\">Max Faith</option>\n" +
+    "                            <option value=\"armor\">Armor</option>\n" +
+    "                            <option value=\"spiritArmor\">Spirit Armor</option>\n" +
+    "                            <option value=\"defense\">Defense</option>\n" +
+    "                        </select>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"f-cell-25p\">\n" +
+    "                        <input type=\"number\" min=\"-10\" ng-model=\"modifier.value\" class=\"form-control input-sm\" placeholder=\"0\">\n" +
+    "                    </div>\n" +
+    "                    <div class=\"f-cell\">\n" +
+    "                        <button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"$ctrl.removeModifier(id)\">\n" +
+    "                            <span class=\"glyphicon glyphicon-trash\"></span>\n" +
+    "                        </button>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
     "                <br>\n" +
     "            </div>\n" +
     "            \n" +
@@ -2061,8 +2110,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "\n" +
     "    </div>\n" +
     "    <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"cancel()\">Close</button>\n" +
-    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!item.name\" ng-click=\"ok()\">Apply</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.cancel()\">Close</button>\n" +
+    "        <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!$ctrl.item.name\" ng-click=\"$ctrl.ok()\">Apply</button>\n" +
     "    </div>\n" +
     "</div>\n"
   );
@@ -2089,7 +2138,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <h5>\n" +
-    "        {{name}} \n" +
+    "        <input type=\"checkbox\" ng-model=\"item.equipped\" ng-change=\"ctrl.save()\"> {{name}} \n" +
     "        <small>\n" +
     "            <em>\n" +
     "                <span ng-if=\"item.slot\">[{{item.slot}}]</span> \n" +
@@ -2157,6 +2206,68 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('v2/loot/loot.html',
+    "<div class=\"c-loot\">\n" +
+    "    <h3>\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$ctrl.rollForLoot()\">Roll!</button>\n" +
+    "        Loot\n" +
+    "    </h3>\n" +
+    "    <div ng-if=\"$ctrl.lootRolled\">\n" +
+    "        <div><small>'Apply' will grant 20 XP in addition to any loot-specific rewards</small></div>\n" +
+    "        <div><small>'Clear' will abort current loot roll (and any rewards and XP)</small></div>\n" +
+    "        <br>\n" +
+    "    </div>\n" +
+    "    <div class=\"loot\" ng-if=\"$ctrl.lootRolled\">\n" +
+    "\n" +
+    "        <label>{{$ctrl.lootRolled.label}}</label>\n" +
+    "        <p>{{$ctrl.lootRolled.description}}</p>\n" +
+    "        <div><em ng-if=\"$ctrl.lootRolled.value\">(Rolled {{$ctrl.lootRolled.value}})</em></div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <button type=\"button\" class=\"btn btn-info\" \n" +
+    "            ng-click=\"$ctrl.applyLoot()\">\n" +
+    "            Apply <span ng-if=\"$ctrl.lootRolled.value\">with value rolled</span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.clearLoot()\">\n" +
+    "            Clear <span ng-if=\"$ctrl.lootRolled.apply\">without applying</span>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('v2/loot/scavenge.html',
+    "<div class=\"c-scavenge\">\n" +
+    "    <h3>\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-right\" ng-click=\"$ctrl.rollForScavenge()\">Roll!</button>\n" +
+    "        Scavenge\n" +
+    "    </h3>\n" +
+    "    <div ng-if=\"$ctrl.scavengeRolled\">\n" +
+    "        <div><small>'Apply' will grant 10 XP in addition to any rewards or penalties</small></div>\n" +
+    "        <div><small>'Clear' will abort current roll (and any rewards, penalties, and XP)</small></div>\n" +
+    "        <br>\n" +
+    "    </div>\n" +
+    "    <div class=\"scavenge\" ng-if=\"$ctrl.scavengeRolled\">\n" +
+    "\n" +
+    "        <label>{{$ctrl.scavengeRolled.label}}</label>\n" +
+    "        <p>{{$ctrl.scavengeRolled.description}}</p>\n" +
+    "        <div><em ng-if=\"$ctrl.scavengeRolled.value\">(Rolled {{$ctrl.scavengeRolled.value}})</em></div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <button type=\"button\" class=\"btn btn-info\" \n" +
+    "            ng-click=\"$ctrl.applyScavenge()\">\n" +
+    "            Apply <span ng-if=\"$ctrl.scavengeRolled.value\">with value rolled</span>\n" +
+    "        </button>\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" ng-click=\"$ctrl.clearScavenge()\">\n" +
+    "            Clear <span ng-if=\"$ctrl.scavengeRolled.apply\">without applying</span>\n" +
+    "        </button>\n" +
+    "    </div>\n" +
     "</div>"
   );
 

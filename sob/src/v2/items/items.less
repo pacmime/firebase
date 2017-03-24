@@ -1,0 +1,72 @@
+.item.usage-adventure {
+    border-left: 4px solid #000;
+}
+.item.usage-fight {
+    border-left: 4px solid #0f0;
+}
+.item.usage-turn {
+    border-left: 4px solid #0f0;
+}
+
+.items-panel, .sermons-container {
+    display: flex;
+    flex-direction: column;
+}
+
+[clothing-2] {
+    margin-top: 36px;
+}
+
+@media(min-width:768px) {
+    .items-panel, .sermons-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .sermons-container>* {
+        flex-basis: 48%;
+        margin-top: 0;
+    }
+
+    .items-panel > .items { 
+        flex: 1; 
+        margin-top: 0;
+    } 
+    .items-panel > .clothing {
+        flex: 1;
+        margin-left: 2em;
+        margin-top: 0;
+    }
+}
+@media(min-width:992px) {
+    .items-panel > .items { 
+        flex: 2; 
+    }
+}
+
+
+
+
+
+
+/* ------------ item editor --------------- */
+
+.modal-body #bonuses .input-group {
+    margin: 0.33em;
+}
+
+.item-editor .nav-tabs>li>a, .item-editor label {
+    font-size: 0.85em;
+}
+
+.item-editor .modal-header, 
+.item-editor .modal-body { 
+    padding: 0.5em;
+}
+
+.item-editor .tab-content > .tab-pane {
+    padding-top: 0.5em;
+}
+
+.item-editor .form-group { 
+    margin-bottom: 0.5em;
+}

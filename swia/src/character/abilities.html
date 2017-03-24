@@ -1,71 +1,34 @@
 <div class="abilities">
-
-    <!-- Purchased Abilities -->
-    <div class="list-group" ng-if="!ctrl.displayOpts.displayPicker">
-
-        <h5 class="list-group-item disabled">
-            <button type="button" class="btn btn-xs btn-primary pull-right" 
-                title="Choose abilities to add" ng-click="ctrl.displayOpts.displayPicker=true">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            Abilities
-        </h5>
-
-        <!-- default abilities (condition-based) -->
-        <div ng-repeat="ability in ctrl.baseData[ctrl.character.condition].abilities" class="list-group-item">
-            <h5 class="list-group-heading">{{ability.name}}</h5>
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Abilities</h5>
+        <div ng-if="$ctrl.character.hasConditions.bleeding" class="list-group-item">
+            <h5 class="list-group-heading">Bleeding</h5>
             <div class="list-group-text">
-                {{ability.description}}
-            </div>
+                During your activation, after you resolve any action other than discarding this condition, 
+                you suffer 1 <span class="image-icon strain"></span>. 
+                <br><span class="image-icon action"></span>: Discard this condition.</div>
         </div>
-        
-        <!-- purchased via xp -->
-        <div ng-repeat="ability in ctrl.character.abilities" class="list-group-item">
-            <h5 class="list-group-heading">{{ability.name}}</h5>
+        <div ng-if="$ctrl.character.hasConditions.stunned" class="list-group-item">
+            <h5 class="list-group-heading">Stunned</h5>
             <div class="list-group-text">
-                <ul><li ng-repeat="effect in ability.effects">{{effect}}</li></ul>
-            </div>
+                You cannot attack or voluntarily exit your space.
+                <br><span class="image-icon action"></span>: Discard this condition.</div>
         </div>
-
-
-        <!-- Weapons -->
-        <h5 class="list-group-item disabled">Weapons</h5>
-        <div ng-repeat="weapon in ctrl.character.weapons" class="list-group-item">
-            <h5 class="list-group-item-heading">{{weapon.name}}</h5>
-            <div>
-                <span class="pull-right" ng-bind-html="weapon.attack|colorize"></span>
-                {{weapon.type}}
-            </div>
-            <ul><li ng-repeat="effect in weapon.effects">{{effect}}</li></ul>
-        </div>
-
-    </div>
-
-
-
-    <!-- Available Abilities -->
-    <div class="list-group" ng-if="ctrl.displayOpts.displayPicker">
-
-        <h5 class="list-group-item disabled">
-            <button type="button" class="btn btn-xs btn-default pull-right" 
-                title="Choose abilities to add" ng-click="ctrl.displayOpts.displayPicker=false;">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
-            Choose New Abilities
-        </h5>
-        <div ng-repeat="ability in ctrl.baseData.abilities" class="list-group-item">
-            <h5 class="list-group-heading">{{ability.name}}</h5>
+        <div ng-if="$ctrl.character.hasConditions.focused" class="list-group-item">
+            <h5 class="list-group-heading">Focused</h5>
             <div class="list-group-text">
-                <strong>{{ability.cost}}</strong>
-                <ul><li ng-repeat="effect in ability.effects">{{effect}}</li></ul>
-                <button type="button" class="btn btn-sm btn-success" 
-                    title="{{ctrl.hasEnoughXP(ability)}}"
-                    ng-class="{disabled:!ctrl.canPurchase(ability)}"
-                    ng-click="ctrl.purchaseAbility(ability)">
-                    Purchase
-                </button>
+                When you declare an attack or attribute test, add 1 <div class="color-icon green"></div> die to the dice pool.
+                <br>
+                After you resolve an attack or attribute test, you must discard this card.
             </div>
         </div>
-
+        <div ng-repeat="(name,ability) in $ctrl.character[$ctrl.character.condition].abilities" class="list-group-item">
+            <h5 class="list-group-heading">{{name}}</h5>
+            <div class="list-group-text" ng-bind-html="ability.description|iconify"></div>
+        </div>
+        <div ng-repeat="(name,ability) in $ctrl.character.abilities" class="list-group-item">
+            <h5 class="list-group-heading">{{name}}</h5>
+            <div class="list-group-text" ng-bind-html="ability.effects|colorize|iconify|listify"></div>
+        </div>
     </div>
 </div>

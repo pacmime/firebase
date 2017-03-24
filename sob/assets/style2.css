@@ -433,6 +433,24 @@ body .navbar-default .navbar-nav>li>a {
 
 
 
+/* ---------- loot & scavenge styles ----------- */
+
+.loot, .scavenge {
+    background: rgba(255,255,255,0.85);
+    padding: 1em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+
+.c-loot { padding-bottom: 2em; }
+
+@media(min-width: 768px) {
+    .c-loot { padding-right: 2em; }
+    .c-scavenge { padding-left: 2em; }
+}
+
+
+
 
 /* ---------- misc form styles ----------- */
 
@@ -478,6 +496,21 @@ body .navbar-default .navbar-nav>li>a {
 .f-cell-75p { flex-basis: 75%; }
 .f-cell-66p { flex-basis: 66%; }
 .f-cell-33p { flex-basis: 33%; }
+
+
+.f-cell-1x-sm,
+.f-cell-1x-md,
+.f-cell-1x-lg { flex: 100%; }
+
+@media(min-width: 992px) {
+    .f-cell-1x-sm { flex: 1!important; }
+}
+@media(min-width: 992px) {
+    .f-cell-1x-md { flex: 1!important; }
+}
+@media(min-width: 1200px) {
+    .f-cell-1x-lg { flex: 1!important; }
+}
 
 
 

@@ -57,7 +57,7 @@
                 if('dynamite' === id) {
                     result.attack = this.parseAttackStats(id);
                     result.bounces = this.rollBounces();
-                } else if('hatchet') {
+                } else if('hatchet' === id) {
                     result.attack = this.parseAttackStats(id);
                 } else {
                     var combat = this.character.attacks[id];

@@ -1,0 +1,18 @@
+Notes
+
+
+on char init...
+  loop through all items,
+    if equipped (flag), apply stat modifiers
+  loop through all injuries, mutations, madness,
+    apply stat modifiers
+  loop through all abilities,
+    apply stat modifiers
+
+
+when adding/removing/editing item, injury, mutation, madness, or ability
+  adjust applied modifiers
+
+
+
+    

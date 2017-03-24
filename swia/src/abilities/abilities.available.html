@@ -1,0 +1,19 @@
+<div class="abilities">
+    <div class="list-group">
+        <h5 class="list-group-item disabled">Purchase Abilities</h5>
+        <div ng-repeat="ability in $ctrl.available" class="list-group-item">
+            <h5 class="list-group-heading">
+                <button type="button" class="btn btn-sm btn-success pull-right" 
+                    title="{{$ctrl.hasEnoughXP(ability)}}"
+                    ng-class="{disabled:!$ctrl.canPurchase(ability)}"
+                    ng-click="$ctrl.purchaseAbility(ability)">
+                    {{ability.cost}} XP
+                </button>
+                {{ability.name}}
+            </h5>
+            <div class="list-group-text">
+                <div ng-bind-html="ability.effects|colorize|iconify|listify"></div>
+            </div>
+        </div>
+    </div>
+</div>

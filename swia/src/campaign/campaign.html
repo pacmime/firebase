@@ -1,47 +1,69 @@
 <div class="container">
 
-    <div class="alert alert-danger" ng-if="ctrl.displayOpts.error">{{ctrl.displayOpts.error}}</div>
+    <div class="alert alert-danger" ng-if="$ctrl.displayOpts.error">{{$ctrl.displayOpts.error}}</div>
     
-    <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
+    <div ng-if="$ctrl.displayOpts.loading">Fetching data...</div>
 
-    <h3>Campaign: {{ctrl.campId}}</h3>
+    <h3>{{$ctrl.campId}} Campaign</h3>
     
-    <div class="list-group">
-        <div class="list-group-item disabled">
-            <h4 class="list-group-item-heading">Characters</h4>
-            <p class="list-group-item-text">Select your character from the list below or click 'New Character' to create one.</p>
+    <div class="f-container">
+
+        <div class="f-cell-1x">
+            <div class="list-group">
+                <div class="list-group-item disabled">
+                    <h4 class="list-group-item-heading">Characters</h4>
+                    <p class="list-group-item-text">Select your character from the list below or click 'New Character' to create one.</p>
+                </div>
+                <a ng-repeat="(id,character) in $ctrl.campaign.characters" class="list-group-item" href="#/campaign/{{$ctrl.campId}}/{{id}}">
+                    {{character.name}} <small>({{character['class']}})</small>
+                </a>
+
+                <div class="list-group-item">
+                    <select class="form-control"
+                        ng-model="$ctrl.newChar" ng-change="$ctrl.createFrom($ctrl.newChar)"
+                        ng-options="character as name disable when $ctrl.hasCharacter(name) for (name,character) in $ctrl.choices">
+                        <option value="">Add Character</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <a ng-repeat="(id,character) in ctrl.campaign" class="list-group-item" href="#/campaign/{{ctrl.campId}}/{{id}}">
-            {{character.name}} 
-            ( 
-            <span class="glyphicon glyphicon-heart" title="Health"></span> {{character.stats.health}} / 
-            <span class="glyphicon glyphicon-user" title="Strain"></span> {{character.stats.strain}}
-            )
-        </a>
+
+        <!-- <div class="f-cell-2x">
+            <h4>Campaign Log</h4>
+
+            <div class="list-group">
+                <div class="list-group-item">
+                    <span>2</span>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+        </div> -->
+
     </div>
 
-    <button type="button" class="btn btn-primary" 
-        ng-if="!ctrl.displayOpts.displayChoices" 
-        ng-click="ctrl.displayOpts.displayChoices=true">
+    <!-- <button type="button" class="btn btn-primary" 
+        ng-if="!$ctrl.displayOpts.displayChoices" 
+        ng-click="$ctrl.displayOpts.displayChoices=true">
         New Character
     </button>
     
-    <div class="list-group" ng-if="ctrl.displayOpts.displayChoices">
+    <div class="list-group" ng-if="$ctrl.displayOpts.displayChoices">
         <h5 class="list-group-item disabled">Which character do you want to use?</h5>
-        <div ng-repeat="character in ctrl.choices" class="list-group-item">
+        <div ng-repeat="character in $ctrl.choices" class="list-group-item">
             <button type="button" class="btn btn-sm btn-primary"
-                ng-disabled="ctrl.campaignHasChar(character)"
-                ng-click="ctrl.createFrom(character)">
+                ng-disabled="$ctrl.campaignHasChar(character)"
+                ng-click="$ctrl.createFrom(character)">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
             {{character.name}} <em>({{character['class']}})</em>
         </div>
         <div class="list-group-item">
             <button type="button" class="btn btn-default" 
-                ng-click="ctrl.displayOpts.displayChoices=false">
+                ng-click="$ctrl.displayOpts.displayChoices=false">
                 Cancel
             </button>
         </div>
-    </div> 
+    </div>  -->
 
 </div>
