@@ -35,9 +35,10 @@
 
                     $scope.options = [];
                     angular.forEach(charOptions, function(value, name) {
+                        
                         if(typeof(value) === 'string') {
-                            var disabled = hasAbility(name);
-                            $scope.options.push({name : name, desc: value, disabled: disabled});
+                            $scope.options.push({name : name, desc: value, disabled: hasAbility(name)});
+
                         } else {
                             //if it requires a skill one doesn't have or can't be added multiple times...
                             var disabled = !value.multi && hasAbility(name);
@@ -64,7 +65,7 @@
 
                 $scope.addCustom = function() {
                     if(!$scope.customAbility.name) return;
-                    $scope.character.abilities = $scope.character.abilities || {}
+                    $scope.character.abilities = $scope.character.abilities || {};
                     $scope.character.abilities[UUID()] = $scope.customAbility;
                     $scope.onSave();
                     init();

@@ -147,12 +147,12 @@
                 };
 
                 if(typeof(att) === 'string' && 'dynamite' === att) {
-                    result.target = this.character['ranged'];
+                    result.target = this.character.ranged;
                     result.range = (this.character.stats.Strength + 3);
                     result.bounces = this.rollBounces();
 
                 } else if(typeof(att) === 'string' && 'hatchet' === att) {
-                    result.target = this.character['melee'];
+                    result.target = this.character.melee;
                     result.range = (this.character.stats.Strength + 3);
                     result.dmgMod = 2;
 

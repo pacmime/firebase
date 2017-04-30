@@ -10,17 +10,17 @@
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         }
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    }
+    };
 
     window.angularFireCopy = function(angularFireObj) {
         var result = {};
         for (var key in angularFireObj) {
            if (key.indexOf('$') < 0 && angularFireObj.hasOwnProperty(key)) {
               result[key] = angularFireObj[key];
-           };
+           }
         }
         return result;
-    }
+    };
 
 
     angular.module('sob-common', [])
@@ -42,6 +42,15 @@
         "7fa50e95-f33d-43a8-b93b-501a7b3f3a3a": "Saloon Girl",
         "c2c8ed0b-4104-44a2-9bfc-b403a7b70615": "Bandido",
         "fa565014-f32b-46b4-9621-f2936d079b35": "Preacher"
+    })
+
+    .factory('UUIDFactory', function() {
+        
+        function s4() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); }
+
+        return function() {  
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        };
     })
 
     .factory('ClassHelper', ["ClassMap", function(ClassMap) {
@@ -82,10 +91,10 @@
                 //apply name as property (in prep for a move from using name as key in list)
                 character.name = character.name || name;
 
-                for(var name in character.abilities) {
-                    var value = character.abilities[name];
-                    delete character.abilities[name];
-                    character.abilities[UUID()] = { name: name, desc: value };
+                for(var abilName in character.abilities) {
+                    var value = character.abilities[abilName];
+                    delete character.abilities[abilName];
+                    character.abilities[UUID()] = { name: abilName, desc: value };
                 }
 
                 character.version = 3;
@@ -97,7 +106,7 @@
             getClassShell: function(classId) {
 
             }
-        }
+        };
     }])
 
     .factory("DataStore", ["$firebaseObject", 'DataStoreUrl',
@@ -109,7 +118,7 @@
                     ref.orderByChild('uid').equalTo(uid);
                     return $firebaseObject(ref);
                 }
-            }
+            };
         }
     ])
 
@@ -119,7 +128,7 @@
                 var root = firebase.database().ref();
                 var ref = root.child('ShadowsOfBrimstone').child('chars').child(name);
                 return $firebaseObject(ref);
-            }
+            };
         }
     ])
 
@@ -129,7 +138,7 @@
                 var root = firebase.database().ref();
                 var ref = root.child('ShadowsOfBrimstone/db/' + type + '/' + classId).orderByKey();
                 return $firebaseObject(ref);
-            }
+            };
         }
     ])
 
@@ -139,7 +148,7 @@
                 var root = firebase.database().ref();
                 var ref = root.child('ShadowsOfBrimstone/db/' + group);
                 return $firebaseObject(ref);
-            }
+            };
         }
     ])
 
@@ -162,12 +171,12 @@
                     for (var key in snap) {
                        if (key.indexOf('$') < 0 && snap.hasOwnProperty(key)) {
                           result[key] = snap[key];
-                       };
+                       }
                     }
                     deferred.resolve(result);
                 });
                 return deferred.promise;
-            }
+            };
         }
     ])
 
@@ -339,7 +348,7 @@
             else
                 $scope.value = Math.max($scope.value + v, minimum); 
             $scope.changes += ($scope.changes.length ? ', ' : '') + (v>0?"+":"") + v;
-        }
+        };
         
         $scope.ok = function () {
             $uibModalInstance.close($scope.value);
@@ -504,13 +513,13 @@
             function readerOnload(e){
                 var base64 = btoa(e.target.result);
                 coolFile.base64 = base64;
-                callback(coolFile)
-            };
+                callback(coolFile);
+            }
 
             var reader = new FileReader();
             reader.onload = readerOnload;
 
-            var file = file[0].files[0];
+            file = file[0].files[0];
             if(file.size > 100000) {
                 alert("Image is too large, should be less than 100 KB");
                 callback(null);
@@ -543,7 +552,7 @@
 
                 $scope.isDirty = function() {
                     return ngModelController.$dirty;
-                }
+                };
 
                 function update() {
                     if(!$scope.imgData) {return;}
@@ -556,7 +565,7 @@
                     ngModelController.$setViewValue($scope.imgData);
                     ngModelController.$setPristine();
                     $scope.onSave();
-                }
+                };
                 
                 function onFileSelect() {
 
@@ -696,7 +705,7 @@
                             alert("Error sending password reset email:", error);
                         }
                     });
-                }
+                };
 
             }
         };

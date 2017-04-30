@@ -249,7 +249,7 @@
             };
             this.canApplyXP = function() {
                 return hasFlag($scope.sermon, flags.cast) && !hasFlag($scope.sermon, flags.xp);
-            }
+            };
             this.xpApplied = function() {
                 return ($scope.sermon.status & flags.xp);
             };
@@ -271,6 +271,7 @@
             templateUrl: 'src/v2/sermons/sermon.html',
             controller: Controller
         };
+        
     }]);
 
 

@@ -81,7 +81,7 @@
                 
                 $scope.add = function() {
                     if(!$scope.newMutation.name) return;
-                    $scope.character.mutations = $scope.character.mutations || {}
+                    $scope.character.mutations = $scope.character.mutations || {};
                     $scope.character.mutations[$scope.newMutation.name] = $scope.newMutation.desc;
                     $scope.onSave();
                     init();
@@ -90,7 +90,7 @@
 
                 $scope.addCustom = function() {
                     if(!$scope.customMutation.name) return;
-                    $scope.character.mutations = $scope.character.mutations || {}
+                    $scope.character.mutations = $scope.character.mutations || {};
                     if($scope.character.mutations[$scope.customMutation.name]) {
                         alert("Character already has a mutation, injury, or madness with that name");
                         return;

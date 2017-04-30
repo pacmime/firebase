@@ -2,55 +2,52 @@
 
     <div class="alert alert-danger" ng-if="ctrl.displayOpts.error">{{ctrl.displayOpts.error}}</div>
     
-    <div ng-if="ctrl.displayOpts.loading">Fetching data...</div>
-    
-    <div class="list-group">
-        <div class="list-group-item disabled">
-            <h4 class="list-group-item-heading">Characters</h4>
-            <p class="list-group-item-text">Select a character from the list</p>
-        </div>
-        <div class="list-group-item" ng-if="!user"><em>Login to select from your available characters</em></div>
-        <div ng-repeat="char in ctrl.chars" class="list-group-item f-container f-row f-justify-between">
-            <a href="#/{{char.id|encode}}" class="f-cell f-container f-align-center">
-                {{char.name}} &nbsp;&nbsp;&nbsp;
-                <small ng-if="char.className">level {{char.level}} <strong>{{char.className}}</strong></small>
-            </a>
-            <div>
-                <!-- <a href="#/{{char.id|encode}}" class="btn btn-sm btn-default">Version 1</a> -->
-                
-                <!-- <button type="button" class="btn btn-sm btn-danger"
-                    ng-click="ctrl.removeCharacter(char.id)">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button> -->
 
-                <div class="btn-group" ng-if="ctrl.confirmDelete[char.id]">
-                    <button type="button" class="btn btn-sm btn-success" 
-                        ng-click="ctrl.removeCharacter(char.id)">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-default" 
-                        ng-click="ctrl.confirmDelete[char.id]=false">
-                        <span class="glyphicon glyphicon-ban-circle"></span>
-                    </button>     
-                </div>
-                <button ng-if="!ctrl.confirmDelete[char.id]"
-                    type="button" class="btn btn-sm btn-danger" 
-                        ng-click="ctrl.confirmDelete[char.id]=true">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
+    <!-- creation -->
+    <div ng-if="ctrl.displayOpts.creating" class="list-group">
+        <div class="list-group-item">
+            <span class="glyphicon glyphicon-hourglass spin"></span> 
+            Creating {{ctrl.displayOpts.creating}}<br>
+            <small>Please wait, this may take up to 30 seconds on some devices.</small>
+        </div>
+    </div>
+    <div ng-if="user" class="list-group">
+        <div class="list-group-item disabled">
+            <h5 class="list-group-item-heading">Create a New Character</h5>
+        </div>
+        <div class="list-group-item f-container f-column-xs f-row-sm f-align-stretch-xs f-align-center-sm has-gutter">
+            <div class="f-cell-1x">
+                <input class="form-control" ng-model="ctrl.newCharName" placeholder="Name the character">
+            </div>
+            <div class="f-cell-1x">
+                <select class="form-control" 
+                    ng-model="ctrl.newCharClass" 
+                    ng-options="item.id as item.name for item in ctrl.classOptions">
+                    <option value="">Select character class</option>
+                </select>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" 
+                    ng-disabled="!ctrl.newCharClass||!ctrl.newCharName"
+                    ng-click="ctrl.createCharacter()">Create</button>
             </div>
         </div>
     </div>
+    
 
-    <div class="f-container">
-        <div class="f-cell-2x">
-            <select class="form-control" 
-                ng-model="ctrl.newCharClass" 
-                ng-options="item.id as item.name for item in ctrl.classOptions">
-                <option value="">Create a New Character</option>
-            </select>
+    <!-- listing -->
+    <div ng-if="ctrl.displayOpts.loading" class="list-group">
+        <div class="list-group-item">Fetching data...</div>
+    </div>
+    <div class="list-group">
+        <div class="list-group-item disabled">
+            <h5 class="list-group-item-heading">Characters</h5>
+            <p class="list-group-item-text"><small>Select a character from the list</small></p>
         </div>
-        <button type="button" class="btn btn-primary" ng-click="ctrl.createCharacter()">Create</button>
+        <div class="list-group-item" ng-if="!user"><em>Login to select from your available characters</em></div>
+        <div ng-repeat="char in ctrl.chars" class="list-group-item">
+            <home-char character="char" on-delete="ctrl.removeCharacter(name)"></home-char>
+        </div>
     </div>
 
 </div>

@@ -222,6 +222,17 @@ body .navbar-default .navbar-nav>li>a {
     color: #fff;
 }
 
+@media (max-width: 767px) {
+    body .navbar-nav .open .dropdown-menu {
+        position: absolute;
+        float: left;
+        margin-top: 2px;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 4px;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    }
+}
 
 [ng-view] { height: 100%; width: 100%; }
 
@@ -231,6 +242,29 @@ body .navbar-default .navbar-nav>li>a {
 
 
 
+
+
+.spin {
+    -animation: spin .5s infinite linear;
+    -ms-animation: spin .5s infinite linear;
+    -webkit-animation: spinwebkit .5s infinite linear;
+    -moz-animation: spinmoz .5s infinite linear;
+}
+ 
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+  
+@-webkit-keyframes spinwebkit {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+ 
+@-moz-keyframes spinmoz {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
 
 
 .form-control.ng-invalid {

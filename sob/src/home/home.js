@@ -7,166 +7,169 @@
     
     
     app.controller("HomeController", [
-        "$scope", "$timeout", "DataStore", "$firebaseAuth", "ClassHelper", "CharacterShell",
-        function($scope, $timeout, DataStore, $firebaseAuth, ClassHelper, CharacterShell) {
+
+        "$scope", "$timeout", "DataStore", "$firebaseAuth", 
+        "ClassHelper", "CharacterShell", "UUIDFactory",
+
+        function($scope, $timeout, DataStore, $firebaseAuth, 
+                 ClassHelper, CharacterShell, UUIDFactory) {
         
-        var self = this;
-        
-        this.displayOpts = {
-            loading: false,
-            message: null,
-            error: null,
-            confirmDelete: {}
-        };
-
-        this.classOptions = ClassHelper.getClasses();
-
-        var auth = $firebaseAuth();
-        auth.$onAuthStateChanged(function(authData) {
-            $scope.user = authData;
-
-            if(authData && authData.uid) {
-                self.displayOpts.loading = true;
-                self.data = DataStore.getCharsForUser(authData.uid);
-                self.data.$loaded().then(function() {
-                    updateList();
-                    self.displayOpts.loading = false;
-                }).catch(function(error) {
-                    self.displayOpts.error = "Failed to load saved data: " + error.data;
-                });
-            } else {
-                if(self.data) {
-                    self.data.$destroy();
-                }
-                updateList();
-            }
-
-        });
-
-        
-
-        function updateList() {
-            var chars = [];
-            if(self.data) {
-                angular.forEach(self.data, function(value, key) { 
-                    if($scope.user && value.userId && value.userId === $scope.user.uid) {
-                        chars.push({
-                            id: key,
-                            name: (value.name || /* hack for pre-v3 chars */key), 
-                            className: ClassHelper.getClassName(value['class']),
-                            level: value.level
-                        }); 
-                    }
-                });
-            }
-            self.chars = chars.sort(function(a,b) { return a.level<b.level; });
-        }
-
-        this.createCharacter = function() {
+            var self = this;
             
-            // var json = getCharacterShell();
-            CharacterShell(this.newCharClass).then(function(json) {
+            this.displayOpts = {
+                loading: false,
+                message: null,
+                error: null,
+                confirmDelete: {}
+            };
 
-                var name = prompt("Name the character", "Joe Bob");
-                if(!name) {
-                    alert("Characters must have a name");
+            this.classOptions = ClassHelper.getClasses();
+
+            var auth = $firebaseAuth();
+            auth.$onAuthStateChanged( authData => {
+                
+                $scope.user = authData;
+
+                if(authData && authData.uid) {
+                    this.displayOpts.loading = true;
+                    this.data = DataStore.getCharsForUser(authData.uid);
+                    this.data.$loaded().then( () => {
+                        this.updateList();
+                        this.displayOpts.loading = false;
+                    }).catch( (error) => {
+                        this.displayOpts.error = "Failed to load saved data: " + error.data;
+                    });
+                } else {
+                    if(this.data) {
+                        this.data.$destroy();
+                    }
+                    this.updateList();
+                }
+
+            });
+
+            
+
+            this.updateList = function() {
+                var chars = [];
+                if(this.data) {
+                    angular.forEach(this.data, function(value, key) { 
+                        if($scope.user && value.userId && value.userId === $scope.user.uid) {
+                            chars.push({
+                                id: key,
+                                name: (value.name || /* hack for pre-v3 chars */key), 
+                                className: ClassHelper.getClassName(value['class']),
+                                level: value.level
+                            }); 
+                        }
+                    });
+                }
+                this.chars = chars.sort(function(a,b) { return a.level<b.level; });
+            };
+
+            this.createCharacter = function() {
+                
+                if(!$scope.user) {
+                    alert("Must be logged in");
                     return;
-                } 
+                }
 
-                //associate user id for restricting who can edit
-                json.userId = $scope.user.uid;  
-                json.name = name;
+                CharacterShell(this.newCharClass).then( json => {
 
-                // console.log(json);
-                var charId = UUID();
-                self.data[charId] = json;
-                self.data.$save().then(function() {
-                    //navigate to the new char page
-                    // window.location = '#/' + encodeURIComponent(name);
-                    window.location = '#/' + charId;
+                    //associate user id for restricting who can edit
+                    json.userId = $scope.user.uid;
+                    json.name = this.newCharName;  
+                    
+                    this.newCharName = null;
+                    this.newCharClass = null;                    
+                    
+                    // console.log(json);
+                    var charId = UUIDFactory();
+                    this.data[charId] = json;
+                    
+                    this.displayOpts.creating = this.data[charId].name;
 
-                }).catch(function(error) {
-                    alert("Unable to create character because of an error");
+                    this.data.$save().then(
+                        ref => {
+                            this.displayOpts.creating = null;
+                            window.location = '#/' + charId;
+                        }, 
+                        error => {
+                            this.displayOpts.creating = null;
+                            alert("Unable to create character because of an error: " + error.message);
+                        }
+                    );
                 });
-            });
 
-        };
+            };
 
-        this.removeCharacter = function(name) {
-            this.data[name] = null;
-            this.data.$save().then(function() {
-                updateList();
-            });
-        };
+            this.removeCharacter = function(name) {
+                this.data[name] = null;
+                this.data.$save().then( () => {
+                    this.updateList();
+                }).catch( (error) => {
+                    alert("Unable to delete character because of an error");
+                });
+            };
 
-    }]);
+        }
+    ]);
 
 
-    function getCharacterShell() {
-        return {
-            "abilities" : {},
-            "class" : " ",
-            "clothing" : {
-                "Hat" : {},
-                "Face" : {},
-                "Shoulders" : {},
-                "Coat" : {},
-                "Torso": {},
-                "Gloves": {},
-                "Belt": {},
-                "Pants": {},
-                "Boots": {}
-            },
-            "combat" : 1,
-            "corruption" : {
-              "current" : 0,
-              "max" : 5
-            },
-            "darkstone" : 0,
-            "defense" : 5,
-            "faith" : 0,
-            "grit" : {
-              "current" : 1,
-              "max" : 2
-            },
-            "health" : {
-              "max" : 10,
-              "wounds" : 0
-            },
-            "init" : 2,
-            "items" : { },
-            "keywords" : " ",
-            "level" : 1,
-            "melee" : 5,
-            "movement" : 0,
-            "ranged" : 5,
-            "sanity" : {
-              "loss" : 0,
-              "max" : 10
-            },
-            "sidebag" : {
-              "capacity" : 5,
-              "whiskey" : 0,
-              "fungus": 0,
-              "tonic": 0,
-              "bandages": 0,
-              "herbs": 0,
-              "dynamite": 0,
-              "flash": 0
-            },
-            "stats" : {
-              "Agility" : 1,
-              "Cunning" : 1,
-              "Lore" : 1,
-              "Luck" : 1,
-              "Spirit" : 1,
-              "Strength" : 1
-            },
-            "wealth" : 0,
-            "willpower" : 5,
-            "xp" : 0
-        };
-    }
+    app.component('homeChar', {
+
+        bindings: {
+            character: '<',
+            onDelete: '&'
+        },
+
+        template: `
+            <div class="f-container f-row f-justify-between">
+                <div class="f-cell">
+                    
+                    <a href="#/{{$ctrl.character.id}}" ng-if="!$ctrl.isDeleting">
+                        {{$ctrl.character.name}} &nbsp;&nbsp;&nbsp;
+                    </a>
+                    <span ng-if="$ctrl.isDeleting">{{$ctrl.character.name}}</span>
+
+                    <br class="visible-xs-block">
+                    <small ng-if="$ctrl.character.className">
+                        Level {{$ctrl.character.level}} 
+                        <strong>{{$ctrl.character.className}}</strong>
+                    </small>
+                </div>
+                <div>
+                    <div class="btn-group" ng-if="$ctrl.confirmDelete">
+                        <button type="button" class="btn btn-sm btn-success" 
+                            ng-click="$ctrl.remove()">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default" 
+                            ng-click="$ctrl.confirmDelete=false">
+                            <span class="glyphicon glyphicon-ban-circle"></span>
+                        </button>     
+                    </div>
+                    <button ng-if="!$ctrl.confirmDelete&&!$ctrl.isDeleting"
+                        type="button" class="btn btn-sm btn-danger" 
+                            ng-click="$ctrl.confirmDelete=true">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button type="button" ng-if="$ctrl.isDeleting">
+                        <span class="glyphicon glyphicon-hourglass spin"></span>
+                    </button>
+                </div>
+            </div>
+        `,
+
+        controller: function() {
+
+            this.remove = function() {
+                this.confirmDelete = false;
+                this.isDeleting = true;
+                this.onDelete({name: this.character.id});
+            };
+        }
+    });
 
 
 }) (angular);
