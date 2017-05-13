@@ -10,7 +10,7 @@
         templateUrl: 'src/v2/character.html',
         replace: true,
 
-        controller: function($routeParams, $timeout, CharacterRef, ClassHelper) {
+        controller: function($rootScope, $routeParams, $timeout, CharacterRef, ClassHelper) {
         
             var self = this;
             
@@ -122,10 +122,9 @@
                     self.character.sidebag.cigars = self.character.sidebag.cigars || 0;
 
 
-
-                    // self.recalc();
-
-
+                    //apply modifiers to stats, etc
+                    self.recalc();
+                
                 });
 
             };
@@ -135,47 +134,40 @@
              */
             this.recalc = function() {
 
-                var modified = this.character.modified || {
-                    stats: { 
-                        Agility: this.character.stats.Agility, 
-                        Cunning: this.character.stats.Cunning, 
-                        Spirit: this.character.stats.Spirit, 
-                        Strength: this.character.stats.Strength, 
-                        Lore: this.character.stats.Lore, 
-                        Luck: this.character.stats.Luck,
-                    },
-                    init: this.character.init,
-                    move: this.character.move || 0,
-                    combat: this.character.combat,
-                    health: { max: this.character.health.max },
-                    sanity: { max: this.character.sanity.max },
-                    corruption: { max: this.character.corruption.max },
-                    grit: { max: this.character.grit.max },
-                    faith: this.character.faith || 0,
-                    armor: this.character.armor || 0,
-                    spiritArmor: this.character.spiritArmor || 0,
-                    defense: this.character.defense || 0
-
+                this.modifiers = {
+                    stats: { Agility: 0, Cunning: 0, Spirit: 0, Strength: 0, Lore: 0, Luck: 0 },
+                    init: 0,
+                    move: 0,
+                    combat: 0,
+                    health: { max: 0 },
+                    sanity: { max: 0 },
+                    corruption: { max: 0 },
+                    grit: { max: 0 },
+                    faith: 0,
+                    armor: 0,
+                    spiritArmor: 0,
+                    defense: 0,
+                    sidebag: { capacity: 0 }
                 };
 
+                this.updateModifiers(this.character.items, true);
+                this.updateModifiers(this.character.abilities, false);
+                this.updateModifiers(this.character.mutations, false);    //covers madness/injuries too
 
-                this.applyModifiers(this.character.items, modified);
-                this.applyModifiers(this.character.abilities, modified);
-                this.applyModifiers(this.character.mutations, modified);    //covers madness/injuries too
-
-                //TODO set modified on the character
-                // console.log(modified);
+                // console.log(modifiers);
             };
 
-            this.applyModifiers = function(source, modifiers) {
+            this.updateModifiers = function(source, mustBeEquipped) {
 
-                angular.forEach(source, function(item) {
+                angular.forEach(source, (src) => {
 
-                    //only bother if the item is marked as equipped
+                    //only bother if the src is marked as equipped
                     // and has modifiers associated with it
-                    if(item.equipped && item.modifiers) {
+                    if(src.modifiers && (!mustBeEquipped || src.equipped)) {
 
-                        angular.forEach(item.modifiers, function(modifier) {
+                        angular.forEach(src.modifiers, (modifier) => {
+
+                            let modVal = isNaN(modifier.value) ? 0 : modifier.value*1;
 
                             switch(modifier.affects) {
                                 case "Agility": 
@@ -184,7 +176,7 @@
                                 case "Strength":
                                 case "Lore":
                                 case "Luck":
-                                    modifiers.stats[modifier.affects] += modifier.value;
+                                    this.modifiers.stats[modifier.affects] += modVal;
                                     break;
                                 case "init":
                                 case "move":
@@ -192,14 +184,18 @@
                                 case "faith":
                                 case "armor":
                                 case "spiritArmor":
-                                case "defense": 
-                                    modifiers[modifier.affects] += modifier.value;
+                                case "defense":
+                                case "willpower": 
+                                    this.modifiers[modifier.affects] += modVal;
                                     break;
                                 case "health":
                                 case "sanity":
                                 case "corruption":
                                 case "grit":
-                                    modifiers[modifier.affects].max += modifier.value;
+                                    this.modifiers[modifier.affects].max += modVal;
+                                    break;
+                                case "sidebag":
+                                    this.modifiers[modifier.affects].capacity += modVal;
                                     break;
                                 default: break; 
                             }
@@ -207,6 +203,11 @@
                     }
                 });
             };
+
+
+            
+            //listen for events that indicate modifiers have been changed
+            $rootScope.$on('modifiers:changed', (evt) => { this.recalc(); });
 
         }
 

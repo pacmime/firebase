@@ -285,6 +285,14 @@
         this.item = item;
         this.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
 
+        //modifiers may have stringified number values, if so format them so input works
+        if(this.item.modifiers) {
+            angular.forEach(this.item.modifiers, (mod, key) => {
+                if(typeof(mod.value) === 'string')
+                    mod.value = mod.value*1;
+            });
+        }
+
         this.ok = function () {
             $uibModalInstance.close(this.item);
         };
@@ -301,45 +309,16 @@
             delete this.item.modifiers[id];
         };
 
-        // $scope.item = item;
-        // $scope.slots = ['hat','face','shoulders','coat','torso','belt', 'pants', 'gloves','boots'];
-        
-        // $scope.ok = function () {
-        //     $uibModalInstance.close($scope.item);
-        // };
-
-        // $scope.cancel = function () {
-        //     $uibModalInstance.dismiss('cancel');
-        // };
-
-        // $scope.addModifier = function() {
-        //     $scope.item.modifiers = $scope.item.modifiers || {};
-        //     $scope.item.modifiers[Math.random()*9999] = {affects: null, value: 0};
-        // };
-        // $scope.removeModifier = function(id) {
-        //     $scope.item.modifiers[id] = null;
-        // };
-
     })
 
-    // .controller('ClothingEditor', function($scope, $uibModalInstance, item, types) {
-    //     $scope.item = item;
-    //     $scope.types = types;
-    //     $scope.newItem = !item;
-    //     $scope.ok = function () {
-    //         $uibModalInstance.close($scope.item);
-    //     };
-    //     $scope.cancel = function () {
-    //         $uibModalInstance.dismiss('cancel');
-    //     };
-    // })
 
 
-    .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum) {
+    .controller('KeyPad', function ($scope, $uibModalInstance, value, minimum, maximum, modifier) {
 
         $scope.value = value;
         $scope.minimum = minimum*1 || 0;
         $scope.maximum = maximum*1 || 9999;
+        $scope.modifier = modifier;
         $scope.changes = "";
         
         $scope.change = function(v) { 
@@ -361,54 +340,144 @@
     })
 
 
-    .directive('editableStatValue', ['$uibModal', function($uibModal) {
-        return {
-            scope: {
-                onSave: '&',
-                minimum: '@',
-                maximum: '@'
-            },
-            restrict: 'A',
-            require: 'ngModel',
-            replace: true,
-            template: '<div class="value" ng-click="openKeypad()">{{display}}</div>',
-            link: function($scope, $element, $attrs, ngModelController) {
+    .component('editableStatValue', {
+        require: {
+            ngModelCtrl: '^ngModel'
+        },
+        bindings: {
+            name: '@',
+            onSave: '&',
+            minimum: '@',
+            maximum: '@',
+            modifier: '<'
+        },
+        template: `
+            <div class="value" ng-click="$ctrl.openKeypad()" 
+                ng-class="{'is-modified': $ctrl.isModified()}">
+                {{$ctrl.display}}
+            </div>
+        `,
+        controller: function($uibModal) {
 
-                $scope.minimum = ($scope.minimum || 0)*1;
-                $scope.maximum = ($scope.maximum || 9999)*1;
+            this.$onInit = () => {
+            
+                this.minimum = (this.minimum || 0)*1;
+                this.maximum = (this.maximum || 9999)*1;
+                
+                this.ngModelCtrl.$render = () => {
+  
+                    let modVal = isNaN(this.modifier) ? 0 : this.modifier*1;
 
-                ngModelController.$render = function() {
-                    $scope.display = ngModelController.$viewValue;
+                    this.display = this.ngModelCtrl.$viewValue ? 
+                        (this.ngModelCtrl.$viewValue*1 + modVal) : modVal;
                 };
 
-                $scope.openKeypad = function() {
+            };
 
-                    var value = ngModelController.$modelValue || 0;
+            this.$onChanges = () => {
+                this.ngModelCtrl.$render();
+            };
 
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'src/keypad.html',
-                        controller: 'KeyPad',
-                        animation: false,
-                        resolve: {
-                            value: function() { return value; },
-                            minimum: function() { return $scope.minimum; },
-                            maximum: function() { return $scope.maximum; }
-                        }
-                    });
+            this.openKeypad = () => {
 
-                    modalInstance.result.then(function(value) {
+                var value = this.ngModelCtrl.$modelValue || 0;
+
+                var min = this.minimum;
+                var max = this.maximum;
+                var mod = this.modifier;
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'src/keypad.html',
+                    controller: 'KeyPad',
+                    animation: false,
+                    resolve: {
+                        value:      function() { return value; },
+                        minimum:    function() { return min; },
+                        maximum:    function() { return max; },
+                        modifier:   function() { return mod; }
+                    }
+                });
+
+                modalInstance.result.then( (value) => {
+                    
+                    this.ngModelCtrl.$setViewValue(value);
+                    this.ngModelCtrl.$render();
+                    if(this.onSave)
+                        this.onSave();
+
+                }, () => { 
+                    //do anything?
+                });
+            };
+
+            this.isModified = function () {
+                return !isNaN(this.modifier) && this.modifier*1 !== 0;
+            };
+
+        }
+    })
+
+    // .directive('editableStatValue', ['$uibModal', function($uibModal) {
+    //     return {
+    //         scope: {
+    //             name: '@',
+    //             onSave: '&',
+    //             minimum: '@',
+    //             maximum: '@',
+    //             modifier: '@'   //amount modifying 'ngModel' from items/abilities/etc
+    //         },
+    //         restrict: 'A',
+    //         require: 'ngModel',
+    //         replace: true,
+    //         template: '<div class="value" ng-click="openKeypad()">{{display}}</div>',
+    //         link: function($scope, $element, $attrs, ngModelController) {
+
+    //             $scope.minimum = ($scope.minimum || 0)*1;
+    //             $scope.maximum = ($scope.maximum || 9999)*1;
+                
+    //             if($scope.name)
+    //                console.log($scope.name + ": m " + $scope.modifier);
+    //             if(isNaN($scope.modifier))
+    //                 $scope.modifier = 0;
+
+    //             ngModelController.$render = function() {
+
+    //                 if($scope.name)
+    //                     console.log($scope.name + ": " + ngModelController.$viewValue + " + " + $scope.modifier);
+
+    //                 $scope.display = ngModelController.$viewValue ? 
+    //                     (ngModelController.$viewValue*1 + $scope.modifier*1) : '';
+    //             };
+
+    //             $scope.openKeypad = function() {
+
+    //                 var value = ngModelController.$modelValue || 0;
+
+    //                 var modalInstance = $uibModal.open({
+    //                     templateUrl: 'src/keypad.html',
+    //                     controller: 'KeyPad',
+    //                     animation: false,
+    //                     resolve: {
+    //                         value: function() { return value; },
+    //                         minimum: function() { return $scope.minimum; },
+    //                         maximum: function() { return $scope.maximum; },
+    //                         modifier: function() { return $scope.modifier; }
+    //                     }
+    //                 });
+
+    //                 modalInstance.result.then(function(value) {
                         
-                        ngModelController.$setViewValue(value);
-                        ngModelController.$render();
-                        if($scope.onSave)
-                            $scope.onSave();
+    //                     ngModelController.$setViewValue(value);
+    //                     ngModelController.$render();
+    //                     if($scope.onSave)
+    //                         $scope.onSave();
 
-                    }, function () { });
+    //                 }, function () { });
 
-                };
-            }
-        };
-    }])
+    //             };
+    //         }
+    //     };
+    // }])
 
 
 
@@ -644,7 +713,24 @@
         };
 
         $scope.cancel = function () {
+            $scope.errorMessage = null;
+            $scope.resetMessage = false;
             $uibModalInstance.dismiss('cancel');
+        };
+
+        $scope.reset = function() {
+
+            if(!$scope.email) return;
+
+            Auth.$sendPasswordResetEmail($scope.email, function(error) {
+                if (error === null) {
+                    $scope.resetMessage = true;
+                    $scope.errorMessage = null;
+                } else {
+                    $scope.resetMessage = false;
+                    $scope.errorMessage = "Error sending password reset email: " + error.message;
+                }
+            });
         };
 
     })

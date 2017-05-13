@@ -2,7 +2,12 @@
   
     <div class="modal-body">
 
-        <h5>Current: {{value}} <br><small>(min: {{minimum}}, max: {{maximum}})</small></h5>
+        <h5>
+            Current: {{value}}
+            <span ng-if="modifier">(<span ng-if="modifier&&modifier>=0">+</span>{{modifier}})</span>
+            <br>
+            <small>(min: {{minimum}}, max: {{maximum}})</small>
+        </h5>
 
         <div class="f-container f-justify-between f-wrap">
 

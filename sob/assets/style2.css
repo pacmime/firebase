@@ -558,7 +558,9 @@ body .navbar-default .navbar-nav>li>a {
     height: 1em;
     font-size: 0.875em;
 }
-.stat .value {
+
+.stat .value,
+.stat editable-stat-value .value {
     position: relative;
     font-size: 1.75em;
     margin: 0;

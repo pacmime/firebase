@@ -2,14 +2,14 @@
     <br>
     
     <!-- list all -->
-    <div ng-repeat="(name, desc) in character.mutations">
+    <div ng-repeat="(id, mutation) in character.mutations">
 
-        <mutation 
-            name="{{name}}" 
-            desc="{{desc}}" 
-            type="{{getType(name)}}"
-            on-save="onEdited(name, newName, newDesc)">
+        <mutation ng-if="typeof(mutation)!=='string'" 
+            mutation="mutation" 
+            type="{{getType(mutation.name)}}"
+            on-save="onEdited(id, updated)">
         </mutation>
+        
     </div>
     
     <br>

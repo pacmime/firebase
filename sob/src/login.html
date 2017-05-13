@@ -15,10 +15,23 @@
                     ng-keyup="onKeyUp($event, $event.keyCode)">
             </div>
 
-            <div ng-if="errorMessage" class="text-danger">{{errorMessage}}</div>
 
-            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-            <button type="button" class="btn btn-primary" ng-click="login()">Login</button>
+            <div ng-if="errorMessage" class="text-danger">{{errorMessage}}</div>
+            <div ng-if="resetMessage" class="text-info">
+                An email has been sent to {{email}} allowing you to change your password.
+            </div>
+
+            <div class="f-container f-justify-between f-align-center">
+                <div>
+                    <button type="button" class="btn btn-warning" ng-click="reset()" ng-if="email">
+                        Reset Password
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="login()">Login</button>
+                </div>
+            </div>
         </form>
 
     </div>

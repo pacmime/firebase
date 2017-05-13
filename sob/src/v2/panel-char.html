@@ -8,37 +8,50 @@
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Agility</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Agility" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Agility" 
+                        modifier="$ctrl.modifiers.stats.Agility" minimum="1">
+                    </editable-stat-value>
                 </div>
             </div>
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Cunning</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Cunning" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Cunning" 
+                        modifier="$ctrl.modifiers.stats.Cunning" minimum="1"></editable-stat-value>
                 </div>
             </div>
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Spirit</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Spirit" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Spirit" 
+                        modifier="$ctrl.modifiers.stats.Spirit" minimum="1"></editable-stat-value>
                 </div>
             </div>
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Strength</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Strength" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Strength" 
+                        modifier="$ctrl.modifiers.stats.Strength" minimum="1"></editable-stat-value>
                 </div>
             </div>
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Lore</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Lore" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Lore" 
+                        modifier="$ctrl.modifiers.stats.Lore" minimum="1"></editable-stat-value>
                 </div>
             </div>
             <div class="f-cell-33p">
                 <div class="stat stat-label-top">
                     <label>Luck</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.stats.Luck" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.stats.Luck" 
+                        modifier="$ctrl.modifiers.stats.Luck" minimum="1"></editable-stat-value>
                 </div>
             </div>
         </div>
@@ -52,16 +65,23 @@
             <div class="combat f-container f-justify-around f-align-center">
                 <span class="stat f-cell">
                     <label>Combat</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.combat"></div>
+                    <editable-stat-value name="Combat"
+                        on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.combat"
+                        modifier="$ctrl.modifiers.combat"></editable-stat-value>
                 </span>
 
                 <span class="stat stat--with-plus f-cell">
                     <label>Melee</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.melee"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.melee"
+                        modifier="$ctrl.modifiers.melee"></editable-stat-value>
                 </span>
                 <span class="stat stat--with-plus f-cell">
                     <label>Ranged</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.ranged"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.ranged"
+                        modifier="$ctrl.modifiers.ranged"></editable-stat-value>
                 </span>
             </div>
 
@@ -71,23 +91,29 @@
                 
                 <div class="f-cell has-stat-with-max">
                     <div class="stat f-cell">
-                        <div editable-stat-value on-save="$ctrl.save()" 
-                            ng-model="$ctrl.character.health.wounds"></div>
+                        <editable-stat-value on-save="$ctrl.save()" 
+                            ng-model="$ctrl.character.health.wounds"></editable-stat-value>
                         <!-- <img src="assets/wound.png">    --> 
                         <span class="sprite sprite-wound"></span>
 
                         <div class="stat">
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.health.max"></div>
+                            <editable-stat-value on-save="$ctrl.save()" 
+                                ng-model="$ctrl.character.health.max"
+                                modifier="$ctrl.modifiers.health.max"></editable-stat-value>
                         </div>
                     </div>
                 </div>
                 <div class="f-cell stat stat--with-plus f-cell">
                     <label>Defense</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.defense"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.defense"
+                        modifier="$ctrl.modifiers.defense"></editable-stat-value>
                 </div>
                 <div class="f-cell stat stat--with-plus f-cell">
                     <label>Armor</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.armor"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.armor"
+                        modifier="$ctrl.modifiers.armor"></editable-stat-value>
                 </div>
             </div>
                 
@@ -98,22 +124,28 @@
                 <div class="f-cell has-stat-with-max">
                     <div class="stat">
                         <!-- <label>Loss</label> -->
-                        <div editable-stat-value on-save="$ctrl.save()" 
-                            ng-model="$ctrl.character.sanity.loss"></div>
+                        <editable-stat-value on-save="$ctrl.save()" 
+                            ng-model="$ctrl.character.sanity.loss"></editable-stat-value>
                         <!-- <img src="assets/sanity.png"> -->
                         <span class="sprite sprite-sanity"></span>
                         <div class="stat">
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.sanity.max"></div>
+                            <editable-stat-value on-save="$ctrl.save()" 
+                                ng-model="$ctrl.character.sanity.max"
+                                modifier="$ctrl.modifiers.sanity.max"></editable-stat-value>
                         </div>
                     </div>
                 </div>
                 <div class="f-cell stat stat--with-plus">
                     <label>Willpower</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.willpower"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.willpower"
+                        modifier="$ctrl.modifiers.willpower"></editable-stat-value>
                 </div>
                 <div class="f-cell stat stat--with-plus">
                     <label>Sp Armor</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.spiritArmor"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.spiritArmor"
+                        modifier="$ctrl.modifiers.spiritArmor"></editable-stat-value>
                 </div>
             </div>
 
@@ -123,27 +155,34 @@
                 <div class="faith f-cell">
                     <div class="stat">
                         <label>Faith</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.faith"></div>
+                        <editable-stat-value on-save="$ctrl.save()" 
+                            ng-model="$ctrl.character.faith"
+                            modifier="$ctrl.modifiers.faith"></editable-stat-value>
                     </div>
                 </div>
 
                 <div class="grit f-cell has-stat-with-max">
                     <div class="stat">
                         <label>Grit</label>
-                        <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.grit.current"></div>
+                        <editable-stat-value on-save="$ctrl.save()" 
+                            ng-model="$ctrl.character.grit.current"></editable-stat-value>
                         <div class="stat">
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.grit.max"></div>
+                            <editable-stat-value on-save="$ctrl.save()" 
+                                ng-model="$ctrl.character.grit.max"
+                                modifier="$ctrl.modifiers.grit.max"></editable-stat-value>
                         </div>
                     </div>
                 </div>
                 
                 <div class="corruption f-cell has-stat-with-max">
                     <div class="stat">
-                        <div editable-stat-value on-save="$ctrl.save()" 
-                            ng-model="$ctrl.character.corruption.current"></div>
+                        <editable-stat-value on-save="$ctrl.save()" 
+                            ng-model="$ctrl.character.corruption.current"></editable-stat-value>
                         <span class="sprite sprite-corruption"></span>
                         <div class="stat">
-                            <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.corruption.max"></div>
+                            <editable-stat-value on-save="$ctrl.save()" 
+                                ng-model="$ctrl.character.corruption.max"
+                                modifier="$ctrl.modifiers.corruption.max"></editable-stat-value>
                         </div>
                     </div>
                 </div>
@@ -157,22 +196,26 @@
             <div class="level f-cell">
                 <div class="stat">
                     <label>Level</label>
-                    <div class="value" editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.level" minimum="1">
-                    </div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.level" minimum="1"></editable-stat-value>
                 </div>
             </div>
             
             <div class="xp f-cell">
                 <div class="stat">
-                    <div class="value--sm" editable-stat-value on-save="$ctrl.onXP()" ng-model="$ctrl.character.xp"></div>
+                    <editable-stat-value class="value--sm" on-save="$ctrl.onXP()" 
+                        ng-model="$ctrl.character.xp"></editable-stat-value>
                     <span class="sprite sprite-xp"></span>
-                    <div style="font-size:0.625em"><span class="glyphicon glyphicon-arrow-up"></span> at {{$ctrl.xpLevels[$ctrl.character.level]}}</div>
+                    <div style="font-size:0.625em">
+                        <span class="glyphicon glyphicon-arrow-up"></span> at {{$ctrl.xpLevels[$ctrl.character.level]}}
+                    </div>
                 </div>
             </div>
 
             <div class="wealth f-cell">
                 <div class="stat">
-                    <div class="value--sm" editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.wealth"></div>
+                    <editable-stat-value class="value--sm" on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.wealth"></editable-stat-value>
                     <!-- <img src="assets/wealth.png"> -->
                     <span class="sprite sprite-wealth"></span>
                 </div>
@@ -180,7 +223,8 @@
 
             <div class="darkstone f-cell">
                 <div class="stat">
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.darkstone"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.darkstone"></editable-stat-value>
                     <img class="sprite-darkstone" src="assets/img/darkstone.png">
                 </div>
             </div>
@@ -188,16 +232,21 @@
             <div class="init f-cell">
                 <div class="stat">
                     <label>Init</label>
-                    <div editable-stat-value on-save="$ctrl.save()" ng-model="$ctrl.character.init" minimum="1"></div>
+                    <editable-stat-value on-save="$ctrl.save()" 
+                        ng-model="$ctrl.character.init" 
+                        modifier="$ctrl.modifiers.init"
+                        minimum="1"></editable-stat-value>
                 </div>
             </div>
 
             <div class="movement f-cell">
-                <div class="stat" ng-class="{'stat--prepend-plus':$ctrl.character.movement>=0}">
+                <div class="stat" 
+                    ng-class="{'stat--prepend-plus':$ctrl.character.movement>=0}">
                     <label>Move</label>
-                    <div editable-stat-value on-save="$ctrl.save()" 
+                    <editable-stat-value on-save="$ctrl.save()" 
                         ng-model="$ctrl.character.movement" 
-                        minimum="-25"></div>
+                        modifier="$ctrl.modifiers.move"
+                        minimum="-25"></editable-stat-value>
                 </div>
             </div>
 

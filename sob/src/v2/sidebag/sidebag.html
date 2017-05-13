@@ -7,8 +7,9 @@
         <div>
             <div class="stat">
                 <label>Capacity</label>
-                <div editable-stat-value on-save="$ctrl.save()" 
-                    ng-model="$ctrl.sidebag.capacity"></div>
+                <editable-stat-value on-save="$ctrl.save()" 
+                    ng-model="$ctrl.sidebag.capacity" 
+                    modifier="$ctrl.modifiers.sidebag.capacity"></editable-stat-value>
             </div>  
         </div>
     </div>

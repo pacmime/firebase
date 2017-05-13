@@ -53,6 +53,7 @@
     height: 36px;
     z-index: 1;
 }
+
 .stat .stat .value {
     font-size: 1em;
     /*box-shadow: 0 1px 3px #000;*/
@@ -62,6 +63,14 @@
     color: #fff;
     font-weight: 700;
 }
+
+.stat .value.is-modified {
+    color: #44ad43;
+}
+.stat .stat .value.is-modified {
+    color: #ace9ac;
+}
+
 
 
 .stat img {
@@ -80,24 +89,27 @@
     transform: scaleX(0.75) scaleY(0.75);
 }
 
-.stat.stat--with-plus [editable-stat-value]:after {
+.stat.stat--with-plus editable-stat-value:after {
     content: "+";
-    font-size: 0.75em;
+    font-size: 2em;
     position: absolute;
     right: 0;
     top: 16%;
+    z-index: 1000;
 }
-.stat.stat--prepend-plus [editable-stat-value]:before {
+.stat.stat--prepend-plus editable-stat-value:before {
     content: "+";
-    font-size: 0.75em;
+    font-size: 2em;
     position: absolute;
     left: 0;
     top: 16%;
+    z-index: 1000;
 }
 
-.stat .value.value--sm {
-    font-size:   1rem;
-    padding-top: .75em;
+.stat .value.value--sm,
+.stat .value--sm .value {
+    font-size:   1.25em;
+    padding-top: 1.25em;
 }
 
 .attributes .f-cell-33p { 

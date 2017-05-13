@@ -52,12 +52,15 @@
                 $scope.add = function() {
                     if(!$scope.newAbility) return;
                     $scope.character.abilities = $scope.character.abilities || {};
-                    $scope.character.abilities[UUID()] = {
-                        name: $scope.newAbility.name, 
-                        desc: $scope.newAbility.desc
-                    };
+                    $scope.character.abilities[UUID()] = JSON.parse(JSON.stringify($scope.newAbility));
+                    let hasMods = $scope.newAbility.modifiers;
                     $scope.onSave();
                     init();
+
+                    //if the ability added has modifiers, notify listeners
+                    if(hasMods) {
+                        $scope.$emit('modifiers:changed', true);
+                    }
                 };
 
                 $scope.addCustom = function() {
@@ -71,11 +74,20 @@
                 $scope.onEdited = function(id, updated) {
 
                     if(!updated) {  //remove ability
+
+                        let hasMods = $scope.character.abilities[id].modifiers;
                         delete $scope.character.abilities[id];
+
+                        //if the ability added has modifiers, notify listeners
+                        if(hasMods) {
+                            $scope.$emit('modifiers:changed', true);
+                        }
                     }
 
-                    if(updated) 
-                        $scope.character.abilities[id] = updated;
+                    if(updated) {
+                        $scope.character.abilities[id].name = updated.name;
+                        $scope.character.abilities[id].desc = updated.desc;
+                    }
 
                     $scope.onSave();
                 };

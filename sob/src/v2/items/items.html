@@ -11,12 +11,18 @@
             </small>
         </h4>
         <hr>
-        <div ng-repeat="(name, item) in character.items" item="item" name="{{name}}" on-save="onEdited(name, item)"></div>
+        <div ng-repeat="(name, item) in character.items">
+            <item item="item" name="{{name}}" 
+                on-save="onEdited(name, item)"
+                on-toggle="toggleEquipped(name)"
+                can-equip="canEquip(item)">
+            </item>
+        </div>
         <hr>
     </div>
 
 
-    <div class="clothing">
+    <!-- <div class="clothing">
         <br>
         <br>
         <h4>Clothing</h4>
@@ -31,7 +37,7 @@
             <br>
         </div>
 
-    </div>
+    </div> -->
 
 
 </div>
