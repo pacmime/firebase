@@ -3,118 +3,149 @@
     "use strict";
 
 
-    angular.module("sob-character").directive('abilities', ['CharacterOptions', function(CharacterOptions) {
+    angular.module("sob-character")
 
-        return {
-            scope: {
-                character: "=",
-                onSave: '&'
-            },
-            replace: true,
-            templateUrl: 'src/v2/abilities/abilities.html',
-            
-            controller: function($scope, $element) {
 
-                var charOptions = CharacterOptions('abilities', $scope.character.class);
-                charOptions.$loaded().then(init);
+    .component('abilities', {
 
-                function hasAbility(name) {
-                    for(var id in $scope.character.abilities) {
-                        if($scope.character.abilities[id].name == name) return true;
-                    }
-                    return false;
+        bindings: {
+            character: "=",
+            onSave: '&',
+            onChange: '&'
+        },
+
+        templateUrl: 'src/v2/abilities/abilities.html',
+
+        controller: function(CharacterOptions) {
+
+            /**
+             *
+             */
+            this.$onInit = function() {
+                this.charOptions = CharacterOptions('abilities', this.character.class);
+                this.charOptions.$loaded().then(() => this.init() );
+            };
+
+            /**
+             * @return {boolean}
+             */
+            this.hasAbility = function(name) {
+                for(var id in this.character.abilities) {
+                    if(this.character.abilities[id].name === name &&
+                        !this.character.abilities[id].custom) return true;
                 }
+                return false;
+            };
 
-                function init() {
+            /**
+             *
+             */
+            this.init = function() {
 
-                    $scope.newAbility = null;
-                    $scope.customAbility = {name: null, desc: null};    
-
-                    $scope.options = [];
-                    angular.forEach(charOptions, function(value, name) {
-                        
-                        if(typeof(value) === 'string') {
-                            $scope.options.push({name : name, desc: value, disabled: hasAbility(name)});
-
-                        } else {
-                            //if it requires a skill one doesn't have or can't be added multiple times...
-                            var disabled = !value.multi && hasAbility(name);
-                            if(!disabled && value.requires && !hasAbility(value.requires)) {
-                                name = name + " (requires " + value.requires + ")";
-                                disabled = true;
-                            }
-                            $scope.options.push({name : name, desc: value.value, disabled: disabled});
-                        }
-                    });
-                }
-                // init();
+                this.newAbility = null;
                 
-                $scope.add = function() {
-                    if(!$scope.newAbility) return;
-                    $scope.character.abilities = $scope.character.abilities || {};
-                    $scope.character.abilities[UUID()] = JSON.parse(JSON.stringify($scope.newAbility));
-                    let hasMods = $scope.newAbility.modifiers;
-                    $scope.onSave();
-                    init();
+                this.options = [];
+                angular.forEach(this.charOptions, (value, name) => {
+                    
+                    this.options.push({
+                        name: 'Custom Ability',
+                        desc: 'This is a custom ability. Click the pencil icon to edit it',
+                        custom: true
+                    });
+
+                    if(typeof(value) === 'string') {
+                        this.options.push({
+                            name : name, 
+                            desc: value, 
+                            disabled: this.hasAbility(name)
+                        });
+
+                    } else {
+                        
+                        //if it requires a skill one doesn't have or can't be added multiple times...
+                        var disabled = !value.multi && this.hasAbility(name);
+                        if(!disabled && value.requires && !this.hasAbility(value.requires)) {
+                            name = name + " (requires " + value.requires + ")";
+                            disabled = true;
+                        }
+                        this.options.push({name : name, desc: value.value, disabled: disabled});
+                    }
+                });
+            };
+            
+            /**
+             *
+             */
+            this.add = function() {
+
+                if(!this.newAbility) return;
+
+                this.character.abilities = this.character.abilities || {};
+                this.character.abilities[UUID()] = JSON.parse(JSON.stringify(this.newAbility));
+                let hasMods = this.newAbility.modifiers;
+                this.onSave();
+                this.init();
+
+                //if the ability added has modifiers, notify listeners
+                if(hasMods) {
+                    this.onChange();
+                }
+            };
+
+            
+            /**
+             *
+             */
+            this.onEdited = function(id, updated) {
+
+                if(!updated) {  //remove ability
+
+                    let hasMods = this.character.abilities[id].modifiers;
+                    delete this.character.abilities[id];
 
                     //if the ability added has modifiers, notify listeners
                     if(hasMods) {
-                        $scope.$emit('modifiers:changed', true);
+                        this.onChange();
                     }
-                };
+                }
 
-                $scope.addCustom = function() {
-                    if(!$scope.customAbility.name) return;
-                    $scope.character.abilities = $scope.character.abilities || {};
-                    $scope.character.abilities[UUID()] = $scope.customAbility;
-                    $scope.onSave();
-                    init();
-                };
+                if(updated) {
+                    this.character.abilities[id].name = updated.name;
+                    this.character.abilities[id].desc = updated.desc;
+                }
 
-                $scope.onEdited = function(id, updated) {
-
-                    if(!updated) {  //remove ability
-
-                        let hasMods = $scope.character.abilities[id].modifiers;
-                        delete $scope.character.abilities[id];
-
-                        //if the ability added has modifiers, notify listeners
-                        if(hasMods) {
-                            $scope.$emit('modifiers:changed', true);
-                        }
-                    }
-
-                    if(updated) {
-                        $scope.character.abilities[id].name = updated.name;
-                        $scope.character.abilities[id].desc = updated.desc;
-                    }
-
-                    $scope.onSave();
-                };
+                this.onSave();
+            };
 
 
-            }
-        };
-    }])
+        }
+    })
 
 
-    .directive('ability', function() {
+    .component('ability', {
 
-        function Controller($scope, $element) {
+        bindings: {
+            ability: "<",
+            onSave: '&'
+        },
+        
+        templateUrl: 'src/v2/abilities/ability.html',
+        
+        controller: function() {
 
-            $scope.ctrl = this;
+            this.$onInit = function() {
+                //remember original name just in case it changes
+                // var originalName = $scope.name;
+                this.name = this.ability.name;
+                this.desc = this.ability.desc;
+            };
 
-            //remember original name just in case it changes
-            // var originalName = $scope.name;
-            this.name = $scope.ability.name;
-            this.desc = $scope.ability.desc;
-            
             this.edit = function() {
                 this.displayEditor = true;
             };
 
             this.save = function() {
-                $scope.onSave({ updated: {name: this.name, desc: this.desc} });
+                this.onSave({ updated: {name: this.name, desc: this.desc} });
                 this.displayEditor = false;
             };
 
@@ -123,24 +154,11 @@
             };
 
             this.remove = function() {
-                $scope.onSave({updated: null});
+                this.onSave({updated: null});
             };
 
         }
 
-        return {
-            scope: {
-                ability: "=",
-                // character: "=",
-                // name: "@",
-                // desc: "@",
-                onSave: '&'
-            },
-            replace: true,
-            templateUrl: 'src/v2/abilities/ability.html',
-            
-            controller: Controller
-        };
     });
 
 

@@ -2,12 +2,12 @@
     <br>
     
     <!-- list all -->
-    <div ng-repeat="(id, mutation) in character.mutations">
+    <div ng-repeat="(id, mutation) in $ctrl.character.mutations">
 
         <mutation ng-if="typeof(mutation)!=='string'" 
             mutation="mutation" 
-            type="{{getType(mutation.name)}}"
-            on-save="onEdited(id, updated)">
+            type="{{$ctrl.getType(mutation.name)}}"
+            on-save="$ctrl.onEdited(id, updated)">
         </mutation>
         
     </div>
@@ -18,20 +18,14 @@
     <label>Add Mutation, Injury, or Madness</label>
     <div class="f-container f-justify-between f-align-center">
         <div class="f-cell-2x">
-            <select class="form-control" ng-model="newMutation" 
-                ng-options="item as item.name group by item.group disable when item.disabled for item in mimOpts">
+            <select class="form-control" ng-model="$ctrl.newMutation" 
+                ng-options="item as item.name group by item.group disable when item.disabled for item in $ctrl.mimOpts">
                 <option value="">Select One</option>
             </select>
         </div>
-        <button type="button" class="btn btn-success pull-right" ng-disabled="!newMutation" ng-click="add()">Add</button>
+        <button type="button" class="btn btn-success pull-right" 
+            ng-disabled="!$ctrl.newMutation" ng-click="$ctrl.add()">Add</button>
     </div>
     <br>
-
-    <form class="form">
-        <label>Add Custom Mutation, Injury, or Madness</label>
-        <input type="text" class="form-control" placeholder="Name" ng-model="customMutation.name">
-        <textarea rows="3" class="form-control" placeholder="Description" ng-model="customMutation.desc"></textarea>
-        <button type="button" class="btn btn-success pull-right" ng-disabled="!customMutation.name" ng-click="addCustom()">Add</button>
-    </form>
 
 </div>

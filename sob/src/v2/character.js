@@ -209,6 +209,9 @@
             //listen for events that indicate modifiers have been changed
             $rootScope.$on('modifiers:changed', (evt) => { this.recalc(); });
 
+            this.onModifiersChanged = function() {
+                this.recalc();
+            }
         }
 
     });

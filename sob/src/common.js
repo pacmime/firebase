@@ -417,70 +417,7 @@
         }
     })
 
-    // .directive('editableStatValue', ['$uibModal', function($uibModal) {
-    //     return {
-    //         scope: {
-    //             name: '@',
-    //             onSave: '&',
-    //             minimum: '@',
-    //             maximum: '@',
-    //             modifier: '@'   //amount modifying 'ngModel' from items/abilities/etc
-    //         },
-    //         restrict: 'A',
-    //         require: 'ngModel',
-    //         replace: true,
-    //         template: '<div class="value" ng-click="openKeypad()">{{display}}</div>',
-    //         link: function($scope, $element, $attrs, ngModelController) {
-
-    //             $scope.minimum = ($scope.minimum || 0)*1;
-    //             $scope.maximum = ($scope.maximum || 9999)*1;
-                
-    //             if($scope.name)
-    //                console.log($scope.name + ": m " + $scope.modifier);
-    //             if(isNaN($scope.modifier))
-    //                 $scope.modifier = 0;
-
-    //             ngModelController.$render = function() {
-
-    //                 if($scope.name)
-    //                     console.log($scope.name + ": " + ngModelController.$viewValue + " + " + $scope.modifier);
-
-    //                 $scope.display = ngModelController.$viewValue ? 
-    //                     (ngModelController.$viewValue*1 + $scope.modifier*1) : '';
-    //             };
-
-    //             $scope.openKeypad = function() {
-
-    //                 var value = ngModelController.$modelValue || 0;
-
-    //                 var modalInstance = $uibModal.open({
-    //                     templateUrl: 'src/keypad.html',
-    //                     controller: 'KeyPad',
-    //                     animation: false,
-    //                     resolve: {
-    //                         value: function() { return value; },
-    //                         minimum: function() { return $scope.minimum; },
-    //                         maximum: function() { return $scope.maximum; },
-    //                         modifier: function() { return $scope.modifier; }
-    //                     }
-    //                 });
-
-    //                 modalInstance.result.then(function(value) {
-                        
-    //                     ngModelController.$setViewValue(value);
-    //                     ngModelController.$render();
-    //                     if($scope.onSave)
-    //                         $scope.onSave();
-
-    //                 }, function () { });
-
-    //             };
-    //         }
-    //     };
-    // }])
-
-
-
+    
     .directive('editableInput', ['$timeout', function($timeout) {
 
         return {

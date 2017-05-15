@@ -1,7 +1,6 @@
 <div class="items-panel">
     
     <div class="items">
-        <br>
         <h4>
             <button type="button" class="btn btn-success pull-right" ng-click="add()">Add</button>    
             Items 
@@ -10,14 +9,20 @@
                 <span class="sprite sprite-item_darkstone"></span> {{itemDarkstone}}
             </small>
         </h4>
-        <hr>
-        <div ng-repeat="(name, item) in character.items">
-            <item item="item" name="{{name}}" 
+        <p>
+            <small>Equip an item by selecting <span class="glyphicon glyphicon-unchecked"></span> next to its name. Items that modify your character's stats will only apply modifiers while equipped.</small>
+        </p>
+        
+        <div class="f-container f-wrap has-gutter">
+            <item ng-repeat="(name, item) in character.items" 
+                class="f-cell-50p-md f-cell-50p-lg"
+                item="item" name="{{name}}" 
                 on-save="onEdited(name, item)"
                 on-toggle="toggleEquipped(name)"
                 can-equip="canEquip(item)">
             </item>
         </div>
+        
         <hr>
     </div>
 

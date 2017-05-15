@@ -2,31 +2,32 @@
     <br>
     
     <!-- list abilities -->
-    <div ng-repeat="(id, ability) in character.abilities" 
-        ability="ability" on-save="onEdited(id, updated)"></div>
+    <div class="f-container f-wrap has-gutter">
+        <ability ng-repeat="(id, ability) in $ctrl.character.abilities" 
+            class="f-cell-50p-md f-cell-50p-lg"
+            ability="ability" on-save="$ctrl.onEdited(id, updated)">
+        </ability>
+    </div>
 
     <br>
     
     <!-- add new -->
     <form class="form">
+
         <label>Add Ability</label>
 
         <div class="f-container f-justify-between f-align-center">
             <div class="f-cell-2x">
-                <select class="form-control" ng-model="newAbility" 
-                    ng-options="item as item.name disable when item.disabled for item in options">
+                <select class="form-control" ng-model="$ctrl.newAbility" 
+                    ng-options="item as item.name disable when item.disabled for item in $ctrl.options">
                     <option value="">Select New Ability</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-success pull-right" ng-disabled="!newAbility" ng-click="add()">Add</button>
+            <button type="button" class="btn btn-success pull-right" 
+                ng-disabled="!$ctrl.newAbility" ng-click="$ctrl.add()">Add</button>
         </div>
         <br>
-
-        <label>Add Custom Ability</label>
-        <input type="text" class="form-control" placeholder="Name" ng-model="customAbility.name">
-        <textarea rows="2" class="form-control" placeholder="Description" ng-model="customAbility.desc"></textarea>
-        <button type="button" class="btn btn-success pull-right" ng-disabled="!customAbility.name" ng-click="addCustom()">Add</button>
-
+        
     </form>
 
 </div>

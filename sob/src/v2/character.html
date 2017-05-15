@@ -37,7 +37,8 @@
     <!-- Abilities -->
     <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='abil'">
         <h3 ng-if="$ctrl.showAll">Abilities</h3>
-        <div abilities character="$ctrl.character" on-save="$ctrl.save()"></div>
+        <abilities character="$ctrl.character" on-save="$ctrl.save()"
+            on-change="$ctrl.onModifiersChanged()"></abilities>
     </div>
 
 
@@ -65,7 +66,8 @@
     <!-- Injuries and Mutations -->
     <div class="char__panel" ng-if="$ctrl.showAll||$ctrl.panel==='inj'">
         <h3 ng-if="$ctrl.showAll">Mutations, Injuries, &amp; Madness</h3>
-        <div mutations character="$ctrl.character" on-save="$ctrl.save()"></div>
+        <mutations character="$ctrl.character" on-save="$ctrl.save()" 
+            on-change="$ctrl.onModifiersChanged()"></mutations>
     </div>
 
 

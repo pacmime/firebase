@@ -4,197 +4,187 @@
 
     angular.module("sob-character")
 
-    .directive('mutations', ['DBHelper', function(DBHelper) {
+    .component('mutations', {
 
-        return {
-            scope: {
-                character: "=",
-                onSave: '&'
-            },
-            replace: true,
-            templateUrl: 'src/v2/mutations/mutations-and-injuries.html',
+        bindings: {
+            character: "=",
+            onSave: '&',
+            onChange: "&"
+        },
+
+        templateUrl: 'src/v2/mutations/mutations-and-injuries.html',
+        
+        controller: function($rootScope, DBHelper) {
+
+            this.$onInit = function() {
             
-            controller: function($scope, $element) {
+                this.newMutation = null;
+                
+                this.mutations = [];
+                this.injuries = [];
+                this.madness = [];
+
+                this.mimOpts = [];
 
 
-                $scope.mutations = [];
-                $scope.injuries = [];
-                $scope.madness = [];
-
-                $scope.mimOpts = [];
-
-                DBHelper('mutations').$loaded(function(mutations) {
+                DBHelper('mutations').$loaded( (mutations) => {
                     for(var key in mutations) {
                         if(key.indexOf("$")<0 && typeof(mutations[key]) == 'object') {
 
                             let mut = JSON.parse(JSON.stringify(mutations[key]));
                             mut.group = "Mutations";
-                            $scope.mimOpts.push(mut);
-                            $scope.mutations.push(mut.name);
+                            this.mimOpts.push(mut);
+                            this.mutations.push(mut.name);
                         }
                     }
-                    DBHelper('injuries').$loaded(function(injuries) {
+                    DBHelper('injuries').$loaded( (injuries) => {
                         for(var key in injuries) {
                             if(key.indexOf("$")<0 && typeof(injuries[key]) == 'object') {
 
                                 let inj = JSON.parse(JSON.stringify(injuries[key]));
                                 inj.group = "Injuries";
-                                $scope.mimOpts.push(inj);
-                                $scope.injuries.push(inj.name);
+                                this.mimOpts.push(inj);
+                                this.injuries.push(inj.name);
                             }
                         }
-                        DBHelper('madness').$loaded(function(madness) {
+                        DBHelper('madness').$loaded( (madness) => {
                             for(var key in madness) {
                                 if(key.indexOf("$")<0 && typeof(madness[key]) == 'object') {
                                     
                                     let mad = JSON.parse(JSON.stringify(madness[key]));
                                     mad.group = "Madness";
-                                    $scope.mimOpts.push(mad);
-                                    $scope.madness.push(mad.name);
+                                    this.mimOpts.push(mad);
+                                    this.madness.push(mad.name);
                                 }
                             }
 
-                            refreshOptions();
+                            this.refreshOptions();
                         });
                     });
                 });
-
                 
-                $scope.newMutation = null;
-                function init() {
-                    $scope.newMutation = null;
-                    $scope.customMutation = {name: null, desc: null};
+                this.init();
+            };
 
-                }
-                init();
-
-                function refreshOptions() {
-                    if($scope.character.mutations) {
+            
+            this.init = function() {
+                this.newMutation = null;
+                this.refreshOptions();
+            };
+            
+            
+            this.refreshOptions = function () {
+               
+                this.character.$loaded( () => {
+                
+                    if(this.character.mutations) {
                         
                         //update mutations if needed
                         let updated = false;
-                        angular.forEach($scope.character.mutations, (mutation, id) => {
-                            if(typeof(mutation) === 'string') {
-                                //older mutation format:  name: desc
+                        angular.forEach(this.character.mutations, (mutation, id) => {
 
-                                let found = $scope.mimOpts.find( mut => mut.name === id);
+                            if(typeof(mutation) === 'string') { //older mutation format:  name: desc
+                                
+                                let found = this.mimOpts.find( mut => mut.name === id);
                                 if(found) {
-                                    $scope.character.mutations[id] = JSON.parse(JSON.stringify(found));
+                                    this.character.mutations[id] = JSON.parse(JSON.stringify(found));
                                     updated = true;
                                 } else {
-                                    $scope.character.mutations[id] = null; //drop it
+                                    this.character.mutations[id] = null; //drop it
                                 }
                             }
                         });
                         if(updated) {
-                            $scope.onSave();
+                            this.onSave();
                         }
 
                         //disable option if character already has this mutation, injury, or madness
-                        angular.forEach($scope.mimOpts, function(opt) {
-                            opt.disabled = $scope.hasMutInjMad(opt.name); //$scope.character.mutations[opt.name];
+                        angular.forEach(this.mimOpts, (opt) => {
+                            opt.disabled = this.hasMutInjMad(opt.name); //this.character.mutations[opt.name];
                         });
 
                     }
+                });
+            }
+
+            /**
+             *
+             */
+            this.hasMutInjMad = function(arg) {
+                let name = (typeof(arg) === 'object') ? arg.name : arg;
+                for(var id in this.character.mutations) {
+                    if(this.character.mutations[id].name == name) 
+                        return true;
                 }
+                return false;
+            };
+            
+            /**
+             *
+             */
+            this.add = function() {
+                if(!this.newMutation.name) return;
+                this.character.mutations = this.character.mutations || {};
 
-                $scope.hasMutInjMad = function(arg) {
-                    let name = (typeof(arg) === 'object') ? arg.name : arg;
-                    for(var id in $scope.character.mutations) {
-                        if($scope.character.mutations[id].name == name) 
-                            return true;
-                    }
-                    return false;
-                };
+                let hasMods = this.newMutation.modifiers;
+                let mut = JSON.parse(JSON.stringify(this.newMutation));
+                this.character.mutations[UUID()] = mut;
+
+                // this.character.mutations[this.newMutation.name] = this.newMutation.desc;
+                this.onSave();
+                this.init();
                 
-                $scope.add = function() {
-                    if(!$scope.newMutation.name) return;
-                    $scope.character.mutations = $scope.character.mutations || {};
+                //if the ability added has modifiers, notify listeners
+                if(hasMods) {
+                    this.onChange();
+                }
+            };
 
-                    let hasMods = $scope.newMutation.modifiers;
-                    let mut = JSON.parse(JSON.stringify($scope.newMutation));
-                    $scope.character.mutations[UUID()] = mut;
+            
+            /**
+             * @param {string} id
+             * @param {object} updated
+             */
+            this.onEdited = function(id, updated) {
 
-                    // $scope.character.mutations[$scope.newMutation.name] = $scope.newMutation.desc;
-                    $scope.onSave();
-                    init();
-                    refreshOptions();
+                if(!updated) {  //remove mutation/inj/madness
+                    
+                    let hasMods = this.character.mutations[id].modifiers;
+                    
+                    delete this.character.mutations[id];
 
                     //if the ability added has modifiers, notify listeners
                     if(hasMods) {
-                        $scope.$emit('modifiers:changed', true);
+                        this.onChange();
                     }
-                };
+                }
 
-                $scope.addCustom = function() {
-                    if(!$scope.customMutation.name) return;
-                    $scope.character.mutations = $scope.character.mutations || {};
+                if(updated) {
+                    this.character.mutations[id].name = updated.name;
+                    this.character.mutations[id].desc = updated.desc;
+                }
 
-                    let mut = JSON.parse(JSON.stringify($scope.customMutation));
-                    $scope.character.mutations[UUID()] = mut;
+                this.onSave();
+                this.init();
+            };
 
-                    // if($scope.character.mutations[$scope.customMutation.name]) {
-                    //     alert("Character already has a mutation, injury, or madness with that name");
-                    //     return;
-                    // }
-                    // $scope.character.mutations[$scope.customMutation.name] = $scope.customMutation.desc;
-                    $scope.onSave();
-                    init();
-                    refreshOptions();
-                };
-
-                // $scope.onEdited = function(name, newName, newDesc) {
-
-                //     if(name !== newName) {
-                //         //delete old property
-                //         delete $scope.character.mutations[name];
-                //     }
-
-                //     if(newName && newDesc) 
-                //         $scope.character.mutations[newName] = newDesc;
-
-                //     $scope.onSave();
-                // };
-
-                $scope.onEdited = function(id, updated) {
-
-                    if(!updated) {  //remove mutation/inj/madness
-                        
-                        let hasMods = $scope.character.mutations[id].modifiers;
-                        
-                        delete $scope.character.mutations[id];
-
-                        //if the ability added has modifiers, notify listeners
-                        if(hasMods) {
-                            $scope.$emit('modifiers:changed', true);
-                        }
-                    }
-
-                    if(updated) {
-                        $scope.character.mutations[id].name = updated.name;
-                        $scope.character.mutations[id].desc = updated.desc;
-                    }
-
-                    $scope.onSave();
-                    init();
-                };
-
-                $scope.getType = function(name) {
-                    if(~$scope.mutations.indexOf(name)) return 'mutation';
-                    if(~$scope.injuries.indexOf(name)) return 'injury';
-                    if(~$scope.madness.indexOf(name)) return 'madness';
-                    return '';
-                };
-
-            }
-        };
-    }])
+            /**
+             * @param {string} name
+             */
+            this.getType = function(name) {
+                if(~this.mutations.indexOf(name)) return 'mutation';
+                if(~this.injuries.indexOf(name)) return 'injury';
+                if(~this.madness.indexOf(name)) return 'madness';
+                return '';
+            };
+        }
+    })
 
 
     .component('mutation', {
 
         bindings: {
-            mutation: "=",
+            mutation: "<",
             onSave: '&'
         },
         
@@ -213,14 +203,6 @@
             this.edit = function() {
                 this.displayEditor = true;
             };
-
-            // this.save = function() {
-            //     this.onSave({
-            //         newName: this.name, 
-            //         newDesc: this.desc
-            //     });
-            //     this.displayEditor = false;
-            // };
 
             this.save = function() {
                 $scope.onSave({ 

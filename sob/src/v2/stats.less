@@ -89,9 +89,10 @@
     transform: scaleX(0.75) scaleY(0.75);
 }
 
+    
 .stat.stat--with-plus editable-stat-value:after {
     content: "+";
-    font-size: 2em;
+    font-size: 1.25em;
     position: absolute;
     right: 0;
     top: 16%;
@@ -99,11 +100,16 @@
 }
 .stat.stat--prepend-plus editable-stat-value:before {
     content: "+";
-    font-size: 2em;
+    font-size: 1.25em;
     position: absolute;
     left: 0;
     top: 16%;
     z-index: 1000;
+}
+
+@media(min-width:768px) {
+    .stat.stat--with-plus editable-stat-value:after { font-size: 2em; }
+    .stat.stat--prepend-plus editable-stat-value:before { font-size: 2em; }
 }
 
 .stat .value.value--sm,
