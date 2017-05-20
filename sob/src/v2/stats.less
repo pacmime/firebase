@@ -24,7 +24,7 @@
     line-height: 0.9;
     color:       #000;
     text-shadow: 0 1px 0 #fff;
-    font-size: 0.75em;
+    font-size: 0.65em;
     z-index: 3;
 }
 .stat.stat-label-top label {
@@ -115,7 +115,14 @@
 .stat .value.value--sm,
 .stat .value--sm .value {
     font-size:   1.25em;
-    padding-top: 1.25em;
+    padding-top: 0.5em;
+}
+@media(min-width: 768px) {
+    .stat .value.value--sm,
+    .stat .value--sm .value {
+        font-size:   1.25em;
+        padding-top: 1.25em;
+    }
 }
 
 .attributes .f-cell-33p { 
