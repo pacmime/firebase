@@ -44,11 +44,11 @@
         <div class="manual-entry">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <a class="btn btn-danger" ng-click="change(-1*manualAdj)" ng-disabled="isNaN(manualAdj)">-</a>
+                    <a class="btn btn-danger" ng-click="changeManual(-1)" ng-class="{disabled:!hasManual()}">-</a>
                 </span>
                 <input type="number" class="form-control" ng-model="manualAdj" placeholder="Adjust by ...">
                 <span class="input-group-btn">
-                    <a class="btn btn-success" ng-click="change(manualAdj)" ng-disabled="isNaN(manualAdj)">+</a>
+                    <a class="btn btn-success" ng-click="changeManual(1)" ng-class="{disabled:!hasManual()}">+</a>
                 </span>
             </div>
         </div>

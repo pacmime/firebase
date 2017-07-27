@@ -906,11 +906,11 @@ img.sprite-darkstone {
 .page {
     height: 100%; 
     width: 100%;
-    padding-top: 57px;
+    // padding-top: 57px;
 }
 @media(min-width:768px) {
     .page {
-        padding-top: 52px;
+        // padding-top: 52px;
     }
 }
 
@@ -921,16 +921,35 @@ img.sprite-darkstone {
     padding: 0.75em;
 
     display:flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: stretch;
-    flex-wrap: wrap;
-
+    
     font-size: 0.875em;
+
+    & > * {
+        display: flex;
+        align-items: center;
+    }
+
+    & > *:first-child {
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    & > *:last-child {
+        position: relative;
+        margin-left: 1em;
+        width: 2em;
+        justify-content: center;
+    }
 }
 
 @media(min-width: 768px) {
-    .char__header { 
+    .char__header > *:first-child { 
         flex-direction: row;
         flex-wrap: nowrap; 
         align-items: center;
@@ -1221,6 +1240,22 @@ img.sprite-darkstone {
     }
 }
 
+/* ---------- loot & scavenge styles ----------- */
+
+.loot, .scavenge {
+    background: rgba(255,255,255,0.85);
+    padding: 1em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+
+.c-loot { padding-bottom: 2em; }
+
+@media(min-width: 768px) {
+    .c-loot { padding-right: 2em; }
+    .c-scavenge { padding-left: 2em; }
+}
+
 .item.usage-adventure {
     border-left: 4px solid #000;
 }
@@ -1294,22 +1329,6 @@ img.sprite-darkstone {
     margin-bottom: 0.5em;
 }
 
-
-/* ---------- loot & scavenge styles ----------- */
-
-.loot, .scavenge {
-    background: rgba(255,255,255,0.85);
-    padding: 1em;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    border-radius: 4px;
-}
-
-.c-loot { padding-bottom: 2em; }
-
-@media(min-width: 768px) {
-    .c-loot { padding-right: 2em; }
-    .c-scavenge { padding-left: 2em; }
-}
 
 /* Sidebag */
 .sidebag__option {

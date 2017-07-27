@@ -45,14 +45,15 @@
                 this.newAbility = null;
                 
                 this.options = [];
+
+                this.options.push({
+                    name: 'Custom Ability',
+                    desc: 'This is a custom ability. Click the pencil icon to edit it',
+                    custom: true
+                });
+
                 angular.forEach(this.charOptions, (value, name) => {
                     
-                    this.options.push({
-                        name: 'Custom Ability',
-                        desc: 'This is a custom ability. Click the pencil icon to edit it',
-                        custom: true
-                    });
-
                     if(typeof(value) === 'string') {
                         this.options.push({
                             name : name, 
@@ -82,14 +83,14 @@
 
                 this.character.abilities = this.character.abilities || {};
                 this.character.abilities[UUID()] = JSON.parse(JSON.stringify(this.newAbility));
-                let hasMods = this.newAbility.modifiers;
+                // let hasMods = this.newAbility.modifiers;
                 this.onSave();
                 this.init();
 
                 //if the ability added has modifiers, notify listeners
-                if(hasMods) {
+                // if(hasMods) {
                     this.onChange();
-                }
+                // }
             };
 
             

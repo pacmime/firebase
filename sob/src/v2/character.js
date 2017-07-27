@@ -211,7 +211,7 @@
 
             this.onModifiersChanged = function() {
                 this.recalc();
-            }
+            };
         }
 
     });

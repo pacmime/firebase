@@ -1,24 +1,24 @@
 <div class="page" ng-class="{'f-container f-column f-justify-between':!$ctrl.showAll}">
 
     <div class="char__header">
-        <div class="f-cell-1x">
-            <label>Name: </label> {{$ctrl.character.name}} ({{$ctrl.charClass}})
-        </div>
-        <div class="f-cell-1x">
-            <div class="f-container">
-                <div class="f-cell-1x">
-                    <div editable-input label="Keys" ng-model="$ctrl.character.keywords" on-save="$ctrl.save()"></div>
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="f-cell">
-                    <button type="button" class="btn btn-sm btn-info" ng-click="$ctrl.showAll=!$ctrl.showAll">
-                        <span class="glyphicon" 
-                            ng-class="{'glyphicon-sort-by-attributes':!$ctrl.showAll,'glyphicon-phone':$ctrl.showAll}"></span>
-                    </button>
-                </div>
+        <div>
+            <div style="margin-right: 1em;">
+                <label>Name: </label> {{$ctrl.character.name}} ({{$ctrl.charClass}})
+            </div>
+            <div style="margin-right: 1em;">
+                <div editable-input label="Keys" ng-model="$ctrl.character.keywords" on-save="$ctrl.save()"></div>
             </div>
         </div>
-
+        <div>
+            <button type="button" class="btn btn-sm btn-info" ng-click="$ctrl.showAll=!$ctrl.showAll">
+                <span class="glyphicon" 
+                    ng-class="{'glyphicon-sort-by-attributes':!$ctrl.showAll,'glyphicon-phone':$ctrl.showAll}">
+                </span>
+            </button>
+        </div>
+        <div>
+            <div login></div>
+        </div>
     </div>
 
 

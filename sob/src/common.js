@@ -320,6 +320,7 @@
         $scope.maximum = maximum*1 || 9999;
         $scope.modifier = modifier;
         $scope.changes = "";
+        $scope.manualAdj===null;
         
         $scope.change = function(v) { 
             if(v>0)
@@ -327,6 +328,16 @@
             else
                 $scope.value = Math.max($scope.value + v, minimum); 
             $scope.changes += ($scope.changes.length ? ', ' : '') + (v>0?"+":"") + v;
+        };
+
+        $scope.changeManual = function(direction) {
+            if(isNaN($scope.manualAdj)) return; //if no value provided
+            $scope.change(direction * $scope.manualAdj);
+        };
+
+        $scope.hasManual = function() {
+            return $scope.manualAdj !== null && $scope.manualAdj !== 'undefined' && 
+                !isNaN($scope.manualAdj);
         };
         
         $scope.ok = function () {
@@ -682,9 +693,12 @@
                 '<a ng-if="!user" ng-click="doLogin()">Login</a>',
                 '<a ng-if="user" class="dropdown-toggle" data-toggle="dropdown" ',
                 '  role="button" aria-haspopup="true" aria-expanded="false">',
-                '  {{user.email}} <span class="caret"></span>',
+                '  <span class="glyphicon glyphicon-menu-hamburger"></span>',
                 '</a>',
-                '<ul ng-if="user" class="dropdown-menu">',
+                '<ul ng-if="user" class="dropdown-menu dropdown-menu-right">',
+                '  <li class="disabled"><a>{{user.email}}</a></li>',
+                '  <li><a href="/sob/index.html#/">My Characters</a></li>',
+                '  <li role="separator" class="divider"></li>',
                 '  <li><a ng-click="doReset()">Reset Password</a></li>',
                 '  <li><a ng-click="doLogout()">Log out</a></li>',
                 '</ul>',

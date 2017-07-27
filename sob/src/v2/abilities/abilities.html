@@ -1,16 +1,6 @@
 <div class="abilities">
-    <br>
     
-    <!-- list abilities -->
-    <div class="f-container f-wrap has-gutter">
-        <ability ng-repeat="(id, ability) in $ctrl.character.abilities" 
-            class="f-cell-50p-md f-cell-50p-lg"
-            ability="ability" on-save="$ctrl.onEdited(id, updated)">
-        </ability>
-    </div>
 
-    <br>
-    
     <!-- add new -->
     <form class="form">
 
@@ -29,5 +19,13 @@
         <br>
         
     </form>
+
+    <!-- list abilities -->
+    <div class="f-container f-wrap has-gutter">
+        <ability ng-repeat="(id, ability) in $ctrl.character.abilities" 
+            class="f-cell-50p-md f-cell-50p-lg"
+            ability="ability" on-save="$ctrl.onEdited(id, updated)">
+        </ability>
+    </div>
 
 </div>
