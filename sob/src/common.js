@@ -699,7 +699,10 @@
                 '  <li class="disabled"><a>{{user.email}}</a></li>',
                 '  <li><a href="/sob/index.html#/">My Characters</a></li>',
                 '  <li role="separator" class="divider"></li>',
+                '  <li role="separator" class="divider"></li>',
                 '  <li><a ng-click="doReset()">Reset Password</a></li>',
+                '  <li role="separator" class="divider"></li>',
+                '  <li role="separator" class="divider"></li>',
                 '  <li><a ng-click="doLogout()">Log out</a></li>',
                 '</ul>',
                 '</div>'
@@ -733,7 +736,8 @@
                 };
 
                 $scope.doReset = function() {
-
+                    if(!$scope.user) return;
+                    
                     //v2.x.x
                     auth.$sendPasswordResetEmail($scope.user.email, function(error) {
                         if (error === null) {

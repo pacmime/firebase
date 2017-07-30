@@ -92,10 +92,15 @@
 
     <!-- message display -->
     <div class="message-display" ng-if="$ctrl.displayOpts.message">
-        <span class="glyphicon glyphicon-ok"></span> {{$ctrl.displayOpts.message}}
+        <span class="glyphicon glyphicon-ok"></span> 
+        {{$ctrl.displayOpts.message}}
     </div>
     <div class="message-display is-error" ng-if="$ctrl.displayOpts.error">
-        <span class="glyphicon glyphicon-exclamation-sign"></span> {{$ctrl.displayOpts.error}}
+        <span class="glyphicon glyphicon-exclamation-sign"></span> 
+        {{$ctrl.displayOpts.error}}
+        <div ng-if="!this.authenticated">
+            You must sign in to make changes to this character!
+        </div>
     </div>
 
 

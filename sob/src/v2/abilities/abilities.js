@@ -81,16 +81,20 @@
 
                 if(!this.newAbility) return;
 
+                let ability = this.getFullAbility(this.newAbility.name);
+                if(!ability) 
+                    ability = this.newAbility;
+
+                let hasMods = ability.modifiers;
+                
                 this.character.abilities = this.character.abilities || {};
-                this.character.abilities[UUID()] = JSON.parse(JSON.stringify(this.newAbility));
-                // let hasMods = this.newAbility.modifiers;
+                this.character.abilities[UUID()] = JSON.parse(JSON.stringify(ability));
                 this.onSave();
                 this.init();
 
                 //if the ability added has modifiers, notify listeners
-                // if(hasMods) {
-                    this.onChange();
-                // }
+                if(hasMods) this.onChange();
+
             };
 
             
@@ -118,6 +122,17 @@
                 this.onSave();
             };
 
+            this.getFullAbility = function(name) {
+                let ability = this.charOptions[name];
+                if(ability) {
+                    ability = JSON.parse(JSON.stringify(ability));
+                    ability.name = name;
+                    ability.desc = ability.value;
+                    delete ability.value;
+                    return ability;
+                } 
+                return null;
+            };
 
         }
     })

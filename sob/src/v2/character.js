@@ -10,7 +10,7 @@
         templateUrl: 'src/v2/character.html',
         replace: true,
 
-        controller: function($rootScope, $routeParams, $timeout, CharacterRef, ClassHelper) {
+        controller: function($rootScope, $routeParams, $timeout, $firebaseAuth, CharacterRef, ClassHelper) {
         
             var self = this;
             
@@ -29,6 +29,11 @@
             this.character = CharacterRef(decodeURIComponent($routeParams.charId));
 
             this.classes = ClassHelper.getClasses();
+
+            //monitor login status
+            $firebaseAuth().$onAuthStateChanged( (authData) => {
+                this.authenticated = !!authData;
+            });
 
 
             this.onInputKeyPress = function($event) {
