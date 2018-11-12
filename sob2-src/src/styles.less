@@ -1,0 +1,303 @@
+/* You can add global styles to this file, and also import other style files */
+
+* { box-sizing: border-box; }
+
+html{
+    font-size: 16px;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 1rem;
+    font-family: sans-serif,arial,Helvetica;
+    background: #E9E3CD;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+}
+
+h6 { font-size: 0.85rem; }
+h5 { font-size: 1rem; }
+h4 { font-size: 1.25rem; }
+h3 { font-size: 1.5rem; }
+h2 { font-size: 1.75rem; }
+h1 { font-size: 2rem; }
+
+p {
+    margin: 0.5em 0;
+    font-style:italic;
+}
+
+label { font-weight: 700; }
+
+input.form-control,
+select.form-control,
+textarea.form-control {
+    width: 100%;
+    font-size: 1em;
+    padding: 0.25em .5em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    &.u-sm {
+        font-size: 0.875em;
+    }
+}
+
+button[type="button"] {
+    font-size: 1em;
+    padding: 0.25em 0.5em;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    &.u-sm {
+        font-size: 0.875em;
+    }
+
+    &.active {
+        background-color: #4277ad;
+        color: #fff;
+        box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    &.btn--add, &.btn-add.active {
+        background-color: #1ac6e2;
+        color: #fff;
+    }
+
+    &.btn--del, &.btn--del.active {
+        background-color: #f30a0a;
+        color: #fff;
+    }
+
+    &.btn--use, &.btn--use.active {
+        background-color: #4d4;
+        color: #fff;
+    }
+
+    &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &.btn--round {
+        border-radius: 100%;
+    }
+}
+
+
+
+.u-text--center { text-align: center; }
+.u-text--sc { font-variant: small-caps; }
+.u-text--uc { text-transform: uppercase; }
+.u-text--lc { text-transform: lowercase; }
+.u-text--right { text-align: right; }
+
+.u-xxlg { font-size: 2em; }
+.u-xlg { font-size: 1.5em; }
+.u-lg { font-size: 1.25em; }
+.u-sm { font-size: 0.875em; }
+.u-xs { font-size: 0.75em; }
+.u-xxs { font-size: 0.5em; }
+.faded { opacity: 0.3; };
+
+.u-mg-left--md { margin-left: 1em; }
+.u-mg-right--md { margin-right: 1em; }
+.u-mg-top--md { margin-top: 1em; }
+.u-mg-bottom--md { margin-bottom: 1em; }
+
+.t-fg--danger { color: #f00; }
+
+
+
+.d-flex { display: flex; }
+.flex-row { flex-direction: row; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-justify-start { justify-content: flex-start; }
+.flex-justify-end { justify-content: flex-end; }
+.flex-justify-between { justify-content: space-between; }
+.flex-justify-around { justify-content: space-around; }
+.flex-justify-center { justify-content: center; }
+.flex-justify-stretch { justify-content: stretch; }
+.flex-align-start { align-items: flex-start; }
+.flex-align-end { align-items: flex-end; }
+.flex-align-center { align-items: center; }
+.flex-align-stretch { align-items: stretch; }
+.col, .col-1 { flex-grow: 1; }
+.col-2 { flex-grow: 2; }
+.col-3 { flex-grow: 3; }
+.col-4 { flex-grow: 4; }
+.col-5 { flex-grow: 5; }
+.col-6 { flex-grow: 6; }
+.col-auto { flex-basis: auto; }
+
+.col-2-sm, .col-3-sm, .col-4-sm, .col-5-sm, .col-6-sm,
+.col-2-md, .col-3-md, .col-4-md, .col-5-md, .col-6-md,
+.col-2-lg, .col-3-lg, .col-4-lg, .col-5-lg, .col-6-lg,
+.col-2-xlg, .col-3-xlg, .col-4-xlg, .col-5-xlg, .col-6-xlg {
+    flex: 1 0 100%;
+}
+
+@media(min-width:768px) and (max-width:991px) {
+    .col-2-sm { flex: 2 0 50%; }
+    .col-3-sm { flex: 3 0 33%; }
+    .col-4-sm { flex: 4 0 25%; }
+    .col-5-sm { flex: 5 0 20%; }
+    .col-6-sm { flex: 6 0 16.67%; }
+}
+@media(min-width:992px) and (max-width:1199px) {
+    .col-2-md { flex: 2 0 50%; }
+    .col-3-md { flex: 3 0 33%; }
+    .col-4-md { flex: 4 0 25%; }
+    .col-5-md { flex: 5 0 20%; }
+    .col-6-md { flex: 6 0 16.67%; }
+}
+@media(min-width:1200px) and (max-width:1499px) {
+    .col-2-lg { flex: 2 0 50%; }
+    .col-3-lg { flex: 3 0 33%; }
+    .col-4-lg { flex: 4 0 25%; }
+    .col-5-lg { flex: 5 0 20%; }
+    .col-6-lg { flex: 6 0 16.67%; }
+}
+@media(min-width:1500px) {
+    .col-2-xlg { flex: 2 0 50%; }
+    .col-3-xlg { flex: 3 0 33%; }
+    .col-4-xlg { flex: 4 0 25%; }
+    .col-5-xlg { flex: 5 0 20%; }
+    .col-6-xlg { flex: 6 0 16.67%; }
+}
+
+
+@media(max-width:766px) {
+    .d-none-xs { display: none; }
+}
+
+
+
+.d-grid {
+    display: grid;
+}
+
+
+
+
+
+
+.desc {
+    color: #777;
+    text-align: justify;
+}
+
+
+
+
+.c-error {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #ff0000e3;
+    color:   #fff;
+    padding: 0.5em 1em;
+
+    a, a:visited { color: #fff; }
+}
+
+
+
+
+.l-char {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow: auto;
+}
+
+.l-page {
+    flex: 1 0 100%;
+    padding: 0.5em 1em 1em;
+    border-right: 1px solid #d7d6b7;
+    border-left: 1px solid #f8f7e5;
+
+    &:first-child { border-left: none; }
+    &:last-child { border-right: none; }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        flex: 100%;
+    }
+    main {
+        flex: 1 0 66%;
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.25em 0;
+            background-image: url(assets/texture.png);
+
+            & > section {
+                flex: 1;
+            }
+            &.misc {
+                padding: 0;
+                justify-content: stretch;
+            }
+        }
+    }
+}
+
+@media(min-width:300px) {
+    .l-char {
+        flex-wrap: nowrap;
+        align-items:stretch;
+        overflow-y:hidden;
+        height: 100%;
+        padding-top: 36px;
+    }
+    .l-page {
+        flex: 1 0 375px;
+        overflow-y: auto;
+    }
+}
+
+
+
+.bio {
+    flex: 1;
+
+    h3, h4, h5 { margin: 0; }
+}
+
+
+.card {
+    background: rgba(255,255,255,0.85);
+    margin: 0.25em 0;
+    padding: 0.5em;
+    border-radius: 0.25em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+@import 'sprites.less';
+@import 'stats.less';
+
+.t-combat, .t-combat .stat2 .label { background-color: #bbb; background-image: url(assets/texture.png); }
+.t-health, .t-health .stat2 .label { background-color: #C24E4E; background-image: url(assets/texture.png); }
+.t-sanity, .t-sanity .stat2 .label { background-color: #81A0D3; background-image: url(assets/texture.png); }
+.t-faith, .t-faith .stat2 .label { background-color: yellow; background-image: url(assets/texture.png); }
+.t-fury, .t-fury .stat2 .label { background-color: red; background-image: url(assets/texture.png); }
+.t-magik, .t-magik .stat2 .label { background-color: purple; background-image: url(assets/texture.png); }
+.t-fortune, .t-fortune .stat2 .label { background-color: orange; background-image: url(assets/texture.png); }
+.t-corruption, .t-corruption .stat2 .label { background-color: #58A932; background-image: url(assets/texture.png); }
+.t-grit, .t-grit .stat2 .label { background-color: #9c7a3f; background-image: url(assets/texture.png); }

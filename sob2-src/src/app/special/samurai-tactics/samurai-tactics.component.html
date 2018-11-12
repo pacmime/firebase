@@ -1,0 +1,36 @@
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">Samurai Battle Tactics</div>
+    <button type="button" class="btn--add u-sm"
+        (click)="openChooser()">New</button>
+</h4>
+<hr>
+<div class="d-flex flex-justify-between flex-align-center">
+    Fury: {{character.fury.current}} / {{maxFury}}
+</div>
+<hr>
+
+<div *ngFor="let tactic of character.tactics;let i=index;" class="card">
+    <h5 class="d-flex flex-justify-between flex-align-end">
+        {{tactic.name}}
+        <div class="d-flex flex-justify-end flex-align-end">
+            <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
+            <div class="btn-group" *ngIf="confirmingDelete(i)">
+                <button type="button" class="u-sm" (click)="remove(i)">Y</button>
+                <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+            </div>
+        </div>
+    </h5>
+    <div *ngIf="tactic.cost">
+        <strong>Cost: </strong> {{tactic.cost}}
+    </div>
+    <p>{{tactic.desc}}</p>
+    <div *ngIf="tactic.modifiers">
+        <div *ngFor="let modifier of tactic.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+    <hr>
+    <div class="d-flex flex-justify-between flex-align-center">
+        <button type="button" class="btn--use" (click)="spendFury(tactic.cost)">Cast</button>
+    </div>
+</div>

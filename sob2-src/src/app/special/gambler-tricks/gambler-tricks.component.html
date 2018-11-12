@@ -1,0 +1,40 @@
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">Gambler Tricks</div>
+    <button type="button" class="btn--add u-sm"
+        (click)="openChooser()">New</button>
+</h4>
+
+<hr>
+<div class="d-flex flex-justify-between flex-align-center">
+    Current Fortune: {{character.fortune.current}} / {{maxFortune}}
+    <button type="button" class="u-sm btn--use" (click)="resetFortune()">Reset</button>
+</div>
+<hr>
+
+<div *ngFor="let trick of character.tricks; let i = index;" class="card">
+    <h5 class="d-flex flex-justify-between flex-align-end">
+        {{trick.name}}
+        <div class="d-flex flex-justify-end flex-align-end">
+            <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
+            <div class="btn-group" *ngIf="confirmingDelete(i)">
+                <button type="button" class="u-sm" (click)="remove(i)">Y</button>
+                <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+            </div>
+        </div>
+    </h5>
+    <div *ngIf="trick.cost">
+        <strong>Cost: </strong> {{trick.cost}}
+    </div>
+    <p>{{trick.desc}}</p>
+    <div *ngIf="trick.modifiers">
+        <div *ngFor="let modifier of trick.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+    <hr>
+    <button type="button" class="btn--use"
+        [disabled]="!hasFortune()" (click)="spendFortune()">
+        Spend 1 Fortune
+    </button>
+    <button type="button" class="btn" *ngIf="trick.xp" (click)="gainXP(trick.xp)">XP</button>
+</div>

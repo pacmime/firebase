@@ -1,0 +1,20 @@
+<div class="value-display">
+    <div class="value" [ngClass]="{'u-sm':'sm'===options.valueSize,modified:isModified()}">
+        <div (click)="openKeypad()">{{computed}}</div>
+        <div *ngIf="canAdjust">
+            <button type="button" class="incrementer"
+                (click)="increment()"
+                (ngDisabled)="!canIncrement()">
+                +
+            </button>
+            <button type="button" class="decrementer"
+                (click)="decrement()"
+                (ngDisabled)="!canDecrement()">
+                -
+            </button>
+        </div>
+    </div>
+    <div class="label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
+        <span>{{label}}</span>
+    </div>
+</div>

@@ -1,0 +1,258 @@
+
+.value-display {
+    background: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #000;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.value-display .label {
+    display: block;
+    font-weight: 700;
+    font-size: 1em;
+    width: 96px;
+    // background-color: #ddd;
+    border-top: 1px solid #000;
+    border-radius: 0 0 8px 8px;
+    &.u-sm { font-size: 1em; }
+}
+.value-display .value {
+    flex: 1 0 64px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+
+    & > *:first-child {
+        font-size: 2em;
+        text-align: center;
+        display: flex;
+        flex-direction: row; //needed for modifier asterisk
+        justify-content: center;
+        align-items: center;
+        flex: 1 0 1em;
+        padding: 0 0.5em;
+        max-width: 64px;
+    }
+
+    &.u-sm > *:first-child {
+        font-size: 1.5em;
+    }
+
+    &.modified > *:first-child {
+        background-color: #ffbc0052;
+    }
+}
+.value-display .incrementer,
+.value-display .decrementer {
+    font-size: 1em;
+    width: 2em;
+    height: 2em;
+    border: none;
+    font-weight: 700;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:first-child {
+        border-radius: 0 8px 0 0;
+    }
+}
+.value-display .incrementer {
+    color: #333;
+    background-color: #b6e3b6;
+}
+.value-display .decrementer {
+    color: #333;
+    background-color: #f1c9c9;
+}
+
+
+
+.has-stat-with-max {
+    width: 90px;
+}
+
+
+.stat {
+    position:   relative;
+    display:    inline-block;
+    text-align: center;
+    vertical-align: top;
+    width:      3em;
+    height:     3em;
+}
+.stat .label {
+    position: absolute;
+    bottom:      0;
+    left:        0;
+    right:       0;
+    margin-bottom: 0;
+    line-height: 0.9;
+    color:       #000;
+    text-shadow: 0 1px 0 #fff;
+    font-size: 0.65em;
+    z-index: 3;
+
+    &.label--top {
+        top: -0.25em;
+        height: 1em;
+        font-size: 0.875em;
+    }
+}
+.stat .value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    margin: 0;
+    font-size:  1.75em;
+    width:      100%;
+    height:     100%;
+    border-radius: 100%;
+    background:  #fff;
+    border: 1px solid #777;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+.stat .stat {
+    position:   absolute;
+    top: -10px;
+    right: -22px;
+    width: 36px;
+    height: 36px;
+    z-index: 1;
+}
+
+.stat .stat .value {
+    font-size: 1em;
+    /*box-shadow: 0 1px 3px #000;*/
+    border: 1px solid #333;
+    background: #666;
+    color: #fff;
+    font-weight: 700;
+}
+
+.stat .value.is-modified {
+    color: #44ad43;
+}
+.stat .stat .value.is-modified {
+    color: #ace9ac;
+}
+
+
+
+.stat img {
+    position:   absolute;
+    bottom:     -12px;
+    left:       -12px;
+    width:      2em;
+    z-index: 2;
+}
+
+.stat .sprite {
+    position: absolute;
+    bottom: -12px;
+    left:   -12px;
+    z-index: 2;
+    transform: scaleX(0.75) scaleY(0.75);
+}
+
+
+.stat.stat--with-plus editable-stat-value:after {
+    content: "+";
+    font-size: 1.25em;
+    position: absolute;
+    right: 0;
+    top: 16%;
+    z-index: 1000;
+}
+.stat.stat--prepend-plus editable-stat-value:before {
+    content: "+";
+    font-size: 1.25em;
+    position: absolute;
+    left: 0;
+    top: 16%;
+    z-index: 1000;
+}
+
+@media(min-width:768px) {
+    .stat.stat--with-plus editable-stat-value:after { font-size: 2em; }
+    .stat.stat--prepend-plus editable-stat-value:before { font-size: 2em; }
+}
+
+.stat .value.value--sm,
+.stat .value--sm .value {
+    font-size:   1.25em;
+}
+@media(min-width: 768px) {
+    .stat .value.value--sm,
+    .stat .value--sm .value {
+        font-size:   1.25em;
+    }
+}
+
+.attributes .f-cell-33p {
+    text-align: center;
+}
+
+
+
+/* at higher resolutions, make the stats larger */
+
+@media (min-width:768px) {
+
+    .has-stat-with-max {
+        width: auto;
+        text-align: center;
+    }
+
+    .stat {
+
+    }
+
+    .stat .label {
+        position: absolute;
+        font-size: 1em;
+
+        &.label--top {
+            top: 0;
+            height: 10px;
+            font-size: 1em;
+        }
+
+        &.label--sm {
+            font-size: 0.8em;
+        }
+    }
+
+    .stat .value {
+        font-size:   2em;
+    }
+
+    .stat .sprite {
+        bottom: -.25em;
+        left: -.25em;
+        transform: scaleX(1.25) scaleY(1.25);
+    }
+
+    .stat .value.value--sm {
+        font-size:   1.5em;
+    }
+
+    .stat .stat {
+        top: -0.25em;
+        right: -2.25em;
+    }
+
+    .stat .stat .value {
+        font-size: 1.25em;
+    }
+
+}

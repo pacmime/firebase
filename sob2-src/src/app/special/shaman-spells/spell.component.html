@@ -1,0 +1,45 @@
+<div class="card">
+    <h5 class="d-flex flex-justify-between flex-align-end">
+        {{spell.name}}
+        <div class="d-flex flex-justify-end flex-align-end">
+            <button type="button" class="u-sm btn--del" (click)="confirmingDelete=true">X</button>
+            <div class="btn-group" *ngIf="confirmingDelete">
+                <button type="button" class="u-sm" (click)="remove()">Y</button>
+                <button type="button" class="u-sm" (click)="confirmingDelete=false">N</button>
+            </div>
+        </div>
+    </h5>
+
+    <div class="u-sm">
+        <strong>Power Roll: </strong> {{spell.power||'*'}}+
+    </div>
+    <div *ngIf="status">{{status}} (Rolled {{roll}})</div>
+
+    <p>{{spell.desc}}</p>
+    <div *ngIf="spell.modifiers">
+        <div *ngFor="let modifier of spell.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+    <hr>
+
+    <div class="col d-flex flex-justify-start flex-align-center">
+        <select class="form-control" [(ngModel)]="magikSpent">
+            <option value="0">Spend Add'l Magik</option>
+            <option value="1" [disabled]="!hasMagik()">1</option>
+            <option value="2" [disabled]="!hasMagik(2)">2</option>
+            <option value="3" [disabled]="!hasMagik(3)">3</option>
+            <option value="4" [disabled]="!hasMagik(4)">4</option>
+            <option value="5" [disabled]="!hasMagik(5)">5</option>
+        </select>
+        <button type="button" class="btn"
+            [disabled]="!hasMagik()" (click)="spendMagik()">
+            Ok
+        </button>
+    </div>
+    <hr>
+    <div class="d-flex flex-justify-between flex-align-center">
+        <button type="button" class="btn--use" (click)="castSpell()">Cast</button>
+        <button type="button" class="btn" *ngIf="spell.xp" (click)="gainXP()">{{spell.xp}} XP</button>
+    </div>
+</div>

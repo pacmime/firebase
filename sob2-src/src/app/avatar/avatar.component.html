@@ -1,0 +1,12 @@
+<div class="avatar">
+    <div class="image-wrapper" (click)="showForm=true">
+      <img class="image" src="{{imgData||'assets/avatar.png'}}">
+    </div>
+    <div *ngIf="showForm">
+        <button type="button" (click)="cancel()" class="u-sm">cancel</button>
+        <button type="button" *ngIf="isDirty()" (click)="save()" class="u-sm">save</button>
+        <div>
+            <input type="file" class="hidden" (change)="changeListener($event)">
+        </div>
+    </div>
+</div>

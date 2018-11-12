@@ -1,0 +1,28 @@
+<div [@dialog] *ngIf="visible" class="dialog">
+    <div class="dialog__body">
+        <div *ngIf="!abilities||!abilities.length">Loading available options...</div>
+        <div *ngFor="let ability of abilities"
+            class="c-ability--available"
+            [ngClass]="{'is-selected':isChosen(ability)}">
+            <h5>
+                <span *ngIf="ability.roll">({{ability.roll}} / 2D6) </span>
+                {{ability.name}}
+            </h5>
+            <div>{{ability.value}}</div>
+            <div class="col" *ngIf="ability.requires">
+                <strong>Requires</strong> <em>{{ability.requires}}</em>
+            </div>
+            <button type="button" class="btn btn--use"
+                *ngIf="!ability.disabled"
+                (click)="choose(ability)">
+                <span>{{isChosen(ability)?'Unselect':'Choose'}}</span>
+            </button>
+        </div>
+    </div>
+    <div class="d-flex flex-justify-end">
+        <button type="button" (click)="close()" aria-label="Close">Cancel</button>
+        <button type="button" aria-label="Apply"
+            [disabled]="!hasSelection()"
+            (click)="apply()">Apply</button>
+    </div>
+</div>

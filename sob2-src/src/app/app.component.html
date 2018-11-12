@@ -1,0 +1,12 @@
+<header>
+    <h5>
+        <a routerLink="/chars" routerLinkActive="active">{{title}}</a>
+    </h5>
+    <div *ngIf="user">
+        <span class="d-none-xs">{{ user.email }} </span>
+        <button type="button" class="btn btn-sm" (click)="logout()">Logout</button>
+    </div>
+</header>
+<main>
+    <router-outlet></router-outlet>
+</main>

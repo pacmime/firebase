@@ -1,0 +1,118 @@
+
+
+
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">Mutations</div>
+    <button type="button" class="btn--add u-sm"
+        (click)="showAvailable.mutations=!showAvailable.mutations">New</button>
+</h4>
+<hr>
+<div *ngIf="showAvailable.mutations" class="d-flex flex-justify-between flex-align-center">
+    <div class="col">
+        <br>
+        <select class="form-control" name="newMutation"
+            [(ngModel)]="newMutation"
+            (change)="add('mutations', newMutation)">
+            <option [ngValue]="null" selected>Select Mutation</option>
+            <option *ngFor="let mutation of available.mutations" [ngValue]="mutation">
+                {{mutation.name}}
+            </option>
+        </select>
+        <br>
+        <br>
+    </div>
+    <button type="button" (click)="showAvailable.mutations=false">&times;</button>
+</div>
+
+<div *ngFor="let mutation of mutations; let i = index" class="card">
+    <h5 class="d-flex flex-justify-between flex-align-center">
+        {{mutation.name}}
+        <button type="button" class="btn--del"
+            (click)="remove('mutations', i)">X</button>
+    </h5>
+    <p>{{mutation.desc}}</p>
+    <div *ngIf="mutation.modifiers">
+        <div *ngFor="let modifier of mutation.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">Injuries</div>
+    <button type="button" class="btn--add u-sm"
+        (click)="showAvailable.injuries=!showAvailable.injuries">New</button>
+</h4>
+<hr>
+<div *ngIf="showAvailable.injuries" class="d-flex flex-justify-between flex-align-center">
+    <div class="col">
+        <br>
+        <select class="form-control" name="newInjury"
+            [(ngModel)]="newInjury"
+            (change)="add('injuries', newInjury)">
+            <option [ngValue]="null" selected>Select Injury</option>
+            <option *ngFor="let injury of available.injuries" [ngValue]="injury">
+                {{injury.name}}
+            </option>
+        </select>
+        <br>
+        <br>
+    </div>
+    <button type="button" (click)="showAvailable.injuries=false">&times;</button>
+</div>
+
+<div *ngFor="let injury of injuries; let i = index" class="card">
+    <h5 class="d-flex flex-justify-between flex-align-center">
+        {{injury.name}}
+        <button type="button" class="btn--del"
+            (click)="remove('injuries', i)">X</button>
+    </h5>
+    <p>{{injury.desc}}</p>
+    <div *ngIf="injury.modifiers">
+        <div *ngFor="let modifier of injury.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">Madness</div>
+    <button type="button" class="btn--add u-sm"
+        (click)="showAvailable.madness=!showAvailable.madness">New</button>
+</h4>
+<hr>
+<div *ngIf="showAvailable.madness" class="d-flex flex-justify-between flex-align-center">
+    <div class="col">
+        <br>
+        <select class="form-control" name="newMadness"
+            [(ngModel)]="newMadness"
+            (change)="add('madness', newMadness)">
+            <option [ngValue]="null" selected>Select Madness</option>
+            <option *ngFor="let mad of available.madness" [ngValue]="mad">
+                {{mad.name}}
+            </option>
+        </select>
+        <br>
+        <br>
+    </div>
+    <button type="button" (click)="showAvailable.madness=false">&times;</button>
+</div>
+
+<div *ngFor="let mad of madness; let i = index" class="card">
+    <h5 class="d-flex flex-justify-between flex-align-center">
+        {{mad.name}}
+        <button type="button" class="btn--del" (click)="remove('madness', i)">X</button>
+    </h5>
+    <p>{{mad.desc}}</p>
+    <div *ngIf="mad.modifiers">
+        <div *ngFor="let modifier of mad.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
+        </div>
+    </div>
+</div>

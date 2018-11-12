@@ -1,0 +1,115 @@
+<div class="attack">
+
+    <div *ngIf="isEditing===false">
+
+        <h5 class="d-flex flex-justify-between flex-align-end">
+            {{attack.name}}
+            <div class="d-flex flex-justify-end flex-align-end">
+                <button type="button" class="u-sm" (click)="edit()">edit</button>
+                <button type="button" class="u-sm btn--del" (click)="confirmingDelete=true">X</button>
+                <div class="btn-group" *ngIf="confirmingDelete">
+                    <button type="button" class="u-sm" (click)="remove()">Y</button>
+                    <button type="button" class="u-sm" (click)="confirmingDelete=false">N</button>
+                </div>
+            </div>
+        </h5>
+
+        <small class="d-flex flex-justify-between">
+            <div><strong>Type: </strong> {{attack.type}}</div>
+            <div><strong>Att: </strong> {{attack.attack||'not specified'}}</div>
+            <div><strong>Dmg: </strong> {{attack.damage||'not specified'}}</div>
+        </small>
+
+        <div *ngIf="attack.description">
+            <small>{{attack.description}}</small>
+        </div>
+
+        <hr>
+
+        <div class="d-flex flex-justify-between flex-align-center">
+            <button type="button" (click)="roll=null">clear</button>
+
+            <button type="button" class="btn--use"
+                (ngDisabled)="!attack.type||!attack.attack||!attack.damage"
+                (click)="execute()">
+                Roll
+            </button>
+        </div>
+
+        <div *ngIf="roll">
+            <br>
+            <div>
+                Hits:
+                <button *ngFor="let hit of roll.hits; let i = index;"
+                    type="button" class="die u-sm" (click)="rerollHit(i)">
+                    {{hit}}
+                </button>
+            </div>
+            <br>
+            <div>
+                Dmg:
+                <button *ngFor="let dmg of roll.dmg; let i = index"
+                    type="button" class="die u-sm" (click)="rerollDmg(i)"
+                    (ngDisabled)="roll.hits[i]<roll.attack.target">
+                    {{dmg}}
+                </button>
+                &nbsp;
+                <small><strong>&nbsp;Total: {{roll.dmg|sum}}</strong></small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div *ngIf="isEditing===true">
+
+        <div>
+            <label>Name</label>
+            <input type="text" class="form-control"
+                [(ngModel)]="editable.name"
+                placeholder="Name this attack">
+        </div>
+
+
+        <div>
+            <label>Type</label>
+            <select class="form-control" [(ngModel)]="editable.type">
+                <option value="melee">Melee</option>
+                <option value="ranged">Ranged</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Att: </label>
+            <input type="text" class="form-control" required
+                [(ngModel)]="editable.attack"
+                placeholder="2D6">
+        </div>
+
+        <div>
+            <label>Dmg: </label>
+            <input type="text" class="form-control" required
+                [(ngModel)]="editable.damage"
+                placeholder="D6">
+        </div>
+
+        <div>
+            <label>Misc: </label>
+            <input type="text" class="form-control"
+                [(ngModel)]="editable.description"
+                placeholder="bonuses, conditionals, etc">
+        </div>
+
+        <hr>
+
+        <div class="d-flex flex-justify-between">
+            <button type="button" class="u-sm" (click)="cancelEditing()">cancel</button>
+            <button type="button" class="u-sm" (click)="saveEdits()">save</button>
+        </div>
+
+    </div>
+
+</div>

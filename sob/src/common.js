@@ -117,6 +117,18 @@
                     var ref = root.child('ShadowsOfBrimstone').child('chars');
                     ref.orderByChild('uid').equalTo(uid);
                     return $firebaseObject(ref);
+                },
+                //returns Thenable:  create(json).then(resolveFn, errorFn);
+                create: function(character) {
+                    var root = firebase.database().ref();
+                    var ref = root.child('ShadowsOfBrimstone').child('chars');
+                    return ref.push(character);
+                },
+                //returns Thenable:  remove(key).then(resolveFn, errorFn);
+                remove: function(key) {
+                    var root = firebase.database().ref();
+                    var ref = root.child('ShadowsOfBrimstone').child('chars').child(key);
+                    return ref.remove();
                 }
             };
         }

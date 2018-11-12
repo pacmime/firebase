@@ -1,0 +1,37 @@
+<div class="sidebag">
+
+    <div class="d-flex flex-align-center">
+        <h4 class="col u-text--sc">Sidebag</h4>
+        <div class="sidebag__carrying">{{carrying}} / </div>
+        <div>
+            <value-display
+                [value]="sidebag.capacity"
+                [modifiers]="modifiers"
+                (onSave)="updateCapacity($event)">
+            </value-display>
+        </div>
+    </div>
+    <br>
+
+    <div *ngFor="let option of options" class="sidebag__option">
+        <label>
+            <span class="sprite sprite-{{option.label}}"></span>
+            {{option.label}}
+        </label>
+        <div class="sidebag__control">
+            <button type="button" class="btn--del btn--round"
+                (click)="decrease(option.label)"
+                (ngDisabled)="!sidebag[option.label]">
+                -
+            </button>
+            <span>{{sidebag[option.label]||0}}</span>
+            <button type="button" class="btn--use btn--round"
+                (click)="increase(option.label)"
+                (ngDisabled)="!max">
+                +
+            </button>
+        </div>
+        <small class="help-block">{{option.description}}</small>
+    </div>
+
+</div>

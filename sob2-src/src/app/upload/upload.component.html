@@ -1,0 +1,33 @@
+<div>
+    <br><br>
+
+    <div *ngIf="status">
+        <h5 *ngIf="'error'===status.type">An Error Occurred</h5>
+        <h5 *ngIf="'success'===status.type">Success</h5>
+        {{status.message}}
+    </div>
+
+    <!-- <textarea class="form-control" rows="10"
+        placeholder="paste character JSON here"
+        [(ngModel)]="charJSON">
+    </textarea>
+    <button type="button" (click)="uploadChar()">Upload</button> -->
+
+    <div class="c-list">
+        <header>
+            <h5>My Old Characters</h5>
+            <p>The following characters can be imported into the new database</p>
+        </header>
+        <div *ngFor="let char of chars | async" class="c-list__item">
+            <div>{{char.name}}</div>
+            <button type="button" class="btn u-sm" (click)="importChar(char.json, char.name)">Import</button>
+        </div>
+    </div>
+
+
+    <!-- <hr>
+
+    <button type="button" (click)="initClasses()">Init</button> -->
+
+
+</div>

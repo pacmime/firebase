@@ -83,33 +83,64 @@
                     this.newCharName = null;
                     this.newCharClass = null;                    
                     
-                    // console.log(json);
-                    var charId = UUIDFactory();
-                    this.data[charId] = json;
-                    
-                    this.displayOpts.creating = this.data[charId].name;
+                    this.displayOpts.creating = json.name;
 
-                    this.data.$save().then(
-                        ref => {
+                    DataStore.create(json).then( 
+                        (result) => {
+                            console.log(result.key);
                             this.displayOpts.creating = null;
-                            window.location = '#/' + charId;
-                        }, 
-                        error => {
+                            window.location = '#/' + result.key;
+                        },
+                        (error) => {
                             this.displayOpts.creating = null;
                             alert("Unable to create character because of an error: " + error.message);
+                            console.log(error);
                         }
                     );
+
+
+                    // let result = this.data.push(json);
+                    // let charId = result.key;
+
+
+                    // console.log(json);
+                    // var charId = UUIDFactory();
+                    // this.data[charId] = json;
+                    
+                    // this.displayOpts.creating = this.data[charId].name;
+
+                    // this.data.$save().then(
+                    //     ref => {
+                    //         this.displayOpts.creating = null;
+                    //         window.location = '#/' + charId;
+                    //     }, 
+                    //     error => {
+                    //         this.displayOpts.creating = null;
+                    //         alert("Unable to create character because of an error: " + error.message);
+                    //     }
+                    // );
                 });
 
             };
 
             this.removeCharacter = function(name) {
-                this.data[name] = null;
-                this.data.$save().then( () => {
-                    this.updateList();
-                }).catch( (error) => {
-                    alert("Unable to delete character because of an error");
-                });
+
+                DataStore.remove(name).then(
+                    () => { 
+                        this.data[name] = null;
+                        this.updateList(); 
+                    },
+                    (error) => {
+                        alert("Unable to delete character because of an error");
+                    }
+                );
+
+                // this.data[name] = null;
+                // this.data.$save().then( () => {
+                //     this.updateList();
+                // }).catch( (error) => {
+                //     alert("Unable to delete character because of an error");
+                // });
             };
 
         }

@@ -6,7 +6,8 @@
       "**/.*",
       "**/node_modules/**",
       "**/bower/**",
-      "**/bower_components/**"
+      "**/bower_components/**",
+      "sob2-src"
     ]
   }
 }

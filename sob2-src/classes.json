@@ -1,0 +1,1144 @@
+[
+    {
+        "name":  "Gambler",
+        "classId": "47aE4QTcdX3bs6J4YoZr",
+        "keywords":  "Performer, Showman",
+        "abilities": [
+            {
+                "desc": "Starts with one Gambling Trick (draw 2, choose 1). Each trick may only be used 1x turn. Any time you Catch your Breath, you may also Recover D3 Fortune tokens.",
+                "name": "Lady Luck"
+            },
+            {
+                "desc": "Whenever you collect Gold from any Gambling in Town, you may collect an extra D6 x $50",
+                "name": "Poker Face"
+            }
+        ],
+        "upgrades":  [],
+        "combat": 2,
+        "melee":  5,
+        "ranged":  4,
+        "defense": 4,
+        "willpower":  4,
+        "movement":  0,
+        "init":  5,
+        "corruption":   { "current": 0, "max": 5 },
+        "fortune":      { "current": 3, "max":  3 },
+        "grit":         { "current": 1, "max":  2 },
+        "health":       { "max":  10, "wounds":  0 },
+        "sanity":       { "loss":  0, "max":  10 },
+        "items":  [
+            { "desc":  "", "name":  "Pistol" },
+            { "name":  "Gambling Trick" },
+            { "name":  "Fortune's Favor" }
+        ],
+        "stats":  {
+            "Agility":  3,
+            "Cunning":  4,
+            "Lore":  2,
+            "Luck":  3,
+            "Spirit":  1,
+            "Strength":  2
+        },
+        "tricks":  [
+            {
+                "desc":  "This is a description",
+                "name":  "Trick Name"
+            }
+        ],
+        "sidebag": { "capacity":  5 },
+        "level":  1,
+        "wealth":  0,
+        "darkstone": 0,
+        "xp":  0
+    },
+
+    {
+        "name":  "Wandering Samurai",
+        "classId":  "M1qfgZTa78yjAmoEspsh",
+        "keywords":  "Traveler, Showman, Samurai",
+        "abilities": [
+            {
+                "desc":  "Starts with 2 Random Wanderer Samurai Battle Tactics (draw 3, choose 2). Battle Tactics may each only be used 1x turn",
+                "name":  "Samurai Battle Tactics"
+            },
+            {
+                "desc":  "Any time you do 1 or more Wounds to an Enemy with a Combat Hit, gain 1 Fury token",
+                "name":  "Battle Fury"
+            },
+            {
+                "desc":  "May not use Guns or Explosives and may not voluntarily Flee from an Adventure (though the rest of the Posse may Flee without you)",
+                "name":  "Code of Honor"
+            },
+        ],
+        "combat":  2,
+        "melee":  3,
+        "ranged":  4,
+        "darkstone":  0,
+        "defense":  3,
+        "willpower":  4,
+        "faith":  0,
+        "fury": { "current":  0, "max":  5 },
+        "grit": { "current":  1, "max":  2 },
+        "health": {  "max":  10, "wounds":  0 },
+        "sanity": { "loss":  0, "max":  10 },
+        "corruption": { "current":  0, "max":  5 },
+        "init":  5,
+        "items": [
+            {
+                "name":  "Wanderer's Katana",
+                "source":  "Starting Gear"
+            }
+        ],
+        "movement":  0,
+        "sidebag": { "capacity":  5 },
+        "stats": {
+            "Agility":  3,
+            "Cunning":  3,
+            "Lore":  2,
+            "Luck":  2,
+            "Spirit":  2,
+            "Strength":  3
+        },
+        "tactics":  [
+            {
+                "desc":  "This is a description",
+                "name":  "Tactic Name"
+            }
+        ],
+        "upgrades": [],
+        "level":  1,
+        "wealth":  0,
+        "xp":  0
+    },
+
+    {
+        "name":  "Dark Stone Shaman",
+        "classId": "Rsyya36YjBhmfv4U1ICQ",
+        "keywords":  "Performer, Showman",
+        "abilities": [
+            {
+                "desc": "Starts with one Gambling Trick (draw 2, choose 1). Each trick may only be used 1x turn. Any time you Catch your Breath, you may also Recover D3 Fortune tokens.",
+                "name": "Lady Luck"
+            },
+            {
+                "desc": "Whenever you collect Gold from any Gambling in Town, you may collect an extra D6 x $50",
+                "name": "Poker Face"
+            }
+        ],
+        "upgrades":  [],
+        "combat": 2,
+        "melee":  5,
+        "ranged":  4,
+        "defense": 4,
+        "willpower":  4,
+        "movement":  0,
+        "init":  5,
+        "corruption":   { "current": 0, "max": 5 },
+        "fortune":      { "current": 3, "max":  3 },
+        "grit":         { "current": 1, "max":  2 },
+        "health":       { "max":  10, "wounds":  0 },
+        "sanity":       { "loss":  0, "max":  10 },
+        "items":  [
+            { "desc":  "", "name":  "Pistol" },
+            { "name":  "Gambling Trick" },
+            { "name":  "Fortune's Favor" }
+        ],
+        "stats":  {
+            "Agility":  3,
+            "Cunning":  4,
+            "Lore":  2,
+            "Luck":  3,
+            "Spirit":  1,
+            "Strength":  2
+        },
+        "tricks":  [
+            {
+                "desc":  "This is a description",
+                "name":  "Trick Name"
+            }
+        ],
+        "level":  1,
+        "wealth":  0,
+        "darkstone": 0,
+        "xp":  0
+    },
+
+    {
+        "name": "Gunslinger",
+        "abilities" : [
+            {
+                "desc" : "Uses the Six Shooter template. Starts each game fully loaded with 6 Dead Eye Shot bullets",
+                "name" : "Quick and the Dead"
+            }
+        ],
+        "classId" : "1455a125-99a3-4aeb-bd6c-0d66bce4b87c",
+        "combat" : 1,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 5,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 10,
+            "wounds" : 0
+        },
+        "init" : 6,
+        "items" : [
+            {
+                "cost" : 100,
+                "description" : "Range 6, Shots 2",
+                "hands" : 1,
+                "keywords" : "Gear, Gun, Pistol",
+                "name" : "Pistol",
+                "slots" : 2,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Showman",
+        "level" : 1,
+        "melee" : 5,
+        "movement" : 0,
+        "ranged" : 3,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 12
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 4,
+            "Cunning" : 3,
+            "Lore" : 2,
+            "Luck" : 3,
+            "Spirit" : 3,
+            "Strength" : 1
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Cowboy",
+        "abilities" : [
+            {
+                "desc" : "At the start of each Turn (or Day in Town), if you have no Grit, Recover 1 Grit on the D6 roll of 4+.",
+                "name" : "Rough Rider"
+            },
+            {
+                "desc" : "Once per Travel, may spend 1 Grit to cancel a Travel Hazard on the D6 roll of 3+ (before any tests are made for that Travel Hazard).",
+                "name" : "Happy Trails"
+            }
+        ],
+        "classId" : "2e2e4022-35c0-498c-ad78-8b87f5664026",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 14,
+            "wounds" : 0
+        },
+        "init" : 3,
+        "items" : [
+            {
+                "description" : "...",
+                "name" : "Bandana",
+                "source" : "Starting Gear"
+            },
+            {
+                "description" : "...",
+                "name" : "Lasso",
+                "source" : "Starting Gear"
+            },
+            {
+                "cost" : 100,
+                "description" : "Range 6, Shots 2",
+                "hands" : 1,
+                "keywords" : "Gear, Gun, Pistol",
+                "name" : "Pistol",
+                "slots" : 2,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Showman, Frontier",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 12
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 3,
+            "Lore" : 3,
+            "Luck" : 2,
+            "Spirit" : 1,
+            "Strength" : 4
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Drifter",
+        "abilities" : [
+            {
+                "desc" : "Immortal - At the start of every Adventure, roll 2D6 for each Injury, Curse, Parasite, or Mutation the Hero has. On the roll of 7 or higher, it is healed.  Any time the Hero would be killed, they are considered dead for the rest of the Adventure/Town Stay. At the start of the next Adventure, the Hero is automatically returned to life, but must roll once on the Madness Chart and starts with no Grit.",
+                "name" : "Drifter's Secret"
+            },
+            {
+                "desc" : "All Enemies gain 1 Elite ability for free. When traveling to town, always add an extra D3 Traveling Hazards",
+                "name" : "Danger Magnet"
+            },
+            {
+                "desc" : "Not restricted to targeting adjacent Enemies first with Ranged Attacks. Starts with 2 Personal Items. At start of each Fight, every other non-Drifter Hero may Recover 1 Grit.",
+                "name" : "Long Years Experience"
+            },
+            {
+                "desc" : "-1 Initiative for every Hero adjacent at the start of the turn (min 1)",
+                "name" : "Distrustful"
+            }
+        ],
+        "classId" : "30d35552-bd40-444d-9558-df917fbc4398",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 10,
+            "wounds" : 0
+        },
+        "init" : 5,
+        "items" : [
+            {
+                "darkstone" : 0,
+                "description" : "Shots equal to agility. Range 6.",
+                "hands" : 1,
+                "name" : "Trusty Pistol",
+                "slots" : 2,
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Traveler, Frontier, Strange",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 3,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 12
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 3,
+            "Lore" : 4,
+            "Luck" : 1,
+            "Spirit" : 3,
+            "Strength" : 2
+        },
+        "wealth" : 0,
+        "willpower" : 3,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Rancher",
+        "abilities" : [
+            {
+                "desc" : "2-Handed. Anytime you kill an Enemy with a 2-Handed Gun, you immediately gain +1 Shot with that Gun.",
+                "name" : "Rapid Shot"
+            },
+            {
+                "desc" : "You may roll 2 dice for Escape tests and pick the highest roll.",
+                "name" : "Evasion"
+            }
+        ],
+        "classId" : "3ec81ec0-56da-4e53-b9b6-cb71af815dbf",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 14,
+            "wounds" : 0
+        },
+        "init" : 3,
+        "items" : [
+            {
+                "description" : "...",
+                "name" : "Hunting Rifle",
+                "source" : "Starting Gear"
+            }
+        ],
+        "keywords" : "Frontier",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 10
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 2,
+            "Lore" : 4,
+            "Luck" : 1,
+            "Spirit" : 3,
+            "Strength" : 3
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "US Marshal",
+        "abilities" : [
+            {
+                "desc" : "(Shotgun) Once per turn, when you kill an Enemy with a Shotgun, you gain +1 Shot with that Shotgun",
+                "name" : "Double Shot"
+            }
+        ],
+        "classId" : "45b3ac67-15f6-4654-bba1-3c73493aa821",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 3,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 10,
+            "wounds" : 0
+        },
+        "init" : 4,
+        "items" : [
+            {
+                "darkstone" : 0,
+                "description" : "Range 5; Shots: 1; D8 To Hit and Damage (Crit on 6/7/8)",
+                "hands" : 2,
+                "name" : "Shotgun",
+                "slots" : 1,
+                "source" : "Starting Gear",
+                "weight" : 1
+            },
+            {
+                "description" : "1x per adventure, give all heroes choice of +2 combat or +2 shot during next activation",
+                "name" : "US Marshal Badge",
+                "source" : "Starting Gear",
+                "usage" : "Adventure"
+            }
+        ],
+        "keywords" : "Law, Traveler",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 10
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 3,
+            "Cunning" : 4,
+            "Lore" : 1,
+            "Luck" : 3,
+            "Spirit" : 2,
+            "Strength" : 2
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Jargono Native",
+        "abilities" : [
+            {
+                "desc" : "Starts with a Swamps of Jargono Personal Item instead of a normal Personal Item. Also, +3 Lore while in Swamps of Jargono.",
+                "name" : "Other World Native (Jargono)"
+            },
+            {
+                "desc" : "You are +1 Damage on all of your Attacks against Beast Enemies. Also, gain +2 Initiative in the first turn of an Ambush Attack",
+                "name" : "Hunter's Reflexes"
+            },
+            {
+                "desc" : "You may not use Guns, Books, or Tech items",
+                "name" : "Primitive"
+            }
+        ],
+        "classId" : "48bdac8c-01a4-4284-ba73-775a79dda210",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 11,
+            "wounds" : 0
+        },
+        "init" : 4,
+        "items" : [
+            {
+                "darkstone" : 1,
+                "description" : "Crit on combat rolls of 5 or 6",
+                "hands" : 1,
+                "source" : "Jargono",
+                "weight" : 1
+            },
+            {
+                "description" : "...",
+                "name" : "Tribal Shield",
+                "source" : "Starting Gear"
+            }
+        ],
+        "keywords" : "Other World (Jargono), Tribal",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 11
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 4,
+            "Cunning" : 2,
+            "Lore" : 1,
+            "Luck" : 2,
+            "Spirit" : 3,
+            "Strength" : 3
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Indian Scout",
+        "abilities" : [
+            {
+                "desc" : "+1 Move",
+                "modifiers" : [
+                    {
+                        "affects" : "move",
+                        "value" : 1
+                    }
+                ],
+                "name" : "Fast"
+            },
+            {
+                "desc" : "Once per Adventure, you may discard and Re-draw an Exploration Token or Encounter card just revealed.",
+                "name" : "Tracker"
+            }
+        ],
+        "classId" : "651350a6-d930-4372-9bce-1d200149362a",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 10,
+            "wounds" : 0
+        },
+        "init" : 5,
+        "items" : [
+            {
+                "description" : "...",
+                "name" : "Carbine",
+                "source" : "Starting Gear"
+            },
+            {
+                "description" : "+1 Damage. Upgrade: Mark of the Void.",
+                "name" : "Indian Hatchet",
+                "slots" : 2,
+                "source" : "Starting Gear"
+            }
+        ],
+        "keywords" : "Scout, Tribal",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 1,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 10
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 3,
+            "Cunning" : 2,
+            "Lore" : 3,
+            "Luck" : 2,
+            "Spirit" : 3,
+            "Strength" : 2
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Frontier Doc",
+        "abilities" : [
+            {
+                "desc" : "When using Bandages Tokens to Heal yourself or another Hero, add +3 to the roll (or +5 at Hero Level 5 or higher)",
+                "name" : "Medical Training"
+            },
+            {
+                "desc" : "Once per Adventure or Town Stay, use 1 Grit to choose an Injury or Mutation on another Hero and roll a D6. On 5+, that Injury/Mutation is Healed (gain 50 XP). On 1, the Hero loses 1 Health Permanently instead. May not be used during a Fight.",
+                "name" : "Field Surgery"
+            }
+        ],
+        "classId" : "6bc4fc3a-4af5-4cf9-b6ad-8615501aca26",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 12,
+            "wounds" : 0
+        },
+        "init" : 4,
+        "items" : [
+            {
+                "description" : "...",
+                "name" : "Doc's Bag",
+                "source" : "Starting Gear"
+            }
+        ],
+        "keywords" : "Frontier, Medical",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 12
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 4,
+            "Lore" : 3,
+            "Luck" : 1,
+            "Spirit" : 2,
+            "Strength" : 2
+        },
+        "wealth" : 0,
+        "willpower" : 3,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Prospector",
+        "abilities" : [
+            {
+                "desc" : "The Hero's To Hit rolls of 8+ double the Damage rolled for that Hit. Only usable with weapons that use D8 for To Hit rolls",
+                "name" : "Death Blow"
+            },
+            {
+                "desc" : "Whenever the Hero collects Gold or Dark Stone from Loot, Scavenge, or Encounter cards, double the amount collected.",
+                "name" : "Expert Miner"
+            },
+            {
+                "desc" : "May not use Guns or Tech items",
+                "name" : "Crotchety"
+            }
+        ],
+        "classId" : "6d198a74-1b2a-4f60-bf51-2c1e2d0ec2e1",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 16,
+            "wounds" : 0
+        },
+        "init" : 2,
+        "items" : [
+            {
+                "cost" : 650,
+                "description" : "Melee Attacks D8 and Crit on 6,7,8  +1 Damage",
+                "hands" : 2,
+                "name" : "Heavy Pick Axe",
+                "slots" : 2,
+                "source" : "Starting Gear",
+                "weight" : 1
+            },
+            {
+                "cost" : 350,
+                "description" : "Once per Adventure Heal 2d8 Wounds or 2d6 Sanity",
+                "name" : "Miner's Canteen",
+                "source" : "Starting Gear",
+                "usage" : "Adventure",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Frontier, Law",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 14
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 1,
+            "Cunning" : 2,
+            "Lore" : 3,
+            "Luck" : 3,
+            "Spirit" : 2,
+            "Strength" : 4
+        },
+        "wealth" : 0,
+        "willpower" : 5,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Law Man",
+        "abilities" : [
+            {
+                "desc" : "Once per Attack, you may Re-roll one To Hit roll.",
+                "name" : "Laying Down the Law"
+            }
+        ],
+        "classId" : "7309fd50-b111-4d16-8a89-c500807b3472",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 12,
+            "wounds" : 0
+        },
+        "init" : 4,
+        "items" : [
+            {
+                "cost" : "250",
+                "description" : "Range 6; Shots 3",
+                "hands" : 1,
+                "name" : "Peacekeeper Pistol",
+                "slots" : 1,
+                "source" : "Starting Gear",
+                "weight" : 1
+            },
+            {
+                "description" : "Once per Adventure, give all Heroes +2 Shots with a Gun or +2 Combat (they choose) during their next Activation",
+                "name" : "Sheriff Badge",
+                "source" : "Starting Gear"
+            }
+        ],
+        "keywords" : "Frontier, Law",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 12
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 4,
+            "Lore" : 2,
+            "Luck" : 3,
+            "Spirit" : 1,
+            "Strength" : 3
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Orphan",
+        "abilities" : [
+            {
+                "desc" : "Starts with an Orphan Mission",
+                "name" : "On a Mission"
+            },
+            {
+                "desc" : "Always Activates before Enemies at Initiative level and automatically passes all Escape tests",
+                "name" : "Quick"
+            },
+            {
+                "desc" : "May not Dual Wield Guns. Unless KO'd, may Heal 1 Wound or 1 Sanity Damage at the start of each turn",
+                "name" : "Young"
+            }
+        ],
+        "classId" : "7c791b38-c539-4964-890c-db925782933a",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 8,
+            "wounds" : 0
+        },
+        "init" : 4,
+        "items" : [
+            {
+                "cost" : 100,
+                "description" : "Range 6, Shots 2",
+                "hands" : 1,
+                "keywords" : "Gear, Gun, Pistol",
+                "name" : "Pistol",
+                "slots" : 2,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Showman, Frontier",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 4,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 10
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 4,
+            "Cunning" : 2,
+            "Lore" : 2,
+            "Luck" : 3,
+            "Spirit" : 3,
+            "Strength" : 1
+        },
+        "wealth" : 0,
+        "willpower" : 3,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Saloon Girl",
+        "abilities" : [
+            {
+                "desc" : "At the end of Hero Turn, you may Heal 1 Wound or 1 Sanity from every other adjacent Hero (gain 5 XP for each Healed this way)",
+                "name" : "Comforting Presence"
+            },
+            {
+                "desc" : "+1 Move",
+                "modifiers" : [
+                    {
+                        "affects" : "move",
+                        "value" : 1
+                    }
+                ],
+                "name" : "Fast"
+            },
+            {
+                "desc" : "May only use Guns that have the keyword Light",
+                "name" : "Lightweight"
+            }
+        ],
+        "classId" : "7fa50e95-f33d-43a8-b93b-501a7b3f3a3a",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 3,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 8,
+            "wounds" : 0
+        },
+        "init" : 5,
+        "items" : [
+            {
+                "description" : "Free Attack 1x Fight; Range 3, Shots, Crit 5/6",
+                "name" : "Hold-out Pistol",
+                "slots" : 1,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Performer",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 1,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 14
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 4,
+            "Cunning" : 3,
+            "Lore" : 2,
+            "Luck" : 3,
+            "Spirit" : 3,
+            "Strength" : 1
+        },
+        "wealth" : 0,
+        "willpower" : 4,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Bandido",
+        "abilities" : [
+            {
+                "desc" : "You may Recover a Grit on a Move roll of 1 or 2",
+                "name" : "Wild Card"
+            }
+        ],
+        "classId" : "c2c8ed0b-4104-44a2-9bfc-b403a7b70615",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 4,
+        "faith" : 0,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 16,
+            "wounds" : 0
+        },
+        "init" : 3,
+        "items" : [
+            {
+                "cost" : 100,
+                "description" : "Range 6, Shots 2",
+                "hands" : 1,
+                "keywords" : "Gear, Gun, Pistol",
+                "name" : "Pistol",
+                "slots" : 2,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Outlaw",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 8
+        },
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 2,
+            "Cunning" : 1,
+            "Lore" : 3,
+            "Luck" : 2,
+            "Spirit" : 3,
+            "Strength" : 4
+        },
+        "wealth" : 0,
+        "willpower" : 5,
+        "xp" : 0,
+        "upgrades": []
+    },
+    {
+        "name": "Preacher",
+        "abilities" : [
+            {
+                "desc" : "You may not use Guns. Starts with 1 Blessing and 1 Judgement.",
+                "name" : "Holy Man"
+            },
+            {
+                "desc" : "You are +1 Damage on all Attacks against Undead Enemies",
+                "name" : "Scourge of the Dead"
+            }
+        ],
+        "classId" : "fa565014-f32b-46b4-9621-f2936d079b35",
+        "combat" : 2,
+        "corruption" : {
+            "current" : 0,
+            "max" : 5
+        },
+        "darkstone" : 0,
+        "defense" : 5,
+        "faith" : 2,
+        "grit" : {
+            "current" : 1,
+            "max" : 2
+        },
+        "health" : {
+            "max" : 12,
+            "wounds" : 0
+        },
+        "init" : 2,
+        "items" : [
+            {
+                "description" : "+1 combat, spend faith to add to combat",
+                "hands" : 1,
+                "source" : "Starting Gear",
+                "weight" : 1
+            }
+        ],
+        "keywords" : "Holy",
+        "level" : 1,
+        "melee" : 4,
+        "movement" : 0,
+        "ranged" : 5,
+        "sanity" : {
+            "loss" : 0,
+            "max" : 10
+        },
+        "sermons" : [
+            {
+                "check" : 5,
+                "cost" : 1,
+                "desc" : "For each Faith spent on the cost of the sermon, you may Heal 1 Wound from yourself or an adjacent Hero. At Level 5 - Heal 2 Wounds for each Faith spent.",
+                "type" : "Blessing",
+                "xp" : 10,
+                "name": "Faith Healing"
+            }
+        ],
+        "sidebag" : {
+            "capacity" : 5
+        },
+        "stats" : {
+            "Agility" : 1,
+            "Cunning" : 2,
+            "Lore" : 3,
+            "Luck" : 2,
+            "Spirit" : 4,
+            "Strength" : 3
+        },
+        "wealth" : 0,
+        "willpower" : 3,
+        "xp" : 0,
+        "upgrades": []
+    }
+]
