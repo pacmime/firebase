@@ -19,6 +19,14 @@ body {
     background: #E9E3CD;
 }
 
+app-root,
+app-character {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     margin-bottom: 0.25em;
@@ -260,15 +268,19 @@ button[type="button"] {
 
 @media(min-width:300px) {
     .l-char {
-        flex-wrap: nowrap;
-        align-items:stretch;
-        overflow-y:hidden;
-        height: 100%;
+        flex-wrap:   nowrap;
+        align-items: stretch;
+        overflow-y:  hidden;
+        overflow-x:  auto;
+        height:      100%;
         padding-top: 36px;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
     }
     .l-page {
         flex: 1 0 375px;
         overflow-y: auto;
+        white-space: normal;
     }
 }
 

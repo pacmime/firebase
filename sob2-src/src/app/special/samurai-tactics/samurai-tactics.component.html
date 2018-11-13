@@ -23,7 +23,7 @@
     <div *ngIf="tactic.cost">
         <strong>Cost: </strong> {{tactic.cost}}
     </div>
-    <p>{{tactic.desc}}</p>
+    <div class="desc">{{tactic.desc}}</div>
     <div *ngIf="tactic.modifiers">
         <div *ngFor="let modifier of tactic.modifiers">
             {{modifier.affects}} : +{{modifier.value}}

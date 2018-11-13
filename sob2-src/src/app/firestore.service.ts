@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 
 import { Observable, Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
-import 'rxjs/add/operator/switchMap'
+// import 'rxjs/add/operator/switchMap'
+import { switchMap} from 'rxjs/operators';
 
 import * as firebase from 'firebase/app';
 import {
@@ -54,7 +55,7 @@ export class FirestoreService {
     ) {
 
         this.user = this.afAuth.authState;
-
+        
         this.charSubject = new Subject<SOBCharacter>();
         this.charObs = this.charSubject.asObservable();
     }

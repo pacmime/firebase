@@ -6,6 +6,9 @@
         <span class="d-none-xs">{{ user.email }} </span>
         <button type="button" class="btn btn-sm" (click)="logout()">Logout</button>
     </div>
+    <div *ngIf="!user">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+    </div>
 </header>
 <main>
     <router-outlet></router-outlet>

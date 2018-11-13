@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ISubscription } from "rxjs/Subscription";
 
 import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import { FirestoreService } from '../firestore.service';
 import { SOBCharacter } from '../models/character.model';
@@ -26,10 +27,12 @@ export class CharListComponent implements OnInit {
     public _deleting : any = {};
     public error : SOBError = null;
 
-    constructor(private service: FirestoreService) { }
+    constructor(private service: FirestoreService,
+        private auth: AngularFireAuth) { }
 
     ngOnInit() {
-        this.userSubscription = this.service.getUser().subscribe( user => {
+        // this.userSubscription = this.service.getUser().subscribe( user => {
+        this.userSubscription = this.auth.authState.subscribe(user => {
             this.user = user;
             if(user) {
                 this.chars = this.service.getUserChars(user.uid);

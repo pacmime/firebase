@@ -1,18 +1,16 @@
 webpackJsonp([1,4],{
 
-/***/ 19:
+/***/ 22:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_switchMap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angularfire2_firestore__ = __webpack_require__(253);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_angularfire2_auth__ = __webpack_require__(244);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__data__ = __webpack_require__(494);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_firestore__ = __webpack_require__(253);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__data__ = __webpack_require__(494);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FirestoreService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -23,7 +21,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -58,17 +55,17 @@ var FirestoreService = (function () {
     };
     FirestoreService.prototype.initDB = function () {
         this.initClasses();
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].MUTATIONS, MUTATIONS_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].INJURIES, INJURIES_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].MADNESS, MADNESS_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].SERMONS, SERMONS_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].SAMURAI_TACTICS, SAMURAI_TACTICS_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].SHAMAN_SPELLS, SHAMAN_SPELLS_PATH);
-        this.populateItems(__WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].GAMBLER_TRICKS, GAMBLER_TRICKS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].MUTATIONS, MUTATIONS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].INJURIES, INJURIES_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].MADNESS, MADNESS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].SERMONS, SERMONS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].SAMURAI_TACTICS, SAMURAI_TACTICS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].SHAMAN_SPELLS, SHAMAN_SPELLS_PATH);
+        this.populateItems(__WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].GAMBLER_TRICKS, GAMBLER_TRICKS_PATH);
         //this.populateItems(Data.ORPHAN_MISSIONS, ORPHAN_MISSIONS_PATH);
     };
     FirestoreService.prototype.initClasses = function () {
-        var classes = __WEBPACK_IMPORTED_MODULE_6__data__["a" /* Data */].CLASSES;
+        var classes = __WEBPACK_IMPORTED_MODULE_5__data__["a" /* Data */].CLASSES;
         var _loop_1 = function (i) {
             var cls = classes[i];
             var docRef = this_1.afs.collection(CLASSES_PATH).doc(cls.classId);
@@ -344,7 +341,7 @@ var FirestoreService = (function () {
 }());
 FirestoreService = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5_angularfire2_auth__["b" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_angularfire2_auth__["b" /* AngularFireAuth */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_firestore__["b" /* AngularFirestore */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_firestore__["b" /* AngularFirestore */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["b" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["b" /* AngularFireAuth */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_firestore__["b" /* AngularFirestore */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_firestore__["b" /* AngularFirestore */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object])
 ], FirestoreService);
 
 var _a, _b, _c;
@@ -352,7 +349,7 @@ var _a, _b, _c;
 
 /***/ }),
 
-/***/ 233:
+/***/ 234:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -448,7 +445,7 @@ AbilityChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 234:
+/***/ 235:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -567,7 +564,7 @@ var _a;
 
 /***/ }),
 
-/***/ 235:
+/***/ 236:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -591,7 +588,7 @@ var SOBError = (function () {
 
 /***/ }),
 
-/***/ 236:
+/***/ 237:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -708,7 +705,7 @@ KeypadComponent = __decorate([
 
 /***/ }),
 
-/***/ 237:
+/***/ 238:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -801,7 +798,7 @@ GamblerTricksChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 238:
+/***/ 239:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -894,7 +891,7 @@ OrphanMissionsChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 239:
+/***/ 240:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -987,7 +984,7 @@ SermonsChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 240:
+/***/ 241:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1080,7 +1077,7 @@ SamuraiTacticsChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 241:
+/***/ 242:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1173,7 +1170,7 @@ ShamanSpellsChooserComponent = __decorate([
 
 /***/ }),
 
-/***/ 242:
+/***/ 243:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1206,7 +1203,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -1238,7 +1235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(487);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(242);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(243);
 
 
 
@@ -1319,11 +1316,11 @@ var _a, _b, _c;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modal_service__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__chooser_chooser_component__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__chooser_chooser_component__ = __webpack_require__(234);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AbilitiesComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1440,7 +1437,7 @@ var _a, _b, _c, _d, _e;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1495,37 +1492,37 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(486);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angularfire2__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_angularfire2_firestore__ = __webpack_require__(253);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_angularfire2_auth__ = __webpack_require__(244);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_angularfire2_auth__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angularfire2_database__ = __webpack_require__(513);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__environments_environment__ = __webpack_require__(242);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__environments_environment__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__auth_guard__ = __webpack_require__(490);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__charlist_charlist_component__ = __webpack_require__(493);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__character_character_component__ = __webpack_require__(492);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__login_login_component__ = __webpack_require__(496);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__upload_upload_component__ = __webpack_require__(508);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__abilities_abilities_component__ = __webpack_require__(485);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__abilities_chooser_chooser_component__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__abilities_chooser_chooser_component__ = __webpack_require__(234);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__items_items_component__ = __webpack_require__(495);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__mim_mim_component__ = __webpack_require__(497);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__shared_value_display_value_display_component__ = __webpack_require__(499);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_keypad_keypad_component__ = __webpack_require__(236);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_keypad_keypad_component__ = __webpack_require__(237);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__attacks_attacks_component__ = __webpack_require__(489);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__attacks_attack_attack_component__ = __webpack_require__(488);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__sidebag_sidebag_component__ = __webpack_require__(500);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__special_preacher_sermons_sermons_component__ = __webpack_require__(505);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__special_preacher_sermons_sermon_sermon_component__ = __webpack_require__(504);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__special_preacher_sermons_chooser_chooser_component__ = __webpack_require__(239);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__items_editor_editor_component__ = __webpack_require__(234);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__special_preacher_sermons_chooser_chooser_component__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__items_editor_editor_component__ = __webpack_require__(235);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__avatar_avatar_component__ = __webpack_require__(491);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__special_shaman_spells_shaman_spells_component__ = __webpack_require__(507);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__special_shaman_spells_chooser_chooser_component__ = __webpack_require__(241);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__special_shaman_spells_chooser_chooser_component__ = __webpack_require__(242);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__special_gambler_tricks_gambler_tricks_component__ = __webpack_require__(501);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__special_gambler_tricks_chooser_chooser_component__ = __webpack_require__(237);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__special_gambler_tricks_chooser_chooser_component__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__special_samurai_tactics_samurai_tactics_component__ = __webpack_require__(506);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__special_samurai_tactics_chooser_chooser_component__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__special_samurai_tactics_chooser_chooser_component__ = __webpack_require__(241);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__special_orphan_missions_orphan_missions_component__ = __webpack_require__(503);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__special_orphan_missions_chooser_chooser_component__ = __webpack_require__(238);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__special_orphan_missions_chooser_chooser_component__ = __webpack_require__(239);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__special_notes_notes_component__ = __webpack_require__(502);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__shared_chooser_chooser_component__ = __webpack_require__(498);
 /* unused harmony export MimGroupFilterPipe */
@@ -1763,7 +1760,7 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AttackComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2094,7 +2091,7 @@ var _a, _b;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(274);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__(34);
@@ -2123,26 +2120,22 @@ var AuthGuard = (function () {
         this.router = router;
     }
     AuthGuard.prototype.canActivate = function (next, state) {
-        if (!this.auth.isAuthenticated()) {
-            this.router.navigate(['/login']);
-            return false;
-        }
-        return true;
-        // return this.auth.user
-        // .take(1)
-        // .map(user => !!user)
-        // .do(loggedIn => {
-        //     if (!loggedIn) {
-        //         console.log('access denied')
-        //         this.router.navigate(['/login']);
-        //     }
-        // })
+        var _this = this;
+        return this.auth.authState.map(function (auth) {
+            if (auth === null || auth === undefined) {
+                _this.router.navigate(['/login']);
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
     };
     return AuthGuard;
 }());
 AuthGuard = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__firestore_service__["a" /* FirestoreService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__firestore_service__["a" /* FirestoreService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["b" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["b" /* AngularFireAuth */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], AuthGuard);
 
 var _a, _b;
@@ -2155,7 +2148,7 @@ var _a, _b;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AvatarComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2246,12 +2239,12 @@ var _a, _b, _c;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_switchMap__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_switchMap__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_switchMap__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__firestore_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_error__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__firestore_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_error__ = __webpack_require__(236);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharacterComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2495,8 +2488,9 @@ var _a, _b, _c;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_error__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_error__ = __webpack_require__(236);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharListComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2510,23 +2504,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CharListComponent = (function () {
-    function CharListComponent(service) {
+    function CharListComponent(service, auth) {
         this.service = service;
+        this.auth = auth;
         this.newCharClass = null;
         this._deleting = {};
         this.error = null;
     }
     CharListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.userSubscription = this.service.getUser().subscribe(function (user) {
+        // this.userSubscription = this.service.getUser().subscribe( user => {
+        this.userSubscription = this.auth.authState.subscribe(function (user) {
             _this.user = user;
             if (user) {
                 _this.chars = _this.service.getUserChars(user.uid);
             }
             else {
                 _this.chars = null;
-                _this.error = new __WEBPACK_IMPORTED_MODULE_2__models_error__["a" /* SOBError */]('auth', "You must sign in to see your characters");
+                _this.error = new __WEBPACK_IMPORTED_MODULE_3__models_error__["a" /* SOBError */]('auth', "You must sign in to see your characters");
             }
         });
         this.service.getClasses().then(function (classes) {
@@ -2548,7 +2545,7 @@ var CharListComponent = (function () {
             //list should update
         })
             .catch(function (e) {
-            _this.error = new __WEBPACK_IMPORTED_MODULE_2__models_error__["a" /* SOBError */]('create', "Unable to create a new character, because " + e.message);
+            _this.error = new __WEBPACK_IMPORTED_MODULE_3__models_error__["a" /* SOBError */]('create', "Unable to create a new character, because " + e.message);
         });
     };
     CharListComponent.prototype.markAsDeleting = function (id, bool) {
@@ -2568,7 +2565,7 @@ var CharListComponent = (function () {
             .then(function () {
         })
             .catch(function (e) {
-            _this.error = new __WEBPACK_IMPORTED_MODULE_2__models_error__["a" /* SOBError */]("delete", "Unable to delete character, because " + e.message);
+            _this.error = new __WEBPACK_IMPORTED_MODULE_3__models_error__["a" /* SOBError */]("delete", "Unable to delete character, because " + e.message);
         });
     };
     CharListComponent.prototype.getAvatar = function (char) {
@@ -2591,10 +2588,10 @@ CharListComponent = __decorate([
         template: __webpack_require__(613),
         styles: [__webpack_require__(581)]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__firestore_service__["a" /* FirestoreService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__firestore_service__["a" /* FirestoreService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__firestore_service__["a" /* FirestoreService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__firestore_service__["a" /* FirestoreService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__["b" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__["b" /* AngularFireAuth */]) === "function" && _b || Object])
 ], CharListComponent);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=charlist.component.js.map
 
 /***/ }),
@@ -8947,7 +8944,7 @@ var Data = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modal_service__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__editor_editor_component__ = __webpack_require__(234);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__editor_editor_component__ = __webpack_require__(235);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9096,7 +9093,7 @@ var _a, _b, _c;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9171,7 +9168,7 @@ var _a, _b;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MimComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9373,7 +9370,7 @@ ChooserComponent = __decorate([
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modal_service__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__keypad_keypad_component__ = __webpack_require__(236);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__keypad_keypad_component__ = __webpack_require__(237);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ValueDisplayComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return XPValueDisplayComponent; });
 var __extends = (this && this.__extends) || (function () {
@@ -9693,10 +9690,10 @@ var _a;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(237);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modal_service__ = __webpack_require__(40);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GamblerTricksComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -9885,10 +9882,10 @@ var _a;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(238);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(239);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modal_service__ = __webpack_require__(40);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrphanMissionsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -9997,7 +9994,7 @@ var _a, _b, _c, _d;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
@@ -10151,12 +10148,12 @@ var _a, _b;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__firestore_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__chooser_chooser_component__ = __webpack_require__(239);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__firestore_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__chooser_chooser_component__ = __webpack_require__(240);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modal_service__ = __webpack_require__(40);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PreacherSermonsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10288,10 +10285,10 @@ var _a, _b, _c, _d;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(241);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modal_service__ = __webpack_require__(40);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SamuraiTacticsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10419,10 +10416,10 @@ var _a, _b, _c, _d;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_character_model___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_character_model__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(241);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__(242);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modal_service__ = __webpack_require__(40);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ShamanSpellsComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ShamanSpellComponent; });
@@ -10633,7 +10630,7 @@ var _a, _b, _c, _d, _e, _f;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UploadComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -10809,7 +10806,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".c-ability--available {\n  margin: 0.5em 0;\n  background: #fff;\n  padding: 0.5em;\n  border-radius: 4px;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, ".c-ability--available {\n  margin: 0.5em 0;\n  background: #fff;\n  padding: 0.5em;\n  border-radius: 4px;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -10917,7 +10914,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".attributes {\n  margin-top: 0.5em;\n  -ms-flex: 1;\n      flex: 1;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-wrap: wrap;\n      flex-wrap: wrap;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.attributes .value-display .label {\n  background-color: #000;\n  color: #fff;\n}\n.attributes > div {\n  margin-bottom: 0.5em;\n}\n", ""]);
+exports.push([module.i, "@media (min-width: 300px) {\n  .l-char {\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    -ms-flex-align: stretch;\n        align-items: stretch;\n    overflow-y: hidden;\n    overflow-x: auto;\n    height: 100%;\n    padding-top: 36px;\n    white-space: nowrap;\n    -webkit-overflow-scrolling: touch;\n  }\n  .l-page {\n    -ms-flex: 1 0 375px;\n        flex: 1 0 375px;\n    overflow-y: auto;\n    white-space: normal;\n  }\n}\n.attributes {\n  margin-top: 0.5em;\n  -ms-flex: 1;\n      flex: 1;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-wrap: wrap;\n      flex-wrap: wrap;\n  -ms-flex-align: center;\n      align-items: center;\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.attributes .value-display .label {\n  background-color: #000;\n  color: #fff;\n}\n.attributes > div {\n  margin-bottom: 0.5em;\n}\n", ""]);
 
 // exports
 
@@ -10971,7 +10968,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.item__stats {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  border: 1px solid #bbb;\n  border-radius: 4px;\n  padding: 0.25em 1em;\n  margin: 0.5em 0;\n}\nh5 > small {\n  float: right;\n  font-weight: 400;\n}\nh5:after {\n  clear: right;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.item__stats {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  border: 1px solid #bbb;\n  border-radius: 4px;\n  padding: 0.25em 1em;\n  margin: 0.5em 0;\n}\nh5 > small {\n  float: right;\n  font-weight: 400;\n}\nh5:after {\n  clear: right;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11007,7 +11004,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11133,7 +11130,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11187,7 +11184,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11223,7 +11220,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin-top: 0;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin-top: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11277,7 +11274,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card p {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
+exports.push([module.i, "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n", ""]);
 
 // exports
 
@@ -11326,7 +11323,7 @@ module.exports = module.exports.toString();
 /***/ 606:
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <p>{{ability.desc}}</p>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{ability.desc}}</div>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11340,7 +11337,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /***/ 608:
 /***/ (function(module, exports) {
 
-module.exports = "<header>\n    <h5>\n        <a routerLink=\"/chars\" routerLinkActive=\"active\">{{title}}</a>\n    </h5>\n    <div *ngIf=\"user\">\n        <span class=\"d-none-xs\">{{ user.email }} </span>\n        <button type=\"button\" class=\"btn btn-sm\" (click)=\"logout()\">Logout</button>\n    </div>\n</header>\n<main>\n    <router-outlet></router-outlet>\n</main>\n"
+module.exports = "<header>\n    <h5>\n        <a routerLink=\"/chars\" routerLinkActive=\"active\">{{title}}</a>\n    </h5>\n    <div *ngIf=\"user\">\n        <span class=\"d-none-xs\">{{ user.email }} </span>\n        <button type=\"button\" class=\"btn btn-sm\" (click)=\"logout()\">Logout</button>\n    </div>\n    <div *ngIf=\"!user\">\n        <a routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n    </div>\n</header>\n<main>\n    <router-outlet></router-outlet>\n</main>\n"
 
 /***/ }),
 
@@ -11389,7 +11386,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n\n    <div
 /***/ 615:
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-end\">\n    <div class=\" u-text--sc\">Items</div>\n    <div class=\"d-flex flex-align-center flex-justify-end u-sm\">\n        <span class=\"sprite sprite-item_weight\"></span> {{totalWeight}}\n        &nbsp;\n        <span class=\"sprite sprite-item_darkstone\"></span> {{totalDarkstone}}\n        &nbsp;\n        <button type=\"button\" class=\"btn--add\" (click)=\"addItem()\">New</button>\n    </div>\n</h4>\n<hr>\n\n<div *ngFor=\"let item of items; let i = index\" class=\"card\">\n\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{item.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"editItem(i)\">edit</button>\n            &nbsp;\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"removeItem(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"d-flex flex-justify-between flex-align-start u-sm\">\n        <span>{{item.source}}</span>\n        <span *ngIf=\"item.keywords\"><em>{{item.keywords}}</em></span>\n    </div>\n\n    <p *ngIf=\"item.description\">{{item.description}}</p>\n\n    <div *ngIf=\"item.usage || item.cost\"\n        class=\"u-sm d-flex flex-justify-between flex-align-center\">\n        <div *ngIf=\"item.usage\">Use per: {{item.usage}}</div>\n        <div *ngIf=\"!item.usage\">&nbsp;</div>\n        <div *ngIf=\"item.cost\">Cost: ${{item.cost}}</div>\n    </div>\n\n    <div *ngIf=\"item.modifiers\">\n        <hr>\n        <div *ngFor=\"let modifier of item.modifiers\"  class=\"u-sm\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n\n    <div class=\"item__stats\">\n        <div [ngClass]=\"{faded:!item.weight}\">\n            <span class=\"sprite sprite-item_weight\"></span> {{item.weight}}\n        </div>\n        <div [ngClass]=\"{faded:!item.darkstone}\">\n            <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone}}\n        </div>\n        <div [ngClass]=\"{faded:!item.hands}\">\n            <span class=\"sprite sprite-item_hands\"></span> {{item.hands}}\n        </div>\n        <div [ngClass]=\"{faded:!item.slots}\">\n            <span class=\"sprite sprite-item_slots\" ></span> {{item.slots}}\n        </div>\n    </div>\n\n\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <div>\n            <button type=\"button\"\n                (click)=\"equipItem(item)\"\n                [ngClass]=\"{active:item.equipped}\">Equip</button>\n            <span *ngIf=\"item.slot\">[{{item.slot}}]</span>\n        </div>\n        <button *ngIf=\"item.usage\" type=\"button\" class=\"btn--use\"\n            (click)=\"item.used=!item.used\"\n            [ngClass]=\"{active:item.used}\">Use</button>\n    </div>\n\n</div>\n"
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-end\">\n    <div class=\" u-text--sc\">Items</div>\n    <div class=\"d-flex flex-align-center flex-justify-end u-sm\">\n        <span class=\"sprite sprite-item_weight\"></span> {{totalWeight}}\n        &nbsp;\n        <span class=\"sprite sprite-item_darkstone\"></span> {{totalDarkstone}}\n        &nbsp;\n        <button type=\"button\" class=\"btn--add\" (click)=\"addItem()\">New</button>\n    </div>\n</h4>\n<hr>\n\n<div *ngFor=\"let item of items; let i = index\" class=\"card\">\n\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{item.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"editItem(i)\">edit</button>\n            &nbsp;\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"removeItem(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"d-flex flex-justify-between flex-align-start u-sm\">\n        <span>{{item.source}}</span>\n        <span *ngIf=\"item.keywords\"><em>{{item.keywords}}</em></span>\n    </div>\n\n    <div class=\"desc\" *ngIf=\"item.description\">{{item.description}}</div>\n\n    <div *ngIf=\"item.usage || item.cost\"\n        class=\"u-sm d-flex flex-justify-between flex-align-center\">\n        <div *ngIf=\"item.usage\">Use per: {{item.usage}}</div>\n        <div *ngIf=\"!item.usage\">&nbsp;</div>\n        <div *ngIf=\"item.cost\">Cost: ${{item.cost}}</div>\n    </div>\n\n    <div *ngIf=\"item.modifiers\">\n        <hr>\n        <div *ngFor=\"let modifier of item.modifiers\"  class=\"u-sm\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n\n    <div class=\"item__stats\">\n        <div [ngClass]=\"{faded:!item.weight}\">\n            <span class=\"sprite sprite-item_weight\"></span> {{item.weight}}\n        </div>\n        <div [ngClass]=\"{faded:!item.darkstone}\">\n            <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone}}\n        </div>\n        <div [ngClass]=\"{faded:!item.hands}\">\n            <span class=\"sprite sprite-item_hands\"></span> {{item.hands}}\n        </div>\n        <div [ngClass]=\"{faded:!item.slots}\">\n            <span class=\"sprite sprite-item_slots\" ></span> {{item.slots}}\n        </div>\n    </div>\n\n\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <div>\n            <button type=\"button\"\n                (click)=\"equipItem(item)\"\n                [ngClass]=\"{active:item.equipped}\">Equip</button>\n            <span *ngIf=\"item.slot\">[{{item.slot}}]</span>\n        </div>\n        <button *ngIf=\"item.usage\" type=\"button\" class=\"btn--use\"\n            (click)=\"item.used=!item.used\"\n            [ngClass]=\"{active:item.used}\">Use</button>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -11403,7 +11400,7 @@ module.exports = "\n<div class=\"c-login\">\n\n    <div class=\"card\">\n\n     
 /***/ 617:
 /***/ (function(module, exports) {
 
-module.exports = "\n\n\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Mutations</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.mutations=!showAvailable.mutations\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.mutations\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMutation\"\n            [(ngModel)]=\"newMutation\"\n            (change)=\"add('mutations', newMutation)\">\n            <option [ngValue]=\"null\" selected>Select Mutation</option>\n            <option *ngFor=\"let mutation of available.mutations\" [ngValue]=\"mutation\">\n                {{mutation.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.mutations=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let mutation of mutations; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mutation.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('mutations', i)\">X</button>\n    </h5>\n    <p>{{mutation.desc}}</p>\n    <div *ngIf=\"mutation.modifiers\">\n        <div *ngFor=\"let modifier of mutation.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Injuries</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.injuries=!showAvailable.injuries\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.injuries\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newInjury\"\n            [(ngModel)]=\"newInjury\"\n            (change)=\"add('injuries', newInjury)\">\n            <option [ngValue]=\"null\" selected>Select Injury</option>\n            <option *ngFor=\"let injury of available.injuries\" [ngValue]=\"injury\">\n                {{injury.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.injuries=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let injury of injuries; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{injury.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('injuries', i)\">X</button>\n    </h5>\n    <p>{{injury.desc}}</p>\n    <div *ngIf=\"injury.modifiers\">\n        <div *ngFor=\"let modifier of injury.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Madness</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.madness=!showAvailable.madness\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.madness\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMadness\"\n            [(ngModel)]=\"newMadness\"\n            (change)=\"add('madness', newMadness)\">\n            <option [ngValue]=\"null\" selected>Select Madness</option>\n            <option *ngFor=\"let mad of available.madness\" [ngValue]=\"mad\">\n                {{mad.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.madness=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let mad of madness; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mad.name}}\n        <button type=\"button\" class=\"btn--del\" (click)=\"remove('madness', i)\">X</button>\n    </h5>\n    <p>{{mad.desc}}</p>\n    <div *ngIf=\"mad.modifiers\">\n        <div *ngFor=\"let modifier of mad.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n\n\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Mutations</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.mutations=!showAvailable.mutations\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.mutations\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMutation\"\n            [(ngModel)]=\"newMutation\"\n            (change)=\"add('mutations', newMutation)\">\n            <option [ngValue]=\"null\" selected>Select Mutation</option>\n            <option *ngFor=\"let mutation of available.mutations\" [ngValue]=\"mutation\">\n                {{mutation.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.mutations=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let mutation of mutations; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mutation.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('mutations', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mutation.desc}}</div>\n    <div *ngIf=\"mutation.modifiers\">\n        <div *ngFor=\"let modifier of mutation.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Injuries</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.injuries=!showAvailable.injuries\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.injuries\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newInjury\"\n            [(ngModel)]=\"newInjury\"\n            (change)=\"add('injuries', newInjury)\">\n            <option [ngValue]=\"null\" selected>Select Injury</option>\n            <option *ngFor=\"let injury of available.injuries\" [ngValue]=\"injury\">\n                {{injury.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.injuries=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let injury of injuries; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{injury.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('injuries', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{injury.desc}}</div>\n    <div *ngIf=\"injury.modifiers\">\n        <div *ngFor=\"let modifier of injury.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Madness</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.madness=!showAvailable.madness\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.madness\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMadness\"\n            [(ngModel)]=\"newMadness\"\n            (change)=\"add('madness', newMadness)\">\n            <option [ngValue]=\"null\" selected>Select Madness</option>\n            <option *ngFor=\"let mad of available.madness\" [ngValue]=\"mad\">\n                {{mad.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.madness=false\">&times;</button>\n</div>\n\n<div *ngFor=\"let mad of madness; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mad.name}}\n        <button type=\"button\" class=\"btn--del\" (click)=\"remove('madness', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mad.desc}}</div>\n    <div *ngIf=\"mad.modifiers\">\n        <div *ngFor=\"let modifier of mad.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11452,7 +11449,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /***/ 624:
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Gambler Tricks</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Current Fortune: {{character.fortune.current}} / {{maxFortune}}\n    <button type=\"button\" class=\"u-sm btn--use\" (click)=\"resetFortune()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let trick of character.tricks; let i = index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{trick.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"trick.cost\">\n        <strong>Cost: </strong> {{trick.cost}}\n    </div>\n    <p>{{trick.desc}}</p>\n    <div *ngIf=\"trick.modifiers\">\n        <div *ngFor=\"let modifier of trick.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <button type=\"button\" class=\"btn--use\"\n        [disabled]=\"!hasFortune()\" (click)=\"spendFortune()\">\n        Spend 1 Fortune\n    </button>\n    <button type=\"button\" class=\"btn\" *ngIf=\"trick.xp\" (click)=\"gainXP(trick.xp)\">XP</button>\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Gambler Tricks</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Current Fortune: {{character.fortune.current}} / {{maxFortune}}\n    <button type=\"button\" class=\"u-sm btn--use\" (click)=\"resetFortune()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let trick of character.tricks; let i = index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{trick.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"trick.cost\">\n        <strong>Cost: </strong> {{trick.cost}}\n    </div>\n    <div class=\"desc\">{{trick.desc}}</div>\n    <div *ngIf=\"trick.modifiers\">\n        <div *ngFor=\"let modifier of trick.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <button type=\"button\" class=\"btn--use\"\n        [disabled]=\"!hasFortune()\" (click)=\"spendFortune()\">\n        Spend 1 Fortune\n    </button>\n    <button type=\"button\" class=\"btn\" *ngIf=\"trick.xp\" (click)=\"gainXP(trick.xp)\">XP</button>\n</div>\n"
 
 /***/ }),
 
@@ -11473,7 +11470,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /***/ 627:
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Orphan Missions</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let mission of character.missions;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{mission.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <p>{{mission.desc}}</p>\n    <div *ngIf=\"mission.modifiers\">\n        <div *ngFor=\"let modifier of mission.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <!--\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(mission.cost)\">Cast</button>\n    </div>\n    -->\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Orphan Missions</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let mission of character.missions;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{mission.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{mission.desc}}</div>\n    <div *ngIf=\"mission.modifiers\">\n        <div *ngFor=\"let modifier of mission.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <!--\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(mission.cost)\">Cast</button>\n    </div>\n    -->\n</div>\n"
 
 /***/ }),
 
@@ -11487,7 +11484,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /***/ 629:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sermon card\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <h5 class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <span *ngIf=\"sermon.deadly\">!</span>\n                {{sermon.name}}\n                <small>({{sermon.type}})</small>\n            </div>\n            <div class=\"d-flex flex-justify-end flex-align-end\">\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"edit()\">edit</button>\n                &nbsp;&nbsp;&nbsp;\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=true\">X</button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"remove()\">Y</button>\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=false\">N</button>\n                </div>\n            </div>\n        </h5>\n\n        <p>{{sermon.desc}}</p>\n\n        <div><strong>Range: </strong> {{sermon.range||\"Not specified\"}}</div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div><strong>Check: </strong> [{{sermon.check}}+]</div>\n            <div><strong>Cost: </strong> {{sermon.cost}}</div>\n            <div><strong>XP: </strong> {{sermon.xp}}</div>\n        </div>\n\n        <hr>\n\n        <div>\n\n            <!-- if not cast already and not empty or insufficient -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canCast()\" (click)=\"use()\">cast</button>\n\n            <!-- if cast but not empty -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canSpendExtraFaith()\"\n                (click)=\"spendExtraFaith()\">+faith</button>\n\n            <!-- if cast but no applied xp -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">+xp</button>\n\n            <!-- if empty or not cast and insufficient -->\n            <span *ngIf=\"isInsufficient()\">\n                <em>not enough faith</em>\n            </span>\n\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this sermon\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Blessing\">Blessing</option>\n                    <option value=\"Judgement\">Judgement</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"d-flex flex-justify-between\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"cancelEditing()\">cancel</button>\n            <button type=\"button\" class=\"u-sm\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
+module.exports = "<div class=\"sermon card\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <h5 class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <span *ngIf=\"sermon.deadly\">!</span>\n                {{sermon.name}}\n                <small>({{sermon.type}})</small>\n            </div>\n            <div class=\"d-flex flex-justify-end flex-align-end\">\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"edit()\">edit</button>\n                &nbsp;&nbsp;&nbsp;\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=true\">X</button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"remove()\">Y</button>\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=false\">N</button>\n                </div>\n            </div>\n        </h5>\n\n        <div class=\"desc\">{{sermon.desc}}</div>\n\n        <div><strong>Range: </strong> {{sermon.range||\"Not specified\"}}</div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div><strong>Check: </strong> [{{sermon.check}}+]</div>\n            <div><strong>Cost: </strong> {{sermon.cost}}</div>\n            <div><strong>XP: </strong> {{sermon.xp}}</div>\n        </div>\n\n        <hr>\n\n        <div>\n\n            <!-- if not cast already and not empty or insufficient -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canCast()\" (click)=\"use()\">cast</button>\n\n            <!-- if cast but not empty -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canSpendExtraFaith()\"\n                (click)=\"spendExtraFaith()\">+faith</button>\n\n            <!-- if cast but no applied xp -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">+xp</button>\n\n            <!-- if empty or not cast and insufficient -->\n            <span *ngIf=\"isInsufficient()\">\n                <em>not enough faith</em>\n            </span>\n\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this sermon\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Blessing\">Blessing</option>\n                    <option value=\"Judgement\">Judgement</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"d-flex flex-justify-between\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"cancelEditing()\">cancel</button>\n            <button type=\"button\" class=\"u-sm\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -11508,7 +11505,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /***/ 632:
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Samurai Battle Tactics</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Fury: {{character.fury.current}} / {{maxFury}}\n</div>\n<hr>\n\n<div *ngFor=\"let tactic of character.tactics;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{tactic.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"tactic.cost\">\n        <strong>Cost: </strong> {{tactic.cost}}\n    </div>\n    <p>{{tactic.desc}}</p>\n    <div *ngIf=\"tactic.modifiers\">\n        <div *ngFor=\"let modifier of tactic.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(tactic.cost)\">Cast</button>\n    </div>\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Samurai Battle Tactics</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Fury: {{character.fury.current}} / {{maxFury}}\n</div>\n<hr>\n\n<div *ngFor=\"let tactic of character.tactics;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{tactic.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"tactic.cost\">\n        <strong>Cost: </strong> {{tactic.cost}}\n    </div>\n    <div class=\"desc\">{{tactic.desc}}</div>\n    <div *ngIf=\"tactic.modifiers\">\n        <div *ngFor=\"let modifier of tactic.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(tactic.cost)\">Cast</button>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11529,7 +11526,7 @@ module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n
 /***/ 635:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{spell.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete=true\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove()\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete=false\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"u-sm\">\n        <strong>Power Roll: </strong> {{spell.power||'*'}}+\n    </div>\n    <div *ngIf=\"status\">{{status}} (Rolled {{roll}})</div>\n\n    <p>{{spell.desc}}</p>\n    <div *ngIf=\"spell.modifiers\">\n        <div *ngFor=\"let modifier of spell.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n\n    <div class=\"col d-flex flex-justify-start flex-align-center\">\n        <select class=\"form-control\" [(ngModel)]=\"magikSpent\">\n            <option value=\"0\">Spend Add'l Magik</option>\n            <option value=\"1\" [disabled]=\"!hasMagik()\">1</option>\n            <option value=\"2\" [disabled]=\"!hasMagik(2)\">2</option>\n            <option value=\"3\" [disabled]=\"!hasMagik(3)\">3</option>\n            <option value=\"4\" [disabled]=\"!hasMagik(4)\">4</option>\n            <option value=\"5\" [disabled]=\"!hasMagik(5)\">5</option>\n        </select>\n        <button type=\"button\" class=\"btn\"\n            [disabled]=\"!hasMagik()\" (click)=\"spendMagik()\">\n            Ok\n        </button>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"castSpell()\">Cast</button>\n        <button type=\"button\" class=\"btn\" *ngIf=\"spell.xp\" (click)=\"gainXP()\">{{spell.xp}} XP</button>\n    </div>\n</div>\n"
+module.exports = "<div class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{spell.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete=true\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove()\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete=false\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"u-sm\">\n        <strong>Power Roll: </strong> {{spell.power||'*'}}+\n    </div>\n    <div *ngIf=\"status\">{{status}} (Rolled {{roll}})</div>\n\n    <div class=\"desc\">{{spell.desc}}</div>\n    <div *ngIf=\"spell.modifiers\">\n        <div *ngFor=\"let modifier of spell.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n\n    <div class=\"col d-flex flex-justify-start flex-align-center\">\n        <select class=\"form-control\" [(ngModel)]=\"magikSpent\">\n            <option value=\"0\">Spend Add'l Magik</option>\n            <option value=\"1\" [disabled]=\"!hasMagik()\">1</option>\n            <option value=\"2\" [disabled]=\"!hasMagik(2)\">2</option>\n            <option value=\"3\" [disabled]=\"!hasMagik(3)\">3</option>\n            <option value=\"4\" [disabled]=\"!hasMagik(4)\">4</option>\n            <option value=\"5\" [disabled]=\"!hasMagik(5)\">5</option>\n        </select>\n        <button type=\"button\" class=\"btn\"\n            [disabled]=\"!hasMagik()\" (click)=\"spendMagik()\">\n            Ok\n        </button>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"castSpell()\">Cast</button>\n        <button type=\"button\" class=\"btn\" *ngIf=\"spell.xp\" (click)=\"gainXP()\">{{spell.xp}} XP</button>\n    </div>\n</div>\n"
 
 /***/ }),
 

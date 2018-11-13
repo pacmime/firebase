@@ -30,7 +30,7 @@
         <button type="button" class="btn--del"
             (click)="remove('mutations', i)">X</button>
     </h5>
-    <p>{{mutation.desc}}</p>
+    <div class="desc">{{mutation.desc}}</div>
     <div *ngIf="mutation.modifiers">
         <div *ngFor="let modifier of mutation.modifiers">
             {{modifier.affects}} : +{{modifier.value}}
@@ -70,7 +70,7 @@
         <button type="button" class="btn--del"
             (click)="remove('injuries', i)">X</button>
     </h5>
-    <p>{{injury.desc}}</p>
+    <div class="desc">{{injury.desc}}</div>
     <div *ngIf="injury.modifiers">
         <div *ngFor="let modifier of injury.modifiers">
             {{modifier.affects}} : +{{modifier.value}}
@@ -109,7 +109,7 @@
         {{mad.name}}
         <button type="button" class="btn--del" (click)="remove('madness', i)">X</button>
     </h5>
-    <p>{{mad.desc}}</p>
+    <div class="desc">{{mad.desc}}</div>
     <div *ngIf="mad.modifiers">
         <div *ngFor="let modifier of mad.modifiers">
             {{modifier.affects}} : +{{modifier.value}}

@@ -25,7 +25,7 @@
     <div *ngIf="trick.cost">
         <strong>Cost: </strong> {{trick.cost}}
     </div>
-    <p>{{trick.desc}}</p>
+    <div class="desc">{{trick.desc}}</div>
     <div *ngIf="trick.modifiers">
         <div *ngFor="let modifier of trick.modifiers">
             {{modifier.affects}} : +{{modifier.value}}

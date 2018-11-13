@@ -15,7 +15,7 @@
             </div>
         </div>
     </h5>
-    <p>{{mission.desc}}</p>
+    <div class="desc">{{mission.desc}}</div>
     <div *ngIf="mission.modifiers">
         <div *ngFor="let modifier of mission.modifiers">
             {{modifier.affects}} : +{{modifier.value}}

@@ -8,6 +8,10 @@
       "**/bower/**",
       "**/bower_components/**",
       "sob2-src"
-    ]
+    ],
+    "rewrites": [ {
+  	"source": "sob2/**",
+  	"destination": "/sob2/index.html"
+    }]
   }
 }

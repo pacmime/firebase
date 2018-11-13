@@ -31,7 +31,7 @@
         <span *ngIf="item.keywords"><em>{{item.keywords}}</em></span>
     </div>
 
-    <p *ngIf="item.description">{{item.description}}</p>
+    <div class="desc" *ngIf="item.description">{{item.description}}</div>
 
     <div *ngIf="item.usage || item.cost"
         class="u-sm d-flex flex-justify-between flex-align-center">
