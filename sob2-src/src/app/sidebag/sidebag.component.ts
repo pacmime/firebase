@@ -1,4 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component, OnInit, OnChanges,
+    SimpleChanges, SimpleChange,
+    Input, Output, EventEmitter
+} from '@angular/core';
 
 @Component({
     selector: 'sidebag',
@@ -9,6 +13,7 @@ export class SidebagComponent implements OnInit {
 
     @Input() sidebag : any;
     @Input() modifiers: { value:number, sources: string[] };
+    @Input() hasDynamiteSatchel : boolean = false;
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 
 
@@ -44,6 +49,16 @@ export class SidebagComponent implements OnInit {
         this.max = this.getAvailableSidebagCapacity();
     }
 
+    ngOnChanges( changes: SimpleChanges ) {
+        if(changes && changes.hasDynamiteSatchel) {
+            let prev = changes.hasDynamiteSatchel.previousValue;
+            let curr = changes.hasDynamiteSatchel.currentValue;
+            if(prev !== curr) {
+                this.getAvailableSidebagCapacity();
+            }
+        }
+    }
+
     save () {
         this.onSave.emit({type:"sidebag"});
         this.max = this.getAvailableSidebagCapacity();
@@ -52,10 +67,16 @@ export class SidebagComponent implements OnInit {
     getAvailableSidebagCapacity() {
         if(!this.sidebag) return 0;
 
-        var carrying = 0;
+        let carrying = 0;
         for(var i=0; i<this.options.length; ++i) {
-            var option = this.options[i];
-            carrying += this.sidebag[option.label] || 0;
+            let option = this.options[i];
+            let amount = this.sidebag[option.label] || 0;
+            if('dynamite' === option.label && this.hasDynamiteSatchel) {
+                //if hero has dynamiteSatchel equipped,
+                // ignore the first five dynamite tokens
+                amount = Math.max(0, amount-5);
+            }
+            carrying += amount;
         }
 
         this.carrying = carrying;

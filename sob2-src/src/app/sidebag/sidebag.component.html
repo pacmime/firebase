@@ -5,6 +5,7 @@
         <div class="sidebag__carrying">{{carrying}} / </div>
         <div>
             <value-display
+                label="Capacity"
                 [value]="sidebag.capacity"
                 [modifiers]="modifiers"
                 (onSave)="updateCapacity($event)">

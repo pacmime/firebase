@@ -23,7 +23,9 @@
     </div>
     <button type="button" (click)="showAvailable.mutations=false">&times;</button>
 </div>
-
+<div *ngIf="!mutations || !mutations.length">
+    Add a new mutation using the 'New' button.
+</div>
 <div *ngFor="let mutation of mutations; let i = index" class="card">
     <h5 class="d-flex flex-justify-between flex-align-center">
         {{mutation.name}}
@@ -63,7 +65,9 @@
     </div>
     <button type="button" (click)="showAvailable.injuries=false">&times;</button>
 </div>
-
+<div *ngIf="!injuries || !injuries.length">
+    Add a new injury using the 'New' button.
+</div>
 <div *ngFor="let injury of injuries; let i = index" class="card">
     <h5 class="d-flex flex-justify-between flex-align-center">
         {{injury.name}}
@@ -103,7 +107,9 @@
     </div>
     <button type="button" (click)="showAvailable.madness=false">&times;</button>
 </div>
-
+<div *ngIf="!madness || !madness.length">
+    Add a new madness using the 'New' button.
+</div>
 <div *ngFor="let mad of madness; let i = index" class="card">
     <h5 class="d-flex flex-justify-between flex-align-center">
         {{mad.name}}

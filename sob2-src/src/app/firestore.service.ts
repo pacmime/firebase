@@ -55,7 +55,7 @@ export class FirestoreService {
     ) {
 
         this.user = this.afAuth.authState;
-        
+
         this.charSubject = new Subject<SOBCharacter>();
         this.charObs = this.charSubject.asObservable();
     }
@@ -414,5 +414,49 @@ export class FirestoreService {
             }
         }
         return dest;
+    }
+
+
+
+    exportDB () {
+
+        let result : {
+            chars : {};
+            users : {};
+            orphanMissions : any[];
+        } = {
+            chars: {}, users: {}, orphanMissions: [] as any[]
+        } as { chars : {}; users: {}; orphanMissions : any[] };
+
+        let SOB = this.afs.doc('/games/sob');
+        SOB.collection<SOBCharacter>('chars')
+        .snapshotChanges()
+        .map(docs => {
+            return docs.map(a => {
+                return { uid: a.payload.doc.id, data: a.payload.doc.data() };
+            });
+        }).take(1).toPromise()
+        .then( chars => {
+            chars.forEach( char => {
+                result.chars[char.uid] = char.data;
+            });
+
+            return SOB.collection<any>('users')
+            .snapshotChanges()
+            .map(docs => {
+                return docs.map(a => {
+                    return { uid: a.payload.doc.id, data: a.payload.doc.data() };
+                });
+            })
+            .take(1).toPromise();
+        })
+        .then( users => {
+            users.forEach( user => { result.users[user.uid] = user.data; });
+            return true;
+        })
+        .then( () => {
+            console.log(JSON.stringify(result));
+        });
+
     }
 }

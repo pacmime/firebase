@@ -15,36 +15,40 @@
         <!-- Tab panes -->
         <div class="panes">
             <div role="tabpanel" class="pane" id="first" [ngClass]="{active:activeTab.id==='first'}">
-                <div>
-                    <label>Name</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="item.name" placeholder="Name">
+                <div class="form-group">
+                    <label class="u-sm">Name</label>
+                    <input type="text" class="form-control input-sm"
+                        [(ngModel)]="item.name" placeholder="Name the item">
                 </div>
-                <div>
-                    <label>Description</label>
-                    <textarea rows="3" class="form-control input-sm" [(ngModel)]="item.description"
+                <div class="form-group">
+                    <label class="u-sm">Description</label>
+                    <textarea rows="3" class="form-control input-sm"
+                        [(ngModel)]="item.description"
                         placeholder="Provide a description">
                     </textarea>
                 </div>
-                <div>
-                    <label>Keywords</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="item.keywords" placeholder="Keywords">
+                <div class="form-group">
+                    <label class="u-sm">Keywords</label>
+                    <input type="text" class="form-control input-sm"
+                        [(ngModel)]="item.keywords"
+                        placeholder="Specify item keywords">
                 </div>
             </div>
             <div role="tabpanel" class="pane" id="second" [ngClass]="{active:activeTab.id==='second'}">
-                <div>
-                    <label>Source</label>
+                <div class="form-group">
+                    <label class="u-sm">Source</label>
                     <input type="text" class="form-control input-sm" [(ngModel)]="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
                 </div>
-                <div>
-                    <label>Use</label>
-                    <select class="form-control u-sm" [(ngModel)]="item.usage">
+                <div class="form-group">
+                    <label class="u-sm">Use</label>
+                    <select class="form-control" [(ngModel)]="item.usage">
                         <option [ngValue]="null">N/A</option>
                         <option *ngFor="let use of uses" [ngValue]="use">{{use}}</option>
                     </select>
                 </div>
-                <div>
-                    <label>Clothing Slot</label>
-                    <select type="text" class="form-control u-sm" [(ngModel)]="item.slot">
+                <div class="form-group">
+                    <label class="u-sm">Clothing Slot</label>
+                    <select type="text" class="form-control" [(ngModel)]="item.slot">
                         <option [ngValue]="null">Select Slot (optional)</option>
                         <option *ngFor="let slot of slots" [ngValue]="slot">{{slot}}</option>
                     </select>
@@ -52,7 +56,7 @@
             </div>
             <div role="tabpanel" class="pane" id="third" [ngClass]="{active:activeTab.id==='third'}">
 
-                <div>
+                <div class="form-group">
                     <label>Cost</label>
                     <input type="text" class="form-control u-sm" [(ngModel)]="item.cost"
                         placeholder="Optionally, specify the cost">
@@ -118,7 +122,9 @@
 
     <div class="d-flex flex-justify-end">
         <button type="button" (click)="close()" aria-label="Close">Cancel</button>
-        <button type="button" (click)="apply()" aria-label="Apply">Apply</button>
+        <button type="button" (click)="apply()"
+            [disabled]="!canApply()"
+            aria-label="Apply">Apply</button>
     </div>
 
 </div>

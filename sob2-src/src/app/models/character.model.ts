@@ -19,7 +19,8 @@ export interface Attack extends Option {
     description : string;
     name    : string;
     toHit   : string;
-    type    : AttackType
+    type    : AttackType;
+    range   ?: string;
 }
 
 export interface AttackRoll {

@@ -31,6 +31,7 @@ export class CharacterComponent implements OnInit {
     public editableBio: any = null;
     public modifiers: any = {};
     public error : SOBError = null; //new SOBError("test", "This is a test");
+    public message: { title: string; value: string; } = null;
 
     constructor(private service: FirestoreService,
                 private route: ActivatedRoute,
@@ -132,21 +133,25 @@ export class CharacterComponent implements OnInit {
     /**
      *
      */
-    levelUp (event) {
-        console.log("Character Level Up! Level " + (this.character.level + 1));
-        this.character.level++;
-        let needed = this.xpLevels[this.character.level-1];
-        this.character.xp = event.xp - needed;
-        this.doSave();
-    }
-
-    /**
-     *
-     */
     saveChar(key, arg) {
         this.refreshModifiers();
 
-        console.log("Character change event:" + (key?key + " => ":"") + JSON.stringify(arg));
+        // console.log("Character change event:" + (key?key + " => ":"") + JSON.stringify(arg));
+
+        //
+        //check to see if character leveled up
+        if(key && 'xp' === key) {
+            let neededXP = this.xpLevels[this.character.level];
+            if(arg.value >= neededXP) {
+                this.message = {
+                    title: "Level Up!",
+                    value: "Choose a class ability and roll for a new level-up ability"
+                };
+                this.character.level++;
+                arg.value -= neededXP;  //reset
+            }
+        }
+
 
         //Could use arg.type as key, but need to not process things like
         // add/remove spells, etc like we would process changing literal values
@@ -213,10 +218,10 @@ export class CharacterComponent implements OnInit {
             i++;
         }
         if(obj === null || obj === undefined) {
-            console.log("Nothing at path: " + key);
+            // console.log("Nothing at path: " + key);
             return false;
         } else if(typeof(obj) !== 'object') {
-            console.log("Path points to primitive value: " + key);
+            // console.log("Path points to primitive value: " + key);
             return false;
         }
         obj[steps[steps.length-1]] = value;
@@ -226,13 +231,21 @@ export class CharacterComponent implements OnInit {
 
 
     doSave() {
-        console.log(`Saving character ${this.charId}...`);
-        console.log(this.character);
+        // console.log(`Saving character ${this.charId}...`);
+        // console.log(this.character);
         this.service.updateCharacter(this.charId, this.character)
         .catch(e => {
             this.error = new SOBError("save",
                 "Unable to save character changes, because " + e.message);
         });
     }
+
+
+
+    hasDynamiteSatchel () {
+        let satchel = this.character.items.find( it => it.name === "Dynamite Satchel");
+        return satchel && satchel.equipped;
+    }
+
 
 }

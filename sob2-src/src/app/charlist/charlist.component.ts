@@ -43,7 +43,7 @@ export class CharListComponent implements OnInit {
         });
 
         this.service.getClasses().then(classes => {
-            this.classes = classes;
+            this.classes = classes.sort((a,b)=>a.name>b.name?1:-1);
         });
     }
 

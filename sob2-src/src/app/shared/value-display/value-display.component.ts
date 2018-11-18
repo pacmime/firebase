@@ -137,20 +137,8 @@ export class XPValueDisplayComponent extends ValueDisplayComponent {
     @Input() needed : number = 9999;
     @Output() onLevel: EventEmitter<{xp:number}> = new EventEmitter<{xp:number}>();
 
-
     hasLeveled() : boolean {
         return this.value >= this.needed;
-    }
-
-    onValueChange(newValue) {
-        super.onValueChange(newValue);
-
-        if(this.onLevel) {
-            let xp = this.value*1;
-            if(xp >= this.needed) {
-                this.onLevel.emit({xp:xp});
-            }
-        }
     }
 
 }

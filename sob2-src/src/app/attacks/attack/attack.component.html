@@ -6,6 +6,7 @@
             {{attack.name}}
             <div class="d-flex flex-justify-end flex-align-end">
                 <button type="button" class="u-sm" (click)="edit()">edit</button>
+                &nbsp;&nbsp;&nbsp;
                 <button type="button" class="u-sm btn--del" (click)="confirmingDelete=true">X</button>
                 <div class="btn-group" *ngIf="confirmingDelete">
                     <button type="button" class="u-sm" (click)="remove()">Y</button>
@@ -15,14 +16,17 @@
         </h5>
 
         <small class="d-flex flex-justify-between">
-            <div><strong>Type: </strong> {{attack.type}}</div>
-            <div><strong>Att: </strong> {{attack.attack||'not specified'}}</div>
-            <div><strong>Dmg: </strong> {{attack.damage||'not specified'}}</div>
+            <div class="col-half"><strong>Type: </strong> {{attack.type}}</div>
+            <div class="col-half" *ngIf="'ranged'===attack.type">
+                <strong>Range: </strong> {{attack.range||0}}
+            </div>
+        </small>
+        <small class="d-flex flex-justify-between">
+            <div class="col-half"><strong>Att: </strong> {{attack.attack||'not specified'}}</div>
+            <div class="col-half"><strong>Dmg: </strong> {{attack.damage||'not specified'}}</div>
         </small>
 
-        <div *ngIf="attack.description">
-            <small>{{attack.description}}</small>
-        </div>
+        <div class="desc" *ngIf="attack.description"><br>{{attack.description}}</div>
 
         <hr>
 
@@ -82,18 +86,25 @@
             </select>
         </div>
 
+        <div *ngIf="'ranged' === editable.type">
+            <label>Range</label>
+            <input type="text" class="form-control"
+                [(ngModel)]="editable.range"
+                placeholder="Specify attack range">
+        </div>
+
         <div>
             <label>Att: </label>
             <input type="text" class="form-control" required
                 [(ngModel)]="editable.attack"
-                placeholder="2D6">
+                placeholder="e.g., 2D6">
         </div>
 
         <div>
             <label>Dmg: </label>
             <input type="text" class="form-control" required
                 [(ngModel)]="editable.damage"
-                placeholder="D6">
+                placeholder="e.g., D6+2">
         </div>
 
         <div>

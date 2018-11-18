@@ -6342,6 +6342,61 @@ export const Data = {
           "desc": "Use 2 Fortune tokens and take 1 Corruption Hit to select any number of dice just rolled and make a Cunning 6+ test. If passed, for each 6+ rolled, choose one of the selected dice and rotate it to be on any facing you like. Only usable on rolls that allow Grit.",
           "xp": 25
       }
+  ],
+
+  ORPHAN_MISSIONS: [
+    {
+      "desc": "+1 Cunning. +1 Luck. Requires 5 Discoveries. Reward: To Hit 3+",
+      "modifiers": [
+        {
+          "affects": "Cunning",
+          "value": 1
+        },
+        {
+          "affects": "Luck",
+          "value": 1
+        }
+      ],
+      "name": "Become the Best"
+    },
+    {
+      "desc": "+2 Health. Requires 2 Discoveries. Reward: +5 Sanity",
+      "modifiers": [
+        {
+          "affects": "health.max",
+          "value": 2
+        }
+      ],
+      "name": "Find Yer Kin"
+    },
+    {
+      "desc": "+1 Max Grit. Requires 4 Discoveries. Reward: Start each Adventure with 1 extra Grit.",
+      "modifiers": {
+        "affects": "grit.max",
+        "value": 1
+      },
+      "name": "Find the Killer"
+    },
+    {
+      "desc": "+1 Combat. Requires 4 Discoveries. Reward: +1 Damage to all of your Attacks",
+      "modifiers": [
+        {
+          "affects": "combat",
+          "value": 1
+        }
+      ],
+      "name": "Hunt Them All"
+    },
+    {
+      "desc": "+1 Initiative. Requires 3 Discoveries. Reward: +2 Strength.",
+      "modifiers": [
+        {
+          "affects": "init",
+          "value": 1
+        }
+      ],
+      "name": "Take Em Down"
+    }
   ]
 
 };

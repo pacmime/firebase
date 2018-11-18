@@ -17,7 +17,7 @@
         {{item.name}}
         <div class="d-flex flex-justify-end flex-align-end">
             <button type="button" class="u-sm" (click)="editItem(i)">edit</button>
-            &nbsp;
+            &nbsp;&nbsp;&nbsp;
             <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
             <div class="btn-group" *ngIf="confirmingDelete(i)">
                 <button type="button" class="u-sm" (click)="removeItem(i)">Y</button>
@@ -40,7 +40,7 @@
         <div *ngIf="item.cost">Cost: ${{item.cost}}</div>
     </div>
 
-    <div *ngIf="item.modifiers">
+    <div *ngIf="item.modifiers && item.modifiers.length">
         <hr>
         <div *ngFor="let modifier of item.modifiers"  class="u-sm">
             {{modifier.affects}} : +{{modifier.value}}

@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component, OnInit, Input, Output,
+    EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'char-notes',
@@ -10,13 +13,19 @@ export class NotesComponent implements OnInit {
     @Input() notes : string;
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 
+    public needsSaving : boolean = false;
+
     constructor() { }
 
-    ngOnInit() {
-    }
+    ngOnInit() { }
 
     saveChanges() {
-        this.onSave.emit({type:'notes', value:this.notes});
+        this.onSave.emit({ type: 'notes', value: this.notes });
+        this.needsSaving = false;
+    }
+
+    onValueChange(change) {
+        this.needsSaving = true;
     }
 
 }

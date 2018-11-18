@@ -49,7 +49,15 @@ export class AttackComponent implements OnInit {
 
     edit () {
         //make a copy so we don't overwrite changes before saving
-        this.editable = { attack:"", damage:"", description:"", name:"", toHit:"", type:'melee'};
+        this.editable = {
+            attack:"",
+            damage:"",
+            description:"",
+            name:"",
+            toHit:"",
+            type:'melee',
+            range: ""
+        };
         Object.assign(this.editable, this.attack);
         this.isEditing = true;
     }

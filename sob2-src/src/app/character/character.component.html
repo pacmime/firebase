@@ -12,6 +12,14 @@
         <button type="button" (click)="error=null">DISMISS</button>
     </div>
 
+    <div *ngIf="message" class="c-message">
+        <h5 class="d-flex flex-justify-between flex-align-start">
+            <span class="col">{{message.title}}</span>
+            <button type="button" (click)="message=null">DISMISS</button>
+        </h5>
+        <p>{{message.value}}</p>
+    </div>
+
     <div class="l-page">
         <main>
             <avatar (onSave)="saveChar('avatar', $event)"></avatar>
@@ -62,8 +70,6 @@
                 <xp-value-display label="XP"
                     value="{{character.xp}}"
                     needed="{{xpLevels[character.level]}}"
-                    step="10"
-                    (onLevel)="levelUp($event)"
                     (onSave)="saveChar('xp', $event)">
                 </xp-value-display>
 
@@ -332,6 +338,7 @@
              <sidebag
                 [sidebag]="character.sidebag"
                 [modifiers]="modifiers.sidebag"
+                [hasDynamiteSatchel]="hasDynamiteSatchel()"
                 (onSave)="saveChar(null, $event)">
              </sidebag>
          </main>

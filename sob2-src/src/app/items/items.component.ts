@@ -51,10 +51,10 @@ export class ItemsComponent implements OnInit {
     addItem () {
 
         let item : Item = {
-            name:       "Item Name",
+            name:       "",
             source:     "General Store",
             slot:       null,
-            description: "Provide a description",
+            description: "",
             keywords:   "",
             usage:      null,
             modifiers:  [],

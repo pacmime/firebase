@@ -67,6 +67,10 @@ button[type="button"] {
     border: 1px solid #ccc;
     border-radius: 4px;
 
+    //prevent double tap zoom when touching buttons
+    //https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action
+    touch-action: manipulation;
+
     &.u-sm {
         font-size: 0.875em;
     }
@@ -148,6 +152,7 @@ button[type="button"] {
 .col-5 { flex-grow: 5; }
 .col-6 { flex-grow: 6; }
 .col-auto { flex-basis: auto; }
+.col-half { flex-basis: 50%; }
 
 .col-2-sm, .col-3-sm, .col-4-sm, .col-5-sm, .col-6-sm,
 .col-2-md, .col-3-md, .col-4-md, .col-5-md, .col-6-md,
@@ -214,6 +219,16 @@ button[type="button"] {
     bottom: 0;
     width: 100%;
     background: #ff0000e3;
+    color:   #fff;
+    padding: 0.5em 1em;
+
+    a, a:visited { color: #fff; }
+}
+.c-message {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #0032ffe3;
     color:   #fff;
     padding: 0.5em 1em;
 
@@ -313,3 +328,13 @@ button[type="button"] {
 .t-fortune, .t-fortune .stat2 .label { background-color: orange; background-image: url(assets/texture.png); }
 .t-corruption, .t-corruption .stat2 .label { background-color: #58A932; background-image: url(assets/texture.png); }
 .t-grit, .t-grit .stat2 .label { background-color: #9c7a3f; background-image: url(assets/texture.png); }
+
+
+
+
+.form-group {
+    margin: 0 0 0.5em;
+}
+select.form-control {
+    
+}

@@ -1,7 +1,9 @@
 <h4 class=" u-text--sc">Notes</h4>
 <textarea rows="20" class="form-control"
     [(ngModel)]="notes"
+    (ngModelChange)="onValueChange($event)"
     placeholder="Enter custom notes here">
 </textarea>
 <button type="button" class="btn--use"
+    *ngIf="needsSaving"
     (click)="saveChanges()">Save</button>

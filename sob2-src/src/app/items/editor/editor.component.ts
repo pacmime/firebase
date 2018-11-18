@@ -67,12 +67,17 @@ export class ItemEditorComponent implements OnInit {
         this.tabs = null;
     }
 
+    canApply() : boolean {
+        return !!this.item && !!this.item.name;
+    }
+
     close() {
         this.visible = false;
         this.onClose({apply:false,value:this.item});
     }
 
     apply() {
+        if(!this.canApply()) return;
         this.visible = false;
         this.onClose({apply:true,value:this.item});
     }

@@ -181,4 +181,10 @@ export class UploadComponent implements OnInit {
         return dest;
     }
 
+
+
+    exportDB() {
+        this.service.exportDB();
+    }
+
 }
