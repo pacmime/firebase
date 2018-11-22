@@ -19,7 +19,6 @@ export class CharacterComponent implements OnInit {
 
     @Input() charId:string;
 
-    private charSubscription: ISubscription;
     public character: SOBCharacter;
     public isPreacher: boolean = false;
     public isShaman: boolean = false;
@@ -40,11 +39,6 @@ export class CharacterComponent implements OnInit {
 
     ngOnInit() {
 
-        this.charSubscription = this.service.getCharacter( (character:SOBCharacter) => {
-            this.character = character;
-            this.init();
-        });
-
         if(this.route.paramMap && this.route.paramMap.switchMap) {
             this.route.paramMap
                 .switchMap((params: ParamMap) => {
@@ -52,17 +46,18 @@ export class CharacterComponent implements OnInit {
                     this.charId = id;
                     return this.service.loadCharacter(id);
                 })
-                .subscribe( (char: SOBCharacter) => {
+                .subscribe( (character: SOBCharacter) => {
                     //charSubscription above will handle getting characters from the service
                     // but this subscribe is necessary to get the actual event from the
                     // Observable from the service
+                    // console.log("char event");
+                    this.character = character;
+                    this.init();
                 });
         }
     }
 
     ngOnDestroy() {
-        this.charSubscription.unsubscribe();
-        this.charSubscription = null;
         this.charId = null;
         this.character = null;
         this.isPreacher = false;
@@ -184,8 +179,13 @@ export class CharacterComponent implements OnInit {
 
         } else {
             //if can't apply the change, don't bother saving the character
-            if(!this.applyChange(key, arg.value))
+            try {
+                if(!this.applyChange(key, arg.value)) return;
+            } catch(e) {
+                this.error = new SOBError("save",
+                    "Unable to apply change(s) to character, because " + e.message);
                 return;
+            }
         }
 
         this.doSave();

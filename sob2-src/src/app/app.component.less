@@ -5,11 +5,10 @@ header {
     align-items: center;
     border-bottom: 1px solid #000;
     background: #fff;
-
+    padding: 0.25em 1em;
 
     & > h5 {
         margin: 0;
-        padding: 0.25em;
     }
 }
 
@@ -20,8 +19,13 @@ header {
         left: 0;
         right: 0;
         height: 36px;
+        transition: height 0.3s linear;
 
         & > h5 { padding: 0.25em; }
+
+        &:hover {
+            height: 60px;
+        }
     }
 
     main {

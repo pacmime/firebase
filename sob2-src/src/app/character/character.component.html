@@ -100,6 +100,25 @@
                     (onSave)="saveChar('movement', $event)">
                 </value-display>
             </section>
+
+            <section>
+                <value-display label="Tech"
+                    value="{{character.techCurrency}}"
+                    (onSave)="saveChar('techCurrency', $event)">
+                </value-display>
+
+                <value-display label="Scrap"
+                    value="{{character.scrapCurrency}}"
+                    (onSave)="saveChar('scrapCurrency', $event)">
+                </value-display>
+
+                <!-- <value-display label="Move"
+                    value="{{character.movement}}"
+                    [options]="{min:-10}"
+                    [modifiers]="modifiers.movement"
+                    (onSave)="saveChar('movement', $event)">
+                </value-display> -->
+            </section>
         </main>
     </div>
 
@@ -167,6 +186,7 @@
                 </value-display>
                 <value-display  label="Spirit Armor"
                     value="{{character.spiritArmor}}"
+                    [modifiers]="modifiers.spiritArmor"
                     [options]="{labelSize:'sm'}"
                     (onSave)="saveChar('spiritArmor', $event)">
                 </value-display>
@@ -323,7 +343,10 @@
 
     <div class="l-page">
         <main>
-            <items [items]="character.items" (onSave)="saveChar(null, $event)"></items>
+            <items [items]="character.items"
+                   [weightLimit]="character.stats.Strength + 5"
+                    (onSave)="saveChar(null, $event)">
+            </items>
         </main>
     </div>
 

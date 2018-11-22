@@ -15,6 +15,7 @@ import { SOBError } from "../models/error";
 export class ItemsComponent implements OnInit {
 
     @Input() items: Item[];
+    @Input() weightLimit : number = 0;
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
     @Output() onError : EventEmitter<any> = new EventEmitter<any>();
 

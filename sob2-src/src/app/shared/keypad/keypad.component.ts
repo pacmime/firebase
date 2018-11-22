@@ -29,8 +29,6 @@ export class KeypadComponent implements OnInit {
     @Input() maximum : number = 9999;
     @Input() modifiers : { value: number; sources: string[]; };
     @Output() onClose: Function;
-    // @Output() onClose: EventEmitter<{apply:boolean,value:number}> =
-    //     new EventEmitter<{apply:boolean,value:number}>();
 
     private manualAdj : number;
     private changes : number[] = [] as number[];
@@ -40,7 +38,6 @@ export class KeypadComponent implements OnInit {
 
     ngOnInit() {
         this.result = this.value;
-        // console.log(this.modifiers);
     }
 
     ngOnDestroy() {
@@ -58,12 +55,22 @@ export class KeypadComponent implements OnInit {
 
     close() {
         this.visible = false;
-        this.onClose({apply:false,value:this.result});
+        try {
+            this.onClose({apply:false,value:this.result});
+        } catch (e) {
+            console.log("Keypad: Error caught firing close event to callee");
+            console.log(e);
+        }
     }
 
     apply() {
         this.visible = false;
-        this.onClose({apply:true,value:this.result});
+        try {
+            this.onClose({apply:true,value:this.result});
+        } catch (e) {
+            console.log("Keypad: Error caught firing apply event to callee");
+            console.log(e);
+        }
     }
 
     change (v) {

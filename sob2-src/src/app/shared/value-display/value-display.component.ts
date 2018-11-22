@@ -103,14 +103,26 @@ export class ValueDisplayComponent implements OnInit {
         instance.value = this.computed;
         instance.modifiers = this.modifiers;
         instance.onClose = (event) => {
-            this.modalService.destroyRef(kpRef, 0);
+            try {
+                this.modalService.destroyRef(kpRef, 0);
+            } catch(e) {
+                console.log("Error destroying modal service ref: " + e.message);
+            }
 
             if(event.apply) {
                 let change = event.value*1;
                 let current = this.value*1;
                 current += change - this.computed;
-                this.onValueChange(current);
-                this.onSave.emit({label:this.label,value:this.value});
+                try {
+                    this.onValueChange(current);
+                } catch(e) {
+                    console.log("VD keypad - Error changing value: " + e.message);
+                }
+                try {
+                    this.onSave.emit({label:this.label,value:this.value});
+                } catch(e) {
+                    console.log("VD keypad - Error emitting save event " + e.message); 
+                }
             }
         };
 

@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy,
+    Input, Output, EventEmitter
+} from '@angular/core';
 import { FirestoreService } from '../firestore.service';
 
 @Component({
@@ -6,14 +9,13 @@ import { FirestoreService } from '../firestore.service';
   templateUrl: './mim.component.html',
   styleUrls: ['./mim.component.less']
 })
-export class MimComponent implements OnInit {
+export class MimComponent implements OnInit, OnDestroy {
 
     @Input() current: any[];
     public mutations: any[];
     public injuries: any[];
     public madness: any[];
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
-
 
     public showAvailable = {
         mutations : false,
@@ -25,6 +27,7 @@ export class MimComponent implements OnInit {
         injuries : [],
         madness : []
     };
+    public options : any = {};
     public newMutation: any = null;
     public newInjury: any = null;
     public newMadness: any = null;
@@ -37,9 +40,30 @@ export class MimComponent implements OnInit {
         this.injuries = this.current.filter(m => m.group.toLowerCase() == 'injuries');
         this.madness = this.current.filter(m => m.group.toLowerCase() == 'madness');
 
-        this.updateAvailable('mutations');
-        this.updateAvailable('injuries');
-        this.updateAvailable('madness');
+        this.afs.getMutations().then( mutations => {
+            this.options['mutations'] = mutations;
+            this.updateAvailable('mutations');
+        });
+        this.afs.getInjuries().then( injuries => {
+            this.options['injuries'] = injuries;
+            this.updateAvailable('injuries');
+        });
+        this.afs.getMadness().then( madness => {
+            this.options['madness'] = madness;
+            this.updateAvailable('madness');
+        });
+
+    }
+
+    ngOnDestroy() {
+        this.mutations = null;
+        this.injuries = null;
+        this.madness = null;
+        this.options = null;
+        this.available = null;
+        this.newMutation =null;
+        this.newInjury = null;
+        this.newMadness = null;
     }
 
     add(type, value) {
@@ -47,7 +71,7 @@ export class MimComponent implements OnInit {
         this.showAvailable[type] = false;
         this[type].push(value);
         this.current.push(value);
-        this.updateAvailable(type);
+        this.updateAvailable(type, );
         this.onSave.emit({type:"mutation.added",value:value});
     }
 
@@ -64,19 +88,10 @@ export class MimComponent implements OnInit {
 
     updateAvailable (type) {
         let takenNames = this[type].map(a=>a.name);
-
-        let promise : Promise<any[]> = null;
-        if('mutations' === type) promise = this.afs.getMutations();
-        else if('injuries' === type) promise = this.afs.getInjuries();
-        else if('madness' === type) promise = this.afs.getMadness();
-        else return;
-
-        promise.then( results => {
-            this.available[type] = results.filter( a => {
-                //return only those that can be chosen multiple times
-                // or haven't already been chosen
-                return takenNames.indexOf(a.name)<0;
-            });
+        this.available[type] = this.options[type].filter( a => {
+            //return only those that can be chosen multiple times
+            // or haven't already been chosen
+            return takenNames.indexOf(a.name)<0;
         });
     }
 }
