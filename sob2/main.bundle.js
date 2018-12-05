@@ -128,7 +128,7 @@ var FirestoreService = (function () {
                         results[affected].value = Math.max(results[affected].value, modVal * 1);
                     }
                     else {
-                        results[affected].value += modVal * 1;
+                        results[affected].value += modVal;
                     }
                     results[affected].sources.push(src.name || src.label);
                 });
@@ -1574,6 +1574,7 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__special_orphan_missions_chooser_chooser_component__ = __webpack_require__(239);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__special_notes_notes_component__ = __webpack_require__(502);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__shared_chooser_chooser_component__ = __webpack_require__(498);
+/* unused harmony export ModifierPipe */
 /* unused harmony export MimGroupFilterPipe */
 /* unused harmony export SumFilterPipe */
 /* unused harmony export JoinPipe */
@@ -1627,6 +1628,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+var ModifierPipe = (function () {
+    function ModifierPipe() {
+    }
+    ModifierPipe.prototype.transform = function (value) {
+        if (value === null || value === undefined ||
+            isNaN(value) || value === 0)
+            return '';
+        if (value * 1 > 0)
+            return '+' + value;
+        return value;
+    };
+    return ModifierPipe;
+}());
+ModifierPipe = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["b" /* Pipe */])({
+        name: 'modifier'
+    }),
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["c" /* Injectable */])()
+], ModifierPipe);
 
 var MimGroupFilterPipe = (function () {
     function MimGroupFilterPipe() {
@@ -1738,6 +1759,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_20__abilities_chooser_chooser_component__["a" /* AbilityChooserComponent */],
             __WEBPACK_IMPORTED_MODULE_21__items_items_component__["a" /* ItemsComponent */],
             __WEBPACK_IMPORTED_MODULE_22__mim_mim_component__["a" /* MimComponent */],
+            ModifierPipe,
             MimGroupFilterPipe,
             SumFilterPipe,
             JoinPipe,
@@ -2333,18 +2355,25 @@ var CharacterComponent = (function () {
         this.editableBio = null;
         this.modifiers = {};
         this.error = null; //new SOBError("test", "This is a test");
-        this.message = null;
+        this.messages = [];
     }
     CharacterComponent.prototype.ngOnInit = function () {
         var _this = this;
+        var loadMsg = null;
         if (this.route.paramMap && this.route.paramMap.switchMap) {
             this.route.paramMap
                 .switchMap(function (params) {
+                loadMsg = _this.createMessage("Loading character", "This should only take a moment...", false);
+                _this.messages.push(loadMsg);
                 var id = params.get('id');
                 _this.charId = id;
                 return _this.service.loadCharacter(id);
             })
                 .subscribe(function (character) {
+                setTimeout(function () {
+                    //clear loading message
+                    _this.removeMessage(loadMsg);
+                }, 1000);
                 //charSubscription above will handle getting characters from the service
                 // but this subscribe is necessary to get the actual event from the
                 // Observable from the service
@@ -2376,7 +2405,7 @@ var CharacterComponent = (function () {
         this.refreshModifiers();
     };
     CharacterComponent.prototype.refreshModifiers = function () {
-        this.modifiers = this.service.getCharacterModifiers();
+        this.modifiers = this.service.getCharacterModifiers(this.character);
         // console.log("Character Component: Modifiers being applied:");
         // console.log(this.modifiers);
         // console.log("-------------------------");
@@ -2423,7 +2452,7 @@ var CharacterComponent = (function () {
         this.character.keywords = this.editableBio.keywords;
         this.editableBio = null;
         this.isEditingBio = false;
-        this.doSave();
+        this.scheduleSave();
     };
     /**
      *
@@ -2436,42 +2465,14 @@ var CharacterComponent = (function () {
         if (key && 'xp' === key) {
             var neededXP = this.xpLevels[this.character.level];
             if (arg.value >= neededXP) {
-                this.message = {
-                    title: "Level Up!",
-                    value: "Choose a class ability and roll for a new level-up ability"
-                };
+                this.messages.push(this.createMessage("Level Up!", "Choose a class ability and roll for a new level-up ability"));
                 this.character.level++;
                 arg.value -= neededXP; //reset
             }
         }
         //Could use arg.type as key, but need to not process things like
         // add/remove spells, etc like we would process changing literal values
-        if (!key) {
-            // if(arg && arg.type === 'xp') {
-            //     //XP gained from using sermons/spells/abilities that grant them
-            //     this.character.xp += (arg.value*1);
-            //
-            // } else if(arg && arg.type === 'fortune.current') {
-            //     //Updating available value after using it
-            //     this.character.fortune.current += (arg.value*1);
-            //
-            // } else if(arg && arg.type === 'magik.current') {
-            //     //Updating available value after using it
-            //     this.character.magik.current += (arg.value*1);
-            //
-            // } else if(arg && arg.type &&
-            //     (~arg.type.indexOf("item.") ||
-            //      ~arg.type.indexOf("ability.") ||
-            //      ~arg.type.indexOf("mutation."))) {
-            //     //Updating modifiers after item/ability added/updated/equipped/removed
-            //     this.refreshModifiers();
-            //
-            // } else {
-            //     console.log("Unrecognized change: " + (arg?arg.type:'null'));
-            //     return;
-            // }
-        }
-        else {
+        if (key) {
             //if can't apply the change, don't bother saving the character
             try {
                 if (!this.applyChange(key, arg.value))
@@ -2482,7 +2483,7 @@ var CharacterComponent = (function () {
                 return;
             }
         }
-        this.doSave();
+        this.scheduleSave();
     };
     /**
      *
@@ -2518,18 +2519,91 @@ var CharacterComponent = (function () {
         obj[steps[steps.length - 1]] = value;
         return true;
     };
+    CharacterComponent.prototype.scheduleSave = function () {
+        var _this = this;
+        //do the actual save in a timeout so we don't block the UI waiting for
+        // the service to complete
+        if (this.savingTimer) {
+            clearTimeout(this.savingTimer);
+            this.savingTimer = null;
+        }
+        this.savingTimer = setTimeout(function () {
+            _this.savingTimer = null;
+            _this.doSave();
+        }, 100);
+    };
     CharacterComponent.prototype.doSave = function () {
         var _this = this;
+        var savingMsg = this.createMessage('Saving changes', 'this should only take a moment...', false);
+        this.messages.push(savingMsg);
+        //set timer for saves that take too long...
+        var timeoutMsg = null;
+        var timer = setTimeout(function () {
+            _this.removeMessage(savingMsg);
+            timeoutMsg = _this.createMessage('Save Timed Out', 'Saving is taking a really long time...', true);
+            _this.messages.push(timeoutMsg);
+        }, 5000);
         // console.log(`Saving character ${this.charId}...`);
         // console.log(this.character);
         this.service.updateCharacter(this.charId, this.character)
+            .then(function () {
+            if (timer)
+                clearTimeout(timer);
+            else if (timeoutMsg)
+                _this.removeMessage(timeoutMsg);
+            _this.removeMessage(savingMsg);
+            var savedMsg = _this.createMessage('Changes saved!', 'this will go away shortly', false);
+            _this.messages.push(savedMsg);
+            setTimeout(function () { _this.removeMessage(savedMsg); }, 3000);
+        })
             .catch(function (e) {
+            if (timer)
+                clearTimeout(timer);
+            else if (timeoutMsg)
+                _this.removeMessage(timeoutMsg);
+            _this.removeMessage(savingMsg);
             _this.error = new __WEBPACK_IMPORTED_MODULE_5__models_error__["a" /* SOBError */]("save", "Unable to save character changes, because " + e.message);
         });
+    };
+    CharacterComponent.prototype.getWeightLimit = function () {
+        var value = this.character.stats.Strength + 5;
+        (this.modifiers || []).forEach(function (mod) {
+            if (mod.affects === 'Strength') {
+                value += (mod.value * 1);
+            }
+        });
+        return value;
     };
     CharacterComponent.prototype.hasDynamiteSatchel = function () {
         var satchel = this.character.items.find(function (it) { return it.name === "Dynamite Satchel"; });
         return satchel && satchel.equipped;
+    };
+    CharacterComponent.prototype.createMessage = function (title, message, canDismiss) {
+        var msg = {
+            title: title,
+            value: message,
+            id: Math.round(Math.random() * 9999),
+            canDismiss: typeof (canDismiss) !== 'undefined' ? canDismiss : true
+        };
+        return msg;
+    };
+    CharacterComponent.prototype.removeMessage = function (arg) {
+        var idx = -1;
+        if (arg && arg.id) {
+            this.messages.forEach(function (msg, i) {
+                if (arg.id === msg.id)
+                    idx = i;
+            });
+        }
+        else if (arg && typeof (arg) === 'number') {
+            this.messages.forEach(function (msg, i) {
+                if (arg === msg.id)
+                    idx = i;
+            });
+        }
+        if (idx >= 0) {
+            this.messages.splice(idx, 1);
+        }
     };
     return CharacterComponent;
 }());
@@ -9308,6 +9382,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+var MIM = {
+    MUTATIONS: "mutations",
+    INJURIES: "injuries",
+    MADNESS: "madness"
+};
 var MimComponent = (function () {
     function MimComponent(afs) {
         this.afs = afs;
@@ -9329,20 +9408,20 @@ var MimComponent = (function () {
     }
     MimComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.mutations = this.current.filter(function (m) { return m.group.toLowerCase() == 'mutations'; });
-        this.injuries = this.current.filter(function (m) { return m.group.toLowerCase() == 'injuries'; });
-        this.madness = this.current.filter(function (m) { return m.group.toLowerCase() == 'madness'; });
+        this.mutations = this.current.filter(function (m) { return !m.group || m.group.toLowerCase() == MIM.MUTATIONS; });
+        this.injuries = this.current.filter(function (m) { return m.group && m.group.toLowerCase() == MIM.INJURIES; });
+        this.madness = this.current.filter(function (m) { return m.group && m.group.toLowerCase() == MIM.MADNESS; });
         this.afs.getMutations().then(function (mutations) {
-            _this.options['mutations'] = mutations;
-            _this.updateAvailable('mutations');
+            _this.options[MIM.MUTATIONS] = mutations;
+            _this.updateAvailable(MIM.MUTATIONS);
         });
         this.afs.getInjuries().then(function (injuries) {
-            _this.options['injuries'] = injuries;
-            _this.updateAvailable('injuries');
+            _this.options[MIM.INJURIES] = injuries;
+            _this.updateAvailable(MIM.INJURIES);
         });
         this.afs.getMadness().then(function (madness) {
-            _this.options['madness'] = madness;
-            _this.updateAvailable('madness');
+            _this.options[MIM.MADNESS] = madness;
+            _this.updateAvailable(MIM.MADNESS);
         });
     };
     MimComponent.prototype.ngOnDestroy = function () {
@@ -9358,6 +9437,8 @@ var MimComponent = (function () {
     MimComponent.prototype.add = function (type, value) {
         if (!this[type])
             this[type] = [];
+        if (value.group)
+            value.group = type;
         this.showAvailable[type] = false;
         this[type].push(value);
         this.current.push(value);
@@ -10195,11 +10276,9 @@ function removeFlag(sermon, flag) {
 function hasFlag(sermon, flag) {
     return sermon.status & flag;
 }
-function clearFlags(sermon) {
-    sermon.status = 0;
-}
 var PreacherSermonComponent = (function () {
     function PreacherSermonComponent() {
+        this.availableFaith = 0;
         this.onEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* EventEmitter */]();
         this.isEditing = false;
         this.confirmingDelete = false;
@@ -10210,19 +10289,34 @@ var PreacherSermonComponent = (function () {
             _this.handleEvent(event);
         });
     };
+    PreacherSermonComponent.prototype.ngOnChanges = function (changes) {
+        if (changes.availableFaith) {
+            var faith = changes.availableFaith.currentValue;
+            var cost = isNaN(this.sermon.cost) ? -1 : this.sermon.cost;
+            if (faith <= 0) {
+                applyFlag(this.sermon, FLAGS.empty);
+            }
+            else {
+                removeFlag(this.sermon, FLAGS.empty);
+            }
+            if (cost > 0 && faith < cost) {
+                applyFlag(this.sermon, FLAGS.insufficient);
+            }
+            else {
+                removeFlag(this.sermon, FLAGS.insufficient);
+            }
+        }
+    };
     PreacherSermonComponent.prototype.use = function () {
-        // $emit('sermon:cast', this.sermon.name, this.sermon.cost);
         applyFlag(this.sermon, FLAGS.cast);
         if (this.onEvent)
             this.onEvent.emit({ name: 'faith:spent', value: this.sermon.cost });
     };
     PreacherSermonComponent.prototype.spendExtraFaith = function () {
-        // $emit('sermon:cast', this.sermon.name, 1);
         if (this.onEvent)
             this.onEvent.emit({ name: 'faith:spent', value: 1 });
     };
     PreacherSermonComponent.prototype.applyXP = function () {
-        // $emit('sermon:xp', this.sermon.name, this.sermon.xp);
         applyFlag(this.sermon, FLAGS.xp);
         if (this.onEvent)
             this.onEvent.emit({ name: 'xp:gained', value: this.sermon.xp });
@@ -10239,10 +10333,10 @@ var PreacherSermonComponent = (function () {
         Object.assign(this.sermon, this.editable);
         this.isEditing = false;
         this.editable = null;
-        //this.onSave();
     };
     PreacherSermonComponent.prototype.remove = function () {
-        //notify
+        if (this.onEvent)
+            this.onEvent.emit({ name: 'sermon:removed', value: this.sermon });
     };
     PreacherSermonComponent.prototype.canCast = function () {
         return !hasFlag(this.sermon, FLAGS.cast) &&
@@ -10266,11 +10360,14 @@ var PreacherSermonComponent = (function () {
             (hasFlag(this.sermon, FLAGS.insufficient) &&
                 !hasFlag(this.sermon, FLAGS.cast));
     };
+    PreacherSermonComponent.prototype.clearFlags = function () {
+        this.sermon.status = 0;
+    };
     PreacherSermonComponent.prototype.handleEvent = function (event) {
         var name = event.name;
         switch (name) {
-            case 'reset':
-                clearFlags(this.sermon);
+            case 'sermons:reset':
+                this.clearFlags();
                 break;
             case 'faith:available':
                 var faith = event.value;
@@ -10287,6 +10384,10 @@ __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Input */])(),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__models_character_model__["Sermon"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__models_character_model__["Sermon"]) === "function" && _a || Object)
 ], PreacherSermonComponent.prototype, "sermon", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Input */])(),
+    __metadata("design:type", Number)
+], PreacherSermonComponent.prototype, "availableFaith", void 0);
 __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Input */])(),
     __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]) === "function" && _b || Object)
@@ -10347,15 +10448,20 @@ var PreacherSermonsComponent = (function () {
         this.eventSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
     }
     PreacherSermonsComponent.prototype.ngOnInit = function () {
-        this.maxFaith = this.maxFaith || this.character.faith;
-        this.availableFaith = this.character.faith;
+        this.availableFaith = this.maxFaith = this.character.faith;
     };
     PreacherSermonsComponent.prototype.ngOnChanges = function (changes) {
         if (changes.modifiers) {
-            this.maxFaith = this.character.faith;
-            var mod = changes.modifiers.currentValue;
-            if (mod && !isNaN(mod.value))
-                this.maxFaith += (mod.value * 1);
+            // if(this.maxFaith === 0)
+            //     this.maxFaith = this.character.faith;
+            //
+            // let mod = changes.modifiers.currentValue;
+            // if(mod && !isNaN(mod.value)) {
+            //     if(this.maxFaith == this.availableFaith) {
+            //          this.availableFaith += (mod.value*1);
+            //     }
+            //     this.maxFaith += (mod.value*1);
+            // }
         }
     };
     PreacherSermonsComponent.prototype.ngOnDestroy = function () {
@@ -10364,9 +10470,17 @@ var PreacherSermonsComponent = (function () {
         this.maxFaith = null;
         this.service = null;
     };
+    PreacherSermonsComponent.prototype.getFaithModifier = function () {
+        if (this.modifiers && this.modifiers.value && !isNaN(this.modifiers.value))
+            return this.modifiers.value * 1;
+        return 0;
+    };
+    PreacherSermonsComponent.prototype.getAvailableFaith = function () {
+        return this.availableFaith + this.getFaithModifier();
+    };
     PreacherSermonsComponent.prototype.add = function (sermon) {
         this.character.sermons.push(sermon);
-        this.onSave.emit({});
+        this.onSave.emit({ type: 'sermons', value: this.character.sermons });
     };
     PreacherSermonsComponent.prototype.remove = function (sermon) {
         var index = -1;
@@ -10376,7 +10490,7 @@ var PreacherSermonsComponent = (function () {
         });
         if (index >= 0) {
             var rem = this.character.sermons.splice(index, 1);
-            this.onSave.emit({});
+            this.onSave.emit({ type: 'sermons', value: this.character.sermons });
         }
     };
     PreacherSermonsComponent.prototype.getAvailable = function () {
@@ -10387,6 +10501,7 @@ var PreacherSermonsComponent = (function () {
     };
     PreacherSermonsComponent.prototype.resetSermons = function () {
         this.availableFaith = this.maxFaith;
+        this.eventSubject.next({ name: 'sermons:reset', value: true });
         this.onSave.emit({});
     };
     PreacherSermonsComponent.prototype.onEvent = function (event) {
@@ -10397,7 +10512,10 @@ var PreacherSermonsComponent = (function () {
                 break;
             case 'xp:gained':
                 this.character.xp += event.value * 1;
-                this.onSave.emit({});
+                this.onSave.emit({ type: 'xp', value: this.character.xp });
+                break;
+            case 'sermon:removed':
+                this.remove(event.value);
                 break;
             default: console.log("Unsupported sermon event " + event.name);
         }
@@ -11011,7 +11129,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "header {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  -ms-flex-align: center;\n      align-items: center;\n  border-bottom: 1px solid #000;\n  background: #fff;\n  padding: 0.25em 1em;\n}\nheader > h5 {\n  margin: 0;\n}\n@media (min-width: 300px) {\n  header {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    height: 36px;\n    transition: height 0.3s linear;\n  }\n  header > h5 {\n    padding: 0.25em;\n  }\n  header:hover {\n    height: 60px;\n  }\n  main {\n    height: 100%;\n    overflow-y: hidden;\n  }\n}\n", ""]);
+exports.push([module.i, "header {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n  -ms-flex-align: center;\n      align-items: center;\n  border-bottom: 1px solid #000;\n  background: #fff;\n  padding: 0.25em 1em;\n  z-index: 9999;\n}\nheader > h5 {\n  margin: 0;\n}\n@media (min-width: 300px) {\n  header {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    height: 36px;\n    transition: height 0.3s linear;\n  }\n  header > h5 {\n    padding: 0.25em;\n  }\n  header:hover {\n    height: 60px;\n  }\n  main {\n    height: 100%;\n    overflow-y: hidden;\n  }\n}\n", ""]);
 
 // exports
 
@@ -11209,7 +11327,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".overlay {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 999;\n}\n.dialog {\n  z-index: 1000;\n  position: fixed;\n  right: 0;\n  left: 0;\n  top: 20px;\n  margin-right: auto;\n  margin-left: auto;\n  min-height: 200px;\n  width: 90%;\n  max-width: 520px;\n  background-color: #fff;\n  padding: 12px;\n  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);\n}\n@media (min-width: 768px) {\n  .dialog {\n    top: 40px;\n  }\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  margin-top: 0;\n  margin-bottom: 0.25em;\n}\nh6 {\n  font-size: 0.85rem;\n}\nh5 {\n  font-size: 1rem;\n}\nh4 {\n  font-size: 1.25rem;\n}\nh3 {\n  font-size: 1.5rem;\n}\nh2 {\n  font-size: 1.75rem;\n}\nh1 {\n  font-size: 2rem;\n}\np {\n  margin: 0.5em 0;\n  font-style: italic;\n}\nlabel {\n  font-weight: 700;\n}\ninput.form-control,\nselect.form-control,\ntextarea.form-control {\n  width: 100%;\n  font-size: 1em;\n  padding: 0.5em .75em;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n}\ninput.form-control.u-sm,\nselect.form-control.u-sm,\ntextarea.form-control.u-sm {\n  font-size: 0.875em;\n}\nbutton[type=\"button\"] {\n  font-size: 1em;\n  padding: 0.5em 0.75em;\n  background-color: #ddd;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\nbutton[type=\"button\"].u-sm {\n  font-size: 0.875em;\n}\nbutton[type=\"button\"].keypad__button {\n  width: 4em;\n  height: 3em;\n}\n.d-flex {\n  display: -ms-flexbox;\n  display: flex;\n}\n.flex-row {\n  -ms-flex-direction: row;\n      flex-direction: row;\n}\n.flex-col {\n  -ms-flex-direction: column;\n      flex-direction: column;\n}\n.flex-wrap {\n  -ms-flex-wrap: wrap;\n      flex-wrap: wrap;\n}\n.flex-justify-start {\n  -ms-flex-pack: start;\n      justify-content: flex-start;\n}\n.flex-justify-end {\n  -ms-flex-pack: end;\n      justify-content: flex-end;\n}\n.flex-justify-between {\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n}\n.flex-justify-around {\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.flex-justify-center {\n  -ms-flex-pack: center;\n      justify-content: center;\n}\n.flex-justify-stretch {\n  -ms-flex-pack: stretch;\n      justify-content: stretch;\n}\n.flex-align-start {\n  -ms-flex-align: start;\n      align-items: flex-start;\n}\n.flex-align-end {\n  -ms-flex-align: end;\n      align-items: flex-end;\n}\n.flex-align-center {\n  -ms-flex-align: center;\n      align-items: center;\n}\n.flex-align-stretch {\n  -ms-flex-align: stretch;\n      align-items: stretch;\n}\n.col,\n.col-1 {\n  -ms-flex: 1;\n      flex: 1;\n}\n.col-2 {\n  -ms-flex: 2;\n      flex: 2;\n}\n.col-3 {\n  -ms-flex: 3;\n      flex: 3;\n}\n.col-4 {\n  -ms-flex: 4;\n      flex: 4;\n}\n.col-5 {\n  -ms-flex: 5;\n      flex: 5;\n}\n.col-6 {\n  -ms-flex: 6;\n      flex: 6;\n}\n.col-auto {\n  -ms-flex: 0 1 auto;\n      flex: 0 1 auto;\n}\n", ""]);
+exports.push([module.i, ".overlay {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 999;\n}\n.dialog {\n  z-index: 1000;\n  position: fixed;\n  right: 0;\n  left: 0;\n  top: 40px;\n  margin-right: auto;\n  margin-left: auto;\n  min-height: 200px;\n  width: 90%;\n  max-width: 520px;\n  background-color: #fff;\n  padding: 12px;\n  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);\n}\n@media (min-width: 768px) {\n  .dialog {\n    top: 40px;\n  }\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  margin-top: 0;\n  margin-bottom: 0.25em;\n}\nh6 {\n  font-size: 0.85rem;\n}\nh5 {\n  font-size: 1rem;\n}\nh4 {\n  font-size: 1.25rem;\n}\nh3 {\n  font-size: 1.5rem;\n}\nh2 {\n  font-size: 1.75rem;\n}\nh1 {\n  font-size: 2rem;\n}\np {\n  margin: 0.5em 0;\n  font-style: italic;\n}\nlabel {\n  font-weight: 700;\n}\ninput.form-control,\nselect.form-control,\ntextarea.form-control {\n  width: 100%;\n  font-size: 1em;\n  padding: 0.5em .75em;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n}\ninput.form-control.u-sm,\nselect.form-control.u-sm,\ntextarea.form-control.u-sm {\n  font-size: 0.875em;\n}\nbutton[type=\"button\"] {\n  font-size: 1em;\n  padding: 0.5em 0.75em;\n  background-color: #ddd;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\nbutton[type=\"button\"].u-sm {\n  font-size: 0.875em;\n}\nbutton[type=\"button\"].keypad__button {\n  width: 4em;\n  height: 3em;\n}\n.d-flex {\n  display: -ms-flexbox;\n  display: flex;\n}\n.flex-row {\n  -ms-flex-direction: row;\n      flex-direction: row;\n}\n.flex-col {\n  -ms-flex-direction: column;\n      flex-direction: column;\n}\n.flex-wrap {\n  -ms-flex-wrap: wrap;\n      flex-wrap: wrap;\n}\n.flex-justify-start {\n  -ms-flex-pack: start;\n      justify-content: flex-start;\n}\n.flex-justify-end {\n  -ms-flex-pack: end;\n      justify-content: flex-end;\n}\n.flex-justify-between {\n  -ms-flex-pack: justify;\n      justify-content: space-between;\n}\n.flex-justify-around {\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.flex-justify-center {\n  -ms-flex-pack: center;\n      justify-content: center;\n}\n.flex-justify-stretch {\n  -ms-flex-pack: stretch;\n      justify-content: stretch;\n}\n.flex-align-start {\n  -ms-flex-align: start;\n      align-items: flex-start;\n}\n.flex-align-end {\n  -ms-flex-align: end;\n      align-items: flex-end;\n}\n.flex-align-center {\n  -ms-flex-align: center;\n      align-items: center;\n}\n.flex-align-stretch {\n  -ms-flex-align: stretch;\n      align-items: stretch;\n}\n.col,\n.col-1 {\n  -ms-flex: 1;\n      flex: 1;\n}\n.col-2 {\n  -ms-flex: 2;\n      flex: 2;\n}\n.col-3 {\n  -ms-flex: 3;\n      flex: 3;\n}\n.col-4 {\n  -ms-flex: 4;\n      flex: 4;\n}\n.col-5 {\n  -ms-flex: 5;\n      flex: 5;\n}\n.col-6 {\n  -ms-flex: 6;\n      flex: 6;\n}\n.col-auto {\n  -ms-flex: 0 1 auto;\n      flex: 0 1 auto;\n}\n", ""]);
 
 // exports
 
@@ -11245,7 +11363,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".value-display .value.modified > *:after {\n  color: darkblue;\n  content: \"*\";\n  font-size: 0.5em;\n  margin-top: -1em;\n}\n.needed {\n  font-size: 0.5em;\n  border-top: 1px solid #777;\n}\n", ""]);
+exports.push([module.i, ".value-display .value.modified > *:after {\n  color: darkblue;\n  content: \"*\";\n  font-size: 0.875em;\n  margin-top: -1em;\n}\n.needed {\n  font-size: 0.875em;\n  border-top: 1px solid #777;\n  color: #777;\n}\n", ""]);
 
 // exports
 
@@ -11492,7 +11610,7 @@ module.exports = module.exports.toString();
 /***/ 606:
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{ability.desc}}</div>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{ability.desc}}</div>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11534,7 +11652,7 @@ module.exports = "<div class=\"avatar\">\n    <div class=\"image-wrapper\" (clic
 /***/ 612:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"l-page\" *ngIf=\"!character\">Loading character...</div>\n\n<div *ngIf=\"character\" class=\"l-char\">\n\n    <div *ngIf=\"error\" class=\"c-error\">\n        <h5>Error</h5>\n        <p>{{error.message}}</p>\n        <a *ngIf=\"'auth'===error.type\" routerLink=\"/login\" routerLinkActive=\"active\">\n            Sign in\n        </a>\n        <button type=\"button\" (click)=\"error=null\">DISMISS</button>\n    </div>\n\n    <div *ngIf=\"message\" class=\"c-message\">\n        <h5 class=\"d-flex flex-justify-between flex-align-start\">\n            <span class=\"col\">{{message.title}}</span>\n            <button type=\"button\" (click)=\"message=null\">DISMISS</button>\n        </h5>\n        <p>{{message.value}}</p>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n            <div class=\"bio\">\n                <div *ngIf=\"!isEditingBio\">\n                    <h4>{{character.name}}</h4>\n                    <div class=\"d-flex flex-justify-between\">\n                        <button type=\"button\" (click)=\"editBio()\">Edit</button>\n                        <div class=\"col u-mg-left--md\">\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                        </div>\n                    </div>\n                </div>\n                <div *ngIf=\"isEditingBio\">\n                    <label>Name</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                    <label>Keywords</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                    <button type=\"button\" (click)=\"cancelBioEdit()\">Cancel</button>\n                    &nbsp;\n                    <button type=\"button\" (click)=\"saveBio()\">Save</button>\n                </div>\n            </div>\n            <hr>\n            <h4 class=\" u-text--sc\">Attributes</h4>\n            <div class=\"attributes\">\n                <div *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                    <value-display label=\"{{st}}\"\n                        value=\"{{character.stats[st]}}\"\n                        [modifiers]=\"modifiers[st]\"\n                        (onSave)=\"saveChar('stats.'+st, $event)\">\n                    </value-display>\n                </div>\n            </div>\n\n            <hr>\n\n            <section>\n                <value-display label=\"Level\"\n                    value=\"{{character.level}}\"\n                    [canAdjust]=\"false\"\n                    (onSave)=\"saveChar('level', $event)\">\n                </value-display>\n\n                <xp-value-display label=\"XP\"\n                    value=\"{{character.xp}}\"\n                    needed=\"{{xpLevels[character.level]}}\"\n                    (onSave)=\"saveChar('xp', $event)\">\n                </xp-value-display>\n\n                <value-display label=\"Wealth\"\n                    value=\"{{character.wealth}}\"\n                    (onSave)=\"saveChar('wealth', $event)\">\n                </value-display>\n            </section>\n\n\n            <section>\n                <value-display label=\"Dark Stone\"\n                    value=\"{{character.darkstone}}\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('darkstone', $event)\">\n                </value-display>\n\n                <value-display label=\"Init\"\n                    value=\"{{character.init}}\"\n                    [modifiers]=\"modifiers.init\"\n                    (onSave)=\"saveChar('init', $event)\">\n                </value-display>\n\n                <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display>\n            </section>\n\n            <section>\n                <value-display label=\"Tech\"\n                    value=\"{{character.techCurrency}}\"\n                    (onSave)=\"saveChar('techCurrency', $event)\">\n                </value-display>\n\n                <value-display label=\"Scrap\"\n                    value=\"{{character.scrapCurrency}}\"\n                    (onSave)=\"saveChar('scrapCurrency', $event)\">\n                </value-display>\n\n                <!-- <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display> -->\n            </section>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n\n            <section class=\"t-combat\">\n                <value-display label=\"Combat\"\n                    value=\"{{character.combat}}\"\n                    [modifiers]=\"modifiers.combat\"\n                    (onSave)=\"saveChar('combat', $event)\">\n                </value-display>\n                <value-display label=\"Melee\"\n                    value=\"{{character.melee}}\"\n                    (onSave)=\"saveChar('melee', $event)\">\n                </value-display>\n                <value-display label=\"Ranged\"\n                    value=\"{{character.ranged}}\"\n                    (onSave)=\"saveChar('ranged', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display  label=\"Wounds\"\n                    value=\"{{character.health.wounds}}\"\n                    (onSave)=\"saveChar('health.wounds', $event)\">\n                </value-display>\n                <value-display label=\"Health\"\n                    value=\"{{character.health.max}}\"\n                    [modifiers]=\"modifiers.health\"\n                    (onSave)=\"saveChar('health.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display label=\"Defense\"\n                    value=\"{{character.defense}}\"\n                    [modifiers]=\"modifiers.defense\"\n                    (onSave)=\"saveChar('defense', $event)\">\n                </value-display>\n                <value-display label=\"Armor\"\n                    value=\"{{character.armor}}\"\n                    [modifiers]=\"modifiers.armor\"\n                    (onSave)=\"saveChar('armor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Loss\"\n                    value=\"{{character.sanity.loss}}\"\n                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                </value-display>\n                <value-display label=\"Sanity\"\n                    value=\"{{character.sanity.max}}\"\n                    [modifiers]=\"modifiers.sanity\"\n                    (onSave)=\"saveChar('sanity.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Willpower\"\n                    value=\"{{character.willpower}}\"\n                    [modifiers]=\"modifiers.willpower\"\n                    (onSave)=\"saveChar('willpower', $event)\">\n                </value-display>\n                <value-display  label=\"Spirit Armor\"\n                    value=\"{{character.spiritArmor}}\"\n                    [modifiers]=\"modifiers.spiritArmor\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-grit\">\n                <value-display label=\"Grit\"\n                    value=\"{{character.grit.current}}\"\n                    [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                    (onSave)=\"saveChar('grit.current', $event)\">\n                </value-display>\n                <value-display label=\"Max Grit\"\n                    value=\"{{character.grit.max}}\"\n                    [modifiers]=\"modifiers.grit\"\n                    (onSave)=\"saveChar('grit.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-corruption\">\n                <value-display label=\"Corruption\"\n                    value=\"{{character.corruption.current}}\"\n                    (onSave)=\"saveChar('corruption.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.corruption.max}}\"\n                    [modifiers]=\"modifiers.corruption\"\n                    (onSave)=\"saveChar('corruption.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-faith\" *ngIf=\"isPreacher\">\n                <value-display label=\"Faith\"\n                    value=\"{{character.faith}}\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar('faith', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fortune\" *ngIf=\"isGambler\">\n                <value-display label=\"Fortune\"\n                    value=\"{{character.fortune.current}}\"\n                    [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                    (onSave)=\"saveChar('fortune.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fortune.max}}\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar('fortune.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-magik\" *ngIf=\"isShaman\">\n                <value-display label=\"Magik\"\n                    value=\"{{character.magik.current}}\"\n                    [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                    (onSave)=\"saveChar('magik.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.magik.max}}\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar('magik.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fury\" *ngIf=\"isSamurai\">\n                <value-display label=\"Fury\"\n                    value=\"{{character.fury.current}}\"\n                    [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                    (onSave)=\"saveChar('fury.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fury.max}}\"\n                    [modifiers]=\"modifiers.fury\"\n                    (onSave)=\"saveChar('fury.max', $event)\">\n                </value-display>\n            </section>\n\n            <!-- <div>\n                <h5>Modifiers being applied</h5>\n                {{modifiers|json}}\n            </div> -->\n\n        </main>\n\n\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <attacks\n                [attacks]=\"character.attacks\"\n                (onSave)=\"saveChar(null, $event)\">\n            </attacks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isPreacher\">\n        <main>\n            <preacher-sermons\n                [character]=\"character\"\n                [modifiers]=\"modifiers.faith\"\n                (onSave)=\"saveChar(null, $event)\">\n            </preacher-sermons>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isShaman\">\n        <main>\n            <shaman-spells\n                [character]=\"character\"\n                [modifiers]=\"modifiers.magik\"\n                (onSave)=\"saveChar(null, $event)\">\n            </shaman-spells>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isSamurai\">\n        <main>\n            <samurai-tactics\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fury\"\n                (onSave)=\"saveChar(null, $event)\">\n            </samurai-tactics>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isGambler\">\n        <main>\n            <gambler-tricks\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fortune\"\n                (onSave)=\"saveChar(null, $event)\">\n            </gambler-tricks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isOrphan\">\n        <main>\n            <orphan-missions\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </orphan-missions>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <abilities\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </abilities>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <items [items]=\"character.items\"\n                   [weightLimit]=\"character.stats.Strength + 5\"\n                    (onSave)=\"saveChar(null, $event)\">\n            </items>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <sidebag\n                [sidebag]=\"character.sidebag\"\n                [modifiers]=\"modifiers.sidebag\"\n                [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                (onSave)=\"saveChar(null, $event)\">\n             </sidebag>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <char-notes [notes]=\"character.notes\" (onSave)=\"saveChar('notes', $event)\">\n             </char-notes>\n         </main>\n     </div>\n\n</div>\n"
+module.exports = "\n<div class=\"l-page\" *ngIf=\"!character\">Loading character...</div>\n\n<div *ngIf=\"character\" class=\"l-char\">\n\n    <div *ngIf=\"error\" class=\"c-error\">\n        <h5>Error</h5>\n        <p>{{error.message}}</p>\n        <a *ngIf=\"'auth'===error.type\" routerLink=\"/login\" routerLinkActive=\"active\">\n            Sign in\n        </a>\n        <button type=\"button\" (click)=\"error=null\">DISMISS</button>\n    </div>\n\n    <div *ngIf=\"messages.length\" class=\"c-messages\">\n        <div class=\"c-message\" *ngFor=\"let msg of messages\">\n            <h5 class=\"d-flex flex-justify-between flex-align-start\">\n                <span class=\"col\">{{msg.title}}</span>\n                <button type=\"button\" *ngIf=\"msg.canDimiss\"\n                    (click)=\"removeMessage(msg)\">DISMISS</button>\n            </h5>\n            <p>{{msg.value}}</p>\n        </div>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n            <div class=\"bio\">\n                <div *ngIf=\"!isEditingBio\">\n                    <h4>{{character.name}}</h4>\n                    <div class=\"d-flex flex-justify-between\">\n                        <button type=\"button\" (click)=\"editBio()\">Edit</button>\n                        <div class=\"col u-mg-left--md\">\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                        </div>\n                    </div>\n                </div>\n                <div *ngIf=\"isEditingBio\">\n                    <label>Name</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                    <label>Keywords</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                    <button type=\"button\" (click)=\"cancelBioEdit()\">Cancel</button>\n                    &nbsp;\n                    <button type=\"button\" (click)=\"saveBio()\">Save</button>\n                </div>\n            </div>\n            <hr>\n            <h4 class=\" u-text--sc\">Attributes</h4>\n            <div class=\"attributes\">\n                <div *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                    <value-display label=\"{{st}}\"\n                        value=\"{{character.stats[st]}}\"\n                        [modifiers]=\"modifiers[st]\"\n                        (onSave)=\"saveChar('stats.'+st, $event)\">\n                    </value-display>\n                </div>\n            </div>\n\n            <hr>\n\n            <section>\n                <value-display label=\"Level\"\n                    value=\"{{character.level}}\"\n                    [canAdjust]=\"false\"\n                    (onSave)=\"saveChar('level', $event)\">\n                </value-display>\n\n                <xp-value-display label=\"XP\"\n                    value=\"{{character.xp}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    needed=\"{{xpLevels[character.level]}}\"\n                    (onSave)=\"saveChar('xp', $event)\">\n                </xp-value-display>\n\n                <value-display label=\"Wealth\"\n                    value=\"{{character.wealth}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    (onSave)=\"saveChar('wealth', $event)\">\n                </value-display>\n            </section>\n\n\n            <section>\n                <value-display label=\"Dark Stone\"\n                    value=\"{{character.darkstone}}\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('darkstone', $event)\">\n                </value-display>\n\n                <value-display label=\"Init\"\n                    value=\"{{character.init}}\"\n                    [modifiers]=\"modifiers.init\"\n                    (onSave)=\"saveChar('init', $event)\">\n                </value-display>\n\n                <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display>\n            </section>\n\n            <section>\n                <value-display label=\"Tech\"\n                    value=\"{{character.techCurrency}}\"\n                    (onSave)=\"saveChar('techCurrency', $event)\">\n                </value-display>\n\n                <value-display label=\"Scrap\"\n                    value=\"{{character.scrapCurrency}}\"\n                    (onSave)=\"saveChar('scrapCurrency', $event)\">\n                </value-display>\n\n                <!-- <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display> -->\n            </section>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n\n            <section class=\"t-combat\">\n                <value-display label=\"Combat\"\n                    value=\"{{character.combat}}\"\n                    [modifiers]=\"modifiers.combat\"\n                    (onSave)=\"saveChar('combat', $event)\">\n                </value-display>\n                <value-display label=\"Melee\"\n                    value=\"{{character.melee}}\"\n                    (onSave)=\"saveChar('melee', $event)\">\n                </value-display>\n                <value-display label=\"Ranged\"\n                    value=\"{{character.ranged}}\"\n                    (onSave)=\"saveChar('ranged', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display  label=\"Wounds\"\n                    value=\"{{character.health.wounds}}\"\n                    (onSave)=\"saveChar('health.wounds', $event)\">\n                </value-display>\n                <value-display label=\"Health\"\n                    value=\"{{character.health.max}}\"\n                    [modifiers]=\"modifiers.health\"\n                    (onSave)=\"saveChar('health.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display label=\"Defense\"\n                    value=\"{{character.defense}}\"\n                    [modifiers]=\"modifiers.defense\"\n                    (onSave)=\"saveChar('defense', $event)\">\n                </value-display>\n                <value-display label=\"Armor\"\n                    value=\"{{character.armor}}\"\n                    [modifiers]=\"modifiers.armor\"\n                    (onSave)=\"saveChar('armor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Loss\"\n                    value=\"{{character.sanity.loss}}\"\n                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                </value-display>\n                <value-display label=\"Sanity\"\n                    value=\"{{character.sanity.max}}\"\n                    [modifiers]=\"modifiers.sanity\"\n                    (onSave)=\"saveChar('sanity.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Willpower\"\n                    value=\"{{character.willpower}}\"\n                    [modifiers]=\"modifiers.willpower\"\n                    (onSave)=\"saveChar('willpower', $event)\">\n                </value-display>\n                <value-display  label=\"Spirit Armor\"\n                    value=\"{{character.spiritArmor}}\"\n                    [modifiers]=\"modifiers.spiritArmor\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-grit\">\n                <value-display label=\"Grit\"\n                    value=\"{{character.grit.current}}\"\n                    [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                    (onSave)=\"saveChar('grit.current', $event)\">\n                </value-display>\n                <value-display label=\"Max Grit\"\n                    value=\"{{character.grit.max}}\"\n                    [modifiers]=\"modifiers.grit\"\n                    (onSave)=\"saveChar('grit.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-corruption\">\n                <value-display label=\"Corruption\"\n                    value=\"{{character.corruption.current}}\"\n                    (onSave)=\"saveChar('corruption.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.corruption.max}}\"\n                    [modifiers]=\"modifiers.corruption\"\n                    (onSave)=\"saveChar('corruption.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-faith\" *ngIf=\"isPreacher\">\n                <value-display label=\"Faith\"\n                    value=\"{{character.faith}}\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar('faith', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fortune\" *ngIf=\"isGambler\">\n                <value-display label=\"Fortune\"\n                    value=\"{{character.fortune.current}}\"\n                    [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                    (onSave)=\"saveChar('fortune.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fortune.max}}\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar('fortune.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-magik\" *ngIf=\"isShaman\">\n                <value-display label=\"Magik\"\n                    value=\"{{character.magik.current}}\"\n                    [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                    (onSave)=\"saveChar('magik.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.magik.max}}\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar('magik.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fury\" *ngIf=\"isSamurai\">\n                <value-display label=\"Fury\"\n                    value=\"{{character.fury.current}}\"\n                    [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                    (onSave)=\"saveChar('fury.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fury.max}}\"\n                    [modifiers]=\"modifiers.fury\"\n                    (onSave)=\"saveChar('fury.max', $event)\">\n                </value-display>\n            </section>\n\n            <!-- <div>\n                <h5>Modifiers being applied</h5>\n                {{modifiers|json}}\n            </div> -->\n\n        </main>\n\n\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <attacks\n                [attacks]=\"character.attacks\"\n                (onSave)=\"saveChar(null, $event)\">\n            </attacks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isPreacher\">\n        <main>\n            <preacher-sermons\n                [character]=\"character\"\n                [modifiers]=\"modifiers.faith\"\n                (onSave)=\"saveChar(null, $event)\">\n            </preacher-sermons>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isShaman\">\n        <main>\n            <shaman-spells\n                [character]=\"character\"\n                [modifiers]=\"modifiers.magik\"\n                (onSave)=\"saveChar(null, $event)\">\n            </shaman-spells>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isSamurai\">\n        <main>\n            <samurai-tactics\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fury\"\n                (onSave)=\"saveChar(null, $event)\">\n            </samurai-tactics>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isGambler\">\n        <main>\n            <gambler-tricks\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fortune\"\n                (onSave)=\"saveChar(null, $event)\">\n            </gambler-tricks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isOrphan\">\n        <main>\n            <orphan-missions\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </orphan-missions>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <abilities\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </abilities>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <items [items]=\"character.items\"\n                   [weightLimit]=\"getWeightLimit()\"\n                    (onSave)=\"saveChar(null, $event)\">\n            </items>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <sidebag\n                [sidebag]=\"character.sidebag\"\n                [modifiers]=\"modifiers.sidebag\"\n                [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                (onSave)=\"saveChar(null, $event)\">\n             </sidebag>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <char-notes [notes]=\"character.notes\" (onSave)=\"saveChar('notes', $event)\">\n             </char-notes>\n         </main>\n     </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -11555,7 +11673,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n\n    <div
 /***/ 615:
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-end\">\n    <div class=\" u-text--sc\">Items</div>\n    <div class=\"d-flex flex-align-center flex-justify-end u-sm\">\n        <span class=\"sprite sprite-item_weight\"></span> {{totalWeight}}\n        / {{weightLimit}}\n        &nbsp;\n        <span class=\"sprite sprite-item_darkstone\"></span> {{totalDarkstone}}\n        &nbsp;\n        <button type=\"button\" class=\"btn--add\" (click)=\"addItem()\">New</button>\n    </div>\n</h4>\n<hr>\n\n<div *ngFor=\"let item of items; let i = index\" class=\"card\">\n\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{item.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"editItem(i)\">edit</button>\n            &nbsp;&nbsp;&nbsp;\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"removeItem(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"d-flex flex-justify-between flex-align-start u-sm\">\n        <span>{{item.source}}</span>\n        <span *ngIf=\"item.keywords\"><em>{{item.keywords}}</em></span>\n    </div>\n\n    <div class=\"desc\" *ngIf=\"item.description\">{{item.description}}</div>\n\n    <div *ngIf=\"item.usage || item.cost\"\n        class=\"u-sm d-flex flex-justify-between flex-align-center\">\n        <div *ngIf=\"item.usage\">Use per: {{item.usage}}</div>\n        <div *ngIf=\"!item.usage\">&nbsp;</div>\n        <div *ngIf=\"item.cost\">Cost: ${{item.cost}}</div>\n    </div>\n\n    <div *ngIf=\"item.modifiers && item.modifiers.length\">\n        <hr>\n        <div *ngFor=\"let modifier of item.modifiers\"  class=\"u-sm\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n\n    <div class=\"item__stats\">\n        <div [ngClass]=\"{faded:!item.weight}\">\n            <span class=\"sprite sprite-item_weight\"></span> {{item.weight}}\n        </div>\n        <div [ngClass]=\"{faded:!item.darkstone}\">\n            <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone}}\n        </div>\n        <div [ngClass]=\"{faded:!item.hands}\">\n            <span class=\"sprite sprite-item_hands\"></span> {{item.hands}}\n        </div>\n        <div [ngClass]=\"{faded:!item.slots}\">\n            <span class=\"sprite sprite-item_slots\" ></span> {{item.slots}}\n        </div>\n    </div>\n\n\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <div>\n            <button type=\"button\"\n                (click)=\"equipItem(item)\"\n                [ngClass]=\"{active:item.equipped}\">Equip</button>\n            <span *ngIf=\"item.slot\">[{{item.slot}}]</span>\n        </div>\n        <button *ngIf=\"item.usage\" type=\"button\" class=\"btn--use\"\n            (click)=\"item.used=!item.used\"\n            [ngClass]=\"{active:item.used}\">Use</button>\n    </div>\n\n</div>\n"
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-end\">\n    <div class=\" u-text--sc\">Items</div>\n    <div class=\"d-flex flex-align-center flex-justify-end u-sm\">\n        <span class=\"sprite sprite-item_weight\"></span> {{totalWeight}}\n        / {{weightLimit}}\n        &nbsp;\n        <span class=\"sprite sprite-item_darkstone\"></span> {{totalDarkstone}}\n        &nbsp;\n        <button type=\"button\" class=\"btn--add\" (click)=\"addItem()\">New</button>\n    </div>\n</h4>\n<hr>\n\n<div *ngFor=\"let item of items; let i = index\" class=\"card\">\n\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{item.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"editItem(i)\">edit</button>\n            &nbsp;&nbsp;&nbsp;\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"removeItem(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n\n    <div class=\"d-flex flex-justify-between flex-align-start u-sm\">\n        <span>{{item.source}}</span>\n        <span *ngIf=\"item.keywords\"><em>{{item.keywords}}</em></span>\n    </div>\n\n    <div class=\"desc\" *ngIf=\"item.description\">{{item.description}}</div>\n\n    <div *ngIf=\"item.usage || item.cost\"\n        class=\"u-sm d-flex flex-justify-between flex-align-center\">\n        <div *ngIf=\"item.usage\">Use per: {{item.usage}}</div>\n        <div *ngIf=\"!item.usage\">&nbsp;</div>\n        <div *ngIf=\"item.cost\">Cost: ${{item.cost}}</div>\n    </div>\n\n    <div *ngIf=\"item.modifiers && item.modifiers.length\">\n        <hr>\n        <div *ngFor=\"let modifier of item.modifiers\"  class=\"u-sm\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n\n    <div class=\"item__stats\">\n        <div [ngClass]=\"{faded:!item.weight}\">\n            <span class=\"sprite sprite-item_weight\"></span> {{item.weight}}\n        </div>\n        <div [ngClass]=\"{faded:!item.darkstone}\">\n            <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone}}\n        </div>\n        <div [ngClass]=\"{faded:!item.hands}\">\n            <span class=\"sprite sprite-item_hands\"></span> {{item.hands}}\n        </div>\n        <div [ngClass]=\"{faded:!item.slots}\">\n            <span class=\"sprite sprite-item_slots\" ></span> {{item.slots}}\n        </div>\n    </div>\n\n\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <div>\n            <button type=\"button\"\n                (click)=\"equipItem(item)\"\n                [ngClass]=\"{active:item.equipped}\">Equip</button>\n            <span *ngIf=\"item.slot\">[{{item.slot}}]</span>\n        </div>\n        <button *ngIf=\"item.usage\" type=\"button\" class=\"btn--use\"\n            (click)=\"item.used=!item.used\"\n            [ngClass]=\"{active:item.used}\">Use</button>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -11569,7 +11687,7 @@ module.exports = "\n<div class=\"c-login\">\n\n    <div class=\"card\">\n\n     
 /***/ 617:
 /***/ (function(module, exports) {
 
-module.exports = "\n\n\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Mutations</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.mutations=!showAvailable.mutations\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.mutations\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMutation\"\n            [(ngModel)]=\"newMutation\"\n            (change)=\"add('mutations', newMutation)\">\n            <option [ngValue]=\"null\" selected>Select Mutation</option>\n            <option *ngFor=\"let mutation of available.mutations\" [ngValue]=\"mutation\">\n                {{mutation.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.mutations=false\">&times;</button>\n</div>\n<div *ngIf=\"!mutations || !mutations.length\">\n    Add a new mutation using the 'New' button.\n</div>\n<div *ngFor=\"let mutation of mutations; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mutation.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('mutations', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mutation.desc}}</div>\n    <div *ngIf=\"mutation.modifiers\">\n        <div *ngFor=\"let modifier of mutation.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Injuries</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.injuries=!showAvailable.injuries\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.injuries\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newInjury\"\n            [(ngModel)]=\"newInjury\"\n            (change)=\"add('injuries', newInjury)\">\n            <option [ngValue]=\"null\" selected>Select Injury</option>\n            <option *ngFor=\"let injury of available.injuries\" [ngValue]=\"injury\">\n                {{injury.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.injuries=false\">&times;</button>\n</div>\n<div *ngIf=\"!injuries || !injuries.length\">\n    Add a new injury using the 'New' button.\n</div>\n<div *ngFor=\"let injury of injuries; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{injury.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('injuries', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{injury.desc}}</div>\n    <div *ngIf=\"injury.modifiers\">\n        <div *ngFor=\"let modifier of injury.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Madness</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.madness=!showAvailable.madness\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.madness\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMadness\"\n            [(ngModel)]=\"newMadness\"\n            (change)=\"add('madness', newMadness)\">\n            <option [ngValue]=\"null\" selected>Select Madness</option>\n            <option *ngFor=\"let mad of available.madness\" [ngValue]=\"mad\">\n                {{mad.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.madness=false\">&times;</button>\n</div>\n<div *ngIf=\"!madness || !madness.length\">\n    Add a new madness using the 'New' button.\n</div>\n<div *ngFor=\"let mad of madness; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mad.name}}\n        <button type=\"button\" class=\"btn--del\" (click)=\"remove('madness', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mad.desc}}</div>\n    <div *ngIf=\"mad.modifiers\">\n        <div *ngFor=\"let modifier of mad.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n\n\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Mutations</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.mutations=!showAvailable.mutations\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.mutations\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMutation\"\n            [(ngModel)]=\"newMutation\"\n            (change)=\"add('mutations', newMutation)\">\n            <option [ngValue]=\"null\" selected>Select Mutation</option>\n            <option *ngFor=\"let mutation of available.mutations\" [ngValue]=\"mutation\">\n                {{mutation.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.mutations=false\">&times;</button>\n</div>\n<div *ngIf=\"!mutations || !mutations.length\">\n    Add a new mutation using the 'New' button.\n</div>\n<div *ngFor=\"let mutation of mutations; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mutation.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('mutations', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mutation.desc}}</div>\n    <br>\n    <div *ngIf=\"mutation.modifiers\">\n        <div *ngFor=\"let modifier of mutation.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Injuries</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.injuries=!showAvailable.injuries\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.injuries\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newInjury\"\n            [(ngModel)]=\"newInjury\"\n            (change)=\"add('injuries', newInjury)\">\n            <option [ngValue]=\"null\" selected>Select Injury</option>\n            <option *ngFor=\"let injury of available.injuries\" [ngValue]=\"injury\">\n                {{injury.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.injuries=false\">&times;</button>\n</div>\n<div *ngIf=\"!injuries || !injuries.length\">\n    Add a new injury using the 'New' button.\n</div>\n<div *ngFor=\"let injury of injuries; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{injury.name}}\n        <button type=\"button\" class=\"btn--del\"\n            (click)=\"remove('injuries', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{injury.desc}}</div>\n    <div *ngIf=\"injury.modifiers\">\n        <div *ngFor=\"let modifier of injury.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n<br>\n<br>\n<br>\n<br>\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Madness</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"showAvailable.madness=!showAvailable.madness\">New</button>\n</h4>\n<hr>\n<div *ngIf=\"showAvailable.madness\" class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">\n        <br>\n        <select class=\"form-control\" name=\"newMadness\"\n            [(ngModel)]=\"newMadness\"\n            (change)=\"add('madness', newMadness)\">\n            <option [ngValue]=\"null\" selected>Select Madness</option>\n            <option *ngFor=\"let mad of available.madness\" [ngValue]=\"mad\">\n                {{mad.name}}\n            </option>\n        </select>\n        <br>\n        <br>\n    </div>\n    <button type=\"button\" (click)=\"showAvailable.madness=false\">&times;</button>\n</div>\n<div *ngIf=\"!madness || !madness.length\">\n    Add a new madness using the 'New' button.\n</div>\n<div *ngFor=\"let mad of madness; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-center\">\n        {{mad.name}}\n        <button type=\"button\" class=\"btn--del\" (click)=\"remove('madness', i)\">X</button>\n    </h5>\n    <div class=\"desc\">{{mad.desc}}</div>\n    <div *ngIf=\"mad.modifiers\">\n        <div *ngFor=\"let modifier of mad.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11583,21 +11701,21 @@ module.exports = "<p>\n  chooser works!\n</p>\n"
 /***/ 619:
 /***/ (function(module, exports) {
 
-module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n\n    <h5>\n        Current: {{value}}\n\n        <small>\n            ( min: {{minimum}}, max: {{maximum}} )\n        </small>\n\n    </h5>\n    <small *ngIf=\"modifiers\">\n        Modifiers:\n        <span *ngIf=\"modifiers.value>=0\">+</span>{{modifiers.value}}\n        {{modifiers.sources|join:', '}}\n    </small>\n\n    <div class=\"d-flex flex-justify-between flex-wrap\">\n\n        <div class=\"col-3\">\n\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-100)\" (ngDisable)=\"value==minimum\">-100</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-50)\" (ngDisable)=\"value==minimum\">-50</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-20)\" (ngDisable)=\"value==minimum\">-20</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-10)\" (ngDisable)=\"value==minimum\">-10</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-5)\" (ngDisable)=\"value==minimum\">-5</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-1)\" (ngDisable)=\"value==minimum\">-1</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(1)\">+1</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(5)\">+5</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(10)\">+10</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(20)\">+20</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(50)\">+50</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(100)\">+100</button>\n            </div>\n\n\n            <br>\n\n            <div class=\"manual-entry\">\n                <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                    <button type=\"button\" (click)=\"changeManual(-1)\" (ngClass)=\"{disabled:!hasManual()}\">-</button>\n                    <div class=\"col\">\n                        <input type=\"number\" class=\"form-control\" [(ngModel)]=\"manualAdj\" placeholder=\"Adjust by ...\">\n                    </div>\n                    <button type=\"button\" (click)=\"changeManual(1)\" (ngClass)=\"{disabled:!hasManual()}\">+</button>\n                </div>\n            </div>\n\n        </div>\n\n        <div class=\"col-1 d-flex flex-col flex-justify-between flex-align-stretch\">\n            <div class=\"col\">\n                <strong>Changes to be applied:</strong><br>\n                <div *ngFor=\"let change of changes\">{{change}}</div>\n            </div>\n            <div>Final Value: {{result}}</div>\n        </div>\n\n    </div>\n\n    <hr>\n\n    <div class=\"d-flex flex-justify-end\">\n        <button type=\"button\" (click)=\"close()\" aria-label=\"Close\">Cancel</button>\n        <button type=\"button\" (click)=\"apply()\" aria-label=\"Apply\">Apply</button>\n    </div>\n\n</div>\n"
+module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n\n    <h5>\n        Current: {{value}}\n\n        <small>\n            ( min: {{minimum}}, max: {{maximum}} )\n        </small>\n\n    </h5>\n    <small *ngIf=\"modifiers\">\n        Modifiers:\n        {{modifiers.value|modifier}}\n        ({{modifiers.sources|join:', '}})\n    </small>\n\n    <div class=\"d-flex flex-justify-between flex-wrap\">\n\n        <div class=\"col-3\">\n\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-100)\" (ngDisable)=\"value==minimum\">-100</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-50)\" (ngDisable)=\"value==minimum\">-50</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-20)\" (ngDisable)=\"value==minimum\">-20</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-10)\" (ngDisable)=\"value==minimum\">-10</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-5)\" (ngDisable)=\"value==minimum\">-5</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(-1)\" (ngDisable)=\"value==minimum\">-1</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(1)\">+1</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(5)\">+5</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(10)\">+10</button>\n            </div>\n            <br>\n            <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(20)\">+20</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(50)\">+50</button>\n                <button type=\"button\" class=\"keypad__button\" (click)=\"change(100)\">+100</button>\n            </div>\n\n\n            <br>\n\n            <div class=\"manual-entry\">\n                <div class=\"d-flex flex-justify-around flex-align-stretch\">\n                    <button type=\"button\" (click)=\"changeManual(-1)\" (ngClass)=\"{disabled:!hasManual()}\">-</button>\n                    <div class=\"col\">\n                        <input type=\"number\" class=\"form-control\" [(ngModel)]=\"manualAdj\" placeholder=\"Adjust by ...\">\n                    </div>\n                    <button type=\"button\" (click)=\"changeManual(1)\" (ngClass)=\"{disabled:!hasManual()}\">+</button>\n                </div>\n            </div>\n\n        </div>\n\n        <div class=\"col-1 d-flex flex-col flex-justify-between flex-align-stretch\">\n            <div class=\"col\">\n                <strong>Changes to be applied:</strong><br>\n                <div *ngFor=\"let change of changes\">{{change}}</div>\n            </div>\n            <div>Final Value: {{result}}</div>\n        </div>\n\n    </div>\n\n    <hr>\n\n    <div class=\"d-flex flex-justify-end\">\n        <button type=\"button\" (click)=\"close()\" aria-label=\"Close\">Cancel</button>\n        &nbsp;&nbsp;&nbsp;\n        <button type=\"button\" (click)=\"apply()\" aria-label=\"Apply\">Apply</button>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 620:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"value-display\">\n    <div class=\"value\" [ngClass]=\"{'u-sm':'sm'===options.valueSize,modified:isModified()}\">\n        <div (click)=\"openKeypad()\">{{computed}}</div>\n        <div *ngIf=\"canAdjust\">\n            <button type=\"button\" class=\"incrementer\"\n                (click)=\"increment()\"\n                (ngDisabled)=\"!canIncrement()\">\n                +\n            </button>\n            <button type=\"button\" class=\"decrementer\"\n                (click)=\"decrement()\"\n                (ngDisabled)=\"!canDecrement()\">\n                -\n            </button>\n        </div>\n    </div>\n    <div class=\"label\" [ngClass]=\"{'u-sm':'sm'===options.labelSize}\">\n        <span>{{label}}</span>\n    </div>\n</div>\n"
+module.exports = "<div class=\"value-display\">\n    <div class=\"value\" [ngClass]=\"{modified:isModified()}\">\n        <div (click)=\"openKeypad()\"\n             [ngClass]=\"{'u-sm':'sm'===options.valueSize}\">\n            {{computed}}\n        </div>\n        <div *ngIf=\"canAdjust\">\n            <button type=\"button\" class=\"incrementer\"\n                (click)=\"increment()\"\n                (ngDisabled)=\"!canIncrement()\">\n                +\n            </button>\n            <button type=\"button\" class=\"decrementer\"\n                (click)=\"decrement()\"\n                (ngDisabled)=\"!canDecrement()\">\n                -\n            </button>\n        </div>\n    </div>\n    <div class=\"label\" [ngClass]=\"{'u-sm':'sm'===options.labelSize}\">\n        <span>{{label}}</span>\n    </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 621:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"value-display\" [ngClass]=\"{'has-leveled':hasLeveled()}\">\n    <div class=\"value\" [ngClass]=\"{'u-sm':'sm'===options.valueSize,modified:isModified()}\">\n        <div (click)=\"openKeypad()\">\n            <div>\n                {{value}}\n                <div class=\"needed\">{{needed}}</div>\n            </div>\n        </div>\n        <div *ngIf=\"canAdjust\">\n            <button type=\"button\" class=\"incrementer\"\n                (click)=\"increment()\"\n                (ngDisabled)=\"!canIncrement()\">\n                +\n            </button>\n            <button type=\"button\" class=\"decrementer\"\n                (click)=\"decrement()\"\n                (ngDisabled)=\"!canDecrement()\">\n                -\n            </button>\n        </div>\n    </div>\n    <div class=\"label\" [ngClass]=\"{'u-sm':'sm'===options.labelSize}\">\n        <span>{{label}}</span>\n    </div>\n</div>\n"
+module.exports = "<div class=\"value-display\" [ngClass]=\"{'has-leveled':hasLeveled()}\">\n    <div class=\"value\" [ngClass]=\"{modified:isModified()}\">\n        <div (click)=\"openKeypad()\"\n            [ngClass]=\"{'u-sm':'sm'===options.valueSize}\">\n            <div>\n                {{value}}\n                <div class=\"needed\">{{needed}}</div>\n            </div>\n        </div>\n        <div *ngIf=\"canAdjust\">\n            <button type=\"button\" class=\"incrementer\"\n                (click)=\"increment()\"\n                (ngDisabled)=\"!canIncrement()\">\n                +\n            </button>\n            <button type=\"button\" class=\"decrementer\"\n                (click)=\"decrement()\"\n                (ngDisabled)=\"!canDecrement()\">\n                -\n            </button>\n        </div>\n    </div>\n    <div class=\"label\" [ngClass]=\"{'u-sm':'sm'===options.labelSize}\">\n        <span>{{label}}</span>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11646,21 +11764,21 @@ module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n
 /***/ 628:
 /***/ (function(module, exports) {
 
-module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div class=\"dialog__body\">\n        <div *ngFor=\"let sermon of options\"\n            class=\"c-option--available\"\n            [ngClass]=\"{'is-selected':isChosen(sermon)}\">\n            <h5>{{sermon.name}}</h5>\n            <div>{{sermon.desc}}</div>\n            <div class=\"col\" *ngIf=\"sermon.requires\">\n                <strong>Requires</strong> <em>{{sermon.requires}}</em>\n            </div>\n            <button type=\"button\" class=\"btn btn--use\"\n                *ngIf=\"!sermon.disabled\"\n                (click)=\"choose(sermon)\">\n                <span>{{isChosen(sermon)?'Unselect':'Choose'}}</span>\n            </button>\n        </div>\n    </div>\n    <div class=\"d-flex flex-justify-end\">\n        <button type=\"button\" (click)=\"close()\" aria-label=\"Close\">Cancel</button>\n        <button type=\"button\" aria-label=\"Apply\"\n            [disabled]=\"!hasSelection()\"\n            (click)=\"apply()\">Apply</button>\n    </div>\n</div>\n"
+module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div class=\"dialog__body\">\n        <div *ngFor=\"let sermon of options\"\n            class=\"c-option--available\"\n            [ngClass]=\"{'is-selected':isChosen(sermon)}\">\n\n            <h5>{{sermon.name}}</h5>\n            <div class=\"d-flex flex-justify-between flex-align-center\">\n                <div><strong>Check: </strong> [{{sermon.check}}+]</div>\n                <div><strong>Cost: </strong> {{sermon.cost}}</div>\n                <div><strong>XP: </strong> {{sermon.xp}}</div>\n            </div>\n            <div>{{sermon.desc}}</div>\n            <div class=\"col\" *ngIf=\"sermon.requires\">\n                <strong>Requires</strong> <em>{{sermon.requires}}</em>\n            </div>\n            <button type=\"button\" class=\"btn btn--use\"\n                *ngIf=\"!sermon.disabled\"\n                (click)=\"choose(sermon)\">\n                <span>{{isChosen(sermon)?'Unselect':'Choose'}}</span>\n            </button>\n            \n        </div>\n    </div>\n    <div class=\"d-flex flex-justify-end\">\n        <button type=\"button\" (click)=\"close()\" aria-label=\"Close\">Cancel</button>\n        <button type=\"button\" aria-label=\"Apply\"\n            [disabled]=\"!hasSelection()\"\n            (click)=\"apply()\">Apply</button>\n    </div>\n</div>\n"
 
 /***/ }),
 
 /***/ 629:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sermon card\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <h5 class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <span *ngIf=\"sermon.deadly\">!</span>\n                {{sermon.name}}\n                <small>({{sermon.type}})</small>\n            </div>\n            <div class=\"d-flex flex-justify-end flex-align-end\">\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"edit()\">edit</button>\n                &nbsp;&nbsp;&nbsp;\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=true\">X</button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"remove()\">Y</button>\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=false\">N</button>\n                </div>\n            </div>\n        </h5>\n\n        <div class=\"desc\">{{sermon.desc}}</div>\n\n        <div><strong>Range: </strong> {{sermon.range||\"Not specified\"}}</div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div><strong>Check: </strong> [{{sermon.check}}+]</div>\n            <div><strong>Cost: </strong> {{sermon.cost}}</div>\n            <div><strong>XP: </strong> {{sermon.xp}}</div>\n        </div>\n\n        <hr>\n\n        <div>\n\n            <!-- if not cast already and not empty or insufficient -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canCast()\" (click)=\"use()\">cast</button>\n\n            <!-- if cast but not empty -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canSpendExtraFaith()\"\n                (click)=\"spendExtraFaith()\">+faith</button>\n\n            <!-- if cast but no applied xp -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">+xp</button>\n\n            <!-- if empty or not cast and insufficient -->\n            <span *ngIf=\"isInsufficient()\">\n                <em>not enough faith</em>\n            </span>\n\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this sermon\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Blessing\">Blessing</option>\n                    <option value=\"Judgement\">Judgement</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"d-flex flex-justify-between\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"cancelEditing()\">cancel</button>\n            <button type=\"button\" class=\"u-sm\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
+module.exports = "<div class=\"sermon card\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <h5 class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <span *ngIf=\"sermon.deadly\" style=\"color:#f00\">!</span>\n                {{sermon.name}}\n                <small>({{sermon.type}})</small>\n            </div>\n            <div class=\"d-flex flex-justify-end flex-align-end\">\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"edit()\">edit</button>\n                &nbsp;&nbsp;&nbsp;\n                <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=true\">X</button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"remove()\">Y</button>\n                    <button type=\"button\" class=\"btn u-sm\" (click)=\"confirmingDelete=false\">N</button>\n                </div>\n            </div>\n        </h5>\n\n        <div class=\"desc\">{{sermon.desc}}</div>\n\n        <div><strong>Range: </strong> {{sermon.range||\"Not specified\"}}</div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div><strong>Check: </strong> [{{sermon.check}}+]</div>\n            <div><strong>Cost: </strong> {{sermon.cost}}</div>\n            <div><strong>XP: </strong> {{sermon.xp}}</div>\n        </div>\n\n        <hr>\n\n        <div>\n\n            <!-- if not cast already and not empty or insufficient -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canCast()\" (click)=\"use()\">cast</button>\n\n            <!-- if cast but not empty -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canSpendExtraFaith()\"\n                (click)=\"spendExtraFaith()\">+faith</button>\n\n            <!-- if cast but no applied xp -->\n            <button type=\"button\" class=\"u-sm\" *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">+xp</button>\n\n            <!-- if empty or not cast and insufficient -->\n            <span *ngIf=\"isInsufficient()\">\n                <em>not enough faith</em>\n            </span>\n\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this sermon\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Blessing\">Blessing</option>\n                    <option value=\"Judgement\">Judgement</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"d-flex flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"d-flex flex-justify-between\">\n            <button type=\"button\" class=\"u-sm\" (click)=\"cancelEditing()\">cancel</button>\n            <button type=\"button\" class=\"u-sm\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 630:
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">Sermons</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Faith: {{availableFaith}} / {{maxFaith}}\n    <button type=\"button\" (click)=\"resetSermons()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let sermon of character.sermons\">\n    <sermon [sermon]=\"sermon\"\n        [eventSubject]=\"eventSubject\"\n        (onEvent)=\"onEvent($event)\">\n    </sermon>\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">Sermons</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Faith: {{getAvailableFaith()}} / {{maxFaith+getFaithModifier()}}\n    <button type=\"button\" (click)=\"resetSermons()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let sermon of character.sermons\">\n    <sermon [sermon]=\"sermon\"\n        [eventSubject]=\"eventSubject\"\n        (onEvent)=\"onEvent($event)\"\n        [availableFaith]=\"getAvailableFaith()\">\n    </sermon>\n</div>\n"
 
 /***/ }),
 

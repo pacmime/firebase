@@ -54,6 +54,20 @@ import { ChooserComponent } from './shared/chooser/chooser.component';
 
 
 @Pipe({
+    name: 'modifier'
+})
+@Injectable()
+export class ModifierPipe implements PipeTransform {
+    transform(value: any) : string {
+        if(value === null || value === undefined ||
+            isNaN(value) || value === 0) return '';
+        if(value*1 > 0) return '+' + value;
+        return value;
+    }
+}
+
+
+@Pipe({
     name: 'mimGroupFilter'
 })
 @Injectable()
@@ -142,6 +156,7 @@ const appRoutes: Routes = [
     AbilityChooserComponent,
     ItemsComponent,
     MimComponent,
+    ModifierPipe,
     MimGroupFilterPipe,
     SumFilterPipe,
     JoinPipe,

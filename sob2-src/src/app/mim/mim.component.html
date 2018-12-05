@@ -33,9 +33,10 @@
             (click)="remove('mutations', i)">X</button>
     </h5>
     <div class="desc">{{mutation.desc}}</div>
+    <br>
     <div *ngIf="mutation.modifiers">
         <div *ngFor="let modifier of mutation.modifiers">
-            {{modifier.affects}} : +{{modifier.value}}
+            {{modifier.affects}} {{modifier.value|modifier}}
         </div>
     </div>
 </div>

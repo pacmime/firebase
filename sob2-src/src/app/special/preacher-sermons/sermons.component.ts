@@ -33,17 +33,22 @@ export class PreacherSermonsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.maxFaith = this.maxFaith || this.character.faith;
-        this.availableFaith = this.character.faith;
+        this.availableFaith = this.maxFaith = this.character.faith;
     }
 
     ngOnChanges(changes : SimpleChanges) {
         if(changes.modifiers) {
-            this.maxFaith = this.character.faith;
 
-            let mod = changes.modifiers.currentValue;
-            if(mod && !isNaN(mod.value))
-                this.maxFaith += (mod.value*1);
+            // if(this.maxFaith === 0)
+            //     this.maxFaith = this.character.faith;
+            //
+            // let mod = changes.modifiers.currentValue;
+            // if(mod && !isNaN(mod.value)) {
+            //     if(this.maxFaith == this.availableFaith) {
+            //          this.availableFaith += (mod.value*1);
+            //     }
+            //     this.maxFaith += (mod.value*1);
+            // }
         }
     }
 
@@ -55,9 +60,20 @@ export class PreacherSermonsComponent implements OnInit {
     }
 
 
+    getFaithModifier() {
+        if(this.modifiers && this.modifiers.value && !isNaN(this.modifiers.value))
+            return this.modifiers.value*1;
+        return 0;
+    }
+
+    getAvailableFaith() {
+        return this.availableFaith + this.getFaithModifier();
+    }
+
+
     add(sermon) {
         this.character.sermons.push(sermon);
-        this.onSave.emit({});
+        this.onSave.emit({ type:'sermons', value: this.character.sermons });
     }
 
     remove(sermon) {
@@ -67,7 +83,7 @@ export class PreacherSermonsComponent implements OnInit {
         });
         if(index >= 0) {
             let rem = this.character.sermons.splice(index, 1);
-            this.onSave.emit({});
+            this.onSave.emit({ type:'sermons', value: this.character.sermons });
         }
     }
 
@@ -80,6 +96,7 @@ export class PreacherSermonsComponent implements OnInit {
 
     resetSermons() {
         this.availableFaith = this.maxFaith;
+        this.eventSubject.next({name:'sermons:reset',value:true})
         this.onSave.emit({});
     }
 
@@ -91,8 +108,9 @@ export class PreacherSermonsComponent implements OnInit {
             break;
             case 'xp:gained':
                 this.character.xp += event.value*1;
-                this.onSave.emit({});
+                this.onSave.emit({ type: 'xp', value: this.character.xp });
             break;
+            case 'sermon:removed': this.remove(event.value); break;
             default: console.log("Unsupported sermon event " + event.name);
         }
     }

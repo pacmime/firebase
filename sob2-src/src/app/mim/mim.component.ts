@@ -4,6 +4,13 @@ import {
 } from '@angular/core';
 import { FirestoreService } from '../firestore.service';
 
+
+const MIM = {
+    MUTATIONS : "mutations",
+    INJURIES: "injuries",
+    MADNESS: "madness"
+};
+
 @Component({
   selector: 'mim',
   templateUrl: './mim.component.html',
@@ -36,21 +43,21 @@ export class MimComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        this.mutations = this.current.filter(m => m.group.toLowerCase() == 'mutations');
-        this.injuries = this.current.filter(m => m.group.toLowerCase() == 'injuries');
-        this.madness = this.current.filter(m => m.group.toLowerCase() == 'madness');
+        this.mutations = this.current.filter(m => !m.group || m.group.toLowerCase() == MIM.MUTATIONS);
+        this.injuries = this.current.filter(m => m.group && m.group.toLowerCase() == MIM.INJURIES);
+        this.madness = this.current.filter(m => m.group && m.group.toLowerCase() == MIM.MADNESS);
 
         this.afs.getMutations().then( mutations => {
-            this.options['mutations'] = mutations;
-            this.updateAvailable('mutations');
+            this.options[MIM.MUTATIONS] = mutations;
+            this.updateAvailable(MIM.MUTATIONS);
         });
         this.afs.getInjuries().then( injuries => {
-            this.options['injuries'] = injuries;
-            this.updateAvailable('injuries');
+            this.options[MIM.INJURIES] = injuries;
+            this.updateAvailable(MIM.INJURIES);
         });
         this.afs.getMadness().then( madness => {
-            this.options['madness'] = madness;
-            this.updateAvailable('madness');
+            this.options[MIM.MADNESS] = madness;
+            this.updateAvailable(MIM.MADNESS);
         });
 
     }
@@ -68,10 +75,11 @@ export class MimComponent implements OnInit, OnDestroy {
 
     add(type, value) {
         if(!this[type]) this[type] = [];
+        if(value.group) value.group = type;
         this.showAvailable[type] = false;
         this[type].push(value);
         this.current.push(value);
-        this.updateAvailable(type, );
+        this.updateAvailable(type);
         this.onSave.emit({type:"mutation.added",value:value});
     }
 

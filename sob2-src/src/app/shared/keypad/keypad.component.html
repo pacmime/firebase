@@ -10,8 +10,8 @@
     </h5>
     <small *ngIf="modifiers">
         Modifiers:
-        <span *ngIf="modifiers.value>=0">+</span>{{modifiers.value}}
-        {{modifiers.sources|join:', '}}
+        {{modifiers.value|modifier}}
+        ({{modifiers.sources|join:', '}})
     </small>
 
     <div class="d-flex flex-justify-between flex-wrap">
@@ -71,6 +71,7 @@
 
     <div class="d-flex flex-justify-end">
         <button type="button" (click)="close()" aria-label="Close">Cancel</button>
+        &nbsp;&nbsp;&nbsp;
         <button type="button" (click)="apply()" aria-label="Apply">Apply</button>
     </div>
 

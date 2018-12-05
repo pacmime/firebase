@@ -21,7 +21,7 @@
     <div *ngIf="ability.modifiers" class="u-sm">
         <hr>
         <div *ngFor="let modifier of ability.modifiers">
-            {{modifier.affects}} : +{{modifier.value}}
+            {{modifier.affects}} {{modifier.value|modifier}}
         </div>
     </div>
 </div>

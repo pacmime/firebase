@@ -10,6 +10,14 @@ import { FirestoreService } from '../firestore.service';
 import { SOBCharacter } from '../models/character.model';
 import { SOBError } from '../models/error';
 
+interface IMessage {
+    id: number;
+    title: string;
+    value: string;
+    canDismiss: boolean;
+}
+
+
 @Component({
   selector: 'app-character',
   templateUrl: './character.component.html',
@@ -30,7 +38,8 @@ export class CharacterComponent implements OnInit {
     public editableBio: any = null;
     public modifiers: any = {};
     public error : SOBError = null; //new SOBError("test", "This is a test");
-    public message: { title: string; value: string; } = null;
+    public messages: IMessage[] = [] as IMessage[];
+    private savingTimer : any;
 
     constructor(private service: FirestoreService,
                 private route: ActivatedRoute,
@@ -39,14 +48,31 @@ export class CharacterComponent implements OnInit {
 
     ngOnInit() {
 
+        let loadMsg : IMessage = null;
+
         if(this.route.paramMap && this.route.paramMap.switchMap) {
             this.route.paramMap
                 .switchMap((params: ParamMap) => {
+
+                    loadMsg = this.createMessage(
+                        "Loading character",
+                        "This should only take a moment...",
+                        false
+                    );
+                    this.messages.push(loadMsg);
+
+
                     let id = params.get('id');
                     this.charId = id;
                     return this.service.loadCharacter(id);
                 })
                 .subscribe( (character: SOBCharacter) => {
+
+                    setTimeout( () => {
+                        //clear loading message
+                        this.removeMessage(loadMsg);
+                    }, 1000);
+
                     //charSubscription above will handle getting characters from the service
                     // but this subscribe is necessary to get the actual event from the
                     // Observable from the service
@@ -81,7 +107,7 @@ export class CharacterComponent implements OnInit {
     }
 
     refreshModifiers() {
-        this.modifiers = this.service.getCharacterModifiers();
+        this.modifiers = this.service.getCharacterModifiers(this.character);
         // console.log("Character Component: Modifiers being applied:");
         // console.log(this.modifiers);
         // console.log("-------------------------");
@@ -122,7 +148,7 @@ export class CharacterComponent implements OnInit {
         this.character.keywords = this.editableBio.keywords;
         this.editableBio = null;
         this.isEditingBio = false;
-        this.doSave();
+        this.scheduleSave();
     }
 
     /**
@@ -138,10 +164,12 @@ export class CharacterComponent implements OnInit {
         if(key && 'xp' === key) {
             let neededXP = this.xpLevels[this.character.level];
             if(arg.value >= neededXP) {
-                this.message = {
-                    title: "Level Up!",
-                    value: "Choose a class ability and roll for a new level-up ability"
-                };
+                this.messages.push(
+                    this.createMessage(
+                        "Level Up!",
+                        "Choose a class ability and roll for a new level-up ability"
+                    )
+                );
                 this.character.level++;
                 arg.value -= neededXP;  //reset
             }
@@ -151,33 +179,7 @@ export class CharacterComponent implements OnInit {
         //Could use arg.type as key, but need to not process things like
         // add/remove spells, etc like we would process changing literal values
 
-        if(!key) {
-
-            // if(arg && arg.type === 'xp') {
-            //     //XP gained from using sermons/spells/abilities that grant them
-            //     this.character.xp += (arg.value*1);
-            //
-            // } else if(arg && arg.type === 'fortune.current') {
-            //     //Updating available value after using it
-            //     this.character.fortune.current += (arg.value*1);
-            //
-            // } else if(arg && arg.type === 'magik.current') {
-            //     //Updating available value after using it
-            //     this.character.magik.current += (arg.value*1);
-            //
-            // } else if(arg && arg.type &&
-            //     (~arg.type.indexOf("item.") ||
-            //      ~arg.type.indexOf("ability.") ||
-            //      ~arg.type.indexOf("mutation."))) {
-            //     //Updating modifiers after item/ability added/updated/equipped/removed
-            //     this.refreshModifiers();
-            //
-            // } else {
-            //     console.log("Unrecognized change: " + (arg?arg.type:'null'));
-            //     return;
-            // }
-
-        } else {
+        if(key) {
             //if can't apply the change, don't bother saving the character
             try {
                 if(!this.applyChange(key, arg.value)) return;
@@ -188,7 +190,7 @@ export class CharacterComponent implements OnInit {
             }
         }
 
-        this.doSave();
+        this.scheduleSave();
     }
 
     /**
@@ -230,22 +232,100 @@ export class CharacterComponent implements OnInit {
     }
 
 
+    scheduleSave () {
+        //do the actual save in a timeout so we don't block the UI waiting for
+        // the service to complete
+        if(this.savingTimer) {
+            clearTimeout(this.savingTimer);
+            this.savingTimer = null;
+        }
+        this.savingTimer = setTimeout( () => {
+            this.savingTimer = null;
+            this.doSave();
+        }, 100);
+    }
+
+
     doSave() {
+        let savingMsg = this.createMessage(
+            'Saving changes', 'this should only take a moment...', false);
+        this.messages.push(savingMsg);
+
+        //set timer for saves that take too long...
+        let timeoutMsg = null;
+        let timer = setTimeout( () => {
+            this.removeMessage(savingMsg);
+            timeoutMsg = this.createMessage(
+                'Save Timed Out', 'Saving is taking a really long time...', true);
+            this.messages.push(timeoutMsg);
+        }, 5000);
+
+
         // console.log(`Saving character ${this.charId}...`);
         // console.log(this.character);
         this.service.updateCharacter(this.charId, this.character)
+        .then( () => {
+
+            if(timer) clearTimeout(timer);
+            else if(timeoutMsg) this.removeMessage(timeoutMsg);
+
+            this.removeMessage(savingMsg);
+
+            let savedMsg = this.createMessage('Changes saved!', 'this will go away shortly', false);
+            this.messages.push(savedMsg);
+            setTimeout( () => { this.removeMessage(savedMsg); }, 3000);
+        })
         .catch(e => {
+            if(timer) clearTimeout(timer);
+            else if(timeoutMsg) this.removeMessage(timeoutMsg);
+
+            this.removeMessage(savingMsg);
             this.error = new SOBError("save",
                 "Unable to save character changes, because " + e.message);
         });
     }
 
 
+    getWeightLimit() {
+        let value = this.character.stats.Strength + 5;
+        (this.modifiers||[]).forEach( mod => {
+            if(mod.affects === 'Strength') {
+                value += (mod.value*1);
+            }
+        })
+        return value;
+    }
 
     hasDynamiteSatchel () {
         let satchel = this.character.items.find( it => it.name === "Dynamite Satchel");
         return satchel && satchel.equipped;
     }
 
+
+    createMessage(title: string, message: string, canDismiss?: boolean) {
+        let msg : IMessage = {
+            title: title,
+            value: message,
+            id: Math.round(Math.random()*9999),
+            canDismiss: typeof(canDismiss) !== 'undefined' ? canDismiss : true
+        };
+        return msg;
+    }
+
+    removeMessage(arg: any) {
+        let idx = -1;
+        if(arg && arg.id) {
+            this.messages.forEach( (msg : IMessage,i:number) => {
+                if(arg.id === msg.id) idx = i;
+            });
+        } else if(arg && typeof(arg) === 'number') {
+            this.messages.forEach( (msg : IMessage,i:number) => {
+                if(arg === msg.id) idx = i;
+            });
+        }
+        if(idx >= 0) {
+            this.messages.splice(idx, 1);
+        }
+    }
 
 }

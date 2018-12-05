@@ -12,12 +12,15 @@
         <button type="button" (click)="error=null">DISMISS</button>
     </div>
 
-    <div *ngIf="message" class="c-message">
-        <h5 class="d-flex flex-justify-between flex-align-start">
-            <span class="col">{{message.title}}</span>
-            <button type="button" (click)="message=null">DISMISS</button>
-        </h5>
-        <p>{{message.value}}</p>
+    <div *ngIf="messages.length" class="c-messages">
+        <div class="c-message" *ngFor="let msg of messages">
+            <h5 class="d-flex flex-justify-between flex-align-start">
+                <span class="col">{{msg.title}}</span>
+                <button type="button" *ngIf="msg.canDimiss"
+                    (click)="removeMessage(msg)">DISMISS</button>
+            </h5>
+            <p>{{msg.value}}</p>
+        </div>
     </div>
 
     <div class="l-page">
@@ -69,12 +72,14 @@
 
                 <xp-value-display label="XP"
                     value="{{character.xp}}"
+                    [options]="{valueSize:'sm'}"
                     needed="{{xpLevels[character.level]}}"
                     (onSave)="saveChar('xp', $event)">
                 </xp-value-display>
 
                 <value-display label="Wealth"
                     value="{{character.wealth}}"
+                    [options]="{valueSize:'sm'}"
                     (onSave)="saveChar('wealth', $event)">
                 </value-display>
             </section>
@@ -344,7 +349,7 @@
     <div class="l-page">
         <main>
             <items [items]="character.items"
-                   [weightLimit]="character.stats.Strength + 5"
+                   [weightLimit]="getWeightLimit()"
                     (onSave)="saveChar(null, $event)">
             </items>
         </main>

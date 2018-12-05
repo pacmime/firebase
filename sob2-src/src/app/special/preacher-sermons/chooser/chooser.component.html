@@ -3,7 +3,13 @@
         <div *ngFor="let sermon of options"
             class="c-option--available"
             [ngClass]="{'is-selected':isChosen(sermon)}">
+
             <h5>{{sermon.name}}</h5>
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div><strong>Check: </strong> [{{sermon.check}}+]</div>
+                <div><strong>Cost: </strong> {{sermon.cost}}</div>
+                <div><strong>XP: </strong> {{sermon.xp}}</div>
+            </div>
             <div>{{sermon.desc}}</div>
             <div class="col" *ngIf="sermon.requires">
                 <strong>Requires</strong> <em>{{sermon.requires}}</em>
@@ -13,6 +19,7 @@
                 (click)="choose(sermon)">
                 <span>{{isChosen(sermon)?'Unselect':'Choose'}}</span>
             </button>
+            
         </div>
     </div>
     <div class="d-flex flex-justify-end">

@@ -5,7 +5,7 @@
 
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
-    Faith: {{availableFaith}} / {{maxFaith}}
+    Faith: {{getAvailableFaith()}} / {{maxFaith+getFaithModifier()}}
     <button type="button" (click)="resetSermons()">Reset</button>
 </div>
 <hr>
@@ -13,6 +13,7 @@
 <div *ngFor="let sermon of character.sermons">
     <sermon [sermon]="sermon"
         [eventSubject]="eventSubject"
-        (onEvent)="onEvent($event)">
+        (onEvent)="onEvent($event)"
+        [availableFaith]="getAvailableFaith()">
     </sermon>
 </div>

@@ -1,6 +1,9 @@
 <div class="value-display">
-    <div class="value" [ngClass]="{'u-sm':'sm'===options.valueSize,modified:isModified()}">
-        <div (click)="openKeypad()">{{computed}}</div>
+    <div class="value" [ngClass]="{modified:isModified()}">
+        <div (click)="openKeypad()"
+             [ngClass]="{'u-sm':'sm'===options.valueSize}">
+            {{computed}}
+        </div>
         <div *ngIf="canAdjust">
             <button type="button" class="incrementer"
                 (click)="increment()"

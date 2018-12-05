@@ -1,6 +1,7 @@
 <div class="value-display" [ngClass]="{'has-leveled':hasLeveled()}">
-    <div class="value" [ngClass]="{'u-sm':'sm'===options.valueSize,modified:isModified()}">
-        <div (click)="openKeypad()">
+    <div class="value" [ngClass]="{modified:isModified()}">
+        <div (click)="openKeypad()"
+            [ngClass]="{'u-sm':'sm'===options.valueSize}">
             <div>
                 {{value}}
                 <div class="needed">{{needed}}</div>

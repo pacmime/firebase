@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy, OnChanges,
+    Input, Output, EventEmitter, SimpleChanges, SimpleChange
+} from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Sermon } from '../../../models/character.model';
@@ -7,7 +10,7 @@ const enum FLAGS {
     empty        = 1,    //no faith available
     insufficient = 2,    //insufficient faith to cast
     cast         = 4,    //cast
-    xp           = 8    //applied xp
+    xp           = 8     //applied xp
 };
 
 function applyFlag(sermon, flag) {
@@ -20,9 +23,7 @@ function removeFlag(sermon, flag) {
 function hasFlag(sermon, flag) {
     return sermon.status & flag;
 }
-function clearFlags(sermon) {
-    sermon.status = 0;
-}
+
 
 
 @Component({
@@ -33,6 +34,7 @@ function clearFlags(sermon) {
 export class PreacherSermonComponent implements OnInit {
 
     @Input() sermon: Sermon;
+    @Input() availableFaith: number = 0;
     @Input() eventSubject : Subject<{name:string,value:any}>;
     @Output() onEvent = new EventEmitter<{ name:string, value:any }>();
 
@@ -49,24 +51,38 @@ export class PreacherSermonComponent implements OnInit {
         });
     }
 
-    use () {
-        // $emit('sermon:cast', this.sermon.name, this.sermon.cost);
+    ngOnChanges(changes : SimpleChanges) {
+        if(changes.availableFaith) {
+            let faith = changes.availableFaith.currentValue;
+            let cost = isNaN(this.sermon.cost) ? -1 : this.sermon.cost;
 
+            if(faith <= 0) {
+                applyFlag(this.sermon, FLAGS.empty);
+            } else {
+                removeFlag(this.sermon, FLAGS.empty);
+            }
+
+            if(cost > 0 && faith < cost) {
+                applyFlag(this.sermon, FLAGS.insufficient);
+            } else {
+                removeFlag(this.sermon, FLAGS.insufficient);
+            }
+        }
+    }
+
+
+    use () {
         applyFlag(this.sermon, FLAGS.cast);
         if(this.onEvent)
             this.onEvent.emit({name:'faith:spent', value: this.sermon.cost});
     }
 
     spendExtraFaith () {
-        // $emit('sermon:cast', this.sermon.name, 1);
-
         if(this.onEvent)
             this.onEvent.emit({name:'faith:spent', value: 1});
     }
 
     applyXP () {
-        // $emit('sermon:xp', this.sermon.name, this.sermon.xp);
-
         applyFlag(this.sermon, FLAGS.xp);
         if(this.onEvent)
             this.onEvent.emit({name:'xp:gained', value: this.sermon.xp});
@@ -86,11 +102,11 @@ export class PreacherSermonComponent implements OnInit {
         Object.assign(this.sermon, this.editable);
         this.isEditing = false;
         this.editable = null;
-        //this.onSave();
     }
 
     remove () {
-        //notify
+        if(this.onEvent)
+            this.onEvent.emit({name:'sermon:removed', value: this.sermon});
     }
 
     canCast () {
@@ -121,12 +137,14 @@ export class PreacherSermonComponent implements OnInit {
              !hasFlag(this.sermon, FLAGS.cast) );
     }
 
+    clearFlags() {
+        this.sermon.status = 0;
+    }
+
     handleEvent (event) {
         let name = event.name;
         switch(name) {
-            case 'reset':
-                clearFlags(this.sermon);
-            break;
+            case 'sermons:reset': this.clearFlags(); break;
             case 'faith:available':
                 let faith = event.value as number;
                 if(faith < this.sermon.cost)

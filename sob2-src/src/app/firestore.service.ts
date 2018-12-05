@@ -158,7 +158,7 @@ export class FirestoreService {
                         //armor doesn't stack, so only use highest modifier value
                         results[affected].value = Math.max(results[affected].value, modVal*1);
                     } else {
-                        results[affected].value += modVal*1;
+                        results[affected].value += modVal;
                     }
 
                     results[affected].sources.push(src.name||src.label);
