@@ -17,7 +17,7 @@ h3, h4, h5 {
   position: fixed;
   right: 0;
   left: 0;
-  top: 20px;
+  top: 60px;
   margin-right: auto;
   margin-left: auto;
   min-height: 200px;
@@ -38,19 +38,32 @@ h3, h4, h5 {
 
 @media (min-width: 768px) {
   .dialog {
-    top: 40px;
+    top: 60px;
   }
 }
 
-
+.c-ability--heading {
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.5em 0.5em;
+    margin-bottom: -1px;
+    border: 1px solid #bbb;
+    background: #ddd;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
 .c-ability--available {
-    margin:         0.5em 0;
-    box-shadow:     0 1px 3px rgba(0,0,0,0.2);
-    padding:        0.5em;
-    border-radius:  4px;
+    padding: 1em 0.5em;
+    border-bottom: 1px solid #ddd;
 
     &.is-selected {
         background-color: #f00;
         color: #fff;
+    }
+
+    p {
+        font-size: 0.875em;
+        margin-bottom: 0.5em;
     }
 }

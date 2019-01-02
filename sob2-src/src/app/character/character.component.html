@@ -16,8 +16,7 @@
         <div class="c-message" *ngFor="let msg of messages">
             <h5 class="d-flex flex-justify-between flex-align-start">
                 <span class="col">{{msg.title}}</span>
-                <button type="button" *ngIf="msg.canDimiss"
-                    (click)="removeMessage(msg)">DISMISS</button>
+                <button type="button" (click)="removeMessage(msg)">DISMISS</button>
             </h5>
             <p>{{msg.value}}</p>
         </div>

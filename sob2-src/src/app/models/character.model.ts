@@ -93,6 +93,8 @@ export interface Ability extends Option {
     multi?:     boolean;    //choose more than once?
     disabled?:  boolean;    //able to be chosen?
     modifiers:  Modifier[]  //mods associated
+    type?:      string; //type of ability (starting, etc)
+    roll?:      string; //2d6 rolled to acquire upgrade ability
 }
 
 export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |

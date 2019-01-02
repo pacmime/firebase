@@ -49,6 +49,51 @@ export class AbilitiesComponent implements OnInit {
         }
     }
 
+    getChooserOptions() {
+        let takenNames = this.character.abilities.map(a=>a.name);
+        return this.afs.getAbilities(this.character.classId)
+        .then( (abilities:Ability[]) => {
+
+            let paths = [];
+            let rolled = [];
+            let rest = [];
+            let hasChosenPath = false;
+            abilities.forEach( a => {
+
+                if('starting' === a.type) {
+                    //starting path abilities...
+                    paths.push(a);
+
+                    //note if the user has already selected a
+                    // starting path ability... and see below why
+                    if( takenNames.indexOf(a.name) >= 0) {
+                        hasChosenPath = true;
+                    }
+
+                } else if(a.roll !== undefined || a.multi === true) {
+                    //rolled abilities when leveling up
+                    rolled.push(a);
+
+                } else if( !a.multi && takenNames.indexOf(a.name) < 0 ){
+                    //mark those requiring unselected abilities as disabled
+                    if(a.requires && takenNames.indexOf(a.requires)<0)
+                        a.disabled = true;
+                    rest.push(a);
+                }
+            });
+
+            //if a starting path has been chosen already,
+            // then we won't bother sending any path ability options
+            if(hasChosenPath) paths = [];
+
+            return {
+                paths: paths,
+                rolled: rolled,
+                rest: rest
+            };
+        });
+    }
+
     getAvailable () {
         let takenNames = this.character.abilities.map(a=>a.name);
         return this.afs.getAbilities(this.character.classId).then( (abilities:Ability[]) => {
@@ -80,9 +125,12 @@ export class AbilitiesComponent implements OnInit {
         const element = this.modalService.getDomElementFromComponentRef(ref);
         this.modalService.addChild(element);
 
-        this.getAvailable().then( options => {
-            ref.instance.abilities = options;
-        });
+        // this.getAvailable().then( options => {
+        //     ref.instance.abilities = options;
+        // });
+        this.getChooserOptions().then( options => {
+            ref.instance.options = options;
+        })
     }
 
 

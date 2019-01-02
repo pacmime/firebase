@@ -242,7 +242,7 @@ export class CharacterComponent implements OnInit {
         this.savingTimer = setTimeout( () => {
             this.savingTimer = null;
             this.doSave();
-        }, 100);
+        }, 500);
     }
 
 

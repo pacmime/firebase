@@ -24,12 +24,23 @@ import { Ability } from '../../models/character.model';
 })
 export class AbilityChooserComponent implements OnInit {
 
+  @Input() options : {
+      paths: Ability[];
+      rolled: Ability[];
+      rest: Ability[];
+  };
   @Input() abilities : Ability[];
   @Input() closable = true;
   @Input() visible: boolean = true;
   @Output() onClose: Function;
 
   private selection : Ability = null;
+
+  public groupToggles : any = {
+      paths: false,
+      rolled: false,
+      rest: false
+  };
 
   constructor() { }
 

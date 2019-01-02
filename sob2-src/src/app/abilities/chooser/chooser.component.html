@@ -1,7 +1,81 @@
 <div [@dialog] *ngIf="visible" class="dialog">
     <div class="dialog__body">
-        <div *ngIf="!abilities||!abilities.length">Loading available options...</div>
-        <div *ngFor="let ability of abilities"
+        <div *ngIf="!options||!options.rest||!options.rest.length">
+            Loading available options...
+        </div>
+
+
+        <!-- starting path options -->
+        <div class="c-ability--heading" (click)="groupToggles.paths=!groupToggles.paths">
+            <span [ngClass]="{'icon-caret--down':groupToggles.paths,'icon-caret--up':!groupToggles.paths}"></span>
+            Starting Paths
+        </div>
+        <div class="c-ability--group" [ngClass]="{hidden:groupToggles.paths}">
+            <div *ngIf="!options?.paths.length" class="c-ability--available">
+                <em>You've already selected a path</em>
+            </div>
+            <div *ngFor="let ability of options?.paths"
+                class="c-ability--available"
+                [ngClass]="{'is-selected':isChosen(ability)}">
+                <h5>{{ability.name}}</h5>
+                <p>{{ability.value}}</p>
+                <button type="button" class="btn btn--use"
+                    *ngIf="!ability.disabled"
+                    (click)="choose(ability)">
+                    <span>{{isChosen(ability)?'Unselect':'Choose'}}</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- rolled upgrades -->
+        <div class="c-ability--heading" (click)="groupToggles.rolled=!groupToggles.rolled">
+            <span [ngClass]="{'icon-caret--down':groupToggles.rolled,'icon-caret--up':!groupToggles.rolled}"></span>
+            Rolled Upgrades
+        </div>
+        <div class="c-ability--group" [ngClass]="{hidden:groupToggles.rolled}">
+            <div *ngFor="let ability of options?.rolled"
+                class="c-ability--available"
+                [ngClass]="{'is-selected':isChosen(ability)}">
+                <h5>
+                    <span *ngIf="ability.roll">({{ability.roll}} / 2D6) </span>
+                    {{ability.name}}
+                </h5>
+                <p>{{ability.value}}</p>
+                <button type="button" class="btn btn--use"
+                    *ngIf="!ability.disabled"
+                    (click)="choose(ability)">
+                    <span>{{isChosen(ability)?'Unselect':'Choose'}}</span>
+                </button>
+            </div>
+        </div>
+
+
+        <!-- remaining level up options -->
+        <div class="c-ability--heading" (click)="groupToggles.rest=!groupToggles.rest">
+            <span [ngClass]="{'icon-caret--down':groupToggles.rest,'icon-caret--up':!groupToggles.rest}"></span>
+            Class Abilities
+        </div>
+        <div class="c-ability--group" [ngClass]="{hidden:groupToggles.rest}">
+            <div *ngFor="let ability of options?.rest"
+                class="c-ability--available"
+                [ngClass]="{'is-selected':isChosen(ability)}">
+                <h5>{{ability.name}}</h5>
+                <p>{{ability.value}}</p>
+                <div class="col" *ngIf="ability.requires">
+                    <strong>Requires</strong> <em>{{ability.requires}}</em>
+                </div>
+                <button type="button" class="btn btn--use"
+                    *ngIf="!ability.disabled"
+                    (click)="choose(ability)">
+                    <span>{{isChosen(ability)?'Unselect':'Choose'}}</span>
+                </button>
+            </div>
+        </div>
+
+
+
+
+        <!-- <div *ngFor="let ability of abilities"
             class="c-ability--available"
             [ngClass]="{'is-selected':isChosen(ability)}">
             <h5>
@@ -9,6 +83,9 @@
                 {{ability.name}}
             </h5>
             <div>{{ability.value}}</div>
+            <div class="col" *ngIf="'starting'===ability.type">
+                <strong>Path</strong>
+            </div>
             <div class="col" *ngIf="ability.requires">
                 <strong>Requires</strong> <em>{{ability.requires}}</em>
             </div>
@@ -17,7 +94,7 @@
                 (click)="choose(ability)">
                 <span>{{isChosen(ability)?'Unselect':'Choose'}}</span>
             </button>
-        </div>
+        </div> -->
     </div>
     <div class="d-flex flex-justify-end">
         <button type="button" (click)="close()" aria-label="Close">Cancel</button>
