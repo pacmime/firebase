@@ -122,10 +122,14 @@ export class CharacterComponent implements OnInit {
         if(isNaN(this.character.sidebag.capacity))
             this.character.sidebag.capacity = 5;
         this.character.notes = this.character.notes || "";
+        if(!this.character.temporaryMods) this.character.temporaryMods = [];
+
+        //class-specific properties
         if(this.isPreacher && !this.character.sermons) this.character.sermons = [];
         if(this.isSamurai && !this.character.tactics) this.character.tactics = [];
         if(this.isGambler && !this.character.tricks) this.character.tricks = [];
         if(this.isShaman && !this.character.spells) this.character.spells = [];
+
     }
 
     editBio() {
@@ -173,6 +177,7 @@ export class CharacterComponent implements OnInit {
                 this.character.level++;
                 arg.value -= neededXP;  //reset
             }
+
         }
 
 
@@ -187,6 +192,10 @@ export class CharacterComponent implements OnInit {
                 this.error = new SOBError("save",
                     "Unable to apply change(s) to character, because " + e.message);
                 return;
+            }
+
+            if('temporaryMods' === key) {
+                this.refreshModifiers();
             }
         }
 
@@ -288,11 +297,9 @@ export class CharacterComponent implements OnInit {
 
     getWeightLimit() {
         let value = this.character.stats.Strength + 5;
-        (this.modifiers||[]).forEach( mod => {
-            if(mod.affects === 'Strength') {
-                value += (mod.value*1);
-            }
-        })
+        if(this.modifiers && this.modifiers.Strength) {
+            value += (this.modifiers.Strength.value*1);
+        }
         return value;
     }
 

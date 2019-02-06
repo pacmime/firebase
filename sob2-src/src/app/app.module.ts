@@ -51,6 +51,7 @@ import { OrphanMissionsChooserComponent } from './special/orphan-missions/choose
 
 import { NotesComponent } from './special/notes/notes.component';
 import { ChooserComponent } from './shared/chooser/chooser.component';
+import { TempComponent } from './shared/temp/temp.component';
 
 
 @Pipe({
@@ -183,7 +184,8 @@ const appRoutes: Routes = [
     OrphanMissionsChooserComponent,
     NotesComponent,
     ChooserComponent,
-    OrphanMissionsComponent
+    OrphanMissionsComponent,
+    TempComponent
   ],
   imports: [
       //                               for debugging purposes only

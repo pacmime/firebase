@@ -129,6 +129,7 @@ export class FirestoreService {
             this.getModifiersFrom(result, char.abilities||[],  false);
             //covers madness/injuries too
             this.getModifiersFrom(result, char.mutations||[],  false);
+            this.getModifiersFrom(result, [ {modifiers: char.temporaryMods||[]}],  false);
         }
         return result;
     }

@@ -6,10 +6,10 @@
         <em>Click avatar to edit</em>
     </div>
     <div *ngIf="showForm">
+        <div>
+            <input type="file" (change)="changeListener($event)">
+        </div>
         <button type="button" (click)="cancel()" class="u-sm">cancel</button>
         <button type="button" *ngIf="isDirty()" (click)="save()" class="u-sm">save</button>
-        <div>
-            <input type="file" class="hidden" (change)="changeListener($event)">
-        </div>
     </div>
 </div>

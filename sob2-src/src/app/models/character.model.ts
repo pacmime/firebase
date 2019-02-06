@@ -194,4 +194,7 @@ export interface SOBCharacter {
     };
     //Orphan
     missions?   : OrphanMission[];
+
+    //temporary modifiers
+    temporaryMods?  : Modifier[]
 }

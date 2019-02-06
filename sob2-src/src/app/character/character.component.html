@@ -373,8 +373,17 @@
 
      <div class="l-page">
          <main>
-             <char-notes [notes]="character.notes" (onSave)="saveChar('notes', $event)">
+
+             <char-notes [notes]="character.notes"
+                (onSave)="saveChar('notes', $event)">
              </char-notes>
+
+             <hr>
+
+             <temporary-modifiers [mods]="character.temporaryMods"
+                (onSave)="saveChar('temporaryMods', $event)">
+             </temporary-modifiers>
+
          </main>
      </div>
 

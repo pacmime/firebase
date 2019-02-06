@@ -1,0 +1,34 @@
+
+<br>
+
+<h5 class="d-flex flex-justify-between flex-align-end">Temporary Modifiers</h5>
+
+<div class="d-flex flex-justify-between">
+    <div class="col-2">
+        <select class="form-control u-sm" [(ngModel)]="newModifier.affects">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let modtarget of modifierTargets" [ngValue]="modtarget">
+                {{modtarget}}
+            </option>
+        </select>
+    </div>
+    <div class="col">
+        <input type="number" min="-10" [(ngModel)]="newModifier.value"
+            class="form-control u-sm" placeholder="0">
+    </div>
+    <button type="button" class="btn--add u-sm"
+        (click)="addModifier()"
+        [disabled]="!newModifier.affects">
+        Add
+    </button>
+</div>
+
+<br>
+
+<div *ngFor="let mod of mods; let $index=index">
+    <strong>{{mod.affects}}</strong>:
+    <em>{{mod.value}}</em>
+    <button type="button" class="btn--del u-sm" (click)="removeModifier($index)">&times;</button>
+</div>
+
+<br>
