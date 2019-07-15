@@ -1,0 +1,115 @@
+<div class="spell card">
+
+    <div *ngIf="!isEditing">
+
+        <h5 class="d-flex flex-justify-between flex-align-center">
+            <div class="col">
+                <span *ngIf="spell.deadly" style="color:#f00">!</span>
+                {{spell.name}}
+                <small>({{spell.type}})</small>
+            </div>
+            <div class="d-flex flex-justify-end flex-align-end">
+                <button type="button" class="btn u-sm" (click)="edit()">edit</button>
+                &nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn u-sm" (click)="confirmingDelete=true">X</button>
+                <div class="btn-group" *ngIf="confirmingDelete">
+                    <button type="button" class="btn u-sm" (click)="remove()">Y</button>
+                    <button type="button" class="btn u-sm" (click)="confirmingDelete=false">N</button>
+                </div>
+            </div>
+        </h5>
+
+        <div class="desc">{{spell.desc}}</div>
+
+        <div><strong>Range: </strong> {{spell.range||"Not specified"}}</div>
+
+        <div class="d-flex flex-justify-between flex-align-center">
+            <div><strong>Check: </strong> [{{spell.check}}+]</div>
+            <div><strong>Cost: </strong> {{spell.cost}}</div>
+            <div><strong>XP: </strong> {{spell.xp}}</div>
+        </div>
+
+        <hr>
+
+        <div>
+
+            <!-- if not cast already and not empty or insufficient -->
+            <button type="button" class="u-sm" *ngIf="canCast()" (click)="use()">cast</button>
+
+            <!-- if cast but not empty -->
+            <button type="button" class="u-sm" *ngIf="canSpendExtraMana()"
+                (click)="spendExtraMana()">+faith</button>
+
+            <!-- if cast but no applied xp -->
+            <button type="button" class="u-sm" *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
+
+            <!-- if empty or not cast and insufficient -->
+            <span *ngIf="isInsufficient()">
+                <em>not enough faith</em>
+            </span>
+
+
+        </div>
+
+    </div>
+
+    <div *ngIf="isEditing">
+        <div>
+            <label>Name</label>
+            <input type="text" class="form-control"
+                [(ngModel)]="editable.name"
+                placeholder="Name this spell">
+        </div>
+
+        <div>
+            <label>Cost</label>
+            <textarea rows="3" class="form-control" [(ngModel)]="editable.desc">
+            </textarea>
+        </div>
+
+        <div class="d-flex flex-justify-between flex-align-center">
+            <div class="col">
+                <label>Deadly?
+                    <input type="checkbox" [(ngModel)]="editable.deadly">
+                </label>
+            </div>
+            <div class="col-2">
+                <label>Type</label>
+                <select class="form-control" [(ngModel)]="editable.type">
+                    <option value="Blessing">Blessing</option>
+                    <option value="Judgement">Judgement</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label>Range</label>
+            <input type="text" class="form-control" [(ngModel)]="editable.range">
+        </div>
+
+        <div class="d-flex flex-justify-between flex-align-center">
+            <div class="col">
+                <label>Check</label>
+                <input type="number" class="form-control" [(ngModel)]="editable.check">
+            </div>
+
+            <div class="col">
+                <label>Cost</label>
+                <input type="number" class="form-control" [(ngModel)]="editable.cost">
+            </div>
+
+            <div class="col">
+                <label>XP</label>
+                <input type="number" class="form-control" [(ngModel)]="editable.xp">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="d-flex flex-justify-between">
+            <button type="button" class="u-sm" (click)="cancelEditing()">cancel</button>
+            <button type="button" class="u-sm" (click)="save()">save</button>
+        </div>
+    </div>
+
+</div>

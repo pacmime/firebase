@@ -69,9 +69,17 @@ export class SamuraiTacticsComponent implements OnInit {
         this.onSave.emit({type: 'fury.current', value: this.character.fury.current });
     }
 
+    getTactics() : Promise<SamuraiTactic[]> {
+        if('Wandering Samurai' === this.character.class)
+            return this.afs.getWanderingSamuraiTactics();
+        if('Daimyo' === this.character.class ||
+            'Samurai Warrior' === this.character.class)
+            return this.afs.getSamuraiBattleTactics();
+    }
+
     getAvailable () {
         let takenNames = (this.character.tactics||[]).map(a=>a.name);
-        return this.afs.getSamuraiTactics().then( (tactics:SamuraiTactic[]) => {
+        return this.getTactics().then( (tactics:SamuraiTactic[]) => {
             return tactics.filter( a => {
                 //return only those that can be chosen multiple times
                 // or haven't already been chosen

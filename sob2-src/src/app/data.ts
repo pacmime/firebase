@@ -831,7 +831,6 @@ export const Data = {
             "darkstone": 0,
             "xp":  0
         },
-
         {
             "name": "Gunslinger",
             "abilities": [
@@ -5420,6 +5419,326 @@ export const Data = {
             },
             "wealth": 0,
             "willpower": 3,
+            "xp": 0,
+            "upgrades": [
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Agility",
+                            "value": "1"
+                        }
+                    ],
+                    "value": "+1 Agility. Also gain D6 Health/Sanity (any mix).",
+                    "name": "Agility"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "grit",
+                            "value": "1"
+                        }
+                    ],
+                    "value": "+1 Faith while in an Other World. +1 Max Grit.",
+                    "name": "Ancient Writing"
+                },
+                {
+                    "value": "New Sermon Blessing",
+                    "name": "Belief"
+                },
+                {
+                    "requires": "Belief",
+                    "value": "Once per turn, you may Re-roll a single Defense roll",
+                    "name": "Chosen"
+                },
+                {
+                    "requires": "Chosen",
+                    "value": "New Sermon Blessing. +1 Faith",
+                    "name": "Conviction"
+                },
+                {
+                    "value": "From now on, any time you collect XP from that kind of Enemy, collect an extra +5 XP.",
+                    "name": "Crush the Forsaken (Demon)"
+                },
+                {
+                    "value": "From now on, any time you collect XP from that kind of Enemy, collect an extra +5 XP.",
+                    "name": "Crush the Forsaken (Undead)"
+                },
+                {
+                    "value": "From now on, any time you collect XP from that kind of Enemy, collect an extra +5 XP.",
+                    "name": "Crush the Forsaken (Void)"
+                },
+                {
+                    "requires": "Conviction",
+                    "value": "Defense +4",
+                    "name": "Divine Protection"
+                },
+                {
+                    "value": "Once per turn, when Performing a Judgement Sermon, you may Re-roll one of the Casting Dice.",
+                    "name": "Firebrand"
+                },
+                {
+                    "requires": "Stories of the Void",
+                    "value": "New Sermon.  You may now hold 5 more Corruption Points before getting a Mutation.",
+                    "name": "Forbidden Knowledge"
+                },
+                {
+                    "requires": "Vengeance",
+                    "value": "Whenever you kill an adjacent Enemy, before assigning any more Hits, you may Move up to 2 spaces in any direction ignoring Escape tests.",
+                    "name": "Frothing Rage"
+                },
+                {
+                    "multi": true,
+                    "value": "+D6 Health and +D6 Sanity.",
+                    "name": "Health and Sanity"
+                },
+                {
+                    "value": "You may not use Guns. Starts with 1 Blessing and 1 Judgement.",
+                    "name": "Holy Man"
+                },
+                {
+                    "requires": "Salvation",
+                    "value": "Anytime you kill a Demon, every Hero on your Map Tile may Heal 1 Wound or Sanity Damage",
+                    "name": "Holy Revolution"
+                },
+                {
+                    "requires": "Revelation",
+                    "value": "Once per turn, you may Re-roll one of your To Hit rolls.",
+                    "name": "Holy Strike"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "init",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Initiative",
+                    "name": "Initiative"
+                },
+                {
+                    "multi": true,
+                    "value": "You may choose one Injury/Mutation/Madness to Heal.  If you have none, gain +1 Faith.",
+                    "name": "Keep the Faith"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Lore",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Lore. Also gain +D6 Health.",
+                    "name": "Lore"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "grit",
+                            "value": "1"
+                        }
+                    ],
+                    "requires": "Zealot",
+                    "value": "Once per turn, you may take 1 Corruption Point, ignoring Willpower, to Heal D6 Health/Sanity (any mix) from yourself or another Hero on your Map Tile. +1 Max Grit.",
+                    "name": "Martyr"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "grit",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Max Grit",
+                    "name": "Max Grit"
+                },
+                {
+                    "value": "Once per turn, when Performing a Blessing Sermon, you may Re-roll one of the Casting Dice.",
+                    "name": "Missionary"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "move",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Move",
+                    "name": "Move"
+                },
+                {
+                    "value": "You may now use 2-Handed Guns. Extra Starting Gear: Shotgun (replaces Holy Book)",
+                    "name": "Redemptionist"
+                },
+                {
+                    "value": "New Sermon Judgement",
+                    "name": "Revelation"
+                },
+                {
+                    "requires": "Martyr",
+                    "value": "Use 2 Grit to remove a Corruption Point from yourself.",
+                    "name": "Salvation"
+                },
+                {
+                    "value": "You are +1 Damage on all Attacks against Undead Enemies",
+                    "name": "Scourge of the Dead"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "sidebag",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Side Bag Token Capacity. Also gain +D6 Health/Sanity (any mix).",
+                    "name": "Side Bag Capacity"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Spirit",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Spirit.  Also gain +D6 Sanity",
+                    "name": "Spirit"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Lore",
+                            "value": "1"
+                        }
+                    ],
+                    "requires": "Tools of the Damned",
+                    "value": "All of your Attacks are +1 Damage against Void Enemies. +1 Lore.",
+                    "name": "Stories of the Void"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Strength",
+                            "value": "1"
+                        }
+                    ],
+                    "multi": true,
+                    "value": "+1 Strength. Also gain D6 Health/Sanity (any mix).",
+                    "name": "Strength"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "Lore",
+                            "value": "1"
+                        }
+                    ],
+                    "requires": "Ancient Writing",
+                    "value": "All of your Attacks are +1 Damage against Demon Enemies. +1 Lore.",
+                    "name": "Tools of the Damned"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "combat",
+                            "value": "1"
+                        }
+                    ],
+                    "requires": "Holy Strike",
+                    "value": "New Sermon Judgement. +1 Combat",
+                    "name": "Vengeance"
+                },
+                {
+                    "modifiers": [
+                        {
+                            "affects": "grit",
+                            "value": "1"
+                        }
+                    ],
+                    "value": "Once per turn, you may take 3 Wounds, ignoring Defense, to add +D6 Damage to one your Hits. +1 Max Grit.",
+                    "name": "Zealot"
+                }
+            ]
+        },
+
+
+        {
+            "name": "Sorcerer",
+            "abilities": [
+                {
+                    "desc": "Starts with 2 Elemental Magik spells. For each spell, select any Element, draw 2 spells of that type choosing 1 to keep, and discard the other. Each spell may only be cast once per Turn.",
+                    "name": "Elemental Magik"
+                },
+                {
+                    "desc": "As a Starting Hero, choose 1 Element to be your focus. From now on, you are +1 to your casting total when casting a spell of that element.",
+                    "name": "Magik Focus"
+                },
+                {
+                    "desc": "May not use Guns",
+                    "name": "Ancient Arts"
+                }
+            ],
+            "classId": "4455653a-4f1d-453a-994d-c6ec9ede860b",
+            "combat": 2,
+            "corruption": {
+                "current": 0,
+                "max": 5
+            },
+            "darkstone": 0,
+            "defense": 5,
+            "mana": 4,
+            "grit": {
+                "current": 1,
+                "max": 2
+            },
+            "health": {
+                "max": 10,
+                "wounds": 0
+            },
+            "init": 3,
+            "items": [
+                {
+                    "description": "",
+                    "hands": 0,
+                    "source": "Roku Demon Bag",
+                    "weight": 1
+                }
+            ],
+            "keywords": "Magik, Strange",
+            "level": 1,
+            "melee": 5,
+            "movement": 0,
+            "ranged": 4,
+            "sanity": {
+                "loss": 0,
+                "max": 14
+            },
+            "sorcererSpells": [
+                {
+                    "check": 8,
+                    "cost": 1,
+                    "desc": "",
+                    "element": "any",
+                    "name": "Elemental Blast"
+                }
+            ],
+            "sidebag": {
+                "capacity": 5
+            },
+            "stats": {
+                "Agility": 2,
+                "Cunning": 2,
+                "Lore": 4,
+                "Luck": 3,
+                "Spirit": 3,
+                "Strength": 1
+            },
+            "wealth": 0,
+            "willpower": 4,
             "xp": 0,
             "upgrades": [
                 {

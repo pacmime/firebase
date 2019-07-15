@@ -53,6 +53,7 @@ export interface Sermon extends Option {
     status?: any;
 }
 
+
 export interface OrphanMission extends Option {
     name:       string;
     desc?:      string; //on chosen abilities
@@ -65,7 +66,8 @@ export interface SamuraiTactic extends Option {
     desc?:      string; //on chosen abilities
     cost?:      number;
     disabled?:  boolean;    //able to be chosen?
-    modifiers?:  Modifier[]  //mods associated
+    modifiers?: Modifier[];  //mods associated
+    type?:      string;
 }
 
 export interface GamblerTrick extends Option {
@@ -83,6 +85,19 @@ export interface ShamanSpell extends Option {
     disabled?:  boolean;    //able to be chosen?
     modifiers?:  Modifier[];  //mods associated
     xp?:        number;
+}
+
+
+export interface ElementalMagik extends Option {
+    name: string;
+    deadly? : boolean;
+    type: string;
+    desc: string;
+    check: string;
+    range: string;
+    cost: number;
+    xp : number;
+    status?: any;
 }
 
 export interface Ability extends Option {
@@ -125,6 +140,8 @@ export interface SOBCharacter {
     armor       : number;
     avatar?     : string;
     combat      : number;
+    spiritArmor : number;
+    cover?      : number;
     darkstone   : number;
     defense     : number;
     faith?      : number;
@@ -136,7 +153,6 @@ export interface SOBCharacter {
     move?       : number;   //old value
     notes       : string;
     ranged      : number;
-    spiritArmor : number;
     uid         : string;   //new version
     userId?     : string;   //old version
     version     : string;
@@ -180,7 +196,7 @@ export interface SOBCharacter {
         current : number;
         max     : number;
     };
-    //Wandering Samurai
+    //Wandering Samurai / Samurai Warrior / Daimyo
     tactics?    : SamuraiTactic[];
     fury?       : {
         current : number;
@@ -194,6 +210,16 @@ export interface SOBCharacter {
     };
     //Orphan
     missions?   : OrphanMission[];
+
+    //Sorcerer
+    elementalMagik? : ElementalMagik[];
+    mana?: number;
+
+    //Traveling Monk
+    ki? : {
+        current: number;
+        max: number;
+    };
 
     //temporary modifiers
     temporaryMods?  : Modifier[]

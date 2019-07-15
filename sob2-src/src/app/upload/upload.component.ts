@@ -38,7 +38,7 @@ export class UploadComponent implements OnInit {
     }
 
     initClasses() {
-        // this.service.initDB();
+        this.service.initDB();
     }
 
 
@@ -185,6 +185,10 @@ export class UploadComponent implements OnInit {
 
     exportDB() {
         this.service.exportDB();
+    }
+
+    exportClasses() {
+        this.service.exportClasses();
     }
 
 }

@@ -22,10 +22,11 @@ import {
     ShamanSpell,
     GamblerTrick,
     OrphanMission,
+    ElementalMagik,
     Ability
 } from './models/character.model';
 
-import { Data } from './data';
+import { Data } from './data_new';
 
 const CLASSES_PATH = '/games/sob/classes';
 const INJURIES_PATH = '/games/sob/injuries';
@@ -33,8 +34,12 @@ const MUTATIONS_PATH = '/games/sob/mutations';
 const SERMONS_PATH = '/games/sob/sermons';
 const SHAMAN_SPELLS_PATH = '/games/sob/shamanSpells';
 const GAMBLER_TRICKS_PATH = '/games/sob/gamblingTricks';
-const SAMURAI_TACTICS_PATH = '/games/sob/samuraiTactics';
+const WANDERING_SAMURAI_TACTICS_PATH = '/games/sob/wanderingSamuraiTactics';
+const SAMURAI_WARRIOR_BATTLE_TACTICS_PATH = '/games/sob/samuraiWarriorBattleTactics';
 const ORPHAN_MISSIONS_PATH = '/games/sob/orphanMissions';
+const ELEMENTAL_MAGIK_PATH = '/games/sob/elementalMagik';
+const NINJA_CLANS_PATH = '/games/sob/ninjaClans';
+const TREDERRAN_FACTIONS_PATH = '/games/sob/trederranFactions';
 const MADNESS_PATH = '/games/sob/madness';
 const CHAR_PATH = '/games/sob/chars';
 const OLD_CHAR_PATH = '/games/sob/oldChars';
@@ -75,10 +80,14 @@ export class FirestoreService {
         this.populateItems(Data.INJURIES, INJURIES_PATH);
         this.populateItems(Data.MADNESS, MADNESS_PATH);
         this.populateItems(Data.SERMONS, SERMONS_PATH);
-        this.populateItems(Data.SAMURAI_TACTICS, SAMURAI_TACTICS_PATH);
+        this.populateItems(Data.WANDERING_SAMURAI_TACTICS, WANDERING_SAMURAI_TACTICS_PATH);
         this.populateItems(Data.SHAMAN_SPELLS, SHAMAN_SPELLS_PATH);
         this.populateItems(Data.GAMBLER_TRICKS, GAMBLER_TRICKS_PATH);
-        //this.populateItems(Data.ORPHAN_MISSIONS, ORPHAN_MISSIONS_PATH);
+        this.populateItems(Data.ORPHAN_MISSIONS, ORPHAN_MISSIONS_PATH);
+        this.populateItems(Data.ELEMENTAL_MAGIK, ELEMENTAL_MAGIK_PATH);
+        this.populateItems(Data.NINJA_CLANS, NINJA_CLANS_PATH);
+        this.populateItems(Data.SAMURAI_WARRIOR_BATTLE_TACTICS, SAMURAI_WARRIOR_BATTLE_TACTICS_PATH);
+        this.populateItems(Data.TREDERRAN_FACTIONS, TREDERRAN_FACTIONS_PATH);
     }
 
     initClasses() {
@@ -155,7 +164,7 @@ export class FirestoreService {
                         results[affected] = { value: 0, sources: [] };
                     }
 
-                    if('armor' === affected) {
+                    if('armor' === affected || 'spiritArmor' === affected) {
                         //armor doesn't stack, so only use highest modifier value
                         results[affected].value = Math.max(results[affected].value, modVal*1);
                     } else {
@@ -198,7 +207,7 @@ export class FirestoreService {
 
 
     getUserDocument(uid) : Observable<SOBUser> {
-        return this.afs.doc('/games/sob/users/' + uid).valueChanges();
+        return this.afs.doc('/games/sob/users/' + uid).valueChanges() as Observable<SOBUser>;
     }
 
     getUnmigratedChars(uid) : Observable<any[]> {
@@ -269,7 +278,7 @@ export class FirestoreService {
 
     getClass( classId: string ) : Promise<SOBCharacter> {
         let docRef = this.afs.collection<any>(CLASSES_PATH).doc(classId);
-        return docRef.valueChanges().take(1).toPromise();
+        return docRef.valueChanges().take(1).toPromise() as Promise<SOBCharacter>;
     }
 
     /**
@@ -289,10 +298,17 @@ export class FirestoreService {
     }
 
     /**
-     * @return {Promise<SamuraiTactic[]>} resolving list of tactics
+     * @return {Promise<SamuraiTactic[]>} resolving list of tactics for Wandering Samurai
      */
-    getSamuraiTactics () : Promise<SamuraiTactic[]> {
-        return this.afs.collection<SamuraiTactic>(SAMURAI_TACTICS_PATH).
+    getWanderingSamuraiTactics () : Promise<SamuraiTactic[]> {
+        return this.afs.collection<SamuraiTactic>(WANDERING_SAMURAI_TACTICS_PATH).
+            valueChanges().take(1).toPromise();
+    }
+    /**
+     * @return {Promise<SamuraiTactic[]>} resolving list of tactics for Daimyo
+     */
+    getSamuraiBattleTactics () : Promise<SamuraiTactic[]> {
+        return this.afs.collection<SamuraiTactic>(SAMURAI_WARRIOR_BATTLE_TACTICS_PATH).
             valueChanges().take(1).toPromise();
     }
 
@@ -311,6 +327,15 @@ export class FirestoreService {
         return this.afs.collection<ShamanSpell>(SHAMAN_SPELLS_PATH).
             valueChanges().take(1).toPromise();
     }
+
+    /**
+     * @return {Promise<ShamanSpell[]>} resolving list of tactics
+     */
+    getElementalMagik () : Promise<ElementalMagik[]> {
+        return this.afs.collection<ElementalMagik>(ELEMENTAL_MAGIK_PATH).
+            valueChanges().take(1).toPromise();
+    }
+
 
     /**
      * @return {Promise<any[]>} resolving list of mutations
@@ -456,6 +481,48 @@ export class FirestoreService {
             return true;
         })
         .then( () => {
+            console.log(JSON.stringify(result));
+        });
+
+    }
+
+
+    exportClasses () {
+
+        let result : {
+            classes : any[];
+            gamblingTricks : any[];
+            orphanMissions : any[];
+            samuraiTactics: any[];
+            sermons: any[];
+            shamanSpells: any[];
+            //sorcererSpells: any[];
+            injuries: any[];
+            madness: any[];
+        } = {
+            classes : [],
+            gamblingTricks : [],
+            orphanMissions : [],
+            samuraiTactics: [],
+            sermons: [],
+            shamanSpells: [],
+            //sorcererSpells: [],
+            injuries: [],
+            madness: []
+        };
+
+        let SOB = this.afs.doc('/games/sob');
+
+        let promises = Object.keys(result).map( key => {
+            return SOB.collection<SOBCharacter>(key)
+            .snapshotChanges().map(docs => docs.map( a => a.payload.doc.data() ) )
+            .take(1).toPromise().then( values => {
+                result[key] = values;
+                return true;
+            });
+        })
+
+        Promise.all(promises).then( () => {
             console.log(JSON.stringify(result));
         });
 

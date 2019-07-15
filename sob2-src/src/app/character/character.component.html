@@ -135,6 +135,13 @@
                     [modifiers]="modifiers.combat"
                     (onSave)="saveChar('combat', $event)">
                 </value-display>
+                <value-display label="Cover"
+                    value="{{character.cover}}"
+                    [modifiers]="modifiers.cover"
+                    (onSave)="saveChar('cover', $event)">
+                </value-display>
+            </section>
+            <section class="t-combat">
                 <value-display label="Melee"
                     value="{{character.melee}}"
                     (onSave)="saveChar('melee', $event)">
@@ -268,6 +275,27 @@
                 </value-display>
             </section>
 
+            <section class="t-ki" *ngIf="isMonk">
+                <value-display label="Ki"
+                    value="{{character.ki.current}}"
+                    [options]="{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}"
+                    (onSave)="saveChar('ki.current', $event)">
+                </value-display>
+                <value-display label="Max"
+                    value="{{character.ki.max}}"
+                    [modifiers]="modifiers.ki"
+                    (onSave)="saveChar('ki.max', $event)">
+                </value-display>
+            </section>
+
+            <section class="t-mana" *ngIf="isSorcerer">
+                <value-display label="Mana"
+                    value="{{character.mana}}"
+                    [modifiers]="modifiers.mana"
+                    (onSave)="saveChar('mana', $event)">
+                </value-display>
+            </section>
+
             <!-- <div>
                 <h5>Modifiers being applied</h5>
                 {{modifiers|json}}
@@ -333,6 +361,16 @@
                 [character]="character"
                 (onSave)="saveChar(null, $event)">
             </orphan-missions>
+        </main>
+    </div>
+
+    <div class="l-page" *ngIf="isSorcerer">
+        <main>
+            <sorcerer-elemental-magik
+                [character]="character"
+                [modifiers]="modifiers.mana"
+                (onSave)="saveChar(null, $event)">
+            </sorcerer-elemental-magik>
         </main>
     </div>
 

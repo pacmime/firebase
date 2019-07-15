@@ -1,0 +1,23 @@
+new modifiers:
+melee - set
+endurance - set
+mana - update
+ki - update
+cover - set
+defense - set
+willpower - set
+arcanePowder - update
+weight - update
+
+show type on battle tactics.
+
+new side bag tokens
+
+remove old samuraiTactics in DB
+
+trederran veteran sets "faction" property
+
+Kitsune gaining Magik (Sorcerer)
+Sumo gaining Fury
+
+set values on abilities (sorcerer : element focus)

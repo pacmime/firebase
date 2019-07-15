@@ -1,0 +1,19 @@
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col">Elemental Magik</div>
+    <button type="button" class="btn--add u-sm" (click)="openChooser()">New</button>
+</h4>
+
+<hr>
+<div class="d-flex flex-justify-between flex-align-center">
+    Mana: {{getAvailableMana()}} / {{maxMana+getManaModifier()}}
+    <button type="button" (click)="reset()">Reset</button>
+</div>
+<hr>
+
+<div *ngFor="let magik of character.elementalMagik">
+    <magik [spell]="magik"
+        [eventSubject]="eventSubject"
+        (onEvent)="onEvent($event)"
+        [availableMana]="getAvailableMana()">
+    </magik>
+</div>

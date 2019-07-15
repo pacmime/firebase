@@ -38,9 +38,13 @@ export class SidebagComponent implements OnInit {
         {label:"shatterGrenade", description: "discard to throw like Dynamite. Any model hit takes D3 Wounds ignoring Defense and gains a Stunned token (-1 Defense). At the start of activation, remove 1 Stunned marker on a roll of 4+."},
         {label:"antiRad",   description: "discard to remove D6 Corruption Points" },
         {label:"junkBomb",  description: "(free attack) discard to Throw and Bounce like Dynamite. All models in the same and adjacent spaces take 2D6-5 Wounds, ignoring Defense" },
-        {label:"fireSake",  description: "discard to gain D3 Fury tokens" },
         {label:"nectar",    description: "discard to Recover D3 Grit"},
-        {label:"stake",     description: "(free attack) discard for Combat 1. Critical Hit on 5 or 6. +1 Damage vs Beast or Undead Enemy or +2 Damage vs Vampire Enemy" }
+        {label:"stake",     description: "(free attack) discard for Combat 1. Critical Hit on 5 or 6. +1 Damage vs Beast or Undead Enemy or +2 Damage vs Vampire Enemy" },
+        {label:"sake",      description: "Discard to Heal D6 Sanity Damage."},
+        {label:"fireSake",  description: "Discard to immediately gain D3 Fury Tokens (Samurai Only)"},
+        {label:"strongSake",  description: "Discard to Heal 2D6 Sanity Damage"},
+        {label:"bomb",      description: "Discard to throw as a Ranged Attack. Range: Strength+3, Does D6 Wounds, ignoring Defense, to each model in the same and adjacent spaces. Any Corpse Token in the affected area is also removed."},
+        {label:"potion",    description: "Discard to add +2 to one of your Skills (Agility, Lore, etc) until the end of the turn"},
     ];
 
     constructor() { }

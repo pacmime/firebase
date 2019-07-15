@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Pipe, PipeTransform, Injectable } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -48,6 +48,9 @@ import { SamuraiTacticsComponent } from './special/samurai-tactics/samurai-tacti
 import { SamuraiTacticsChooserComponent } from './special/samurai-tactics/chooser/chooser.component';
 import { OrphanMissionsComponent } from './special/orphan-missions/orphan-missions.component';
 import { OrphanMissionsChooserComponent } from './special/orphan-missions/chooser/chooser.component';
+import { ElementalMagikSpellComponent } from './special/sorcerer-magik/spell/spell.component';
+import { ElementalMagikComponent } from './special/sorcerer-magik/magik.component';
+import { ElementalMagikChooserComponent } from './special/sorcerer-magik/chooser/chooser.component'
 
 import { NotesComponent } from './special/notes/notes.component';
 import { ChooserComponent } from './shared/chooser/chooser.component';
@@ -185,6 +188,9 @@ const appRoutes: Routes = [
     NotesComponent,
     ChooserComponent,
     OrphanMissionsComponent,
+    ElementalMagikSpellComponent,
+    ElementalMagikComponent,
+    ElementalMagikChooserComponent,
     TempComponent
   ],
   imports: [
@@ -192,7 +198,7 @@ const appRoutes: Routes = [
       RouterModule.forRoot( appRoutes, { enableTracing: false } ),
       BrowserModule,
       FormsModule,
-      HttpModule,
+      HttpClientModule,
       BrowserAnimationsModule,
       AngularFireModule.initializeApp(environment.firebase),
       AngularFirestoreModule,
@@ -214,7 +220,7 @@ const appRoutes: Routes = [
       ShamanSpellsChooserComponent,
       GamblerTricksChooserComponent,
       OrphanMissionsChooserComponent,
-
+      ElementalMagikChooserComponent
   ],
   bootstrap: [AppComponent]
 })

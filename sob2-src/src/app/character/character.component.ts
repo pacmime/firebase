@@ -33,6 +33,8 @@ export class CharacterComponent implements OnInit {
     public isSamurai: boolean = false;
     public isGambler: boolean = false;
     public isOrphan: boolean = false;
+    public isMonk : boolean = false;
+    public isSorcerer : boolean = false;
     public xpLevels: number[] = [0, 500, 1000, 2000, 3000, 4500, 6000];
     public isEditingBio: boolean = false;
     public editableBio: any = null;
@@ -90,6 +92,9 @@ export class CharacterComponent implements OnInit {
         this.isShaman = false;
         this.isSamurai = false;
         this.isGambler = false;
+        this.isOrphan = false;
+        this.isMonk = false;
+        this.isSorcerer = false;
         this.xpLevels = null;
         this.isEditingBio = false;
         this.editableBio = null;
@@ -100,8 +105,13 @@ export class CharacterComponent implements OnInit {
         this.isPreacher = 'Preacher' === this.character.class;
         this.isGambler = 'Gambler' === this.character.class;
         this.isShaman = 'Dark Stone Shaman' === this.character.class;
-        this.isSamurai = 'Wandering Samurai' === this.character.class;
+        this.isSamurai =
+            'Wandering Samurai' === this.character.class ||
+            'Daimyo' === this.character.class ||
+            'Samurai Warrior' === this.character.class;
         this.isOrphan = 'Orphan' === this.character.class;
+        this.isMonk = 'Traveling Monk' === this.character.class
+        this.isSorcerer = 'Sorcerer' === this.character.class
         this.ensureProperties();
         this.refreshModifiers();
     }
@@ -129,6 +139,7 @@ export class CharacterComponent implements OnInit {
         if(this.isSamurai && !this.character.tactics) this.character.tactics = [];
         if(this.isGambler && !this.character.tricks) this.character.tricks = [];
         if(this.isShaman && !this.character.spells) this.character.spells = [];
+        if(this.isSorcerer && !this.character.elementalMagik) this.character.elementalMagik = [];
 
     }
 
