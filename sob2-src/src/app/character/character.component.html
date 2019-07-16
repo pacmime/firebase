@@ -135,13 +135,6 @@
                     [modifiers]="modifiers.combat"
                     (onSave)="saveChar('combat', $event)">
                 </value-display>
-                <value-display label="Cover"
-                    value="{{character.cover}}"
-                    [modifiers]="modifiers.cover"
-                    (onSave)="saveChar('cover', $event)">
-                </value-display>
-            </section>
-            <section class="t-combat">
                 <value-display label="Melee"
                     value="{{character.melee}}"
                     (onSave)="saveChar('melee', $event)">
@@ -149,6 +142,18 @@
                 <value-display label="Ranged"
                     value="{{character.ranged}}"
                     (onSave)="saveChar('ranged', $event)">
+                </value-display>
+            </section>
+            <section class="t-combat">
+                <value-display label="Cover"
+                    value="{{character.cover}}"
+                    [modifiers]="modifiers.cover"
+                    (onSave)="saveChar('cover', $event)">
+                </value-display>
+                <value-display label="Endurance"
+                    value="{{character.endurance}}"
+                    [modifiers]="modifiers.endurance"
+                    (onSave)="saveChar('endurance', $event)">
                 </value-display>
             </section>
 
@@ -228,7 +233,7 @@
                 </value-display>
             </section>
 
-            <section class="t-faith" *ngIf="isPreacher">
+            <section class="t-faith" *ngIf="hasFlag(CLASSES.PREACHER)">
                 <value-display label="Faith"
                     value="{{character.faith}}"
                     [modifiers]="modifiers.faith"
@@ -236,7 +241,7 @@
                 </value-display>
             </section>
 
-            <section class="t-fortune" *ngIf="isGambler">
+            <section class="t-fortune" *ngIf="hasFlag(CLASSES.GAMBLER)">
                 <value-display label="Fortune"
                     value="{{character.fortune.current}}"
                     [options]="{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}"
@@ -249,7 +254,7 @@
                 </value-display>
             </section>
 
-            <section class="t-magik" *ngIf="isShaman">
+            <section class="t-magik" *ngIf="hasFlag(CLASSES.SHAMAN)">
                 <value-display label="Magik"
                     value="{{character.magik.current}}"
                     [options]="{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}"
@@ -262,7 +267,7 @@
                 </value-display>
             </section>
 
-            <section class="t-fury" *ngIf="isSamurai">
+            <section class="t-fury" *ngIf="hasFlag(CLASSES.SAMURAI)">
                 <value-display label="Fury"
                     value="{{character.fury.current}}"
                     [options]="{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}"
@@ -275,7 +280,7 @@
                 </value-display>
             </section>
 
-            <section class="t-ki" *ngIf="isMonk">
+            <section class="t-ki" *ngIf="hasFlag(CLASSES.MONK)">
                 <value-display label="Ki"
                     value="{{character.ki.current}}"
                     [options]="{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}"
@@ -288,7 +293,7 @@
                 </value-display>
             </section>
 
-            <section class="t-mana" *ngIf="isSorcerer">
+            <section class="t-mana" *ngIf="hasFlag(CLASSES.SORCERER)">
                 <value-display label="Mana"
                     value="{{character.mana}}"
                     [modifiers]="modifiers.mana"
@@ -315,7 +320,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isPreacher">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.PREACHER)">
         <main>
             <preacher-sermons
                 [character]="character"
@@ -325,7 +330,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isShaman">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.SHAMAN)">
         <main>
             <shaman-spells
                 [character]="character"
@@ -335,7 +340,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isSamurai">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.SAMURAI)">
         <main>
             <samurai-tactics
                 [character]="character"
@@ -345,7 +350,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isGambler">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.GAMBLER)">
         <main>
             <gambler-tricks
                 [character]="character"
@@ -355,7 +360,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isOrphan">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.ORPHAN)">
         <main>
             <orphan-missions
                 [character]="character"
@@ -364,7 +369,7 @@
         </main>
     </div>
 
-    <div class="l-page" *ngIf="isSorcerer">
+    <div class="l-page" *ngIf="hasFlag(CLASSES.SORCERER)">
         <main>
             <sorcerer-elemental-magik
                 [character]="character"
@@ -373,6 +378,16 @@
             </sorcerer-elemental-magik>
         </main>
     </div>
+
+    <div class="l-page" *ngIf="hasFlag(CLASSES.ASSASSIN) || hasFlag(CLASSES.TREDERRAN_VETERAN)">
+        <main>
+            <factions
+                [character]="character"
+                (onSave)="saveChar(null, $event)">
+            </factions>
+        </main>
+    </div>
+
 
     <div class="l-page">
         <main>

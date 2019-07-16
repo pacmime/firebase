@@ -1,5 +1,5 @@
 <h4 class="d-flex flex-justify-between flex-align-center">
-    <div class="col">Elemental Magik</div>
+    <div class=" u-text--sc">Elemental Magik</div>
     <button type="button" class="btn--add u-sm" (click)="openChooser()">New</button>
 </h4>
 
@@ -7,6 +7,12 @@
 <div class="d-flex flex-justify-between flex-align-center">
     Mana: {{getAvailableMana()}} / {{maxMana+getManaModifier()}}
     <button type="button" (click)="reset()">Reset</button>
+</div>
+<hr>
+<div class="d-flex flex-justify-between flex-align-center">
+    Arcane Powder: {{arcanePowder}} / 6
+    <button type="button" (click)="useArcanePowder()">Use</button>
+    <button type="button" (click)="resetArcanePowder()">Reset</button>
 </div>
 <hr>
 

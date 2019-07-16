@@ -17,8 +17,9 @@ export class TempComponent implements OnInit {
     public newModifier : Modifier = { affects: null, value: 0 };
     public modifierTargets : string[] = [
         'Agility', 'Cunning', 'Spirit', 'Strength', 'Lore', 'Luck',
-        'init', 'move', 'combat', 'health', 'sanity', 'corruption',
-        'grit', 'faith', 'fury', 'magik', 'armor', 'spiritArmor', 'defense'
+        'armor', 'combat', 'corruption', 'cover', 'defense', 'endurance',
+        'faith', 'fury', 'grit', 'health', 'init', 'ki',
+        'spiritArmor', 'magik', 'mana', 'melee', 'ranged', 'move', 'sanity'
     ];
 
     constructor() { }

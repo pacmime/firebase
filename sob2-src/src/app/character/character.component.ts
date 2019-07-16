@@ -7,7 +7,9 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 
 import { FirestoreService } from '../firestore.service';
-import { SOBCharacter } from '../models/character.model';
+import {
+    SOBCharacter, SPECIAL_CLASSES, ClassFlag
+} from '../models/character.model';
 import { SOBError } from '../models/error';
 
 interface IMessage {
@@ -16,6 +18,56 @@ interface IMessage {
     value: string;
     canDismiss: boolean;
 }
+
+// enum CLASSES {
+//     PREACHER, SHAMAN, SAMURAI, GAMBLER, ORPHAN, MONK, SORCERER
+// };
+//
+// const FLAGS = {};
+//
+// FLAGS[CLASSES.PREACHER] = {
+//     value: 1,
+//     fn: (char:SOBCharacter) => { return 'Preacher'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.sermons = this.character.sermons || []; }
+// };
+// FLAGS[CLASSES.SHAMAN] = {
+//     value: 2,
+//     fn: (char:SOBCharacter) => { return 'Dark Stone Shaman'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.spells = this.character.spells || []; }
+// };
+// FLAGS[CLASSES.SAMURAI] = {
+//     value: 4,
+//     fn: (char:SOBCharacter) => { return ['Wandering Samurai', 'Daimyo', 'Samurai Warrior'].indexOf(char.class)>=0; },
+//     init: (char:SOBCharacter) => { this.character.tactics = this.character.tactics || []; }
+// };
+// FLAGS[CLASSES.GAMBLER] = {
+//     value: 8,
+//     fn: (char:SOBCharacter) => { return 'Gambler'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.tricks = this.character.tricks || []; }
+// };
+// FLAGS[CLASSES.ORPHAN] = {
+//     value: 16,
+//     fn: (char:SOBCharacter) => { return 'Orphan'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.missions = this.character.missions || []; }
+// };
+// FLAGS[CLASSES.MONK] = { value: 32, fn: (char:SOBCharacter) => { return 'Traveling Monk'===char.class; } };
+// FLAGS[CLASSES.SORCERER] = {
+//     value: 64,
+//     fn: (char:SOBCharacter) => { return 'Sorcerer'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.elementalMagik = this.character.elementalMagik || []; }
+// };
+//
+// function _applyFlag(value : number, flag : number) : number {
+//     return value |= flag;
+// }
+// function _removeFlag(value : number, flag : number) : number {
+//     return value &= ~flag;
+// }
+// function _hasFlag(value : number, flag : number) : boolean {
+//     return (value & flag) > 0;
+// }
+
+
 
 
 @Component({
@@ -27,14 +79,9 @@ export class CharacterComponent implements OnInit {
 
     @Input() charId:string;
 
-    public character: SOBCharacter;
-    public isPreacher: boolean = false;
-    public isShaman: boolean = false;
-    public isSamurai: boolean = false;
-    public isGambler: boolean = false;
-    public isOrphan: boolean = false;
-    public isMonk : boolean = false;
-    public isSorcerer : boolean = false;
+    public character : SOBCharacter;
+    public charFlags : ClassFlag;
+    public CLASSES = SPECIAL_CLASSES;
     public xpLevels: number[] = [0, 500, 1000, 2000, 3000, 4500, 6000];
     public isEditingBio: boolean = false;
     public editableBio: any = null;
@@ -88,13 +135,7 @@ export class CharacterComponent implements OnInit {
     ngOnDestroy() {
         this.charId = null;
         this.character = null;
-        this.isPreacher = false;
-        this.isShaman = false;
-        this.isSamurai = false;
-        this.isGambler = false;
-        this.isOrphan = false;
-        this.isMonk = false;
-        this.isSorcerer = false;
+        this.charFlags = null;
         this.xpLevels = null;
         this.isEditingBio = false;
         this.editableBio = null;
@@ -102,16 +143,16 @@ export class CharacterComponent implements OnInit {
     }
 
     init () {
-        this.isPreacher = 'Preacher' === this.character.class;
-        this.isGambler = 'Gambler' === this.character.class;
-        this.isShaman = 'Dark Stone Shaman' === this.character.class;
-        this.isSamurai =
-            'Wandering Samurai' === this.character.class ||
-            'Daimyo' === this.character.class ||
-            'Samurai Warrior' === this.character.class;
-        this.isOrphan = 'Orphan' === this.character.class;
-        this.isMonk = 'Traveling Monk' === this.character.class
-        this.isSorcerer = 'Sorcerer' === this.character.class
+
+        this.charFlags = new ClassFlag(this.character);
+
+        // Object.keys(FLAGS).forEach( key => {
+        //     let flag = FLAGS[key];
+        //     if(flag.fn(this.character)) {
+        //         this.charFlags = _applyFlag(this.charFlags, flag.value);
+        //     }
+        // })
+
         this.ensureProperties();
         this.refreshModifiers();
     }
@@ -134,12 +175,13 @@ export class CharacterComponent implements OnInit {
         this.character.notes = this.character.notes || "";
         if(!this.character.temporaryMods) this.character.temporaryMods = [];
 
-        //class-specific properties
-        if(this.isPreacher && !this.character.sermons) this.character.sermons = [];
-        if(this.isSamurai && !this.character.tactics) this.character.tactics = [];
-        if(this.isGambler && !this.character.tricks) this.character.tricks = [];
-        if(this.isShaman && !this.character.spells) this.character.spells = [];
-        if(this.isSorcerer && !this.character.elementalMagik) this.character.elementalMagik = [];
+        // //class-specific properties
+        // Object.keys(FLAGS).forEach( key => {
+        //     let flag = FLAGS[key];
+        //     if(this.hasFlag(flag.value)) {
+        //         flag.init(this.character);
+        //     }
+        // });
 
     }
 
@@ -344,6 +386,11 @@ export class CharacterComponent implements OnInit {
         if(idx >= 0) {
             this.messages.splice(idx, 1);
         }
+    }
+
+
+    hasFlag (classKey : SPECIAL_CLASSES) : boolean {
+        return this.charFlags && this.charFlags.hasSpecialClass(classKey);
     }
 
 }

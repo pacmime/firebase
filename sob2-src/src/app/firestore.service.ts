@@ -139,6 +139,9 @@ export class FirestoreService {
             //covers madness/injuries too
             this.getModifiersFrom(result, char.mutations||[],  false);
             this.getModifiersFrom(result, [ {modifiers: char.temporaryMods||[]}],  false);
+            if(char.faction) {
+                this.getModifiersFrom(result, [char.faction], false);
+            }
         }
         return result;
     }
@@ -164,8 +167,9 @@ export class FirestoreService {
                         results[affected] = { value: 0, sources: [] };
                     }
 
-                    if('armor' === affected || 'spiritArmor' === affected) {
-                        //armor doesn't stack, so only use highest modifier value
+                    if( 'armor' === affected || 'spiritArmor' === affected ||
+                        'cover' === affected || 'endurance' === affected ) {
+                        //these doesn't stack, so only use highest modifier value
                         results[affected].value = Math.max(results[affected].value, modVal*1);
                     } else {
                         results[affected].value += modVal;
@@ -329,10 +333,26 @@ export class FirestoreService {
     }
 
     /**
-     * @return {Promise<ShamanSpell[]>} resolving list of tactics
+     * @return {Promise<ShamanSpell[]>} resolving list of spells
      */
     getElementalMagik () : Promise<ElementalMagik[]> {
         return this.afs.collection<ElementalMagik>(ELEMENTAL_MAGIK_PATH).
+            valueChanges().take(1).toPromise();
+    }
+
+    /**
+     * @return {Promise<any[]>} resolving list of clans
+     */
+    getNinjaClans () : Promise<any[]> {
+        return this.afs.collection<any>(NINJA_CLANS_PATH).
+            valueChanges().take(1).toPromise();
+    }
+
+    /**
+     * @return {Promise<any[]>} resolving list of factions
+     */
+    getTrederranFactions () : Promise<any[]> {
+        return this.afs.collection<any>(TREDERRAN_FACTIONS_PATH).
             valueChanges().take(1).toPromise();
     }
 

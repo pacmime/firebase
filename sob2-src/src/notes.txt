@@ -1,21 +1,22 @@
 new modifiers:
-melee - set
-endurance - set
-mana - update
-ki - update
-cover - set
-defense - set
+# melee - set
+# endurance - set
+# mana - update
+# ki - update
+# cover - set
+# defense - set
 willpower - set
-arcanePowder - update
+# arcanePowder - update
 weight - update
 
-show type on battle tactics.
+# show type on battle tactics.
 
-new side bag tokens
+# new side bag tokens
 
 remove old samuraiTactics in DB
 
-trederran veteran sets "faction" property
+# trederran veteran faction
+# ninja clan
 
 Kitsune gaining Magik (Sorcerer)
 Sumo gaining Fury

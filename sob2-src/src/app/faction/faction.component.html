@@ -1,0 +1,22 @@
+
+<h4 class="d-flex flex-justify-between flex-align-center">
+    <div class="col u-text--sc">{{label}}</div>
+    <button type="button" class="btn--add u-sm" *ngIf="!character.faction" (click)="openChooser()">New</button>
+</h4>
+<hr>
+<div class="card" *ngIf="!character?.faction">
+    No {{label}} selected
+</div>
+<div class="card" *ngIf="character?.faction">
+    <h5 class="d-flex flex-justify-between flex-align-end">
+        {{character.faction.name}}
+        <button type="button" class="u-sm btn--del" (click)="character.faction=null;">X</button>
+    </h5>
+    <div class="desc">{{character.faction.desc||character.faction.description}}</div>
+    <div *ngIf="character.faction.modifiers" class="u-sm">
+        <hr>
+        <div *ngFor="let modifier of character.faction.modifiers">
+            {{modifier.affects}} {{modifier.value|modifier}}
+        </div>
+    </div>
+</div>

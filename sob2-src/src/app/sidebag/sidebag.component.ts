@@ -43,8 +43,7 @@ export class SidebagComponent implements OnInit {
         {label:"sake",      description: "Discard to Heal D6 Sanity Damage."},
         {label:"fireSake",  description: "Discard to immediately gain D3 Fury Tokens (Samurai Only)"},
         {label:"strongSake",  description: "Discard to Heal 2D6 Sanity Damage"},
-        {label:"bomb",      description: "Discard to throw as a Ranged Attack. Range: Strength+3, Does D6 Wounds, ignoring Defense, to each model in the same and adjacent spaces. Any Corpse Token in the affected area is also removed."},
-        {label:"potion",    description: "Discard to add +2 to one of your Skills (Agility, Lore, etc) until the end of the turn"},
+        {label:"bomb",      description: "Discard to throw as a Ranged Attack. Range: Strength+3, Does D6 Wounds, ignoring Defense, to each model in the same and adjacent spaces. Any Corpse Token in the affected area is also removed."}
     ];
 
     constructor() { }

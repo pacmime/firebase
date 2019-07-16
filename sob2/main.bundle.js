@@ -20,7 +20,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /***/ "./src/app/abilities/abilities.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{ability.desc}}</div>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{ability.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div class=\"desc\">{{ability.desc}}</div>\n    <div *ngIf=\"ability.userInput\">\n        <small><strong>{{ability.userInput.name}}:</strong></small>\n        <input type=\"text\" [(ngModel)]=\"ability.userInput.value\">\n    </div>\n    <div *ngIf=\"ability.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of ability.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -427,12 +427,16 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__special_notes_notes_component__ = __webpack_require__("./src/app/special/notes/notes.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__shared_chooser_chooser_component__ = __webpack_require__("./src/app/shared/chooser/chooser.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__shared_temp_temp_component__ = __webpack_require__("./src/app/shared/temp/temp.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__faction_faction_component__ = __webpack_require__("./src/app/faction/faction.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__faction_chooser_chooser_component__ = __webpack_require__("./src/app/faction/chooser/chooser.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -639,7 +643,9 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_41__special_sorcerer_magik_spell_spell_component__["a" /* ElementalMagikSpellComponent */],
                 __WEBPACK_IMPORTED_MODULE_42__special_sorcerer_magik_magik_component__["a" /* ElementalMagikComponent */],
                 __WEBPACK_IMPORTED_MODULE_43__special_sorcerer_magik_chooser_chooser_component__["a" /* ElementalMagikChooserComponent */],
-                __WEBPACK_IMPORTED_MODULE_46__shared_temp_temp_component__["a" /* TempComponent */]
+                __WEBPACK_IMPORTED_MODULE_46__shared_temp_temp_component__["a" /* TempComponent */],
+                __WEBPACK_IMPORTED_MODULE_47__faction_faction_component__["a" /* FactionComponent */],
+                __WEBPACK_IMPORTED_MODULE_48__faction_chooser_chooser_component__["a" /* FactionChooserComponent */]
             ],
             imports: [
                 //                               for debugging purposes only
@@ -668,7 +674,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_34__special_shaman_spells_chooser_chooser_component__["a" /* ShamanSpellsChooserComponent */],
                 __WEBPACK_IMPORTED_MODULE_36__special_gambler_tricks_chooser_chooser_component__["a" /* GamblerTricksChooserComponent */],
                 __WEBPACK_IMPORTED_MODULE_40__special_orphan_missions_chooser_chooser_component__["a" /* OrphanMissionsChooserComponent */],
-                __WEBPACK_IMPORTED_MODULE_43__special_sorcerer_magik_chooser_chooser_component__["a" /* ElementalMagikChooserComponent */]
+                __WEBPACK_IMPORTED_MODULE_43__special_sorcerer_magik_chooser_chooser_component__["a" /* ElementalMagikChooserComponent */],
+                __WEBPACK_IMPORTED_MODULE_48__faction_chooser_chooser_component__["a" /* FactionChooserComponent */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
         })
@@ -1203,7 +1210,7 @@ var AvatarComponent = (function () {
 /***/ "./src/app/character/character.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"l-page\" *ngIf=\"!character\">Loading character...</div>\n\n<div *ngIf=\"character\" class=\"l-char\">\n\n    <div *ngIf=\"error\" class=\"c-error\">\n        <h5>Error</h5>\n        <p>{{error.message}}</p>\n        <a *ngIf=\"'auth'===error.type\" routerLink=\"/login\" routerLinkActive=\"active\">\n            Sign in\n        </a>\n        <button type=\"button\" (click)=\"error=null\">DISMISS</button>\n    </div>\n\n    <div *ngIf=\"messages.length\" class=\"c-messages\">\n        <div class=\"c-message\" *ngFor=\"let msg of messages\">\n            <h5 class=\"d-flex flex-justify-between flex-align-start\">\n                <span class=\"col\">{{msg.title}}</span>\n                <button type=\"button\" (click)=\"removeMessage(msg)\">DISMISS</button>\n            </h5>\n            <p>{{msg.value}}</p>\n        </div>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n            <div class=\"bio\">\n                <div *ngIf=\"!isEditingBio\">\n                    <h4>{{character.name}}</h4>\n                    <div class=\"d-flex flex-justify-between\">\n                        <button type=\"button\" (click)=\"editBio()\">Edit</button>\n                        <div class=\"col u-mg-left--md\">\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                        </div>\n                    </div>\n                </div>\n                <div *ngIf=\"isEditingBio\">\n                    <label>Name</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                    <label>Keywords</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                    <button type=\"button\" (click)=\"cancelBioEdit()\">Cancel</button>\n                    &nbsp;\n                    <button type=\"button\" (click)=\"saveBio()\">Save</button>\n                </div>\n            </div>\n            <hr>\n            <h4 class=\" u-text--sc\">Attributes</h4>\n            <div class=\"attributes\">\n                <div *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                    <value-display label=\"{{st}}\"\n                        value=\"{{character.stats[st]}}\"\n                        [modifiers]=\"modifiers[st]\"\n                        (onSave)=\"saveChar('stats.'+st, $event)\">\n                    </value-display>\n                </div>\n            </div>\n\n            <hr>\n\n            <section>\n                <value-display label=\"Level\"\n                    value=\"{{character.level}}\"\n                    [canAdjust]=\"false\"\n                    (onSave)=\"saveChar('level', $event)\">\n                </value-display>\n\n                <xp-value-display label=\"XP\"\n                    value=\"{{character.xp}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    needed=\"{{xpLevels[character.level]}}\"\n                    (onSave)=\"saveChar('xp', $event)\">\n                </xp-value-display>\n\n                <value-display label=\"Wealth\"\n                    value=\"{{character.wealth}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    (onSave)=\"saveChar('wealth', $event)\">\n                </value-display>\n            </section>\n\n\n            <section>\n                <value-display label=\"Dark Stone\"\n                    value=\"{{character.darkstone}}\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('darkstone', $event)\">\n                </value-display>\n\n                <value-display label=\"Init\"\n                    value=\"{{character.init}}\"\n                    [modifiers]=\"modifiers.init\"\n                    (onSave)=\"saveChar('init', $event)\">\n                </value-display>\n\n                <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display>\n            </section>\n\n            <section>\n                <value-display label=\"Tech\"\n                    value=\"{{character.techCurrency}}\"\n                    (onSave)=\"saveChar('techCurrency', $event)\">\n                </value-display>\n\n                <value-display label=\"Scrap\"\n                    value=\"{{character.scrapCurrency}}\"\n                    (onSave)=\"saveChar('scrapCurrency', $event)\">\n                </value-display>\n\n                <!-- <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display> -->\n            </section>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n\n            <section class=\"t-combat\">\n                <value-display label=\"Combat\"\n                    value=\"{{character.combat}}\"\n                    [modifiers]=\"modifiers.combat\"\n                    (onSave)=\"saveChar('combat', $event)\">\n                </value-display>\n                <value-display label=\"Cover\"\n                    value=\"{{character.cover}}\"\n                    [modifiers]=\"modifiers.cover\"\n                    (onSave)=\"saveChar('cover', $event)\">\n                </value-display>\n            </section>\n            <section class=\"t-combat\">\n                <value-display label=\"Melee\"\n                    value=\"{{character.melee}}\"\n                    (onSave)=\"saveChar('melee', $event)\">\n                </value-display>\n                <value-display label=\"Ranged\"\n                    value=\"{{character.ranged}}\"\n                    (onSave)=\"saveChar('ranged', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display  label=\"Wounds\"\n                    value=\"{{character.health.wounds}}\"\n                    (onSave)=\"saveChar('health.wounds', $event)\">\n                </value-display>\n                <value-display label=\"Health\"\n                    value=\"{{character.health.max}}\"\n                    [modifiers]=\"modifiers.health\"\n                    (onSave)=\"saveChar('health.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display label=\"Defense\"\n                    value=\"{{character.defense}}\"\n                    [modifiers]=\"modifiers.defense\"\n                    (onSave)=\"saveChar('defense', $event)\">\n                </value-display>\n                <value-display label=\"Armor\"\n                    value=\"{{character.armor}}\"\n                    [modifiers]=\"modifiers.armor\"\n                    (onSave)=\"saveChar('armor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Loss\"\n                    value=\"{{character.sanity.loss}}\"\n                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                </value-display>\n                <value-display label=\"Sanity\"\n                    value=\"{{character.sanity.max}}\"\n                    [modifiers]=\"modifiers.sanity\"\n                    (onSave)=\"saveChar('sanity.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Willpower\"\n                    value=\"{{character.willpower}}\"\n                    [modifiers]=\"modifiers.willpower\"\n                    (onSave)=\"saveChar('willpower', $event)\">\n                </value-display>\n                <value-display  label=\"Spirit Armor\"\n                    value=\"{{character.spiritArmor}}\"\n                    [modifiers]=\"modifiers.spiritArmor\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-grit\">\n                <value-display label=\"Grit\"\n                    value=\"{{character.grit.current}}\"\n                    [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                    (onSave)=\"saveChar('grit.current', $event)\">\n                </value-display>\n                <value-display label=\"Max Grit\"\n                    value=\"{{character.grit.max}}\"\n                    [modifiers]=\"modifiers.grit\"\n                    (onSave)=\"saveChar('grit.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-corruption\">\n                <value-display label=\"Corruption\"\n                    value=\"{{character.corruption.current}}\"\n                    (onSave)=\"saveChar('corruption.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.corruption.max}}\"\n                    [modifiers]=\"modifiers.corruption\"\n                    (onSave)=\"saveChar('corruption.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-faith\" *ngIf=\"isPreacher\">\n                <value-display label=\"Faith\"\n                    value=\"{{character.faith}}\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar('faith', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fortune\" *ngIf=\"isGambler\">\n                <value-display label=\"Fortune\"\n                    value=\"{{character.fortune.current}}\"\n                    [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                    (onSave)=\"saveChar('fortune.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fortune.max}}\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar('fortune.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-magik\" *ngIf=\"isShaman\">\n                <value-display label=\"Magik\"\n                    value=\"{{character.magik.current}}\"\n                    [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                    (onSave)=\"saveChar('magik.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.magik.max}}\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar('magik.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fury\" *ngIf=\"isSamurai\">\n                <value-display label=\"Fury\"\n                    value=\"{{character.fury.current}}\"\n                    [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                    (onSave)=\"saveChar('fury.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fury.max}}\"\n                    [modifiers]=\"modifiers.fury\"\n                    (onSave)=\"saveChar('fury.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-ki\" *ngIf=\"isMonk\">\n                <value-display label=\"Ki\"\n                    value=\"{{character.ki.current}}\"\n                    [options]=\"{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}\"\n                    (onSave)=\"saveChar('ki.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.ki.max}}\"\n                    [modifiers]=\"modifiers.ki\"\n                    (onSave)=\"saveChar('ki.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-mana\" *ngIf=\"isSorcerer\">\n                <value-display label=\"Mana\"\n                    value=\"{{character.mana}}\"\n                    [modifiers]=\"modifiers.mana\"\n                    (onSave)=\"saveChar('mana', $event)\">\n                </value-display>\n            </section>\n\n            <!-- <div>\n                <h5>Modifiers being applied</h5>\n                {{modifiers|json}}\n            </div> -->\n\n        </main>\n\n\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <attacks\n                [attacks]=\"character.attacks\"\n                (onSave)=\"saveChar(null, $event)\">\n            </attacks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isPreacher\">\n        <main>\n            <preacher-sermons\n                [character]=\"character\"\n                [modifiers]=\"modifiers.faith\"\n                (onSave)=\"saveChar(null, $event)\">\n            </preacher-sermons>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isShaman\">\n        <main>\n            <shaman-spells\n                [character]=\"character\"\n                [modifiers]=\"modifiers.magik\"\n                (onSave)=\"saveChar(null, $event)\">\n            </shaman-spells>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isSamurai\">\n        <main>\n            <samurai-tactics\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fury\"\n                (onSave)=\"saveChar(null, $event)\">\n            </samurai-tactics>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isGambler\">\n        <main>\n            <gambler-tricks\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fortune\"\n                (onSave)=\"saveChar(null, $event)\">\n            </gambler-tricks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isOrphan\">\n        <main>\n            <orphan-missions\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </orphan-missions>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"isSorcerer\">\n        <main>\n            <sorcerer-elemental-magik\n                [character]=\"character\"\n                [modifiers]=\"modifiers.mana\"\n                (onSave)=\"saveChar(null, $event)\">\n            </sorcerer-elemental-magik>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <abilities\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </abilities>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <items [items]=\"character.items\"\n                   [weightLimit]=\"getWeightLimit()\"\n                    (onSave)=\"saveChar(null, $event)\">\n            </items>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <sidebag\n                [sidebag]=\"character.sidebag\"\n                [modifiers]=\"modifiers.sidebag\"\n                [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                (onSave)=\"saveChar(null, $event)\">\n             </sidebag>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n\n             <char-notes [notes]=\"character.notes\"\n                (onSave)=\"saveChar('notes', $event)\">\n             </char-notes>\n\n             <hr>\n\n             <temporary-modifiers [mods]=\"character.temporaryMods\"\n                (onSave)=\"saveChar('temporaryMods', $event)\">\n             </temporary-modifiers>\n\n         </main>\n     </div>\n\n</div>\n"
+module.exports = "\n<div class=\"l-page\" *ngIf=\"!character\">Loading character...</div>\n\n<div *ngIf=\"character\" class=\"l-char\">\n\n    <div *ngIf=\"error\" class=\"c-error\">\n        <h5>Error</h5>\n        <p>{{error.message}}</p>\n        <a *ngIf=\"'auth'===error.type\" routerLink=\"/login\" routerLinkActive=\"active\">\n            Sign in\n        </a>\n        <button type=\"button\" (click)=\"error=null\">DISMISS</button>\n    </div>\n\n    <div *ngIf=\"messages.length\" class=\"c-messages\">\n        <div class=\"c-message\" *ngFor=\"let msg of messages\">\n            <h5 class=\"d-flex flex-justify-between flex-align-start\">\n                <span class=\"col\">{{msg.title}}</span>\n                <button type=\"button\" (click)=\"removeMessage(msg)\">DISMISS</button>\n            </h5>\n            <p>{{msg.value}}</p>\n        </div>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n            <div class=\"bio\">\n                <div *ngIf=\"!isEditingBio\">\n                    <h4>{{character.name}}</h4>\n                    <div class=\"d-flex flex-justify-between\">\n                        <button type=\"button\" (click)=\"editBio()\">Edit</button>\n                        <div class=\"col u-mg-left--md\">\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                        </div>\n                    </div>\n                </div>\n                <div *ngIf=\"isEditingBio\">\n                    <label>Name</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                    <label>Keywords</label>\n                    <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                    <button type=\"button\" (click)=\"cancelBioEdit()\">Cancel</button>\n                    &nbsp;\n                    <button type=\"button\" (click)=\"saveBio()\">Save</button>\n                </div>\n            </div>\n            <hr>\n            <h4 class=\" u-text--sc\">Attributes</h4>\n            <div class=\"attributes\">\n                <div *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                    <value-display label=\"{{st}}\"\n                        value=\"{{character.stats[st]}}\"\n                        [modifiers]=\"modifiers[st]\"\n                        (onSave)=\"saveChar('stats.'+st, $event)\">\n                    </value-display>\n                </div>\n            </div>\n\n            <hr>\n\n            <section>\n                <value-display label=\"Level\"\n                    value=\"{{character.level}}\"\n                    [canAdjust]=\"false\"\n                    (onSave)=\"saveChar('level', $event)\">\n                </value-display>\n\n                <xp-value-display label=\"XP\"\n                    value=\"{{character.xp}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    needed=\"{{xpLevels[character.level]}}\"\n                    (onSave)=\"saveChar('xp', $event)\">\n                </xp-value-display>\n\n                <value-display label=\"Wealth\"\n                    value=\"{{character.wealth}}\"\n                    [options]=\"{valueSize:'sm'}\"\n                    (onSave)=\"saveChar('wealth', $event)\">\n                </value-display>\n            </section>\n\n\n            <section>\n                <value-display label=\"Dark Stone\"\n                    value=\"{{character.darkstone}}\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('darkstone', $event)\">\n                </value-display>\n\n                <value-display label=\"Init\"\n                    value=\"{{character.init}}\"\n                    [modifiers]=\"modifiers.init\"\n                    (onSave)=\"saveChar('init', $event)\">\n                </value-display>\n\n                <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display>\n            </section>\n\n            <section>\n                <value-display label=\"Tech\"\n                    value=\"{{character.techCurrency}}\"\n                    (onSave)=\"saveChar('techCurrency', $event)\">\n                </value-display>\n\n                <value-display label=\"Scrap\"\n                    value=\"{{character.scrapCurrency}}\"\n                    (onSave)=\"saveChar('scrapCurrency', $event)\">\n                </value-display>\n\n                <!-- <value-display label=\"Move\"\n                    value=\"{{character.movement}}\"\n                    [options]=\"{min:-10}\"\n                    [modifiers]=\"modifiers.movement\"\n                    (onSave)=\"saveChar('movement', $event)\">\n                </value-display> -->\n            </section>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n\n            <section class=\"t-combat\">\n                <value-display label=\"Combat\"\n                    value=\"{{character.combat}}\"\n                    [modifiers]=\"modifiers.combat\"\n                    (onSave)=\"saveChar('combat', $event)\">\n                </value-display>\n                <value-display label=\"Melee\"\n                    value=\"{{character.melee}}\"\n                    (onSave)=\"saveChar('melee', $event)\">\n                </value-display>\n                <value-display label=\"Ranged\"\n                    value=\"{{character.ranged}}\"\n                    (onSave)=\"saveChar('ranged', $event)\">\n                </value-display>\n            </section>\n            <section class=\"t-combat\">\n                <value-display label=\"Cover\"\n                    value=\"{{character.cover}}\"\n                    [modifiers]=\"modifiers.cover\"\n                    (onSave)=\"saveChar('cover', $event)\">\n                </value-display>\n                <value-display label=\"Endurance\"\n                    value=\"{{character.endurance}}\"\n                    [modifiers]=\"modifiers.endurance\"\n                    (onSave)=\"saveChar('endurance', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display  label=\"Wounds\"\n                    value=\"{{character.health.wounds}}\"\n                    (onSave)=\"saveChar('health.wounds', $event)\">\n                </value-display>\n                <value-display label=\"Health\"\n                    value=\"{{character.health.max}}\"\n                    [modifiers]=\"modifiers.health\"\n                    (onSave)=\"saveChar('health.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-health\">\n                <value-display label=\"Defense\"\n                    value=\"{{character.defense}}\"\n                    [modifiers]=\"modifiers.defense\"\n                    (onSave)=\"saveChar('defense', $event)\">\n                </value-display>\n                <value-display label=\"Armor\"\n                    value=\"{{character.armor}}\"\n                    [modifiers]=\"modifiers.armor\"\n                    (onSave)=\"saveChar('armor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Loss\"\n                    value=\"{{character.sanity.loss}}\"\n                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                </value-display>\n                <value-display label=\"Sanity\"\n                    value=\"{{character.sanity.max}}\"\n                    [modifiers]=\"modifiers.sanity\"\n                    (onSave)=\"saveChar('sanity.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-sanity\">\n                <value-display label=\"Willpower\"\n                    value=\"{{character.willpower}}\"\n                    [modifiers]=\"modifiers.willpower\"\n                    (onSave)=\"saveChar('willpower', $event)\">\n                </value-display>\n                <value-display  label=\"Spirit Armor\"\n                    value=\"{{character.spiritArmor}}\"\n                    [modifiers]=\"modifiers.spiritArmor\"\n                    [options]=\"{labelSize:'sm'}\"\n                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-grit\">\n                <value-display label=\"Grit\"\n                    value=\"{{character.grit.current}}\"\n                    [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                    (onSave)=\"saveChar('grit.current', $event)\">\n                </value-display>\n                <value-display label=\"Max Grit\"\n                    value=\"{{character.grit.max}}\"\n                    [modifiers]=\"modifiers.grit\"\n                    (onSave)=\"saveChar('grit.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\" t-corruption\">\n                <value-display label=\"Corruption\"\n                    value=\"{{character.corruption.current}}\"\n                    (onSave)=\"saveChar('corruption.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.corruption.max}}\"\n                    [modifiers]=\"modifiers.corruption\"\n                    (onSave)=\"saveChar('corruption.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-faith\" *ngIf=\"hasFlag(CLASSES.PREACHER)\">\n                <value-display label=\"Faith\"\n                    value=\"{{character.faith}}\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar('faith', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fortune\" *ngIf=\"hasFlag(CLASSES.GAMBLER)\">\n                <value-display label=\"Fortune\"\n                    value=\"{{character.fortune.current}}\"\n                    [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                    (onSave)=\"saveChar('fortune.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fortune.max}}\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar('fortune.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-magik\" *ngIf=\"hasFlag(CLASSES.SHAMAN)\">\n                <value-display label=\"Magik\"\n                    value=\"{{character.magik.current}}\"\n                    [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                    (onSave)=\"saveChar('magik.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.magik.max}}\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar('magik.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-fury\" *ngIf=\"hasFlag(CLASSES.SAMURAI)\">\n                <value-display label=\"Fury\"\n                    value=\"{{character.fury.current}}\"\n                    [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                    (onSave)=\"saveChar('fury.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.fury.max}}\"\n                    [modifiers]=\"modifiers.fury\"\n                    (onSave)=\"saveChar('fury.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-ki\" *ngIf=\"hasFlag(CLASSES.MONK)\">\n                <value-display label=\"Ki\"\n                    value=\"{{character.ki.current}}\"\n                    [options]=\"{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}\"\n                    (onSave)=\"saveChar('ki.current', $event)\">\n                </value-display>\n                <value-display label=\"Max\"\n                    value=\"{{character.ki.max}}\"\n                    [modifiers]=\"modifiers.ki\"\n                    (onSave)=\"saveChar('ki.max', $event)\">\n                </value-display>\n            </section>\n\n            <section class=\"t-mana\" *ngIf=\"hasFlag(CLASSES.SORCERER)\">\n                <value-display label=\"Mana\"\n                    value=\"{{character.mana}}\"\n                    [modifiers]=\"modifiers.mana\"\n                    (onSave)=\"saveChar('mana', $event)\">\n                </value-display>\n            </section>\n\n            <!-- <div>\n                <h5>Modifiers being applied</h5>\n                {{modifiers|json}}\n            </div> -->\n\n        </main>\n\n\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <attacks\n                [attacks]=\"character.attacks\"\n                (onSave)=\"saveChar(null, $event)\">\n            </attacks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.PREACHER)\">\n        <main>\n            <preacher-sermons\n                [character]=\"character\"\n                [modifiers]=\"modifiers.faith\"\n                (onSave)=\"saveChar(null, $event)\">\n            </preacher-sermons>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.SHAMAN)\">\n        <main>\n            <shaman-spells\n                [character]=\"character\"\n                [modifiers]=\"modifiers.magik\"\n                (onSave)=\"saveChar(null, $event)\">\n            </shaman-spells>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.SAMURAI)\">\n        <main>\n            <samurai-tactics\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fury\"\n                (onSave)=\"saveChar(null, $event)\">\n            </samurai-tactics>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.GAMBLER)\">\n        <main>\n            <gambler-tricks\n                [character]=\"character\"\n                [modifiers]=\"modifiers.fortune\"\n                (onSave)=\"saveChar(null, $event)\">\n            </gambler-tricks>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.ORPHAN)\">\n        <main>\n            <orphan-missions\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </orphan-missions>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.SORCERER)\">\n        <main>\n            <sorcerer-elemental-magik\n                [character]=\"character\"\n                [modifiers]=\"modifiers.mana\"\n                (onSave)=\"saveChar(null, $event)\">\n            </sorcerer-elemental-magik>\n        </main>\n    </div>\n\n    <div class=\"l-page\" *ngIf=\"hasFlag(CLASSES.ASSASSIN) || hasFlag(CLASSES.TREDERRAN_VETERAN)\">\n        <main>\n            <factions\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </factions>\n        </main>\n    </div>\n\n\n    <div class=\"l-page\">\n        <main>\n            <abilities\n                [character]=\"character\"\n                (onSave)=\"saveChar(null, $event)\">\n            </abilities>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <items [items]=\"character.items\"\n                   [weightLimit]=\"getWeightLimit()\"\n                    (onSave)=\"saveChar(null, $event)\">\n            </items>\n        </main>\n    </div>\n\n    <div class=\"l-page\">\n        <main>\n            <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n             <sidebag\n                [sidebag]=\"character.sidebag\"\n                [modifiers]=\"modifiers.sidebag\"\n                [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                (onSave)=\"saveChar(null, $event)\">\n             </sidebag>\n         </main>\n     </div>\n\n     <div class=\"l-page\">\n         <main>\n\n             <char-notes [notes]=\"character.notes\"\n                (onSave)=\"saveChar('notes', $event)\">\n             </char-notes>\n\n             <hr>\n\n             <temporary-modifiers [mods]=\"character.temporaryMods\"\n                (onSave)=\"saveChar('temporaryMods', $event)\">\n             </temporary-modifiers>\n\n         </main>\n     </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -1225,7 +1232,8 @@ module.exports = ".l-char {\n  -ms-flex-wrap: nowrap;\n      flex-wrap: nowrap;\
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/_esm5/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__firestore_service__ = __webpack_require__("./src/app/firestore.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_error__ = __webpack_require__("./src/app/models/error.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_character_model__ = __webpack_require__("./src/app/models/character.model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_error__ = __webpack_require__("./src/app/models/error.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1241,18 +1249,60 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+// enum CLASSES {
+//     PREACHER, SHAMAN, SAMURAI, GAMBLER, ORPHAN, MONK, SORCERER
+// };
+//
+// const FLAGS = {};
+//
+// FLAGS[CLASSES.PREACHER] = {
+//     value: 1,
+//     fn: (char:SOBCharacter) => { return 'Preacher'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.sermons = this.character.sermons || []; }
+// };
+// FLAGS[CLASSES.SHAMAN] = {
+//     value: 2,
+//     fn: (char:SOBCharacter) => { return 'Dark Stone Shaman'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.spells = this.character.spells || []; }
+// };
+// FLAGS[CLASSES.SAMURAI] = {
+//     value: 4,
+//     fn: (char:SOBCharacter) => { return ['Wandering Samurai', 'Daimyo', 'Samurai Warrior'].indexOf(char.class)>=0; },
+//     init: (char:SOBCharacter) => { this.character.tactics = this.character.tactics || []; }
+// };
+// FLAGS[CLASSES.GAMBLER] = {
+//     value: 8,
+//     fn: (char:SOBCharacter) => { return 'Gambler'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.tricks = this.character.tricks || []; }
+// };
+// FLAGS[CLASSES.ORPHAN] = {
+//     value: 16,
+//     fn: (char:SOBCharacter) => { return 'Orphan'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.missions = this.character.missions || []; }
+// };
+// FLAGS[CLASSES.MONK] = { value: 32, fn: (char:SOBCharacter) => { return 'Traveling Monk'===char.class; } };
+// FLAGS[CLASSES.SORCERER] = {
+//     value: 64,
+//     fn: (char:SOBCharacter) => { return 'Sorcerer'===char.class; },
+//     init: (char:SOBCharacter) => { this.character.elementalMagik = this.character.elementalMagik || []; }
+// };
+//
+// function _applyFlag(value : number, flag : number) : number {
+//     return value |= flag;
+// }
+// function _removeFlag(value : number, flag : number) : number {
+//     return value &= ~flag;
+// }
+// function _hasFlag(value : number, flag : number) : boolean {
+//     return (value & flag) > 0;
+// }
 var CharacterComponent = (function () {
     function CharacterComponent(service, route, router) {
         this.service = service;
         this.route = route;
         this.router = router;
-        this.isPreacher = false;
-        this.isShaman = false;
-        this.isSamurai = false;
-        this.isGambler = false;
-        this.isOrphan = false;
-        this.isMonk = false;
-        this.isSorcerer = false;
+        this.CLASSES = __WEBPACK_IMPORTED_MODULE_5__models_character_model__["b" /* SPECIAL_CLASSES */];
         this.xpLevels = [0, 500, 1000, 2000, 3000, 4500, 6000];
         this.isEditingBio = false;
         this.editableBio = null;
@@ -1289,29 +1339,20 @@ var CharacterComponent = (function () {
     CharacterComponent.prototype.ngOnDestroy = function () {
         this.charId = null;
         this.character = null;
-        this.isPreacher = false;
-        this.isShaman = false;
-        this.isSamurai = false;
-        this.isGambler = false;
-        this.isOrphan = false;
-        this.isMonk = false;
-        this.isSorcerer = false;
+        this.charFlags = null;
         this.xpLevels = null;
         this.isEditingBio = false;
         this.editableBio = null;
         this.modifiers = null;
     };
     CharacterComponent.prototype.init = function () {
-        this.isPreacher = 'Preacher' === this.character.class;
-        this.isGambler = 'Gambler' === this.character.class;
-        this.isShaman = 'Dark Stone Shaman' === this.character.class;
-        this.isSamurai =
-            'Wandering Samurai' === this.character.class ||
-                'Daimyo' === this.character.class ||
-                'Samurai Warrior' === this.character.class;
-        this.isOrphan = 'Orphan' === this.character.class;
-        this.isMonk = 'Traveling Monk' === this.character.class;
-        this.isSorcerer = 'Sorcerer' === this.character.class;
+        this.charFlags = new __WEBPACK_IMPORTED_MODULE_5__models_character_model__["a" /* ClassFlag */](this.character);
+        // Object.keys(FLAGS).forEach( key => {
+        //     let flag = FLAGS[key];
+        //     if(flag.fn(this.character)) {
+        //         this.charFlags = _applyFlag(this.charFlags, flag.value);
+        //     }
+        // })
         this.ensureProperties();
         this.refreshModifiers();
     };
@@ -1337,17 +1378,13 @@ var CharacterComponent = (function () {
         this.character.notes = this.character.notes || "";
         if (!this.character.temporaryMods)
             this.character.temporaryMods = [];
-        //class-specific properties
-        if (this.isPreacher && !this.character.sermons)
-            this.character.sermons = [];
-        if (this.isSamurai && !this.character.tactics)
-            this.character.tactics = [];
-        if (this.isGambler && !this.character.tricks)
-            this.character.tricks = [];
-        if (this.isShaman && !this.character.spells)
-            this.character.spells = [];
-        if (this.isSorcerer && !this.character.elementalMagik)
-            this.character.elementalMagik = [];
+        // //class-specific properties
+        // Object.keys(FLAGS).forEach( key => {
+        //     let flag = FLAGS[key];
+        //     if(this.hasFlag(flag.value)) {
+        //         flag.init(this.character);
+        //     }
+        // });
     };
     CharacterComponent.prototype.editBio = function () {
         this.editableBio = {
@@ -1395,7 +1432,7 @@ var CharacterComponent = (function () {
                     return;
             }
             catch (e) {
-                this.error = new __WEBPACK_IMPORTED_MODULE_5__models_error__["a" /* SOBError */]("save", "Unable to apply change(s) to character, because " + e.message);
+                this.error = new __WEBPACK_IMPORTED_MODULE_6__models_error__["a" /* SOBError */]("save", "Unable to apply change(s) to character, because " + e.message);
                 return;
             }
             if ('temporaryMods' === key) {
@@ -1481,7 +1518,7 @@ var CharacterComponent = (function () {
             else if (timeoutMsg)
                 _this.removeMessage(timeoutMsg);
             _this.removeMessage(savingMsg);
-            _this.error = new __WEBPACK_IMPORTED_MODULE_5__models_error__["a" /* SOBError */]("save", "Unable to save character changes, because " + e.message);
+            _this.error = new __WEBPACK_IMPORTED_MODULE_6__models_error__["a" /* SOBError */]("save", "Unable to save character changes, because " + e.message);
         });
     };
     CharacterComponent.prototype.getWeightLimit = function () {
@@ -1521,6 +1558,9 @@ var CharacterComponent = (function () {
         if (idx >= 0) {
             this.messages.splice(idx, 1);
         }
+    };
+    CharacterComponent.prototype.hasFlag = function (classKey) {
+        return this.charFlags && this.charFlags.hasSpecialClass(classKey);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
@@ -12554,6 +12594,260 @@ var Data = {
 
 /***/ }),
 
+/***/ "./src/app/faction/chooser/chooser.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div class=\"dialog__body\">\n        <div *ngIf=\"!options||!options.length\">\n            Loading available options...\n        </div>\n\n        <div *ngFor=\"let option of options\"\n            class=\"c-option--available\"\n            [ngClass]=\"{'is-selected':isChosen(option)}\">\n            <h5>{{option.name}}</h5>\n            <p>{{option.desc||option.description}}</p>\n            <button type=\"button\" class=\"btn btn--use\"\n                *ngIf=\"!option.disabled\"\n                (click)=\"choose(option)\">\n                <span>{{isChosen(option)?'Unselect':'Choose'}}</span>\n            </button>\n        </div>\n\n    </div>\n    <div class=\"d-flex flex-justify-end\">\n        <button type=\"button\" (click)=\"close()\" aria-label=\"Close\">Cancel</button>\n        <button type=\"button\" aria-label=\"Apply\"\n            [disabled]=\"!hasSelection()\"\n            (click)=\"apply()\">Apply</button>\n    </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/faction/chooser/chooser.component.less":
+/***/ (function(module, exports) {
+
+module.exports = "h3,\nh4,\nh5 {\n  margin: 0;\n}\n.overlay {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 999;\n}\n.dialog {\n  z-index: 1000;\n  position: fixed;\n  right: 0;\n  left: 0;\n  top: 60px;\n  margin-right: auto;\n  margin-left: auto;\n  min-height: 200px;\n  width: 90%;\n  max-width: 520px;\n  background-color: #fff;\n  padding: 12px;\n  -webkit-box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);\n          box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);\n}\n.dialog__body {\n  max-height: 400px;\n  overflow: auto;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 1em;\n  padding-bottom: 1em;\n}\n@media (min-width: 768px) {\n  .dialog {\n    top: 60px;\n  }\n}\n.c-option--available {\n  padding: 1em 0.5em;\n  border-bottom: 1px solid #ddd;\n}\n.c-option--available.is-selected {\n  background-color: #f00;\n  color: #fff;\n}\n.c-option--available p {\n  font-size: 0.875em;\n  margin-bottom: 0.5em;\n}\n"
+
+/***/ }),
+
+/***/ "./src/app/faction/chooser/chooser.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FactionChooserComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var FactionChooserComponent = (function () {
+    function FactionChooserComponent() {
+        this.closable = true;
+        this.visible = true;
+        this.selection = null;
+        this.groupToggles = {
+            paths: false,
+            rolled: false,
+            rest: false
+        };
+    }
+    FactionChooserComponent.prototype.ngOnInit = function () { };
+    FactionChooserComponent.prototype.ngOnDestroy = function () {
+        this.factions = null;
+        this.options = null;
+        this.selection = null;
+        this.closable = false;
+        this.visible = false;
+        this.onClose = null;
+    };
+    FactionChooserComponent.prototype.close = function () {
+        this.visible = false;
+        this.onClose({ apply: false, value: null });
+    };
+    FactionChooserComponent.prototype.apply = function () {
+        this.visible = false;
+        //move ".value" to ".desc" for chosen factions
+        var value = JSON.parse(JSON.stringify(this.selection));
+        value.desc = this.selection.value;
+        delete value.value;
+        this.onClose({ apply: true, value: value });
+    };
+    FactionChooserComponent.prototype.choose = function (faction) {
+        if (this.isChosen(faction))
+            this.selection = null;
+        else
+            this.selection = faction;
+    };
+    FactionChooserComponent.prototype.isChosen = function (faction) {
+        return this.selection && this.selection.name === faction.name;
+    };
+    FactionChooserComponent.prototype.hasSelection = function () {
+        return this.selection !== null;
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Array)
+    ], FactionChooserComponent.prototype, "options", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Array)
+    ], FactionChooserComponent.prototype, "factions", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], FactionChooserComponent.prototype, "closable", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Boolean)
+    ], FactionChooserComponent.prototype, "visible", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */])(),
+        __metadata("design:type", Function)
+    ], FactionChooserComponent.prototype, "onClose", void 0);
+    FactionChooserComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'faction-chooser',
+            template: __webpack_require__("./src/app/faction/chooser/chooser.component.html"),
+            styles: [__webpack_require__("./src/app/faction/chooser/chooser.component.less")],
+            animations: [
+                Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_22" /* trigger */])('dialog', [
+                    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* transition */])('void => *', [
+                        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* style */])({ transform: 'scale3d(.3, .3, .3)' }),
+                        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* animate */])(100)
+                    ]),
+                    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* transition */])('* => void', [
+                        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* animate */])(100, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* style */])({ transform: 'scale3d(.0, .0, .0)' }))
+                    ])
+                ])
+            ]
+        }),
+        __metadata("design:paramtypes", [])
+    ], FactionChooserComponent);
+    return FactionChooserComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/faction/faction.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "\n<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">{{label}}</div>\n    <button type=\"button\" class=\"btn--add u-sm\" *ngIf=\"!character.faction\" (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n<div class=\"card\" *ngIf=\"!character?.faction\">\n    No {{label}} selected\n</div>\n<div class=\"card\" *ngIf=\"character?.faction\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{character.faction.name}}\n        <button type=\"button\" class=\"u-sm btn--del\" (click)=\"character.faction=null;\">X</button>\n    </h5>\n    <div class=\"desc\">{{character.faction.desc||character.faction.description}}</div>\n    <div *ngIf=\"character.faction.modifiers\" class=\"u-sm\">\n        <hr>\n        <div *ngFor=\"let modifier of character.faction.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </div>\n    </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/faction/faction.component.less":
+/***/ (function(module, exports) {
+
+module.exports = ".c-option--available {\n  padding: 1em 0.5em;\n  border-bottom: 1px solid #ddd;\n}\n.card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n"
+
+/***/ }),
+
+/***/ "./src/app/faction/faction.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FactionComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__firestore_service__ = __webpack_require__("./src/app/firestore.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modal_service__ = __webpack_require__("./src/app/modal.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__ = __webpack_require__("./src/app/faction/chooser/chooser.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var FactionComponent = (function () {
+    function FactionComponent(afs, modalService) {
+        this.afs = afs;
+        this.modalService = modalService;
+        this.onSave = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        this.onError = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
+        this.label = "Faction";
+        this.confirming = {};
+    }
+    FactionComponent.prototype.ngOnInit = function () {
+        if ('Assassin' === this.character.class) {
+            this.label = "Clan";
+        }
+    };
+    FactionComponent.prototype.ngOnDestroy = function () {
+        this.character = null;
+        this.afs = null;
+        this.modalService = null;
+    };
+    FactionComponent.prototype.add = function (faction) {
+        //prevent FS error when setting undefined values
+        if (typeof (faction.desc) === 'undefined')
+            delete faction.desc;
+        if (typeof (faction.description) === 'undefined')
+            delete faction.description;
+        this.character.faction = faction;
+        this.onSave.emit({});
+    };
+    FactionComponent.prototype.remove = function (index) {
+        if (index >= 0) {
+            delete this.confirming[index];
+            this.character.faction = null;
+            this.onSave.emit({});
+        }
+    };
+    FactionComponent.prototype.getChooserOptions = function () {
+        var method = null, className = this.character.class;
+        if ('Assassin' === className)
+            method = 'getNinjaClans';
+        else if ('Trederran Veteran' === className)
+            method = 'getTrederranFactions';
+        if (!method)
+            return Promise.resolve([]);
+        return this.afs[method]();
+    };
+    FactionComponent.prototype.openChooser = function () {
+        var _this = this;
+        var ref = this.modalService.createComponentRef(__WEBPACK_IMPORTED_MODULE_3__chooser_chooser_component__["a" /* FactionChooserComponent */]);
+        ref.instance.options = [];
+        ref.instance.onClose = function (event) {
+            _this.modalService.destroyRef(ref, 0);
+            if (event.apply) {
+                _this.add(event.value);
+            }
+        };
+        var element = this.modalService.getDomElementFromComponentRef(ref);
+        this.modalService.addChild(element);
+        this.getChooserOptions().then(function (options) {
+            ref.instance.options = options;
+        });
+    };
+    FactionComponent.prototype.confirmingDelete = function (index, value) {
+        if (typeof (value) !== 'undefined' && value !== null) {
+            this.confirming[index] = value;
+            return value;
+        }
+        else {
+            return this.confirming[index];
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], FactionComponent.prototype, "character", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */])
+    ], FactionComponent.prototype, "onSave", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */])
+    ], FactionComponent.prototype, "onError", void 0);
+    FactionComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'factions',
+            template: __webpack_require__("./src/app/faction/faction.component.html"),
+            styles: [__webpack_require__("./src/app/faction/faction.component.less")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__firestore_service__["a" /* FirestoreService */],
+            __WEBPACK_IMPORTED_MODULE_2__modal_service__["a" /* ModalService */]])
+    ], FactionComponent);
+    return FactionComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/firestore.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12669,6 +12963,9 @@ var FirestoreService = (function () {
             //covers madness/injuries too
             this.getModifiersFrom(result, char.mutations || [], false);
             this.getModifiersFrom(result, [{ modifiers: char.temporaryMods || [] }], false);
+            if (char.faction) {
+                this.getModifiersFrom(result, [char.faction], false);
+            }
         }
         return result;
     };
@@ -12686,8 +12983,9 @@ var FirestoreService = (function () {
                     if (typeof (results[affected]) === 'undefined' || results[affected] === null) {
                         results[affected] = { value: 0, sources: [] };
                     }
-                    if ('armor' === affected || 'spiritArmor' === affected) {
-                        //armor doesn't stack, so only use highest modifier value
+                    if ('armor' === affected || 'spiritArmor' === affected ||
+                        'cover' === affected || 'endurance' === affected) {
+                        //these doesn't stack, so only use highest modifier value
                         results[affected].value = Math.max(results[affected].value, modVal * 1);
                     }
                     else {
@@ -12817,10 +13115,24 @@ var FirestoreService = (function () {
             valueChanges().take(1).toPromise();
     };
     /**
-     * @return {Promise<ShamanSpell[]>} resolving list of tactics
+     * @return {Promise<ShamanSpell[]>} resolving list of spells
      */
     FirestoreService.prototype.getElementalMagik = function () {
         return this.afs.collection(ELEMENTAL_MAGIK_PATH).
+            valueChanges().take(1).toPromise();
+    };
+    /**
+     * @return {Promise<any[]>} resolving list of clans
+     */
+    FirestoreService.prototype.getNinjaClans = function () {
+        return this.afs.collection(NINJA_CLANS_PATH).
+            valueChanges().take(1).toPromise();
+    };
+    /**
+     * @return {Promise<any[]>} resolving list of factions
+     */
+    FirestoreService.prototype.getTrederranFactions = function () {
+        return this.afs.collection(TREDERRAN_FACTIONS_PATH).
             valueChanges().take(1).toPromise();
     };
     /**
@@ -13570,6 +13882,101 @@ var ModalService = (function () {
 
 /***/ }),
 
+/***/ "./src/app/models/character.model.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SPECIAL_CLASSES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassFlag; });
+/*
+These classes have some abilities like spells or custom trackable resources like faith
+*/
+var SPECIAL_CLASSES;
+(function (SPECIAL_CLASSES) {
+    SPECIAL_CLASSES[SPECIAL_CLASSES["PREACHER"] = 0] = "PREACHER";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["SHAMAN"] = 1] = "SHAMAN";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["SAMURAI"] = 2] = "SAMURAI";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["GAMBLER"] = 3] = "GAMBLER";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["ORPHAN"] = 4] = "ORPHAN";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["MONK"] = 5] = "MONK";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["SORCERER"] = 6] = "SORCERER";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["ASSASSIN"] = 7] = "ASSASSIN";
+    SPECIAL_CLASSES[SPECIAL_CLASSES["TREDERRAN_VETERAN"] = 8] = "TREDERRAN_VETERAN";
+})(SPECIAL_CLASSES || (SPECIAL_CLASSES = {}));
+;
+var CLASS_FLAGS = {};
+CLASS_FLAGS[SPECIAL_CLASSES.PREACHER] = {
+    value: 1,
+    fn: function (char) { return 'Preacher' === char.class; },
+    init: function (char) { char.sermons = char.sermons || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.SHAMAN] = {
+    value: 2,
+    fn: function (char) { return 'Dark Stone Shaman' === char.class; },
+    init: function (char) { char.spells = char.spells || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.SAMURAI] = {
+    value: 4,
+    fn: function (char) { return ['Wandering Samurai', 'Daimyo', 'Samurai Warrior'].indexOf(char.class) >= 0; },
+    init: function (char) { char.tactics = char.tactics || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.GAMBLER] = {
+    value: 8,
+    fn: function (char) { return 'Gambler' === char.class; },
+    init: function (char) { char.tricks = char.tricks || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.ORPHAN] = {
+    value: 16,
+    fn: function (char) { return 'Orphan' === char.class; },
+    init: function (char) { char.missions = char.missions || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.MONK] = { value: 32, fn: function (char) { return 'Traveling Monk' === char.class; } };
+CLASS_FLAGS[SPECIAL_CLASSES.SORCERER] = {
+    value: 64,
+    fn: function (char) { return 'Sorcerer' === char.class; },
+    init: function (char) { char.elementalMagik = char.elementalMagik || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.ASSASSIN] = {
+    value: 128,
+    fn: function (char) { return 'Assassin' === char.class; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.TREDERRAN_VETERAN] = {
+    value: 256,
+    fn: function (char) { return 'Trederran Veteran' === char.class; }
+};
+/**
+ *
+ */
+var ClassFlag = (function () {
+    function ClassFlag(char) {
+        var _this = this;
+        this.flag = 0;
+        Object.keys(CLASS_FLAGS).forEach(function (key) {
+            var flag = CLASS_FLAGS[key];
+            if (flag.fn(char)) {
+                _this.applyFlag(flag.value);
+                if (typeof (flag.init) !== 'undefined') {
+                    flag.init(char);
+                }
+            }
+        });
+    }
+    ClassFlag.prototype.applyFlag = function (flag) { this.flag |= flag; };
+    ClassFlag.prototype.removeFlag = function (flag) { this.flag &= ~flag; };
+    ClassFlag.prototype.hasFlag = function (flag) { return (this.flag & flag) > 0; };
+    ClassFlag.prototype.hasSpecialClass = function (cls) {
+        if (cls && CLASS_FLAGS[cls]) {
+            return this.hasFlag(CLASS_FLAGS[cls].value);
+        }
+        return false;
+    };
+    return ClassFlag;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/models/error.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -13880,8 +14287,9 @@ var TempComponent = (function () {
         this.newModifier = { affects: null, value: 0 };
         this.modifierTargets = [
             'Agility', 'Cunning', 'Spirit', 'Strength', 'Lore', 'Luck',
-            'init', 'move', 'combat', 'health', 'sanity', 'corruption',
-            'grit', 'faith', 'fury', 'magik', 'armor', 'spiritArmor', 'defense'
+            'armor', 'combat', 'corruption', 'cover', 'defense', 'endurance',
+            'faith', 'fury', 'grit', 'health', 'init', 'ki',
+            'spiritArmor', 'magik', 'mana', 'melee', 'ranged', 'move', 'sanity'
         ];
     }
     TempComponent.prototype.ngOnInit = function () {
@@ -13930,7 +14338,7 @@ module.exports = "<div class=\"value-display\">\n    <div class=\"value\" [ngCla
 /***/ "./src/app/shared/value-display/value-display.component.less":
 /***/ (function(module, exports) {
 
-module.exports = ".value-display .value.modified > *:after {\n  color: darkblue;\n  content: \"*\";\n  font-size: 0.5em;\n  margin-top: -1em;\n}\n"
+module.exports = ".value-display .value.modified > *:first-child:after {\n  color: darkblue;\n  content: \"*\";\n  font-size: 0.5em;\n  margin-top: -1em;\n}\n"
 
 /***/ }),
 
@@ -14220,8 +14628,7 @@ var SidebagComponent = (function () {
             { label: "sake", description: "Discard to Heal D6 Sanity Damage." },
             { label: "fireSake", description: "Discard to immediately gain D3 Fury Tokens (Samurai Only)" },
             { label: "strongSake", description: "Discard to Heal 2D6 Sanity Damage" },
-            { label: "bomb", description: "Discard to throw as a Ranged Attack. Range: Strength+3, Does D6 Wounds, ignoring Defense, to each model in the same and adjacent spaces. Any Corpse Token in the affected area is also removed." },
-            { label: "potion", description: "Discard to add +2 to one of your Skills (Agility, Lore, etc) until the end of the turn" },
+            { label: "bomb", description: "Discard to throw as a Ranged Attack. Range: Strength+3, Does D6 Wounds, ignoring Defense, to each model in the same and adjacent spaces. Any Corpse Token in the affected area is also removed." }
         ];
     }
     SidebagComponent.prototype.ngOnInit = function () {
@@ -15427,7 +15834,7 @@ var SamuraiTacticsChooserComponent = (function () {
 /***/ "./src/app/special/samurai-tactics/samurai-tactics.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Samurai Battle Tactics</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Fury: {{character.fury.current}} / {{maxFury}}\n</div>\n<hr>\n\n<div *ngFor=\"let tactic of character.tactics;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        {{tactic.name}}\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"tactic.cost\">\n        <strong>Cost: </strong> {{tactic.cost}}\n    </div>\n    <div class=\"desc\">{{tactic.desc}}</div>\n    <div *ngIf=\"tactic.modifiers\">\n        <div *ngFor=\"let modifier of tactic.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(tactic.cost)\">Cast</button>\n    </div>\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Samurai Battle Tactics</div>\n    <button type=\"button\" class=\"btn--add u-sm\"\n        (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Fury: {{character.fury.current}} / {{maxFury}}\n</div>\n<hr>\n\n<div *ngFor=\"let tactic of character.tactics;let i=index;\" class=\"card\">\n    <h5 class=\"d-flex flex-justify-between flex-align-end\">\n        <div>{{tactic.name}}  ({{tactic.type||'un-typed'}})</div>\n        <div class=\"d-flex flex-justify-end flex-align-end\">\n            <button type=\"button\" class=\"u-sm btn--del\" (click)=\"confirmingDelete(i,true)\">X</button>\n            <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n                <button type=\"button\" class=\"u-sm\" (click)=\"remove(i)\">Y</button>\n                <button type=\"button\" class=\"u-sm\" (click)=\"confirmingDelete(i,false)\">N</button>\n            </div>\n        </div>\n    </h5>\n    <div *ngIf=\"tactic.cost\">\n        <strong>Cost: </strong> {{tactic.cost}}\n    </div>\n    <div class=\"desc\">{{tactic.desc}}</div>\n    <div *ngIf=\"tactic.modifiers\">\n        <div *ngFor=\"let modifier of tactic.modifiers\">\n            {{modifier.affects}} : +{{modifier.value}}\n        </div>\n    </div>\n    <hr>\n    <div class=\"d-flex flex-justify-between flex-align-center\">\n        <button type=\"button\" class=\"btn--use\" (click)=\"spendFury(tactic.cost)\">Cast</button>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -16022,14 +16429,14 @@ var ElementalMagikChooserComponent = (function () {
 /***/ "./src/app/special/sorcerer-magik/magik.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\"col\">Elemental Magik</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Mana: {{getAvailableMana()}} / {{maxMana+getManaModifier()}}\n    <button type=\"button\" (click)=\"reset()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let magik of character.elementalMagik\">\n    <magik [spell]=\"magik\"\n        [eventSubject]=\"eventSubject\"\n        (onEvent)=\"onEvent($event)\"\n        [availableMana]=\"getAvailableMana()\">\n    </magik>\n</div>\n"
+module.exports = "<h4 class=\"d-flex flex-justify-between flex-align-center\">\n    <div class=\" u-text--sc\">Elemental Magik</div>\n    <button type=\"button\" class=\"btn--add u-sm\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Mana: {{getAvailableMana()}} / {{maxMana+getManaModifier()}}\n    <button type=\"button\" (click)=\"reset()\">Reset</button>\n</div>\n<hr>\n<div class=\"d-flex flex-justify-between flex-align-center\">\n    Arcane Powder: {{arcanePowder}} / 6\n    <button type=\"button\" (click)=\"useArcanePowder()\">Use</button>\n    <button type=\"button\" (click)=\"resetArcanePowder()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let magik of character.elementalMagik\">\n    <magik [spell]=\"magik\"\n        [eventSubject]=\"eventSubject\"\n        (onEvent)=\"onEvent($event)\"\n        [availableMana]=\"getAvailableMana()\">\n    </magik>\n</div>\n"
 
 /***/ }),
 
 /***/ "./src/app/special/sorcerer-magik/magik.component.less":
 /***/ (function(module, exports) {
 
-module.exports = "h3,\nh4,\nh5 {\n  margin: 0;\n}\n"
+module.exports = ".card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n"
 
 /***/ }),
 
@@ -16065,6 +16472,7 @@ var ElementalMagikComponent = (function () {
         this.onSave = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
         this.maxMana = 0;
         this.availableMana = 0;
+        this.arcanePowder = 6;
         this.eventSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
     }
     ElementalMagikComponent.prototype.ngOnInit = function () {
@@ -16123,6 +16531,12 @@ var ElementalMagikComponent = (function () {
         this.availableMana = this.maxMana;
         this.eventSubject.next({ name: 'elementalMagik:reset', value: true });
         this.onSave.emit({});
+    };
+    ElementalMagikComponent.prototype.useArcanePowder = function () {
+        this.arcanePowder = Math.max(this.arcanePowder - 1, 0);
+    };
+    ElementalMagikComponent.prototype.resetArcanePowder = function () {
+        this.arcanePowder = 6;
     };
     ElementalMagikComponent.prototype.onEvent = function (event) {
         switch (event.name) {

@@ -18,6 +18,10 @@
         </div>
     </h5>
     <div class="desc">{{ability.desc}}</div>
+    <div *ngIf="ability.userInput">
+        <small><strong>{{ability.userInput.name}}:</strong></small>
+        <input type="text" [(ngModel)]="ability.userInput.value">
+    </div>
     <div *ngIf="ability.modifiers" class="u-sm">
         <hr>
         <div *ngFor="let modifier of ability.modifiers">

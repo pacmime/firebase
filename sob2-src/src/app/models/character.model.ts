@@ -7,7 +7,11 @@ export interface Modifier {
 }
 
 export interface Option {
-    name: string;
+    name   : string;
+    value ?: any;
+    desc  ?: string;
+    description ?: string;
+    modifiers ?: Modifier[];
 }
 
 
@@ -221,6 +225,105 @@ export interface SOBCharacter {
         max: number;
     };
 
+    //Assassin / Trederran Veteran
+    faction ?: any;
+
     //temporary modifiers
     temporaryMods?  : Modifier[]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+These classes have some abilities like spells or custom trackable resources like faith
+*/
+export enum SPECIAL_CLASSES {
+    PREACHER, SHAMAN, SAMURAI, GAMBLER, ORPHAN, MONK, SORCERER, ASSASSIN, TREDERRAN_VETERAN
+};
+
+const CLASS_FLAGS = {};
+
+CLASS_FLAGS[SPECIAL_CLASSES.PREACHER] = {
+    value: 1,
+    fn: (char:SOBCharacter) => { return 'Preacher'===char.class; },
+    init: (char:SOBCharacter) => { char.sermons = char.sermons || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.SHAMAN] = {
+    value: 2,
+    fn: (char:SOBCharacter) => { return 'Dark Stone Shaman'===char.class; },
+    init: (char:SOBCharacter) => { char.spells = char.spells || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.SAMURAI] = {
+    value: 4,
+    fn: (char:SOBCharacter) => { return ['Wandering Samurai', 'Daimyo', 'Samurai Warrior'].indexOf(char.class)>=0; },
+    init: (char:SOBCharacter) => { char.tactics = char.tactics || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.GAMBLER] = {
+    value: 8,
+    fn: (char:SOBCharacter) => { return 'Gambler'===char.class; },
+    init: (char:SOBCharacter) => { char.tricks = char.tricks || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.ORPHAN] = {
+    value: 16,
+    fn: (char:SOBCharacter) => { return 'Orphan'===char.class; },
+    init: (char:SOBCharacter) => { char.missions = char.missions || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.MONK] = { value: 32, fn: (char:SOBCharacter) => { return 'Traveling Monk'===char.class; } };
+CLASS_FLAGS[SPECIAL_CLASSES.SORCERER] = {
+    value: 64,
+    fn: (char:SOBCharacter) => { return 'Sorcerer'===char.class; },
+    init: (char:SOBCharacter) => { char.elementalMagik = char.elementalMagik || []; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.ASSASSIN] = {
+    value: 128,
+    fn: (char:SOBCharacter) => { return 'Assassin'===char.class; }
+};
+CLASS_FLAGS[SPECIAL_CLASSES.TREDERRAN_VETERAN] = {
+    value: 256,
+    fn: (char:SOBCharacter) => { return 'Trederran Veteran'===char.class; }
+};
+
+
+/**
+ *
+ */
+export class ClassFlag {
+
+    private flag : number = 0;
+
+    constructor( char : SOBCharacter ) {
+        Object.keys(CLASS_FLAGS).forEach( key => {
+            let flag = CLASS_FLAGS[key];
+            if( flag.fn(char) ) {
+                this.applyFlag(flag.value);
+                if(typeof(flag.init) !== 'undefined') {
+                    flag.init(char);
+                }
+            }
+        });
+    }
+
+    applyFlag(flag : number) : void { this.flag |= flag; }
+
+    removeFlag(flag : number) : void { this.flag &= ~flag; }
+
+    hasFlag(flag : number) : boolean { return (this.flag & flag) > 0; }
+
+    hasSpecialClass(cls : SPECIAL_CLASSES) : boolean {
+        if(cls && CLASS_FLAGS[cls]) {
+            return this.hasFlag(CLASS_FLAGS[cls].value);
+        }
+        return false;
+    }
 }

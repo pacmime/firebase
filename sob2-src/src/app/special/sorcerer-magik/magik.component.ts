@@ -24,6 +24,7 @@ export class ElementalMagikComponent implements OnInit {
 
     public maxMana : number = 0;
     public availableMana: number = 0;
+    public arcanePowder : number = 6;
 
     private eventSubject : Subject<{name:string,value:any}> = new Subject();
 
@@ -98,6 +99,14 @@ export class ElementalMagikComponent implements OnInit {
         this.availableMana = this.maxMana;
         this.eventSubject.next({name:'elementalMagik:reset',value:true})
         this.onSave.emit({});
+    }
+
+    useArcanePowder() {
+        this.arcanePowder = Math.max(this.arcanePowder-1,0);
+    }
+
+    resetArcanePowder() {
+        this.arcanePowder = 6;
     }
 
     onEvent (event) {

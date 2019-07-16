@@ -55,6 +55,8 @@ import { ElementalMagikChooserComponent } from './special/sorcerer-magik/chooser
 import { NotesComponent } from './special/notes/notes.component';
 import { ChooserComponent } from './shared/chooser/chooser.component';
 import { TempComponent } from './shared/temp/temp.component';
+import { FactionComponent } from './faction/faction.component';
+import { FactionChooserComponent } from './faction/chooser/chooser.component';
 
 
 @Pipe({
@@ -191,7 +193,9 @@ const appRoutes: Routes = [
     ElementalMagikSpellComponent,
     ElementalMagikComponent,
     ElementalMagikChooserComponent,
-    TempComponent
+    TempComponent,
+    FactionComponent,
+    FactionChooserComponent
   ],
   imports: [
       //                               for debugging purposes only
@@ -220,7 +224,8 @@ const appRoutes: Routes = [
       ShamanSpellsChooserComponent,
       GamblerTricksChooserComponent,
       OrphanMissionsChooserComponent,
-      ElementalMagikChooserComponent
+      ElementalMagikChooserComponent,
+      FactionChooserComponent
   ],
   bootstrap: [AppComponent]
 })
