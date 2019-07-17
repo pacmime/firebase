@@ -7144,7 +7144,8 @@ export const Data = {
           },
           {
               "desc": "+1 Move. You may move through other models and you automatically pass all Escape tests.",
-              "name": "Nimble"
+              "name": "Nimble",
+              "modifiers":[{"affects":"move","value":1}]
           },
           {
               "desc": "Your Combat Hits ignore any Armor an Enemy has, and are also +1 Damage while your target is the only Enemy adjacent to you",

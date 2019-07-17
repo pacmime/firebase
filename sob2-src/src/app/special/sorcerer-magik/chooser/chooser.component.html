@@ -1,25 +1,33 @@
 <div [@dialog] *ngIf="visible" class="dialog">
     <div class="dialog__body">
-        <div *ngFor="let sermon of options"
+        <div *ngFor="let spell of options"
             class="c-option--available"
-            [ngClass]="{'is-selected':isChosen(sermon)}">
+            [ngClass]="{'is-selected':isChosen(spell)}">
 
-            <h5>{{sermon.name}}</h5>
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div><strong>Check: </strong> [{{sermon.check}}+]</div>
-                <div><strong>Cost: </strong> {{sermon.cost}}</div>
-                <div><strong>XP: </strong> {{sermon.xp}}</div>
-            </div>
-            <div>{{sermon.desc}}</div>
-            <div class="col" *ngIf="sermon.requires">
-                <strong>Requires</strong> <em>{{sermon.requires}}</em>
+            <h5 class="d-flex flex-justify-between flex-align-center">
+                <div>
+                    {{spell.name}}
+                    <span *ngIf="spell.deadly"  class="icon-deadly">!</span>
+                </div>
+                ({{spell.type}})
+            </h5>
+            <div class="u-sm">
+                <div class="d-flex flex-justify-between flex-align-center">
+                    <div><strong>Check: </strong> [{{spell.check}}+]</div>
+                    <div><strong>Cost: </strong> {{spell.cost}}</div>
+                    <div><strong>XP: </strong> {{spell.xp}}</div>
+                </div>
+                <div>{{spell.desc}}</div>
+                <div class="col" *ngIf="spell.requires">
+                    <strong>Requires</strong> <em>{{spell.requires}}</em>
+                </div>
             </div>
             <button type="button" class="btn btn--use"
-                *ngIf="!sermon.disabled"
-                (click)="choose(sermon)">
-                <span>{{isChosen(sermon)?'Unselect':'Choose'}}</span>
+                *ngIf="!spell.disabled"
+                (click)="choose(spell)">
+                <span>{{isChosen(spell)?'Unselect':'Choose'}}</span>
             </button>
-            
+
         </div>
     </div>
     <div class="d-flex flex-justify-end">
