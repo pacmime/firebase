@@ -35,6 +35,7 @@ export class ElementalMagikSpellComponent implements OnInit {
 
     @Input() spell: ElementalMagik;
     @Input() availableMana: number = 0;
+    @Input() arcanePowder : number = 0;
     @Input() eventSubject : Subject<{name:string,value:any}>;
     @Output() onEvent = new EventEmitter<{ name:string, value:any }>();
 
@@ -77,9 +78,9 @@ export class ElementalMagikSpellComponent implements OnInit {
             this.onEvent.emit({name:'mana:spent', value: this.spell.cost});
     }
 
-    spendExtraMana () {
+    spendArcanePowder () {
         if(this.onEvent)
-            this.onEvent.emit({name:'mana:spent', value: 1});
+            this.onEvent.emit({name:'powder:spent', value: 1});
     }
 
     applyXP () {
@@ -119,8 +120,8 @@ export class ElementalMagikSpellComponent implements OnInit {
         return (this.spell.status & FLAGS.cast);
     }
 
-    canSpendExtraMana () {
-        return hasFlag(this.spell, FLAGS.cast) && !hasFlag(this.spell, FLAGS.empty);
+    canSpendPowder() {
+        return this.arcanePowder > 0 && hasFlag(this.spell, FLAGS.cast);
     }
 
     canApplyXP () {

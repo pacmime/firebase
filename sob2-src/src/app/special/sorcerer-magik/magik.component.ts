@@ -19,12 +19,14 @@ import { ModalService } from'../../modal.service';
 export class ElementalMagikComponent implements OnInit {
 
     @Input() character : SOBCharacter;
-    @Input() modifiers: { value:number, sources: string[] };
+    @Input() modifiersMana: { value:number, sources: string[] };
+    @Input() modifiersArcanePowder: { value:number, sources: string[] };
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 
     public maxMana : number = 0;
     public availableMana: number = 0;
-    public arcanePowder : number = 6;
+    public arcanePowder : number = 0;
+    public arcanePowderMax : number = 0;
 
     private eventSubject : Subject<{name:string,value:any}> = new Subject();
 
@@ -38,12 +40,12 @@ export class ElementalMagikComponent implements OnInit {
     }
 
     ngOnChanges(changes : SimpleChanges) {
-        if(changes.modifiers) {
+        if(changes.modifiersMana) {
 
             // if(this.maxMana === 0)
             //     this.maxMana = this.character.mana;
             //
-            // let mod = changes.modifiers.currentValue;
+            // let mod = changes.modifiersMana.currentValue;
             // if(mod && !isNaN(mod.value)) {
             //     if(this.maxMana == this.availableMana) {
             //          this.availableMana += (mod.value*1);
@@ -51,19 +53,22 @@ export class ElementalMagikComponent implements OnInit {
             //     this.maxMana += (mod.value*1);
             // }
         }
+        if(changes.modifiersArcanePowder) {
+        }
     }
 
     ngOnDestroy() {
         this.character = null;
-        this.modifiers = null;
+        this.modifiersMana = null;
+        this.modifiersArcanePowder = null;
         this.maxMana = null;
         this.service = null;
     }
 
 
     getManaModifier() {
-        if(this.modifiers && this.modifiers.value && !isNaN(this.modifiers.value))
-            return this.modifiers.value*1;
+        if(this.modifiersMana && this.modifiersMana.value && !isNaN(this.modifiersMana.value))
+            return this.modifiersMana.value*1;
         return 0;
     }
 
@@ -110,7 +115,11 @@ export class ElementalMagikComponent implements OnInit {
     }
 
     resetArcanePowder() {
-        this.arcanePowder = 6;
+        let rolled = Math.ceil( Math.random() * 6 );
+        if(this.modifiersArcanePowder && this.modifiersArcanePowder.value) {
+            rolled += this.modifiersArcanePowder.value;
+        }
+        this.arcanePowder = this.arcanePowderMax = rolled;
     }
 
     onEvent (event) {
@@ -118,6 +127,9 @@ export class ElementalMagikComponent implements OnInit {
             case 'mana:spent':
                 this.availableMana -= event.value*1;
                 // this.eventSubject.next({ name: 'mana:available', value: this.availableMana });
+            break;
+            case 'powder:spent':
+                this.arcanePowder -= event.value*1;
             break;
             case 'xp:gained':
                 this.character.xp += event.value*1;

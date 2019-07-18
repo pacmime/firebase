@@ -49,7 +49,8 @@ export class ItemEditorComponent implements OnInit {
         this.modifierTargets = [
             'Agility', 'Cunning', 'Spirit', 'Strength', 'Lore', 'Luck',
             'init', 'move', 'combat', 'health', 'sanity', 'corruption',
-            'grit', 'faith', 'fury', 'magik', 'armor', 'spiritArmor', 'defense'
+            'grit', 'faith', 'fury', 'magik', 'mana', 'arcanePowder',
+            'armor', 'spiritArmor', 'defense'
         ];
 
         this.activeTab = this.tabs[0];

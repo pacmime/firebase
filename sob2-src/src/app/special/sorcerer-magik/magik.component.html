@@ -5,13 +5,15 @@
 
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
-    Mana: {{getAvailableMana()}} / {{maxMana+getManaModifier()}}
+    <strong>Mana:</strong>
+    {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]
     <button type="button" (click)="reset()">Reset</button>
 </div>
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
-    Arcane Powder: {{arcanePowder}} / 6
-    <button type="button" (click)="useArcanePowder()">Use</button>
+    <strong>Arcane Powder:</strong>
+    {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]
+    <button type="button" (click)="useArcanePowder()" *ngIf="arcanePowder>0">Use</button>
     <button type="button" (click)="resetArcanePowder()">Reset</button>
 </div>
 <hr>
@@ -20,6 +22,7 @@
     <magik [spell]="magik"
         [eventSubject]="eventSubject"
         (onEvent)="onEvent($event)"
-        [availableMana]="getAvailableMana()">
+        [availableMana]="getAvailableMana()"
+        [arcanePowder]="arcanePowder">
     </magik>
 </div>

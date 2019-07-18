@@ -19,56 +19,6 @@ interface IMessage {
     canDismiss: boolean;
 }
 
-// enum CLASSES {
-//     PREACHER, SHAMAN, SAMURAI, GAMBLER, ORPHAN, MONK, SORCERER
-// };
-//
-// const FLAGS = {};
-//
-// FLAGS[CLASSES.PREACHER] = {
-//     value: 1,
-//     fn: (char:SOBCharacter) => { return 'Preacher'===char.class; },
-//     init: (char:SOBCharacter) => { this.character.sermons = this.character.sermons || []; }
-// };
-// FLAGS[CLASSES.SHAMAN] = {
-//     value: 2,
-//     fn: (char:SOBCharacter) => { return 'Dark Stone Shaman'===char.class; },
-//     init: (char:SOBCharacter) => { this.character.spells = this.character.spells || []; }
-// };
-// FLAGS[CLASSES.SAMURAI] = {
-//     value: 4,
-//     fn: (char:SOBCharacter) => { return ['Wandering Samurai', 'Daimyo', 'Samurai Warrior'].indexOf(char.class)>=0; },
-//     init: (char:SOBCharacter) => { this.character.tactics = this.character.tactics || []; }
-// };
-// FLAGS[CLASSES.GAMBLER] = {
-//     value: 8,
-//     fn: (char:SOBCharacter) => { return 'Gambler'===char.class; },
-//     init: (char:SOBCharacter) => { this.character.tricks = this.character.tricks || []; }
-// };
-// FLAGS[CLASSES.ORPHAN] = {
-//     value: 16,
-//     fn: (char:SOBCharacter) => { return 'Orphan'===char.class; },
-//     init: (char:SOBCharacter) => { this.character.missions = this.character.missions || []; }
-// };
-// FLAGS[CLASSES.MONK] = { value: 32, fn: (char:SOBCharacter) => { return 'Traveling Monk'===char.class; } };
-// FLAGS[CLASSES.SORCERER] = {
-//     value: 64,
-//     fn: (char:SOBCharacter) => { return 'Sorcerer'===char.class; },
-//     init: (char:SOBCharacter) => { this.character.elementalMagik = this.character.elementalMagik || []; }
-// };
-//
-// function _applyFlag(value : number, flag : number) : number {
-//     return value |= flag;
-// }
-// function _removeFlag(value : number, flag : number) : number {
-//     return value &= ~flag;
-// }
-// function _hasFlag(value : number, flag : number) : boolean {
-//     return (value & flag) > 0;
-// }
-
-
-
 
 @Component({
   selector: 'app-character',

@@ -21,12 +21,13 @@
 
         <div class="desc">{{spell.desc}}</div>
 
-        <div><strong>Range: </strong> {{spell.range||"Not specified"}}</div>
-
-        <div class="d-flex flex-justify-between flex-align-center">
-            <div><strong>Check: </strong> [{{spell.check}}+]</div>
-            <div><strong>Cost: </strong> {{spell.cost}}</div>
-            <div *ngIf="spell.xp"><strong>XP: </strong> {{spell.xp}}</div>
+        <div class="u-sm u-mg-top--md u-mg-bottom--md">
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div><strong>Range: </strong> {{spell.range||"N/A"}}</div>
+                <div><strong>Check: </strong> [{{spell.check}}+]</div>
+                <div><strong>Cost: </strong> {{spell.cost}}</div>
+                <div><strong>XP: </strong> {{spell.xp||'N/A'}}</div>
+            </div>
         </div>
 
         <hr>
@@ -37,8 +38,8 @@
             <button type="button" class="u-sm" *ngIf="canCast()" (click)="use()">cast</button>
 
             <!-- if cast but not empty -->
-            <button type="button" class="u-sm" *ngIf="canSpendExtraMana()"
-                (click)="spendExtraMana()">+mana</button>
+            <button type="button" class="u-sm" *ngIf="canSpendPowder()"
+                (click)="spendArcanePowder()">+powder</button>
 
             <!-- if cast but no applied xp -->
             <button type="button" class="u-sm" *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
@@ -76,8 +77,10 @@
             <div class="col-2">
                 <label>Type</label>
                 <select class="form-control" [(ngModel)]="editable.type">
-                    <option value="Blessing">Blessing</option>
-                    <option value="Judgement">Judgement</option>
+                    <option value="Earth">Earth</option>
+                    <option value="Fire">Fire</option>
+                    <option value="Water">Water</option>
+                    <option value="Wind">Wind</option>
                 </select>
             </div>
         </div>
