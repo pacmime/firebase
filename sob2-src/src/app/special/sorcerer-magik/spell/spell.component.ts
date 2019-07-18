@@ -144,7 +144,7 @@ export class ElementalMagikSpellComponent implements OnInit {
     handleEvent (event) {
         let name = event.name;
         switch(name) {
-            case 'spells:reset': this.clearFlags(); break;
+            case 'elementalMagik:reset': this.clearFlags(); break;
             case 'mana:available':
                 let mana = event.value as number;
                 if(mana < this.spell.cost)
