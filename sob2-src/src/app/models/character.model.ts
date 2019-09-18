@@ -321,7 +321,7 @@ export class ClassFlag {
     hasFlag(flag : number) : boolean { return (this.flag & flag) > 0; }
 
     hasSpecialClass(cls : SPECIAL_CLASSES) : boolean {
-        if(cls && CLASS_FLAGS[cls]) {
+        if( cls !== null && typeof(cls) !== 'undefined' && CLASS_FLAGS[cls]) {
             return this.hasFlag(CLASS_FLAGS[cls].value);
         }
         return false;

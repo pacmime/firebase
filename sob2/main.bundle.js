@@ -12019,7 +12019,7 @@ var Data = {
             "modifiers": [{ "affects": "Luck", "value": 1 }]
         },
         {
-            "name": "Sobara Masters",
+            "name": "Lotus Clan",
             "description": "+1 Spirit. Once per Adventure, Heal 2 Wounds/Sanity (any mix) from each Hero on your Map Tile (including yourself).",
             "modifiers": [{ "affects": "Spirit", "value": 1 }]
         },
@@ -13920,7 +13920,7 @@ var ClassFlag = (function () {
     ClassFlag.prototype.removeFlag = function (flag) { this.flag &= ~flag; };
     ClassFlag.prototype.hasFlag = function (flag) { return (this.flag & flag) > 0; };
     ClassFlag.prototype.hasSpecialClass = function (cls) {
-        if (cls && CLASS_FLAGS[cls]) {
+        if (cls !== null && typeof (cls) !== 'undefined' && CLASS_FLAGS[cls]) {
             return this.hasFlag(CLASS_FLAGS[cls].value);
         }
         return false;

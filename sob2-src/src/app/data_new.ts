@@ -10402,7 +10402,7 @@ export const Data = {
         "modifiers": [{"affects":"Luck","value":1}]
     },
     {
-        "name": "Sobara Masters",
+        "name": "Lotus Clan",
         "description": "+1 Spirit. Once per Adventure, Heal 2 Wounds/Sanity (any mix) from each Hero on your Map Tile (including yourself).",
         "modifiers": [{"affects":"Spirit","value":1}]
     },
