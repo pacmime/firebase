@@ -1,18 +1,19 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, Subject } from 'rxjs';
-import { ISubscription } from "rxjs/Subscription";
+import { Observable, Subject, Subscription, of } from "rxjs";
 // import 'rxjs/add/operator/switchMap'
-import { switchMap} from 'rxjs/operators';
+import { map, take, switchMap} from 'rxjs/operators';
 
-import * as firebase from 'firebase/app';
+// import * as firebase from 'firebase/app';
+
 import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-  AngularFirestoreCollection
-} from 'angularfire2/firestore';
-import { AngularFireAuth } from 'angularfire2/auth';
+    AngularFirestore,
+    AngularFirestoreDocument,
+    AngularFirestoreCollection
+} from '@angular/fire/firestore';
+
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import { SOBUser } from './models/user.model';
 import {
@@ -97,7 +98,7 @@ export class FirestoreService {
             let cls = classes[i];
 
             let docRef = this.afs.collection<any>(CLASSES_PATH).doc(cls.classId);
-            docRef.snapshotChanges().take(1).toPromise().then(doc => {
+            docRef.snapshotChanges().pipe( take(1) ).toPromise().then(doc => {
                 return doc.payload.exists ? docRef.update(cls) : docRef.set(cls);
             })
             .catch(err => {
@@ -111,7 +112,7 @@ export class FirestoreService {
     populateItems(items, path) {
         items.forEach(item => {
             let docRef = this.afs.collection<any>(path).doc(item.name);
-            docRef.snapshotChanges().take(1).toPromise().then(doc => {
+            docRef.snapshotChanges().pipe( take(1) ).toPromise().then(doc => {
                 return doc.payload.exists ? docRef.update(item) : docRef.set(item);
             })
             .catch(err => {
@@ -197,7 +198,7 @@ export class FirestoreService {
     // FireStore access methods
 
 
-    public getCharacter( callback: (SOBCharacter) => void ) : ISubscription {
+    public getCharacter( callback: (SOBCharacter) => void ) : Subscription {
         let subscription = this.charSubject.subscribe( ( result ) => {
             // console.log(result);
             callback(result)
@@ -218,11 +219,13 @@ export class FirestoreService {
         let doc = this.afs.doc<SOBUser>('/games/sob/users/' + uid);
         return doc.collection<SOBCharacter>('oldChars')//.valueChanges();
         .snapshotChanges()
-        .map(docs => {
-            return docs.map(a => {
-                return { json:  a.payload.doc.data().json, name: a.payload.doc.id };
-            });
-        });
+        .pipe(
+            map(docs => {
+                return docs.map(a => {
+                    return { json:  a.payload.doc.data().json, name: a.payload.doc.id };
+                });
+            })
+        );
         // return this.afs.collection<any>(OLD_CHAR_PATH,
         //     ref => ref.where('uid', '==', uid)).valueChanges();
     }
@@ -241,7 +244,7 @@ export class FirestoreService {
         // console.log("Fetching character from " + CHAR_PATH + '/' + charId);
         let observable = this.afs.doc<SOBCharacter>(CHAR_PATH + '/' + charId).valueChanges();
         //cache character so it can be referenced by components directly
-        observable.take(1).toPromise().then(char => {
+        observable.pipe( take(1) ).toPromise().then(char => {
             this.character = char;
             this.charSubject.next(char);
             return char;
@@ -251,7 +254,7 @@ export class FirestoreService {
 
     updateCharacter(charId, updates:any) : Promise<void> {
         let docRef = this.afs.collection<SOBCharacter>(CHAR_PATH).doc(charId);
-        return docRef.snapshotChanges().take(1).toPromise().then(doc => {
+        return docRef.snapshotChanges().pipe( take(1) ).toPromise().then(doc => {
             return doc.payload.exists ? docRef.update(updates) : docRef.set(updates);
        })
        .catch(err => {
@@ -261,7 +264,7 @@ export class FirestoreService {
 
     removeCharacter(charId) : Promise<void> {
         let docRef = this.afs.collection<SOBCharacter>(CHAR_PATH).doc(charId);
-        return docRef.snapshotChanges().take(1).toPromise().then(doc => {
+        return docRef.snapshotChanges().pipe( take(1) ).toPromise().then(doc => {
             return docRef.delete();
        })
        .catch(err => {
@@ -277,12 +280,12 @@ export class FirestoreService {
 
     getClasses() : Promise<SOBCharacter[]> {
         return this.afs.collection<any>(CLASSES_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     getClass( classId: string ) : Promise<SOBCharacter> {
         let docRef = this.afs.collection<any>(CLASSES_PATH).doc(classId);
-        return docRef.valueChanges().take(1).toPromise() as Promise<SOBCharacter>;
+        return docRef.valueChanges().pipe( take(1) ).toPromise() as Promise<SOBCharacter>;
     }
 
     /**
@@ -290,7 +293,7 @@ export class FirestoreService {
      */
     getSermons () : Promise<Sermon[]> {
         return this.afs.collection<Sermon>(SERMONS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -298,7 +301,7 @@ export class FirestoreService {
      */
     getOrphanMissions () : Promise<OrphanMission[]> {
         return this.afs.collection<OrphanMission>(ORPHAN_MISSIONS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -306,14 +309,14 @@ export class FirestoreService {
      */
     getWanderingSamuraiTactics () : Promise<SamuraiTactic[]> {
         return this.afs.collection<SamuraiTactic>(WANDERING_SAMURAI_TACTICS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
     /**
      * @return {Promise<SamuraiTactic[]>} resolving list of tactics for Daimyo
      */
     getSamuraiBattleTactics () : Promise<SamuraiTactic[]> {
         return this.afs.collection<SamuraiTactic>(SAMURAI_WARRIOR_BATTLE_TACTICS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -321,7 +324,7 @@ export class FirestoreService {
      */
     getGamblerTricks () : Promise<GamblerTrick[]> {
         return this.afs.collection<GamblerTrick>(GAMBLER_TRICKS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -329,7 +332,7 @@ export class FirestoreService {
      */
     getShamanSpells () : Promise<ShamanSpell[]> {
         return this.afs.collection<ShamanSpell>(SHAMAN_SPELLS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -337,7 +340,7 @@ export class FirestoreService {
      */
     getElementalMagik () : Promise<ElementalMagik[]> {
         return this.afs.collection<ElementalMagik>(ELEMENTAL_MAGIK_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -345,7 +348,7 @@ export class FirestoreService {
      */
     getNinjaClans () : Promise<any[]> {
         return this.afs.collection<any>(NINJA_CLANS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
@@ -353,7 +356,7 @@ export class FirestoreService {
      */
     getTrederranFactions () : Promise<any[]> {
         return this.afs.collection<any>(TREDERRAN_FACTIONS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
 
@@ -362,23 +365,27 @@ export class FirestoreService {
      */
     getMutations () : Promise<any[]> {
         return this.afs.collection<any>(MUTATIONS_PATH).
-            valueChanges().take(1).toPromise();
+            valueChanges().pipe( take(1) ).toPromise();
     }
 
     /**
      * @return {Promise<any[]>} resolving list of injuries
      */
     getInjuries () : Promise<any[]> {
-        return this.afs.collection<any>(INJURIES_PATH).
-            valueChanges().take(1).toPromise();
+        return this.afs.collection<any>(INJURIES_PATH)
+            .valueChanges()
+            .pipe( take(1) )
+            .toPromise();
     }
 
     /**
      * @return {Promise<any[]>} resolving list of madness
      */
     getMadness () : Promise<any[]> {
-        return this.afs.collection<any>(MADNESS_PATH).
-            valueChanges().take(1).toPromise();
+        return this.afs.collection<any>(MADNESS_PATH)
+            .valueChanges()
+            .pipe( take(1) )
+            .toPromise();
     }
 
     /**
@@ -387,7 +394,9 @@ export class FirestoreService {
      */
     getAbilities(classId) : Promise<Ability[]> {
         let docRef = this.afs.collection<any>(CLASSES_PATH).doc(classId);
-        return docRef.valueChanges().take(1).toPromise().then(cls => {
+        return docRef.valueChanges()
+        .pipe( take(1) )
+        .toPromise().then(cls => {
             let c = cls as {upgrades:Ability[]};
             return c.upgrades;
         });
@@ -403,7 +412,7 @@ export class FirestoreService {
 
         return this.afAuth.auth.signInWithEmailAndPassword(email, password)
         .then( ( authState ) => {
-            this.user = authState;
+            this.user = of(authState.user);
             return authState;
         })
         .catch( (error) => {
@@ -477,11 +486,14 @@ export class FirestoreService {
         let SOB = this.afs.doc('/games/sob');
         SOB.collection<SOBCharacter>('chars')
         .snapshotChanges()
-        .map(docs => {
-            return docs.map(a => {
-                return { uid: a.payload.doc.id, data: a.payload.doc.data() };
-            });
-        }).take(1).toPromise()
+        .pipe(
+            map(docs => {
+                return docs.map(a => {
+                    return { uid: a.payload.doc.id, data: a.payload.doc.data() };
+                });
+            }),
+            take(1)
+        ).toPromise()
         .then( chars => {
             chars.forEach( char => {
                 result.chars[char.uid] = char.data;
@@ -489,12 +501,15 @@ export class FirestoreService {
 
             return SOB.collection<any>('users')
             .snapshotChanges()
-            .map(docs => {
-                return docs.map(a => {
-                    return { uid: a.payload.doc.id, data: a.payload.doc.data() };
-                });
-            })
-            .take(1).toPromise();
+            .pipe(
+                map(docs => {
+                    return docs.map(a => {
+                        return { uid: a.payload.doc.id, data: a.payload.doc.data() };
+                    });
+                }),
+                take(1)
+            )
+            .toPromise();
         })
         .then( users => {
             users.forEach( user => { result.users[user.uid] = user.data; });
@@ -535,8 +550,10 @@ export class FirestoreService {
 
         let promises = Object.keys(result).map( key => {
             return SOB.collection<SOBCharacter>(key)
-            .snapshotChanges().map(docs => docs.map( a => a.payload.doc.data() ) )
-            .take(1).toPromise().then( values => {
+            .snapshotChanges().pipe(
+                map(docs => docs.map( a => a.payload.doc.data() ) ),
+                take(1)
+            ).toPromise().then( values => {
                 result[key] = values;
                 return true;
             });

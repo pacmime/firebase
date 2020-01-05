@@ -1,4 +1,4 @@
-<header>
+<!-- <header>
     <h5>
         <a routerLink="/chars" routerLinkActive="active">{{title}}</a>
     </h5>
@@ -9,7 +9,19 @@
     <div *ngIf="!user">
         <a routerLink="/login" routerLinkActive="active">Login</a>
     </div>
-</header>
+</header> -->
+<mat-toolbar>
+    <div class="d-flex flex-justify-between flex-align-center" style="width:100%">
+        <a class="flex-1" routerLink="/chars" routerLinkActive="active">{{title}}</a>
+        <div *ngIf="user">
+            <span class="d-none-xs">{{ user.email }} </span>
+            <button type="button" class="btn btn-xs" (click)="logout()">Logout</button>
+        </div>
+        <div *ngIf="!user">
+            <a routerLink="/login" routerLinkActive="active">Login</a>
+        </div>
+    </div>
+</mat-toolbar>
 <main>
     <router-outlet></router-outlet>
 </main>

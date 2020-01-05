@@ -229,7 +229,9 @@ export interface SOBCharacter {
     faction ?: any;
 
     //temporary modifiers
-    temporaryMods?  : Modifier[]
+    temporaryMods?  : Modifier[],
+
+    json ?: any
 }
 
 

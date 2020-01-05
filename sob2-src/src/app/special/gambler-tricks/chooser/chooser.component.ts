@@ -1,8 +1,9 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
-    trigger, state, style, animate, transition
 } from '@angular/core';
-
+import {
+    trigger, state, style, animate, transition
+} from '@angular/animations';
 import { GamblerTrick } from '../../../models/character.model';
 
 @Component({

@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ISubscription } from "rxjs/Subscription";
+import { Observable, Subscription } from "rxjs";
 
 import * as firebase from 'firebase/app';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import { FirestoreService } from '../firestore.service';
 import { SOBCharacter } from '../models/character.model';
@@ -18,7 +17,7 @@ import { SOBError } from '../models/error';
 export class CharListComponent implements OnInit {
 
     user: firebase.User;
-    userSubscription: ISubscription;
+    userSubscription: Subscription;
     chars: Observable<SOBCharacter[]>;
 
     newCharClass: SOBCharacter = null;

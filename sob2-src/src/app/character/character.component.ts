@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-
-import { Observable } from 'rxjs/Observable';
-import { ISubscription } from "rxjs/Subscription";
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/toPromise';
+import {
+    MatSnackBar, MatSnackBarConfig, MatSnackBarRef
+} from '@angular/material/snack-bar';
+import { Observable, Subscription } from "rxjs";
+import { switchMap } from 'rxjs/operators';
 
 import { FirestoreService } from '../firestore.service';
 import {
@@ -39,37 +39,48 @@ export class CharacterComponent implements OnInit {
     public error : SOBError = null; //new SOBError("test", "This is a test");
     public messages: IMessage[] = [] as IMessage[];
     private savingTimer : any;
+    private snackBarRef : MatSnackBarRef<any>;
 
-    constructor(private service: FirestoreService,
-                private route: ActivatedRoute,
-                private router: Router) {
+    constructor(
+        private snackBar: MatSnackBar,
+        private service: FirestoreService,
+        private route: ActivatedRoute,
+        private router: Router
+    ) {
     }
 
     ngOnInit() {
 
         let loadMsg : IMessage = null;
 
-        if(this.route.paramMap && this.route.paramMap.switchMap) {
-            this.route.paramMap
-                .switchMap((params: ParamMap) => {
+        if(this.route.paramMap) {
+            this.route.paramMap.pipe(
+                switchMap((params: ParamMap) => {
 
-                    loadMsg = this.createMessage(
-                        "Loading character",
-                        "This should only take a moment...",
-                        false
-                    );
-                    this.messages.push(loadMsg);
+                    // loadMsg = this.createMessage(
+                    //     "Loading character",
+                    //     "This should only take a moment...",
+                    //     false
+                    // );
+                    // this.messages.push(loadMsg);
+
+                    this.snackBarRef = this.snackBar.open("Loading character, one moment...");
 
 
                     let id = params.get('id');
                     this.charId = id;
                     return this.service.loadCharacter(id);
                 })
-                .subscribe( (character: SOBCharacter) => {
+
+            ).subscribe( (character: SOBCharacter) => {
 
                     setTimeout( () => {
                         //clear loading message
-                        this.removeMessage(loadMsg);
+                        // this.removeMessage(loadMsg);
+
+                        this.snackBarRef.dismiss();
+                        this.snackBarRef = null;
+
                     }, 1000);
 
                     //charSubscription above will handle getting characters from the service
@@ -259,17 +270,35 @@ export class CharacterComponent implements OnInit {
 
 
     doSave() {
-        let savingMsg = this.createMessage(
-            'Saving changes', 'this should only take a moment...', false);
-        this.messages.push(savingMsg);
+
+        // let opts : MatSnackBarConfig = {
+        //     duration: 2000
+        // }
+        // this.snackBar.open("Loading character, one moment...", null, opts);
+
+
+        // let savingMsg = this.createMessage(
+        //     'Saving changes', 'this should only take a moment...', false);
+        // this.messages.push(savingMsg);
+
+        if(this.snackBarRef) {
+            this.snackBarRef.dismiss();
+        }
+        this.snackBarRef = this.snackBar.open("Saving changes, one moment...");
+
+        let timeoutSnackBarRef;
+
 
         //set timer for saves that take too long...
         let timeoutMsg = null;
         let timer = setTimeout( () => {
-            this.removeMessage(savingMsg);
-            timeoutMsg = this.createMessage(
-                'Save Timed Out', 'Saving is taking a really long time...', true);
-            this.messages.push(timeoutMsg);
+            // this.removeMessage(savingMsg);
+            // timeoutMsg = this.createMessage(
+            //     'Save Timed Out', 'Saving is taking a really long time...', true);
+            // this.messages.push(timeoutMsg);
+
+            timeoutSnackBarRef = this.snackBar.open("Save is taking longer than expected...");
+
         }, 5000);
 
 
@@ -279,19 +308,34 @@ export class CharacterComponent implements OnInit {
         .then( () => {
 
             if(timer) clearTimeout(timer);
-            else if(timeoutMsg) this.removeMessage(timeoutMsg);
+            // else if(timeoutMsg) this.removeMessage(timeoutMsg);
+            else if(timeoutSnackBarRef) timeoutSnackBarRef.dismiss();
 
-            this.removeMessage(savingMsg);
+            // this.removeMessage(savingMsg);
+            this.snackBarRef.dismiss();
+            this.snackBarRef = null;
 
-            let savedMsg = this.createMessage('Changes saved!', 'this will go away shortly', false);
-            this.messages.push(savedMsg);
-            setTimeout( () => { this.removeMessage(savedMsg); }, 3000);
+            // let savedMsg = this.createMessage('Changes saved!', 'this will go away shortly', false);
+            // this.messages.push(savedMsg);
+            // setTimeout( () => { this.removeMessage(savedMsg); }, 3000);
+
+            this.snackBarRef = this.snackBar.open("Changes saved!");
+            setTimeout( () => {
+                if(this.snackBarRef) {
+                    this.snackBarRef.dismiss();
+                    this.snackBarRef = null;
+                }
+            }, 3000);
         })
         .catch(e => {
             if(timer) clearTimeout(timer);
-            else if(timeoutMsg) this.removeMessage(timeoutMsg);
+            // else if(timeoutMsg) this.removeMessage(timeoutMsg);
+            else if(timeoutSnackBarRef) timeoutSnackBarRef.dismiss();
 
-            this.removeMessage(savingMsg);
+            // this.removeMessage(savingMsg);
+            this.snackBarRef.dismiss();
+            this.snackBarRef = null;
+
             this.error = new SOBError("save",
                 "Unable to save character changes, because " + e.message);
         });

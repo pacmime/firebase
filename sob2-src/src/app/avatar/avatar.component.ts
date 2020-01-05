@@ -1,7 +1,7 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, ElementRef, EventEmitter
 } from '@angular/core';
-import { ISubscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 
 import { SOBCharacter } from '../models/character.model';
 import { FirestoreService } from '../firestore.service';
@@ -11,7 +11,7 @@ interface FileReaderEventTarget extends EventTarget {
     result:string
 }
 
-interface FileReaderEvent extends Event {
+interface FileReaderEvent extends ProgressEvent {
     target: FileReaderEventTarget;
     getMessage():string;
 }
@@ -29,7 +29,7 @@ export class AvatarComponent implements OnInit {
     private dirty: boolean = false;
     public imgData: string;
     private character: SOBCharacter;
-    private charSubscription: ISubscription;
+    private charSubscription: Subscription;
 
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 

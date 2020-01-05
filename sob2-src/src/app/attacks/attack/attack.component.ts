@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ISubscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 
 import { SOBCharacter, Attack, AttackType, AttackRoll, AttackDetails } from '../../models/character.model';
 import { FirestoreService } from '../../firestore.service';
@@ -22,7 +22,7 @@ export class AttackComponent implements OnInit {
     public isEditing: boolean = false;
     private editable: Attack = null;
 
-    private charSub : ISubscription;
+    private charSub : Subscription;
     private character : SOBCharacter;
 
 

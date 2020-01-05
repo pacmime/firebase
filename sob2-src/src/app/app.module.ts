@@ -4,14 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+    MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule
+} from '@angular/material';
 
 import { ModalService } from'./modal.service'
 import { AppComponent } from './app.component';
 
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { environment } from '../environments/environment';
 
@@ -207,7 +210,8 @@ const appRoutes: Routes = [
       AngularFireModule.initializeApp(environment.firebase),
       AngularFirestoreModule,
       AngularFireAuthModule,
-      AngularFireDatabaseModule
+      AngularFireDatabaseModule,
+      MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule
   ],
   providers: [
       ModalService,

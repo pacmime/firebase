@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ISubscription } from "rxjs/Subscription";
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from "rxjs";
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
 
 import { FirestoreService } from './firestore.service';
@@ -19,7 +19,7 @@ export class AppComponent {
     title = 'Brimstone Chars v2';
     user: firebase.User;
 
-    userSubscription: ISubscription;
+    userSubscription: Subscription;
 
     constructor(private service: FirestoreService) {
 

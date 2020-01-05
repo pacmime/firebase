@@ -3,8 +3,7 @@ import {
     SimpleChanges, SimpleChange,
     Input, Output, EventEmitter
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ISubscription } from "rxjs/Subscription";
+import { Subject, Subscription } from "rxjs";
 
 import { SOBCharacter, Sermon } from '../../models/character.model';
 import { FirestoreService } from '../../firestore.service';

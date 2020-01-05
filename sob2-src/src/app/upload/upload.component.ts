@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ISubscription } from "rxjs/Subscription";
+import { Observable, Subscription } from "rxjs";
 
 import * as firebase from 'firebase/app';
 
@@ -22,7 +21,7 @@ export class UploadComponent implements OnInit {
         message?: string;
     };
 
-    userSubscription: ISubscription;
+    userSubscription: Subscription;
     chars: Observable<any[]>;
 
     constructor(private service: FirestoreService) { }

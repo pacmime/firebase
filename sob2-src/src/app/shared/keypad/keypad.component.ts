@@ -1,8 +1,10 @@
 
 import {
-  Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
-  trigger, state, style, animate, transition
+  Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter
 } from '@angular/core';
+import {
+    trigger, state, style, animate, transition
+} from '@angular/animations';
 
 @Component({
     selector: 'keypad',
