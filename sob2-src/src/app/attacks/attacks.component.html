@@ -5,6 +5,8 @@
 </h4>
 <hr>
 
-<div *ngFor="let attack of attacks">
-    <attack [attack]="attack" (onEvent)="onEvent($event)"></attack>
+<div class="m-grid flex-align-stretch no-pad">
+    <div *ngFor="let attack of attacks" class="card">
+        <attack [attack]="attack" (onEvent)="onEvent($event)"></attack>
+    </div>
 </div>

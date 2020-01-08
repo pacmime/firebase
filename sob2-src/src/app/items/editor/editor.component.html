@@ -1,130 +1,106 @@
-<div [@dialog] *ngIf="visible" class="dialog">
+<!-- no title to reduce height -->
+<div mat-dialog-content>
 
-    <div class="tabbed">
-
-        <div class="tabs" role="tablist">
-            <a  *ngFor="let tab of tabs"
-                [ngClass]="{active:activeTab.id===tab.id}"
-                role="tab"
-                class="tab"
-                (click)="activateTab(tab)">
-                {{tab.label}}
-            </a>
-        </div>
-
-        <!-- Tab panes -->
-        <div class="panes">
-            <div role="tabpanel" class="pane" id="first" [ngClass]="{active:activeTab.id==='first'}">
-                <div class="form-group">
-                    <label class="u-sm">Name</label>
-                    <input type="text" class="form-control input-sm"
-                        [(ngModel)]="item.name" placeholder="Name the item">
+    <mat-tab-group>
+        <mat-tab label="Overview">
+            <div class="form-group">
+                <label class="u-sm">Name</label>
+                <input type="text" class="form-control input-sm"
+                    [(ngModel)]="data.item.name" placeholder="Name the item">
+            </div>
+            <div class="form-group">
+                <label class="u-sm">Description</label>
+                <textarea rows="3" class="form-control input-sm"
+                    [(ngModel)]="data.item.description"
+                    placeholder="Provide a description">
+                </textarea>
+            </div>
+            <div class="form-group">
+                <label class="u-sm">Keywords</label>
+                <input type="text" class="form-control input-sm"
+                    [(ngModel)]="data.item.keywords"
+                    placeholder="Specify item keywords">
+            </div>
+        </mat-tab>
+        <mat-tab label="About">
+            <div class="form-group">
+                <label class="u-sm">Source</label>
+                <input type="text" class="form-control input-sm" [(ngModel)]="data.item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
+            </div>
+            <div class="form-group">
+                <label class="u-sm">Use</label>
+                <select class="form-control" [(ngModel)]="data.item.usage">
+                    <option [ngValue]="null">N/A</option>
+                    <option *ngFor="let use of uses" [ngValue]="use">{{use}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="u-sm">Clothing Slot</label>
+                <select type="text" class="form-control" [(ngModel)]="data.item.slot">
+                    <option [ngValue]="null">Select Slot (optional)</option>
+                    <option *ngFor="let slot of slots" [ngValue]="slot">{{slot}}</option>
+                </select>
+            </div>
+        </mat-tab>
+        <mat-tab label="Stats">
+            <div class="form-group">
+                <label>Cost</label>
+                <input type="text" class="form-control u-sm" [(ngModel)]="data.item.cost"
+                    placeholder="Optionally, specify the cost">
+            </div>
+            <br>
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div class="col">
+                    <img src="assets/item_weight.png" height="16">
+                    <input type="number" min="0" [(ngModel)]="data.item.weight" class="form-control u-sm">
                 </div>
-                <div class="form-group">
-                    <label class="u-sm">Description</label>
-                    <textarea rows="3" class="form-control input-sm"
-                        [(ngModel)]="item.description"
-                        placeholder="Provide a description">
-                    </textarea>
-                </div>
-                <div class="form-group">
-                    <label class="u-sm">Keywords</label>
-                    <input type="text" class="form-control input-sm"
-                        [(ngModel)]="item.keywords"
-                        placeholder="Specify item keywords">
+                <div class="col">
+                    <img src="assets/item_darkstone.png" height="16">
+                    <input type="number" min="0" [(ngModel)]="data.item.darkstone" class="form-control u-sm">
                 </div>
             </div>
-            <div role="tabpanel" class="pane" id="second" [ngClass]="{active:activeTab.id==='second'}">
-                <div class="form-group">
-                    <label class="u-sm">Source</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="item.source" placeholder="Source (eg, 'General Store' or 'Targa Plateau')">
+            <br>
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div class="col">
+                    <img src="assets/item_hands.png" height="16">
+                    <input type="number" min="0" [(ngModel)]="data.item.hands" class="form-control u-sm">
                 </div>
-                <div class="form-group">
-                    <label class="u-sm">Use</label>
-                    <select class="form-control" [(ngModel)]="item.usage">
-                        <option [ngValue]="null">N/A</option>
-                        <option *ngFor="let use of uses" [ngValue]="use">{{use}}</option>
+                <div class="col">
+                    <img src="assets/item_slots.png" height="16">
+                    <input type="number" min="0" [(ngModel)]="data.item.slots" class="form-control u-sm">
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Modifiers">
+            <button type="button" class="u-sm" (click)="addModifier()">+</button>
+
+            <div class="d-flex flex-align-center flex-justify-between"
+                *ngFor="let modifier of data.item.modifiers">
+
+                <div class="col-2" id="modifier-{{id}}">
+                    <select class="form-control u-sm" [(ngModel)]="modifier.affects">
+                        <option [ngValue]="null">Select</option>
+                        <option *ngFor="let modtarget of modifierTargets" [ngValue]="modtarget">
+                            {{modtarget}}
+                        </option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label class="u-sm">Clothing Slot</label>
-                    <select type="text" class="form-control" [(ngModel)]="item.slot">
-                        <option [ngValue]="null">Select Slot (optional)</option>
-                        <option *ngFor="let slot of slots" [ngValue]="slot">{{slot}}</option>
-                    </select>
+                <div class="col">
+                    <input type="number" min="-10" [(ngModel)]="modifier.value"
+                        class="form-control u-sm" placeholder="0">
+                </div>
+                <div class="col">
+                    <button type="button" class="btn u-sm" (click)="removeModifier($index)">
+                        X
+                    </button>
                 </div>
             </div>
-            <div role="tabpanel" class="pane" id="third" [ngClass]="{active:activeTab.id==='third'}">
+        </mat-tab>
+    </mat-tab-group>
 
-                <div class="form-group">
-                    <label>Cost</label>
-                    <input type="text" class="form-control u-sm" [(ngModel)]="item.cost"
-                        placeholder="Optionally, specify the cost">
-                </div>
-                <br>
-                <div class="d-flex flex-justify-between flex-align-center">
-                    <div class="col">
-                        <img src="assets/item_weight.png" height="16">
-                        <input type="number" min="0" [(ngModel)]="item.weight" class="form-control u-sm">
-                    </div>
-                    <div class="col">
-                        <img src="assets/item_darkstone.png" height="16">
-                        <input type="number" min="0" [(ngModel)]="item.darkstone" class="form-control u-sm">
-                    </div>
-                </div>
-                <br>
-                <div class="d-flex flex-justify-between flex-align-center">
-                    <div class="col">
-                        <img src="assets/item_hands.png" height="16">
-                        <input type="number" min="0" [(ngModel)]="item.hands" class="form-control u-sm">
-                    </div>
-                    <div class="col">
-                        <img src="assets/item_slots.png" height="16">
-                        <input type="number" min="0" [(ngModel)]="item.slots" class="form-control u-sm">
-                    </div>
-                </div>
-                <br>
-            </div>
-            <div role="tabpanel" class="pane" id="fourth" [ngClass]="{active:activeTab.id==='fourth'}">
-                <h6 class="d-flex flex-justify-between flex-align-end">
-                    Modifiers
-                    <button type="button" class="u-sm" (click)="addModifier()">+</button>
-                </h6><br>
-
-                <div class="d-flex flex-align-center flex-justify-between"
-                    *ngFor="let modifier of item.modifiers">
-
-                    <div class="col-2" id="modifier-{{id}}">
-                        <select class="form-control u-sm" [(ngModel)]="modifier.affects">
-                            <option [ngValue]="null">Select</option>
-                            <option *ngFor="let modtarget of modifierTargets" [ngValue]="modtarget">
-                                {{modtarget}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <input type="number" min="-10" [(ngModel)]="modifier.value"
-                            class="form-control u-sm" placeholder="0">
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn u-sm" (click)="removeModifier($index)">
-                            X
-                        </button>
-                    </div>
-                </div>
-                <br>
-
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="d-flex flex-justify-end">
-        <button type="button" (click)="close()" aria-label="Close">Cancel</button>
-        <button type="button" (click)="apply()"
-            [disabled]="!canApply()"
-            aria-label="Apply">Apply</button>
-    </div>
-
+</div>
+<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+    <a mat-flat-button color="light" (click)="close()" aria-label="Close">Cancel</a>
+    &nbsp;&nbsp;&nbsp;
+    <a mat-flat-button color="primary" [mat-dialog-close]="result" aria-label="Save">Save</a>
 </div>

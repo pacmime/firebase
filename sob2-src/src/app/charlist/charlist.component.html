@@ -9,7 +9,7 @@
 
 <div class="c-list">
 
-    <header><h5>My Characters</h5></header>
+    <header><h5>My Characters</h5></header><br>
 
     <div class="c-list__item">
         <select class="form-control" name="newCharClass" [(ngModel)]="newCharClass">
@@ -20,32 +20,31 @@
         </select>
         &nbsp;
         <button type="button" (click)="create()">Create</button>
-    </div>
-
-    <div class="c-list__item">
-        <a routerLink="/import" routerLinkActive="active">
-            Import an Old Character
-        </a>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</div>
+        <button type="button" class="u-mg-left--md" routerLink="/import" routerLinkActive="active">Import</button>
     </div>
 
     <div class="d-grid">
 
-        <div *ngFor="let char of chars | async | orderBy:'level'">
+        <div *ngFor="let char of chars | async | orderBy:'level'" class="card">
 
-            <div class="card">
-                <a class="thumbnail" routerLink="/chars/{{char.id}}" routerLinkActive="active">
-                    <img class="image" [ngStyle]="getAvatar(char)">
-                </a>
-                <h4 class="u-text--center">{{char.name}}</h4>
-                <div class="u-text--center u-sm">{{char.class}} {{char.level}}</div>
-                <div class="d-flex flex-justify-end flex-align-start">
-                    <button type="button" class="u-sm btn--del" (click)="markAsDeleting(char.id,true)">Delete</button>
-                    <div class="btn-group" *ngIf="isDeleting(char.id)">
-                        <button type="button" class="btn--del u-sm" (click)="remove(char.id)">Y</button>
-                        <button type="button" class="u-sm" (click)="markAsDeleting(char.id, false)">N</button>
-                    </div>
+            <a class="thumbnail" routerLink="/chars/{{char.id}}" routerLinkActive="active">
+                <img class="image" [ngStyle]="getAvatar(char)">
+            </a>
+            <h4 class="u-text--center">{{char.name}}</h4>
+            <div class="u-text--center u-sm">{{char.class}} {{char.level}}</div>
+
+
+            <div class="card-action">
+                <button type="button" class="u-sm btn--del" (click)="markAsDeleting(char.id,true)">
+                    DEL
+                </button>
+                <div class="btn-group" *ngIf="isDeleting(char.id)">
+                    <button type="button" class="btn--del u-sm" (click)="remove(char.id)">Y</button>
+                    <button type="button" class="u-sm" (click)="markAsDeleting(char.id, false)">N</button>
                 </div>
             </div>
+
         </div>
 
     </div>

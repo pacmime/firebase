@@ -182,12 +182,13 @@ export class CharacterComponent implements OnInit {
         if(key && 'xp' === key) {
             let neededXP = this.xpLevels[this.character.level];
             if(arg.value >= neededXP) {
-                this.messages.push(
-                    this.createMessage(
-                        "Level Up!",
-                        "Choose a class ability and roll for a new level-up ability"
-                    )
-                );
+                // this.messages.push(
+                //     this.createMessage(
+                //         "Level Up!",
+                //         "Choose a class ability and roll for a new level-up ability"
+                //     )
+                // );
+                this.snackBar.open("Level Up!", "Dismiss");
                 this.character.level++;
                 arg.value -= neededXP;  //reset
             }

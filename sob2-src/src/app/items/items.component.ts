@@ -1,9 +1,10 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, EventEmitter
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 import { Item } from '../models/character.model';
-import { ModalService } from'../modal.service';
 import { ItemEditorComponent } from './editor/editor.component';
 import { SOBError } from "../models/error";
 
@@ -19,11 +20,15 @@ export class ItemsComponent implements OnInit {
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
     @Output() onError : EventEmitter<any> = new EventEmitter<any>();
 
+    public  dialog    : MatDialog;
     public totalWeight : number;
     public totalDarkstone : number;
     private confirming : { key: number, value: boolean } = {} as { key: number, value: boolean };
+    private subscription : Subscription;
 
-    constructor(private modalService : ModalService) { }
+    constructor( dialog ?: MatDialog ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         this.updateTotals();
@@ -33,7 +38,7 @@ export class ItemsComponent implements OnInit {
         this.items = null;
         this.totalWeight = null;
         this.totalDarkstone = null;
-        this.modalService = null;
+        // this.modalService = null;
     }
 
     updateTotals() {
@@ -66,41 +71,44 @@ export class ItemsComponent implements OnInit {
             slots:      0,
             equipped:   false
         };
-
-        const ref = this.modalService.createComponentRef(ItemEditorComponent);
-        ref.instance.item = item;
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.items.push(event.value as Item);
-                this.updateTotals();
-                this.onSave.emit({type:"item.added",value:event.value});
-            }
-        };
-
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
+        this.openEditor(item, null);
     }
 
     editItem (index) {
-
         let item = this.items[index];
         let editable = JSON.parse(JSON.stringify(item));
+        this.openEditor(editable, index);
+    }
 
-        const ref = this.modalService.createComponentRef(ItemEditorComponent);
-        ref.instance.item = editable;
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.items[index] = event.value as Item;
-                this.updateTotals();
-                this.onSave.emit({type:"item.updated",value:event.value});
+
+    openEditor(item : any , position : number) {
+        let opts = {
+            data: {
+                item : item
             }
         };
+        const dialogRef = this.dialog.open(ItemEditorComponent, opts);
+        this.subscription = dialogRef.afterClosed().subscribe( ( result : Item ) => {
 
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
+            if(result) {
+                let type = '';
+                if(isNaN(position)) {
+                    type = "item.added";
+                    this.items.push(result);
+
+                } else {
+                    this.items[position] = result;
+                    type = "item.updated";
+                }
+                this.updateTotals();
+                this.onSave.emit({ type:type, value:result });
+            }
+
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        });
     }
+
 
     removeItem(index) {
         delete this.confirming[index];

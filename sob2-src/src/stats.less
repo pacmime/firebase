@@ -8,16 +8,18 @@
     border: 1px solid #000;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    max-width: 100px;
 }
 
 .value-display .label {
     display: block;
     font-weight: 700;
     font-size: 1em;
-    width: 96px;
+    min-width: 96px;
     // background-color: #ddd;
     border-top: 1px solid #000;
     border-radius: 0 0 8px 8px;
+    background-color: #ececec;
     &.u-sm { font-size: 1em; }
 }
 .value-display .value {
@@ -35,7 +37,7 @@
         align-items: center;
         flex: 1 0 1em;
         padding: 0 0.5em;
-        max-width: 64px;
+        // max-width: 64px;
 
         &.u-sm {
             font-size: 1.25em;

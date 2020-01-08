@@ -1,7 +1,7 @@
 h3, h4, h5 { margin: 0; }
 
 .c-list {
-    padding: 3em 1em 5em;
+    padding: 1em 1em 5em;
     overflow: auto;
     height: 100%;
 
@@ -67,6 +67,7 @@ h3, h4, h5 { margin: 0; }
 
 .card {
     height: 100%;
+    position: relative;
 
     .thumbnail {
         width: 100%;
@@ -81,5 +82,15 @@ h3, h4, h5 { margin: 0; }
         display: block;
         border-radius: 100%;
         border: 1px solid #bbb;
+    }
+
+
+    .card-action {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        position: absolute;
+        top: 0.25em;
+        right: 0.5em;
     }
 }

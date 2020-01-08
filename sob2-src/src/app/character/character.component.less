@@ -42,6 +42,81 @@
 
 
 
+.o-bio-container {
+    border-bottom: 1px solid #bbb;
+    padding: 0 1em 2em;
+}
+
+@media(min-width:992px) {
+    .p-overview {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .o-bio-container {
+        flex: 1;
+        border-bottom: none;
+        padding: 0 2em;
+    }
+    .o-attributes-container {
+        flex: 3;
+    }
+}
+
+
+.t-combat, .t-health, .t-sanity, .t-grit, .t-corruption,
+.t-faith, .t-mana, .t-magik, .t-fury, .t-ki {
+    flex: 1 0 100%;
+
+    justify-content: center;
+    & > .m-grid {
+        justify-content: center;
+    }
+}
+
+.t-health, .t-sanity {
+    & > .m-grid {
+        justify-content: center;
+
+        .m-grid { justify-content: center; }
+    }
+}
+
+@media(min-width: 992px) {
+    .t-combat {
+        justify-content: flex-start;
+    }
+    .t-health, .t-sanity {
+        flex: 1;
+        justify-content: flex-start;
+
+        & > .m-grid { justify-content: flex-start; }
+    }
+    .t-grit, .t-corruption, .t-faith,
+    .t-mana, .t-magik, .t-fury, .t-ki {
+        flex: 0 1 auto;
+        justify-content: flex-start;
+    }
+
+    .t-combat, .t-health, .t-sanity, .t-grit, .t-corruption,
+    .t-faith, .t-mana, .t-magik, .t-fury, .t-ki {
+        & > .m-grid {
+            justify-content: flex-start;
+            .m-grid { justify-content: flex-start; }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 .mat-tab-group {
     width: 100%;
 }

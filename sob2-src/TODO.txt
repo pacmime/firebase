@@ -1,0 +1,4 @@
+
+indicate on VD something shouldn't be adjusted (max health, etc)
+    - via color?
+    - button change?

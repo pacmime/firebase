@@ -1,17 +1,19 @@
 import {
-    Component, OnInit, OnChanges, Input, Output,
+    Component, OnInit, OnChanges, OnDestroy, Input, Output,
     EventEmitter, SimpleChanges, ElementRef
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
-import { ModalService } from'../../modal.service'
 import { KeypadComponent } from '../keypad/keypad.component';
+
 
 @Component({
     selector: 'value-display',
     templateUrl: './value-display.component.html',
     styleUrls: ['./value-display.component.less']
 })
-export class ValueDisplayComponent implements OnInit {
+export class ValueDisplayComponent implements OnInit, OnDestroy {
 
     @Input() value: number = 0;
     @Input() modifiers: { value:number, sources: string[] };
@@ -20,9 +22,12 @@ export class ValueDisplayComponent implements OnInit {
     @Input() min: number = 0;
     @Input() max: number;
     @Input() step: number = 1;
+    @Input() special: boolean = false;
     @Output() onSave: EventEmitter<{label:string,value:number}> = new EventEmitter<{label:string,value:number}>();
 
     public computed: number = 0;
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
 
     @Input() options: {
         valueSize? : string;
@@ -31,7 +36,9 @@ export class ValueDisplayComponent implements OnInit {
         max? : number;
     } = { min: 0 };
 
-    constructor(private modalService : ModalService) { }
+    constructor( dialog ?: MatDialog ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         if(typeof(this.canAdjust) === 'undefined')
@@ -49,6 +56,13 @@ export class ValueDisplayComponent implements OnInit {
             this.onValueChange(changes.value.currentValue);
         } else if(changes.modifiers) {
             this.onValueChange(this.value);
+        }
+    }
+
+    ngOnDestroy() {
+        if(this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
         }
     }
 
@@ -94,23 +108,18 @@ export class ValueDisplayComponent implements OnInit {
                 this.value * 1 > this.options.min * 1;
     }
 
-    openKeypad() {
-        // let closeFn = this.modalService.open(ModalComponent);
-
-        const kpRef = this.modalService.createComponentRef(KeypadComponent);
-        let instance = kpRef.instance;
-        instance.visible = true;
-        instance.value = this.computed;
-        instance.modifiers = this.modifiers;
-        instance.onClose = (event) => {
-            try {
-                this.modalService.destroyRef(kpRef, 0);
-            } catch(e) {
-                console.log("Error destroying modal service ref: " + e.message);
+    openKeypad(): void {
+        let opts = {
+            data: {
+                visible: true,
+                value : this.computed,
+                modifiers : this.modifiers
             }
-
-            if(event.apply) {
-                let change = event.value*1;
+        };
+        const dialogRef = this.dialog.open(KeypadComponent, opts);
+        this.subscription = dialogRef.afterClosed().subscribe( ( result : any ) => {
+            if( !isNaN(result) ) {
+                let change = result*1;
                 let current = this.value*1;
                 current += change - this.computed;
                 try {
@@ -121,13 +130,12 @@ export class ValueDisplayComponent implements OnInit {
                 try {
                     this.onSave.emit({label:this.label,value:this.value});
                 } catch(e) {
-                    console.log("VD keypad - Error emitting save event " + e.message); 
+                    console.log("VD keypad - Error emitting save event " + e.message);
                 }
             }
-        };
-
-        const kpElement = this.modalService.getDomElementFromComponentRef(kpRef);
-        this.modalService.addChild(kpElement);
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        });
     }
 
 }
@@ -142,7 +150,7 @@ export class ValueDisplayComponent implements OnInit {
 @Component({
     selector: 'xp-value-display',
     templateUrl: './xp-value-display.component.html',
-    styleUrls: ['./xp-value-display.component.less']
+    styleUrls: ['./value-display.component.less']
 })
 export class XPValueDisplayComponent extends ValueDisplayComponent {
 

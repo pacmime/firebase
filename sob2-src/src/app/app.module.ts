@@ -5,7 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule
+    MatSelectModule, MatTabsModule, MatSnackBarModule,
+    MatCardModule, MatToolbarModule, MatButtonModule,
+    MatIconModule, MatInputModule, MatDialogModule
 } from '@angular/material';
 
 import { ModalService } from'./modal.service'
@@ -211,7 +213,8 @@ const appRoutes: Routes = [
       AngularFirestoreModule,
       AngularFireAuthModule,
       AngularFireDatabaseModule,
-      MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule
+      MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule,
+      MatButtonModule, MatIconModule, MatInputModule, MatDialogModule
   ],
   providers: [
       ModalService,

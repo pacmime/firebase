@@ -1,10 +1,13 @@
 
-import {
-  Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+
+import { AbstractDialogComponent } from '../dialog/dialog.component';
+
 
 @Component({
     selector: 'keypad',
@@ -22,57 +25,34 @@ import {
         ])
     ]
 })
-export class KeypadComponent implements OnInit {
-
-    @Input() closable = true;
-    @Input() visible: boolean;
-    @Input() value : number;
-    @Input() minimum : number = 0;
-    @Input() maximum : number = 9999;
-    @Input() modifiers : { value: number; sources: string[]; };
-    @Output() onClose: Function;
+export class KeypadComponent extends AbstractDialogComponent<KeypadComponent>
+implements OnInit, OnDestroy {
 
     private manualAdj : number;
-    private changes : number[] = [] as number[];
-    private result : number = 0;
+    private changes   : number[] = [] as number[];
+    private result    : number = 0;
+    private minimum   : number = 0;
+    private maximum   : number = 9999;
 
-    constructor() { }
+    constructor(
+        dialogRef: MatDialogRef<KeypadComponent>,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ) {
+        super(dialogRef, data);
+    }
 
     ngOnInit() {
-        this.result = this.value;
+        super.ngOnInit();
+        this.result = (!this.data || isNaN(this.data.value)) ? 0 : this.data.value;
+        if(this.data && !isNaN(this.data.minimum)) this.minimum = this.data.minimum*1;
+        if(this.data && !isNaN(this.data.maximum)) this.maximum = this.data.maximum*1;
     }
 
     ngOnDestroy() {
-        this.closable = false;
-        this.visible = false;
-        this.value = 0;
-        this.minimum = 0;
-        this.maximum = 0;
-        this.modifiers = null;
-        this.onClose = null;
+        super.ngOnDestroy();
         this.manualAdj = null;
         this.changes = null;
         this.result = 0;
-    }
-
-    close() {
-        this.visible = false;
-        try {
-            this.onClose({apply:false,value:this.result});
-        } catch (e) {
-            console.log("Keypad: Error caught firing close event to callee");
-            console.log(e);
-        }
-    }
-
-    apply() {
-        this.visible = false;
-        try {
-            this.onClose({apply:true,value:this.result});
-        } catch (e) {
-            console.log("Keypad: Error caught firing apply event to callee");
-            console.log(e);
-        }
     }
 
     change (v) {

@@ -1,4 +1,4 @@
-<div class="value-display" [ngClass]="{'has-leveled':hasLeveled()}">
+<!-- <div class="value-display" [ngClass]="{'has-leveled':hasLeveled()}">
     <div class="value" [ngClass]="{modified:isModified()}">
         <div (click)="openKeypad()"
             [ngClass]="{'u-sm':'sm'===options.valueSize}">
@@ -22,5 +22,29 @@
     </div>
     <div class="label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
         <span>{{label}}</span>
+    </div>
+</div> -->
+
+<div class="vd" [ngClass]="{'has-leveled':hasLeveled()}">
+    <div class="vd__value"
+        [ngClass]="{modified:isModified(), 'u-sm':'sm'===options.valueSize}"
+        (click)="openKeypad()">
+        <div>
+            <div class="d-flex flex-col">
+                {{value}}
+                <div class="needed">{{needed}}</div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="vd__incr" (click)="increment()"
+        (ngDisabled)="!canAdjust || !canIncrement()">
+        +
+    </button>
+    <button type="button" class="vd__decr" (click)="decrement()"
+        (ngDisabled)="!canAdjust || !canDecrement()">
+        -
+    </button>
+    <div class="vd__label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
+        {{label}}
     </div>
 </div>

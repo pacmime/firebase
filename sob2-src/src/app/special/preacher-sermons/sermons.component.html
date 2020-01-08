@@ -10,10 +10,12 @@
 </div>
 <hr>
 
-<div *ngFor="let sermon of character.sermons">
-    <sermon [sermon]="sermon"
-        [eventSubject]="eventSubject"
-        (onEvent)="onEvent($event)"
-        [availableFaith]="getAvailableFaith()">
-    </sermon>
+<div class="m-grid flex-align-stretch no-pad">
+    <div *ngFor="let sermon of character.sermons" class="card">
+        <sermon [sermon]="sermon"
+            [eventSubject]="eventSubject"
+            (onEvent)="onEvent($event)"
+            [availableFaith]="getAvailableFaith()">
+        </sermon>
+    </div>
 </div>

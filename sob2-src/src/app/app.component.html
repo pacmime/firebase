@@ -10,16 +10,19 @@
         <a routerLink="/login" routerLinkActive="active">Login</a>
     </div>
 </header> -->
-<mat-toolbar>
+<mat-toolbar color="primary">
     <div class="d-flex flex-justify-between flex-align-center" style="width:100%">
-        <a class="flex-1" routerLink="/chars" routerLinkActive="active">{{title}}</a>
+        <a mat-button routerLink="/chars">
+            &lt;-
+        </a>
+        <div class="flex-1">
+            {{title}} <img src="assets/darkstone.png" width="16px"> 
+        </div>
         <div *ngIf="user">
-            <span class="d-none-xs">{{ user.email }} </span>
-            <button type="button" class="btn btn-xs" (click)="logout()">Logout</button>
+            <span mat-button class="d-none-xs">{{ user.email }} </span>
+            <button mat-button (click)="logout()">Logout</button>
         </div>
-        <div *ngIf="!user">
-            <a routerLink="/login" routerLinkActive="active">Login</a>
-        </div>
+        <a *ngIf="!user" mat-button routerLink="/login" routerLinkActive="active">Login</a>
     </div>
 </mat-toolbar>
 <main>

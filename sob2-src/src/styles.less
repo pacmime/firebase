@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 
 
@@ -30,6 +30,11 @@ app-character {
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
+
+app-root mat-toolbar.mat-toolbar-row,
+app-root mat-toolbar.mat-toolbar-single-row {
+    height: 48px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -151,6 +156,8 @@ button[type="button"] {
 .flex-align-end { align-items: flex-end; }
 .flex-align-center { align-items: center; }
 .flex-align-stretch { align-items: stretch; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
 .col, .col-1 { flex-grow: 1; }
 .col-2 { flex-grow: 2; }
 .col-3 { flex-grow: 3; }
@@ -385,4 +392,57 @@ select.form-control {
     height: 1em;
     background-size: 100%;
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMjQgMTEuMzA1bC03Ljk5NyAxMS4zOUw4IDExLjMwNXoiLz48L3N2Zz4=');
+}
+
+
+
+
+
+
+
+
+.m-grid {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5em;
+    flex-wrap: wrap;
+
+    & > *:not(.m-grid):not(.m-group) { margin: 0.5em; }
+
+    & > .card { flex: 0 1 100%; }
+
+
+    &.no-wrap {
+        flex-wrap: nowrap;
+    }
+    &.no-pad {
+        padding: 0;
+    }
+    &.flex-align-stretch {
+        align-items: stretch;
+    }
+}
+@media(min-width: 768px) {
+    .m-grid {
+        padding: 1em;
+
+        & > .card { flex: 0 1 48%; }
+    }
+
+}
+@media(min-width: 992px) {
+    .m-grid {
+        padding: 1em;
+
+        & > .card { flex: 0 1 31%; }
+
+    }
+}
+
+.m-group > h5 {
+    text-transform: uppercase;
+    padding-left: 1em;
+    padding-top: 0.5em;
+    margin-bottom: 0;
 }

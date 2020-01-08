@@ -1,10 +1,15 @@
 import {
-  Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+  Inject, Component, OnInit, OnDestroy,
+  Input, Output, OnChanges, EventEmitter,
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import { Item, Modifier } from '../../models/character.model';
+
+import { AbstractDialogComponent } from '../../shared/dialog/dialog.component';
 
 @Component({
   selector: 'item-editor',
@@ -22,13 +27,13 @@ import { Item, Modifier } from '../../models/character.model';
       ])
   ]
 })
-export class ItemEditorComponent implements OnInit {
+export class ItemEditorComponent extends AbstractDialogComponent<ItemEditorComponent>
+implements OnInit, OnDestroy {
 
     @Input() item : Item;
     @Input() closable = true;
     @Input() visible: boolean = true;
-    @Output() onClose: Function;
-
+    
     private uses : string[];
     private slots : string[];
     private modifierTargets : string[];
@@ -41,9 +46,15 @@ export class ItemEditorComponent implements OnInit {
         { label:'Mods', id:'fourth' }
     ];
 
-    constructor() { }
+    constructor(
+        dialogRef: MatDialogRef<ItemEditorComponent>,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ) {
+        super(dialogRef, data);
+    }
 
     ngOnInit() {
+        super.ngOnInit();
         this.uses = ['Turn', "Fight", "Adventure"];
         this.slots = ['hat', 'face', 'shoulders', 'coat',
             'torso', 'belt',  'pants',  'gloves', 'boots'];
@@ -58,10 +69,10 @@ export class ItemEditorComponent implements OnInit {
     }
 
     ngOnDestroy() {
+        super.ngOnDestroy();
         this.item = null;
         this.closable = false;
         this.visible = false;
-        this.onClose = null;
         this.uses = null;
         this.slots = null;
         this.modifierTargets = null;
@@ -73,16 +84,6 @@ export class ItemEditorComponent implements OnInit {
         return !!this.item && !!this.item.name;
     }
 
-    close() {
-        this.visible = false;
-        this.onClose({apply:false,value:this.item});
-    }
-
-    apply() {
-        if(!this.canApply()) return;
-        this.visible = false;
-        this.onClose({apply:true,value:this.item});
-    }
 
     addModifier () {
         let mod : Modifier = {
@@ -98,8 +99,5 @@ export class ItemEditorComponent implements OnInit {
         this.item.modifiers.splice(index, 1);
     }
 
-    activateTab (tab) {
-        this.activeTab = tab;
-    }
 
 }

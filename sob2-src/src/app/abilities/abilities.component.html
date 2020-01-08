@@ -6,27 +6,29 @@
 </h4>
 <hr>
 
-<div *ngFor="let ability of character.abilities; let i = index" class="card">
-    <h5 class="d-flex flex-justify-between flex-align-end">
-        {{ability.name}}
-        <div class="d-flex flex-justify-end flex-align-end">
-            <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
-            <div class="btn-group" *ngIf="confirmingDelete(i)">
-                <button type="button" class="u-sm" (click)="remove(i)">Y</button>
-                <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+<div class="m-grid flex-align-stretch no-pad">
+    <div *ngFor="let ability of character.abilities; let i = index" class="card">
+        <h5 class="d-flex flex-justify-between flex-align-end">
+            {{ability.name}}
+            <div class="d-flex flex-justify-end flex-align-end">
+                <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
+                <div class="btn-group" *ngIf="confirmingDelete(i)">
+                    <button type="button" class="u-sm" (click)="remove(i)">Y</button>
+                    <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+                </div>
             </div>
+        </h5>
+        <div class="desc">{{ability.desc}}</div>
+        <div *ngIf="ability.userInput">
+            <hr>
+            <small><strong>{{ability.userInput.name}}:</strong></small>
+            <input type="text" [(ngModel)]="ability.userInput.value">
         </div>
-    </h5>
-    <div class="desc">{{ability.desc}}</div>
-    <div *ngIf="ability.userInput">
-        <hr>
-        <small><strong>{{ability.userInput.name}}:</strong></small>
-        <input type="text" [(ngModel)]="ability.userInput.value">
-    </div>
-    <div *ngIf="ability.modifiers" class="u-sm">
-        <hr>
-        <div *ngFor="let modifier of ability.modifiers">
-            {{modifier.affects}} {{modifier.value|modifier}}
+        <div *ngIf="ability.modifiers" class="u-sm">
+            <hr>
+            <div *ngFor="let modifier of ability.modifiers">
+                {{modifier.affects}} {{modifier.value|modifier}}
+            </div>
         </div>
     </div>
 </div>
