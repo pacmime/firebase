@@ -162,3 +162,43 @@ export class XPValueDisplayComponent extends ValueDisplayComponent {
     }
 
 }
+
+
+
+
+
+
+
+
+@Component({
+    selector: 'sidebag-value-display',
+    styleUrls: ['./value-display.component.less'],
+    template: `
+    <div class="vd">
+        <div class="vd__value u-sm" [ngClass]="{modified:isModified()}"
+            (click)="openKeypad()">
+            <div>
+                <div class="d-flex flex-col">
+                    {{weight}}
+                    <div class="needed">{{value}}</div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="vd__incr" (click)="increment()"
+            (ngDisabled)="!canAdjust || !canIncrement()">
+            +
+        </button>
+        <button type="button" class="vd__decr" (click)="decrement()"
+            (ngDisabled)="!canAdjust || !canDecrement()">
+            -
+        </button>
+        <div class="vd__label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
+            {{label}}
+        </div>
+    </div>
+    `
+})
+export class SidebagValueDisplayComponent extends ValueDisplayComponent {
+    @Input()  weight : number = 0;
+    @Output() onLevel: EventEmitter<{xp:number}> = new EventEmitter<{xp:number}>();
+}

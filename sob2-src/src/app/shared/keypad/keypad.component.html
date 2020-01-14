@@ -1,7 +1,7 @@
 <h5 mat-dialog-title>
     Current: {{data.value}}
     <small>
-        ( min: {{data.minimum}}, max: {{data.maximum}} )
+        <small>( min: {{minimum}}, max: {{maximum}} )</small>
     </small>
 </h5>
 <div mat-dialog-content>
@@ -11,47 +11,39 @@
         ({{data.modifiers.sources|join:', '}})
     </small>
 
-    <div class="d-flex flex-justify-between flex-align-start">
-        <div class="flex-1">
-            <div class="o-keypad">
-                <button type="button" class="keypad__button" (click)="change(-100)" (ngDisable)="value==minimum">-100</button>
-                <button type="button" class="keypad__button" (click)="change(-50)" (ngDisable)="value==minimum">-50</button>
-                <button type="button" class="keypad__button" (click)="change(-20)" (ngDisable)="value==minimum">-20</button>
-                <button type="button" class="keypad__button" (click)="change(-10)" (ngDisable)="value==minimum">-10</button>
-                <button type="button" class="keypad__button" (click)="change(-5)" (ngDisable)="value==minimum">-5</button>
-                <button type="button" class="keypad__button" (click)="change(-1)" (ngDisable)="value==minimum">-1</button>
-                <button type="button" class="keypad__button" (click)="change(1)">+1</button>
-                <button type="button" class="keypad__button" (click)="change(5)">+5</button>
-                <button type="button" class="keypad__button" (click)="change(10)">+10</button>
-                <button type="button" class="keypad__button" (click)="change(20)">+20</button>
-                <button type="button" class="keypad__button" (click)="change(50)">+50</button>
-                <button type="button" class="keypad__button" (click)="change(100)">+100</button>
+    <div class="o-keypad">
+        <button mat-mini-fab color="accent" (click)="change(100)">+100</button>
+        <button mat-mini-fab color="accent" (click)="change(50)">+50</button>
+        <button mat-mini-fab color="accent" (click)="change(20)">+20</button>
+        <button mat-mini-fab color="accent" (click)="change(10)">+10</button>
+        <button mat-mini-fab color="accent" (click)="change(5)">+5</button>
+        <button mat-mini-fab color="accent" (click)="change(1)">+1</button>
+        <button mat-mini-fab color="warn" (click)="change(-1)" (ngDisable)="value==minimum">-1</button>
+        <button mat-mini-fab color="warn" (click)="change(-5)" (ngDisable)="value==minimum">-5</button>
+        <button mat-mini-fab color="warn" (click)="change(-10)" (ngDisable)="value==minimum">-10</button>
+        <button mat-mini-fab color="warn" (click)="change(-20)" (ngDisable)="value==minimum">-20</button>
+        <button mat-mini-fab color="warn" (click)="change(-50)" (ngDisable)="value==minimum">-50</button>
+        <button mat-mini-fab color="warn" (click)="change(-100)" (ngDisable)="value==minimum">-100</button>
+    </div>
+    <div class="manual-entry">
+        <br>
+        <div class="d-flex flex-justify-around flex-align-stretch">
+            <button mat-flat-button class="u-sm" color="accent" (click)="changeManual(-1)" (ngClass)="{disabled:!hasManual()}">-</button>
+            <div class="col">
+                <input type="number" class="form-control" [(ngModel)]="manualAdj" placeholder="Adjust by ...">
             </div>
-            <br>
-
-            <div class="manual-entry">
-                <div class="d-flex flex-justify-around flex-align-stretch">
-                    <button type="button" (click)="changeManual(-1)" (ngClass)="{disabled:!hasManual()}">-</button>
-                    <div class="col">
-                        <input type="number" class="form-control" [(ngModel)]="manualAdj" placeholder="Adjust by ...">
-                    </div>
-                    <button type="button" (click)="changeManual(1)" (ngClass)="{disabled:!hasManual()}">+</button>
-                </div>
-            </div>
-        </div>
-        <div class="u-mg-left--md">
-            <strong>Changes:</strong><br>
-            <div *ngFor="let change of changes">{{change}}</div>
-            <br>
-            <br>
-            <hr>
-            <div><strong>Final Value:</strong> {{result}}</div>
+            <button mat-flat-button class="u-sm" color="accent" (click)="changeManual(1)" (ngClass)="{disabled:!hasManual()}">+</button>
         </div>
     </div>
+    <div class="u-sm">
+        <strong>Changes:</strong>
+        <span *ngFor="let change of changes">{{change}}, </span>
+    </div>
+    <div class="u-sm"><strong>Final Value:</strong> {{result}}</div>
 
 </div>
 <div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
-    <a mat-flat-button color="light" (click)="close()" aria-label="Close">Cancel</a>
+    <a mat-flat-button color="accent" (click)="close()" aria-label="Close">Cancel</a>
     &nbsp;&nbsp;&nbsp;
     <a mat-flat-button color="primary" [mat-dialog-close]="result" aria-label="Apply">Apply</a>
 </div>

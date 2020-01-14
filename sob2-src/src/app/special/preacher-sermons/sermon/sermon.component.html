@@ -9,12 +9,16 @@
                 <small>({{sermon.type}})</small>
             </div>
             <div class="d-flex flex-justify-end flex-align-end">
-                <button type="button" class="btn u-sm" (click)="edit()">edit</button>
+                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
                 &nbsp;&nbsp;&nbsp;
-                <button type="button" class="btn u-sm" (click)="confirmingDelete=true">X</button>
+                <button class="u-sm" mat-flat-button color="warn"
+                    (click)="confirmingDelete=true"
+                    *ngIf="!confirmingDelete">
+                    X
+                </button>
                 <div class="btn-group" *ngIf="confirmingDelete">
-                    <button type="button" class="btn u-sm" (click)="remove()">Y</button>
-                    <button type="button" class="btn u-sm" (click)="confirmingDelete=false">N</button>
+                    <button class="u-sm" mat-flat-button color="primary" (click)="remove()">Y</button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false">N</button>
                 </div>
             </div>
         </h5>
@@ -34,14 +38,14 @@
         <div>
 
             <!-- if not cast already and not empty or insufficient -->
-            <button type="button" class="u-sm" *ngIf="canCast()" (click)="use()">cast</button>
+            <button class="u-sm" mat-flat-button color="accent" *ngIf="canCast()" (click)="use()">cast</button>
 
             <!-- if cast but not empty -->
-            <button type="button" class="u-sm" *ngIf="canSpendExtraFaith()"
+            <button class="u-sm" mat-flat-button color="accent" *ngIf="canSpendExtraFaith()"
                 (click)="spendExtraFaith()">+faith</button>
 
             <!-- if cast but no applied xp -->
-            <button type="button" class="u-sm" *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
+            <button class="u-sm" mat-flat-button color="accent" *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
 
             <!-- if empty or not cast and insufficient -->
             <span *ngIf="isInsufficient()">
@@ -107,8 +111,8 @@
         <hr>
 
         <div class="d-flex flex-justify-between">
-            <button type="button" class="u-sm" (click)="cancelEditing()">cancel</button>
-            <button type="button" class="u-sm" (click)="save()">save</button>
+            <button class="u-sm" mat-flat-button color="accent" (click)="cancelEditing()">cancel</button>
+            <button class="u-sm" mat-flat-button color="primary" (click)="save()">save</button>
         </div>
     </div>
 

@@ -3,15 +3,15 @@
 
     <div class="card">
 
-        <div>
-            <label for="userEmail">Email*</label>
-            <input class="form-control" [(ngModel)]="email" type="email" required name="userEmail">
-        </div>
-        <br>
-        <div>
-            <label for="userPassword">Password</label>
-            <input class="form-control" [(ngModel)]="password" type="password" required name="userPassword">
-        </div>
+        <mat-form-field>
+            <mat-label>Email Address</mat-label>
+            <input matInput [(ngModel)]="email" type="email" required name="userEmail">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="password" type="password" required name="userPassword">
+        </mat-form-field>
 
         <div *ngIf="message" class="t-fg--danger">
             <br>
@@ -20,12 +20,17 @@
         </div>
 
         <br>
-        <hr>
         <br>
 
         <div class="d-flex flex-justify-between flex-align-center">
-            <button type="button" (click)="resetPassword()">Reset Password</button>
-            <button type="button" class="btn--use" (click)="login()">Login</button>
+            <button type="button" (click)="resetPassword()"
+                [disabled]="!userEmail||!userEmail.length">
+                Reset Password
+            </button>
+            <button type="button" class="btn--use" (click)="login()"
+                [disabled]="!userEmail||!userPassword">
+                Login
+            </button>
         </div>
     </div>
 </div>

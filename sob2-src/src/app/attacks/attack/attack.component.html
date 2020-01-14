@@ -5,12 +5,16 @@
         <h5 class="d-flex flex-justify-between flex-align-end">
             {{attack.name}}
             <div class="d-flex flex-justify-end flex-align-end">
-                <button type="button" class="u-sm" (click)="edit()">edit</button>
+                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
                 &nbsp;&nbsp;&nbsp;
-                <button type="button" class="u-sm btn--del" (click)="confirmingDelete=true">X</button>
+                <button class="u-sm" mat-flat-button color="warn"
+                    (click)="confirmingDelete=true"
+                    *ngIf="!confirmingDelete">
+                    X
+                </button>
                 <div class="btn-group" *ngIf="confirmingDelete">
-                    <button type="button" class="u-sm" (click)="remove()">Y</button>
-                    <button type="button" class="u-sm" (click)="confirmingDelete=false">N</button>
+                    <button class="u-sm" mat-flat-button color="primary" (click)="remove()">Y</button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false">N</button>
                 </div>
             </div>
         </h5>
@@ -31,9 +35,9 @@
         <hr>
 
         <div class="d-flex flex-justify-between flex-align-center">
-            <button type="button" (click)="roll=null">clear</button>
+            <button class="u-sm" mat-flat-button color="accent" (click)="roll=null">clear</button>
 
-            <button type="button" class="btn--use"
+            <button class="u-sm" mat-flat-button color="primary"
                 (ngDisabled)="!attack.type||!attack.attack||!attack.damage"
                 (click)="execute()">
                 Roll

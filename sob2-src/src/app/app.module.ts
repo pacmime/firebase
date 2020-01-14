@@ -32,7 +32,8 @@ import { ItemsComponent } from './items/items.component';
 import { MimComponent } from './mim/mim.component';
 import {
     ValueDisplayComponent,
-    XPValueDisplayComponent
+    XPValueDisplayComponent,
+    SidebagValueDisplayComponent
 } from './shared/value-display/value-display.component';
 import { KeypadComponent } from './shared/keypad/keypad.component';
 
@@ -174,6 +175,7 @@ const appRoutes: Routes = [
     OrderByPipe,
     ValueDisplayComponent,
     XPValueDisplayComponent,
+    SidebagValueDisplayComponent,
     AttacksComponent,
     AttackComponent,
     KeypadComponent,

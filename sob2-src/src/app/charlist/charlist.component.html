@@ -19,9 +19,9 @@
             </option>
         </select>
         &nbsp;
-        <button type="button" (click)="create()">Create</button>
+        <button mat-flat-button color="primary" (click)="create()">Create&nbsp;</button>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</div>
-        <button type="button" class="u-mg-left--md" routerLink="/import" routerLinkActive="active">Import</button>
+        <button mat-flat-button color="accent" routerLink="/import" routerLinkActive="active">Import</button>
     </div>
 
     <div class="d-grid">
@@ -36,12 +36,18 @@
 
 
             <div class="card-action">
-                <button type="button" class="u-sm btn--del" (click)="markAsDeleting(char.id,true)">
-                    DEL
+                <button mat-mini-fab color="warn" class="u-sm"
+                    *ngIf="!isDeleting(char.id)"
+                    (click)="markAsDeleting(char.id,true)">
+                    <mat-icon>delete_forever</mat-icon>
                 </button>
                 <div class="btn-group" *ngIf="isDeleting(char.id)">
-                    <button type="button" class="btn--del u-sm" (click)="remove(char.id)">Y</button>
-                    <button type="button" class="u-sm" (click)="markAsDeleting(char.id, false)">N</button>
+                    <button mat-mini-fab color="primary" class="u-sm" (click)="remove(char.id)">
+                        <mat-icon>check_circle_outline</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="accent" class="u-sm" (click)="markAsDeleting(char.id, false)">
+                        <mat-icon>not_interested</mat-icon>
+                    </button>
                 </div>
             </div>
 

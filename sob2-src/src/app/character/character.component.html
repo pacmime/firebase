@@ -29,12 +29,12 @@
                     <div class="bio">
                         <div *ngIf="!isEditingBio">
                             <h4>{{character.name}}</h4>
-                            <div class="d-flex flex-justify-between">
-                                <button type="button" (click)="editBio()">Edit</button>
-                                <div class="col u-mg-left--md">
+                            <div class="d-flex flex-justify-between u-pd-top--md u-pd-bottom--md">
+                                <div class="flex-1 u-mg-right--md">
                                     <div><small>{{character.class}}</small></div>
                                     <div><small><em>{{character.keywords}}</em></small></div>
                                 </div>
+                                <button mat-raised-button color="accent" (click)="editBio()">Edit</button>
                             </div>
                         </div>
                         <div *ngIf="isEditingBio">
@@ -257,6 +257,7 @@
                     </div>
 
                     <div class="m-group"
+                        *ngIf="hasFlag(CLASSES.PREACHER)||hasFlag(CLASSES.GAMBLER)||hasFlag(CLASSES.SHAMAN)||hasFlag(CLASSES.SORCERER)||hasFlag(CLASSES.SAMURAI)||hasFlag(CLASSES.MONK)"
                         [ngClass]="{'t-faith':hasFlag(CLASSES.PREACHER), 't-fortune':hasFlag(CLASSES.GAMBLER), 't-magik':hasFlag(CLASSES.SHAMAN), 't-mana':hasFlag(CLASSES.SORCERER), 't-fury':hasFlag(CLASSES.SAMURAI), 't-ki':hasFlag(CLASSES.MONK)}">
                         <h5>Special</h5>
                         <div class="m-grid" *ngIf="hasFlag(CLASSES.PREACHER)">

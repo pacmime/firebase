@@ -4,7 +4,7 @@
     <div class="o-mutation-container">
         <h4 class="d-flex flex-justify-between flex-align-center">
             <div class="col u-text--sc">Mutations</div>
-            <button type="button" class="btn--add u-sm"
+            <button mat-flat-button color="primary"
                 (click)="showAvailable.mutations=!showAvailable.mutations">New</button>
         </h4>
         <hr>
@@ -31,7 +31,7 @@
         <div *ngFor="let mutation of mutations; let i = index" class="card">
             <h5 class="d-flex flex-justify-between flex-align-center">
                 {{mutation.name}}
-                <button type="button" class="btn--del"
+                <button class="u-sm" mat-flat-button color="warn"
                     (click)="remove('mutations', i)">X</button>
             </h5>
             <div class="desc">{{mutation.desc}}</div>
@@ -50,7 +50,7 @@
     <div class="o-injury-container">
         <h4 class="d-flex flex-justify-between flex-align-center">
             <div class="col u-text--sc">Injuries</div>
-            <button type="button" class="btn--add u-sm"
+            <button mat-flat-button color="primary"
                 (click)="showAvailable.injuries=!showAvailable.injuries">New</button>
         </h4>
         <hr>
@@ -76,7 +76,7 @@
         <div *ngFor="let injury of injuries; let i = index" class="card">
             <h5 class="d-flex flex-justify-between flex-align-center">
                 {{injury.name}}
-                <button type="button" class="btn--del"
+                <button class="u-sm" mat-flat-button color="warn"
                     (click)="remove('injuries', i)">X</button>
             </h5>
             <div class="desc">{{injury.desc}}</div>
@@ -95,7 +95,7 @@
     <div class="o-madness-container">
         <h4 class="d-flex flex-justify-between flex-align-center">
             <div class="col u-text--sc">Madness</div>
-            <button type="button" class="btn--add u-sm"
+            <button mat-flat-button color="primary"
                 (click)="showAvailable.madness=!showAvailable.madness">New</button>
         </h4>
         <hr>
@@ -121,7 +121,7 @@
         <div *ngFor="let mad of madness; let i = index" class="card">
             <h5 class="d-flex flex-justify-between flex-align-center">
                 {{mad.name}}
-                <button type="button" class="btn--del" (click)="remove('madness', i)">X</button>
+                <button class="u-sm" mat-flat-button color="warn" (click)="remove('madness', i)">X</button>
             </h5>
             <div class="desc">{{mad.desc}}</div>
             <div *ngIf="mad.modifiers">

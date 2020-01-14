@@ -1,8 +1,7 @@
 
 <h4 class="d-flex flex-justify-between flex-align-center">
     <div class="col u-text--sc">Abilities</div>
-    <button type="button" class="btn--add u-sm"
-        (click)="openChooser()">New</button>
+    <button mat-flat-button color="primary" (click)="openChooser()">New</button>
 </h4>
 <hr>
 
@@ -11,10 +10,14 @@
         <h5 class="d-flex flex-justify-between flex-align-end">
             {{ability.name}}
             <div class="d-flex flex-justify-end flex-align-end">
-                <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
+                <button class="u-sm" mat-flat-button color="warn"
+                    (click)="confirmingDelete(i,true)"
+                    *ngIf="!confirmingDelete(i)">
+                    X
+                </button>
                 <div class="btn-group" *ngIf="confirmingDelete(i)">
-                    <button type="button" class="u-sm" (click)="remove(i)">Y</button>
-                    <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+                    <button class="u-sm" mat-flat-button color="primary" (click)="remove(i)">Y</button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)">N</button>
                 </div>
             </div>
         </h5>

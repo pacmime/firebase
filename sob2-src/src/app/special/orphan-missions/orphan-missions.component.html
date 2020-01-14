@@ -1,31 +1,37 @@
 <h4 class="d-flex flex-justify-between flex-align-center">
     <div class="col u-text--sc">Orphan Missions</div>
-    <button type="button" class="btn--add u-sm" (click)="openChooser()">New</button>
+    <button mat-flat-button color="primary" (click)="openChooser()">New</button>
 </h4>
 <hr>
 
-<div *ngFor="let mission of character.missions;let i=index;" class="card">
-    <h5 class="d-flex flex-justify-between flex-align-end">
-        {{mission.name}}
-        <div class="d-flex flex-justify-end flex-align-end">
-            <button type="button" class="u-sm btn--del" (click)="confirmingDelete(i,true)">X</button>
-            <div class="btn-group" *ngIf="confirmingDelete(i)">
-                <button type="button" class="u-sm" (click)="remove(i)">Y</button>
-                <button type="button" class="u-sm" (click)="confirmingDelete(i,false)">N</button>
+<div class="m-grid flex-align-stretch no-pad">
+    <div *ngFor="let mission of character.missions;let i=index;" class="card">
+        <h5 class="d-flex flex-justify-between flex-align-end">
+            {{mission.name}}
+            <div class="d-flex flex-justify-end flex-align-end">
+                <button class="u-sm" mat-flat-button color="warn"
+                    (click)="confirmingDelete(i,true)"
+                    *ngIf="confirmingDelete(i)">
+                    X
+                </button>
+                <div class="btn-group" *ngIf="confirmingDelete(i)">
+                    <button class="u-sm" mat-flat-button color="primary" (click)="remove(i)">Y</button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)">N</button>
+                </div>
+            </div>
+        </h5>
+        <div class="desc">{{mission.desc}}</div>
+        <div *ngIf="mission.modifiers">
+            <hr>
+            <div *ngFor="let modifier of mission.modifiers">
+                {{modifier.affects}} : +{{modifier.value}}
             </div>
         </div>
-    </h5>
-    <div class="desc">{{mission.desc}}</div>
-    <div *ngIf="mission.modifiers">
+        <!--
         <hr>
-        <div *ngFor="let modifier of mission.modifiers">
-            {{modifier.affects}} : +{{modifier.value}}
+        <div class="d-flex flex-justify-between flex-align-center">
+            <button type="button" class="btn--use" (click)="spendFury(mission.cost)">Cast</button>
         </div>
+        -->
     </div>
-    <!--
-    <hr>
-    <div class="d-flex flex-justify-between flex-align-center">
-        <button type="button" class="btn--use" (click)="spendFury(mission.cost)">Cast</button>
-    </div>
-    -->
 </div>

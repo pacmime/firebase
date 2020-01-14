@@ -1,4 +1,4 @@
-<div class="card">
+<div>
     <h5 class="d-flex flex-justify-between flex-align-end">
         {{spell.name}}
         <div class="d-flex flex-justify-end flex-align-end">
@@ -10,12 +10,14 @@
         </div>
     </h5>
 
+    <br>
     <div class="u-sm">
         <strong>Power Roll: </strong> {{spell.power||'*'}}+
     </div>
     <div *ngIf="status">{{status}} (Rolled {{roll}})</div>
 
-    <div class="desc">{{spell.desc}}</div>
+    <br>
+    <div class="desc u-sm">{{spell.desc}}</div>
     <div *ngIf="spell.modifiers">
         <div *ngFor="let modifier of spell.modifiers">
             {{modifier.affects}} : +{{modifier.value}}

@@ -28,11 +28,11 @@ import { AbstractDialogComponent } from '../dialog/dialog.component';
 export class KeypadComponent extends AbstractDialogComponent<KeypadComponent>
 implements OnInit, OnDestroy {
 
-    private manualAdj : number;
-    private changes   : number[] = [] as number[];
-    private result    : number = 0;
-    private minimum   : number = 0;
-    private maximum   : number = 9999;
+    public manualAdj : number;
+    public changes   : number[] = [] as number[];
+    public result    : number = 0;
+    public minimum   : number = 0;
+    public maximum   : number = 9999;
 
     constructor(
         dialogRef: MatDialogRef<KeypadComponent>,

@@ -1,28 +1,32 @@
 <h4 class="d-flex flex-justify-between flex-align-center">
     <div class=" u-text--sc">Elemental Magik</div>
-    <button type="button" class="btn--add u-sm" (click)="openChooser()">New</button>
+    <button mat-flat-button color="primary" (click)="openChooser()">New</button>
 </h4>
 
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
     <strong>Mana:</strong>
     {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]
-    <button type="button" (click)="reset()">Reset</button>
+    <button mat-flat-button color="accent" (click)="reset()">Reset</button>
 </div>
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
     <strong>Arcane Powder:</strong>
     {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]
-    <button type="button" (click)="useArcanePowder()" *ngIf="arcanePowder>0">Use</button>
-    <button type="button" (click)="resetArcanePowder()">Reset</button>
+    <button class="u-sm" mat-flat-button color="accent"
+        (click)="useArcanePowder()" *ngIf="arcanePowder>0">Use</button>
+    <button class="u-sm" mat-flat-button color="accent"
+        (click)="resetArcanePowder()">Reset</button>
 </div>
 <hr>
 
-<div *ngFor="let magik of character.elementalMagik">
-    <magik [spell]="magik"
-        [eventSubject]="eventSubject"
-        (onEvent)="onEvent($event)"
-        [availableMana]="getAvailableMana()"
-        [arcanePowder]="arcanePowder">
-    </magik>
+<div class="m-grid flex-align-stretch no-pad">
+    <div *ngFor="let magik of character.elementalMagik" class="card">
+        <magik [spell]="magik"
+            [eventSubject]="eventSubject"
+            (onEvent)="onEvent($event)"
+            [availableMana]="getAvailableMana()"
+            [arcanePowder]="arcanePowder">
+        </magik>
+    </div>
 </div>

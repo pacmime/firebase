@@ -1,12 +1,12 @@
 <h4 class="d-flex flex-justify-between flex-align-center">
     <div class="col">Sermons</div>
-    <button type="button" class="btn--add u-sm" (click)="openChooser()">New</button>
+    <button mat-flat-button color="primary" (click)="openChooser()">New</button>
 </h4>
 
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
     Faith: {{getAvailableFaith()}} / {{maxFaith+getFaithModifier()}}
-    <button type="button" (click)="resetSermons()">Reset</button>
+    <button mat-flat-button color="accent" (click)="resetSermons()">Reset</button>
 </div>
 <hr>
 
