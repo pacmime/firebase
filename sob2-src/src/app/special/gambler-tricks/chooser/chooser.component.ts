@@ -1,10 +1,13 @@
 import {
-    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, Inject
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GamblerTrick } from '../../../models/character.model';
+import { AbstractDialogComponent } from '../../../shared/dialog/dialog.component';
+
 
 @Component({
   selector: 'gambler-tricks-chooser',
@@ -22,38 +25,24 @@ import { GamblerTrick } from '../../../models/character.model';
       ])
   ]
 })
-export class GamblerTricksChooserComponent implements OnInit {
-
-    @Input() options : GamblerTrick[];
-    @Input() closable = true;
-    @Input() visible: boolean = true;
-    @Output() onClose: Function;
+export class GamblerTricksChooserComponent extends AbstractDialogComponent<GamblerTricksChooserComponent>
+implements OnInit, OnDestroy  {
 
     private selection : GamblerTrick = null;
 
-    constructor() { }
+    constructor(dialogRef: MatDialogRef<GamblerTricksChooserComponent>,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ) {
+        super(dialogRef, data);
+    }
 
-    ngOnInit() { }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
     ngOnDestroy() {
-        this.options = null;
+        super.ngOnDestroy();
         this.selection = null;
-        this.closable = false;
-        this.visible = false;
-        this.onClose = null;
-    }
-
-    close() {
-        this.visible = false;
-        this.onClose({apply:false,value:null});
-    }
-
-    apply() {
-        this.visible = false;
-
-        let value : GamblerTrick = JSON.parse(JSON.stringify(this.selection));
-
-        this.onClose({ apply:true, value:value });
     }
 
     choose(value : GamblerTrick) {

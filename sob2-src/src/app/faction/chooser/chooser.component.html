@@ -6,14 +6,13 @@
 
         <div *ngFor="let option of options"
             class="c-option--available"
+            (click)="choose(option)"
             [ngClass]="{'is-selected':isChosen(option)}">
-            <h5>{{option.name}}</h5>
-            <p>{{option.desc||option.description}}</p>
-            <button type="button" class="btn btn--use"
-                *ngIf="!option.disabled"
-                (click)="choose(option)">
-                <span>{{isChosen(option)?'Unselect':'Choose'}}</span>
-            </button>
+            <div class="a-heading">
+                <mat-icon>{{isChosen(sermon)?'check_box':'check_box_outline_blank'}}</mat-icon>
+                {{option.name}}
+            </div>
+            <p class="u-sm">{{option.desc||option.description}}</p>
         </div>
 
     </div>

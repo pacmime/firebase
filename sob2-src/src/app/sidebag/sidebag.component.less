@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     flex-basis: 100%;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
     margin: 1em;
 
     .sprite { margin-right: 1em; }
@@ -88,14 +88,18 @@
         font-weight: 700;
         text-align:center;
         width: 2em;
+        min-width: 2em;
+        padding: 0.25em 0;
+        line-height: 1em;
     }
-    & > button {
-        height: 2em;
-        border-color: #666;
-        color: #000;
-
-        &.btn--del { background-color: #f1c9c9; }
-        &.btn--use { background-color: #b6e3b6; }
-    }
+    & > :not(button) { background-color: #fff; }
+    // & > button {
+    //     height: 2em;
+    //     border-color: #666;
+    //     color: #000;
+    //
+    //     &.btn--del { background-color: #f1c9c9; }
+    //     &.btn--use { background-color: #b6e3b6; }
+    // }
 
 }

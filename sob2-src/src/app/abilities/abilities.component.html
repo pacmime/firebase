@@ -7,20 +7,20 @@
 
 <div class="m-grid flex-align-stretch no-pad">
     <div *ngFor="let ability of character.abilities; let i = index" class="card">
-        <h5 class="d-flex flex-justify-between flex-align-end">
-            {{ability.name}}
+        <div class="d-flex flex-justify-between flex-align-end">
+            <div class="a-heading">{{ability.name}}</div>
             <div class="d-flex flex-justify-end flex-align-end">
                 <button class="u-sm" mat-flat-button color="warn"
                     (click)="confirmingDelete(i,true)"
                     *ngIf="!confirmingDelete(i)">
-                    X
+                    <mat-icon>delete_forever</mat-icon>
                 </button>
                 <div class="btn-group" *ngIf="confirmingDelete(i)">
-                    <button class="u-sm" mat-flat-button color="primary" (click)="remove(i)">Y</button>
-                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)">N</button>
+                    <button class="u-sm" mat-flat-button color="warn" (click)="remove(i)"><mat-icon>check_circle</mat-icon></button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)"><mat-icon>not_interested</mat-icon></button>
                 </div>
             </div>
-        </h5>
+        </div>
         <div class="desc">{{ability.desc}}</div>
         <div *ngIf="ability.userInput">
             <hr>

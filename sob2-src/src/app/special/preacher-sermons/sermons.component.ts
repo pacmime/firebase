@@ -4,11 +4,12 @@ import {
     Input, Output, EventEmitter
 } from '@angular/core';
 import { Subject, Subscription } from "rxjs";
+import { MatDialog } from '@angular/material/dialog';
 
 import { SOBCharacter, Sermon } from '../../models/character.model';
 import { FirestoreService } from '../../firestore.service';
 import { SermonsChooserComponent } from './chooser/chooser.component';
-import { ModalService } from'../../modal.service';
+// import { ModalService } from'../../modal.service';
 
 @Component({
   selector: 'preacher-sermons',
@@ -23,13 +24,16 @@ export class PreacherSermonsComponent implements OnInit {
 
     public maxFaith : number = 0;
     public availableFaith: number = 0;
-
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
     private eventSubject : Subject<{name:string,value:any}> = new Subject();
 
     constructor(
         private service : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         this.availableFaith = this.maxFaith = this.character.faith;
@@ -115,19 +119,37 @@ export class PreacherSermonsComponent implements OnInit {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(SermonsChooserComponent);
-        ref.instance.options = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as Sermon);
-            }
-        };
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
+        // const ref = this.modalService.createComponentRef(SermonsChooserComponent);
+        // ref.instance.options = [];
+        // ref.instance.onClose = (event) => {
+        //     this.modalService.destroyRef(ref, 0);
+        //     if(event.apply) {
+        //         this.add(event.value as Sermon);
+        //     }
+        // };
+        // const element = this.modalService.getDomElementFromComponentRef(ref);
+        // this.modalService.addChild(element);
+        //
+        // this.getAvailable().then( available => {
+        //     ref.instance.options = available;
+        // });
 
         this.getAvailable().then( available => {
-            ref.instance.options = available;
+
+            let opts = {
+                data: {
+                    options: available
+                }
+            };
+            const dialogRef = this.dialog.open(SermonsChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : Sermon ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
+
         });
     }
 

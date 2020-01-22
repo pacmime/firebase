@@ -19,7 +19,7 @@
         </div>
     </div> -->
 
-    <mat-tab-group [backgroundColor]="'accent'">
+    <mat-tab-group [backgroundColor]="'accent'" [(selectedIndex)]="selectedTabIndex">
         <mat-tab label="Attributes">
 
             <div class="p-overview">
@@ -66,7 +66,7 @@
                     </div>
                     <hr>
 
-                    <div class="m-grid">
+                    <div class="m-grid flex-justify-around">
 
                         <value-display label="Level"
                             value="{{character.level}}"
@@ -159,63 +159,55 @@
                     <div class="m-group t-health">
                         <h5>Health</h5>
 
-                        <div class="m-grid no-wrap">
-                            <div class="m-grid no-pad">
-                                <value-display  label="Wounds"
-                                    value="{{character.health.wounds}}"
-                                    (onSave)="saveChar('health.wounds', $event)">
-                                </value-display>
-                                <value-display label="Max Health"
-                                    value="{{character.health.max}}"
-                                    [modifiers]="modifiers.health"
-                                    [special]="true"
-                                    (onSave)="saveChar('health.max', $event)">
-                                </value-display>
-                            </div>
-                            <div class="m-grid no-pad">
-                                <value-display label="Defense"
-                                    value="{{character.defense}}"
-                                    [modifiers]="modifiers.defense"
-                                    (onSave)="saveChar('defense', $event)">
-                                </value-display>
-                                <value-display label="Armor"
-                                    value="{{character.armor}}"
-                                    [modifiers]="modifiers.armor"
-                                    (onSave)="saveChar('armor', $event)">
-                                </value-display>
-                            </div>
+                        <div class="m-grid">
+                            <value-display  label="Wounds"
+                                value="{{character.health.wounds}}"
+                                (onSave)="saveChar('health.wounds', $event)">
+                            </value-display>
+                            <value-display label="Max Health"
+                                value="{{character.health.max}}"
+                                [modifiers]="modifiers.health"
+                                [special]="true"
+                                (onSave)="saveChar('health.max', $event)">
+                            </value-display>
+                            <value-display label="Defense"
+                                value="{{character.defense}}"
+                                [modifiers]="modifiers.defense"
+                                (onSave)="saveChar('defense', $event)">
+                            </value-display>
+                            <value-display label="Armor"
+                                value="{{character.armor}}"
+                                [modifiers]="modifiers.armor"
+                                (onSave)="saveChar('armor', $event)">
+                            </value-display>
                         </div>
                     </div>
 
                     <div class="m-group t-sanity">
                         <h5>Sanity</h5>
 
-                        <div class="m-grid no-wrap">
-                            <div class="m-grid no-pad">
-                                <value-display label="Sanity Loss"
-                                    value="{{character.sanity.loss}}"
-                                    (onSave)="saveChar('sanity.loss', $event)">
-                                </value-display>
-                                <value-display label="Max Sanity"
-                                    value="{{character.sanity.max}}"
-                                    [modifiers]="modifiers.sanity"
-                                    [special]="true"
-                                    (onSave)="saveChar('sanity.max', $event)">
-                                </value-display>
-                            </div>
-                            <div class="m-grid no-pad">
-                                <value-display label="Willpower"
-                                    value="{{character.willpower}}"
-                                    [modifiers]="modifiers.willpower"
-                                    (onSave)="saveChar('willpower', $event)">
-                                </value-display>
-                                <value-display  label="Spirit Armor"
-                                    value="{{character.spiritArmor}}"
-                                    [modifiers]="modifiers.spiritArmor"
-                                    [options]="{labelSize:'sm'}"
-                                    (onSave)="saveChar('spiritArmor', $event)">
-                                </value-display>
-                            </div>
+                        <div class="m-grid">
+                            <value-display label="Sanity Loss"
+                                value="{{character.sanity.loss}}"
+                                (onSave)="saveChar('sanity.loss', $event)">
+                            </value-display>
+                            <value-display label="Max Sanity"
+                                value="{{character.sanity.max}}"
+                                [modifiers]="modifiers.sanity"
+                                [special]="true"
+                                (onSave)="saveChar('sanity.max', $event)">
+                            </value-display>
+                            <value-display label="Willpower"
+                                value="{{character.willpower}}"
+                                [modifiers]="modifiers.willpower"
+                                (onSave)="saveChar('willpower', $event)">
+                            </value-display>
+                            <value-display  label="Spirit Armor"
+                                value="{{character.spiritArmor}}"
+                                [modifiers]="modifiers.spiritArmor"
+                                [options]="{labelSize:'sm'}"
+                                (onSave)="saveChar('spiritArmor', $event)">
+                            </value-display>
                         </div>
                     </div>
                 </div>
@@ -454,5 +446,16 @@
 
 
     </mat-tab-group>
+
+    <div class="swipe--left">
+        <a mat-mini-fab color="accent" (click)="swipe(-1)">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </a>
+    </div>
+    <div class="swipe--right">
+        <a mat-mini-fab color="accent" (click)="swipe(1)">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </a>
+    </div>
 
 </div>

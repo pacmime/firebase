@@ -29,11 +29,13 @@
         </div>
 
         <div *ngFor="let mutation of mutations; let i = index" class="card">
-            <h5 class="d-flex flex-justify-between flex-align-center">
-                {{mutation.name}}
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div class="a-heading">{{mutation.name}}</div>
                 <button class="u-sm" mat-flat-button color="warn"
-                    (click)="remove('mutations', i)">X</button>
-            </h5>
+                    (click)="remove('mutations', i)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
             <div class="desc">{{mutation.desc}}</div>
             <br>
             <div *ngIf="mutation.modifiers">
@@ -74,11 +76,13 @@
             Add a new injury using the 'New' button.
         </div>
         <div *ngFor="let injury of injuries; let i = index" class="card">
-            <h5 class="d-flex flex-justify-between flex-align-center">
-                {{injury.name}}
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div class="a-heading">{{injury.name}}</div>
                 <button class="u-sm" mat-flat-button color="warn"
-                    (click)="remove('injuries', i)">X</button>
-            </h5>
+                    (click)="remove('injuries', i)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
             <div class="desc">{{injury.desc}}</div>
             <div *ngIf="injury.modifiers">
                 <div *ngFor="let modifier of injury.modifiers">
@@ -119,10 +123,12 @@
             Add a new madness using the 'New' button.
         </div>
         <div *ngFor="let mad of madness; let i = index" class="card">
-            <h5 class="d-flex flex-justify-between flex-align-center">
-                {{mad.name}}
-                <button class="u-sm" mat-flat-button color="warn" (click)="remove('madness', i)">X</button>
-            </h5>
+            <div class="d-flex flex-justify-between flex-align-center">
+                <div class="a-heading">{{mad.name}}</div>
+                <button class="u-sm" mat-flat-button color="warn" (click)="remove('madness', i)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
             <div class="desc">{{mad.desc}}</div>
             <div *ngIf="mad.modifiers">
                 <div *ngFor="let modifier of mad.modifiers">

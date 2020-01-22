@@ -1,10 +1,8 @@
 <h5 mat-dialog-title>
     Current: {{data.value}}
-    <small>
-        <small>( min: {{minimum}}, max: {{maximum}} )</small>
-    </small>
 </h5>
 <div mat-dialog-content>
+    <!-- <small>( min: {{minimum}}, max: {{maximum}} )</small> -->
     <small *ngIf="data.modifiers">
         Modifiers:
         {{data.modifiers.value|modifier}}
@@ -12,12 +10,12 @@
     </small>
 
     <div class="o-keypad">
-        <button mat-mini-fab color="accent" (click)="change(100)">+100</button>
-        <button mat-mini-fab color="accent" (click)="change(50)">+50</button>
-        <button mat-mini-fab color="accent" (click)="change(20)">+20</button>
-        <button mat-mini-fab color="accent" (click)="change(10)">+10</button>
-        <button mat-mini-fab color="accent" (click)="change(5)">+5</button>
-        <button mat-mini-fab color="accent" (click)="change(1)">+1</button>
+        <button mat-mini-fab color="success" (click)="change(100)">+100</button>
+        <button mat-mini-fab color="success" (click)="change(50)">+50</button>
+        <button mat-mini-fab color="success" (click)="change(20)">+20</button>
+        <button mat-mini-fab color="success" (click)="change(10)">+10</button>
+        <button mat-mini-fab color="success" (click)="change(5)">+5</button>
+        <button mat-mini-fab color="success" (click)="change(1)">+1</button>
         <button mat-mini-fab color="warn" (click)="change(-1)" (ngDisable)="value==minimum">-1</button>
         <button mat-mini-fab color="warn" (click)="change(-5)" (ngDisable)="value==minimum">-5</button>
         <button mat-mini-fab color="warn" (click)="change(-10)" (ngDisable)="value==minimum">-10</button>

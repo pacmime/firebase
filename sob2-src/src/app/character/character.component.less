@@ -76,17 +76,17 @@
 .t-faith, .t-mana, .t-magik, .t-fury, .t-ki {
     flex: 1 0 100%;
 
-    justify-content: center;
+    justify-content: space-around;
     & > .m-grid {
-        justify-content: center;
+        justify-content: space-around;
     }
 }
 
 .t-health, .t-sanity {
     & > .m-grid {
-        justify-content: center;
+        justify-content: space-around;
 
-        .m-grid { justify-content: center; }
+        .m-grid { justify-content: space-around; }
     }
 }
 
@@ -143,4 +143,24 @@ section {
         padding: 0;
         justify-content: stretch;
     }
+}
+
+
+
+
+
+
+
+
+.swipe--left {
+    position: absolute;
+    left: 0;
+    bottom: 2em;
+    z-index: 100;
+}
+.swipe--right {
+    position: absolute;
+    right: 0;
+    bottom: 2em;
+    z-index: 100;
 }

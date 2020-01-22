@@ -2,8 +2,8 @@
 
     <div *ngIf="!isEditing">
 
-        <h5 class="d-flex flex-justify-between flex-align-center">
-            <div class="col">
+        <div class="d-flex flex-justify-between flex-align-center">
+            <div class="col a-heading">
                 <span *ngIf="spell.deadly" style="color:#f00">!</span>
                 {{spell.name}} <span *ngIf="spell.deadly"  class="icon-deadly">!</span>
                 <small>({{spell.type}})</small>
@@ -14,14 +14,14 @@
                 <button class="u-sm" mat-flat-button color="warn"
                     (click)="confirmingDelete=true"
                     *ngIf="!confirmingDelete">
-                    X
+                    <mat-icon>delete_forever</mat-icon>
                 </button>
                 <div class="btn-group" *ngIf="confirmingDelete">
-                    <button class="u-sm" mat-flat-button color="primary" (click)="remove()">Y</button>
-                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false">N</button>
+                    <button class="u-sm" mat-flat-button color="warn" (click)="remove()"><mat-icon>check_circle</mat-icon></button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false"><mat-icon>not_interested</mat-icon></button>
                 </div>
             </div>
-        </h5>
+        </div>
 
         <div class="desc">{{spell.desc}}</div>
 

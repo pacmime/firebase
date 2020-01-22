@@ -36,6 +36,8 @@
         align-items: stretch;
         background: #fff;
         border-top-left-radius: 8px;
+        width: 64px;
+        height: 64px;
 
         & > *:first-child {
             font-size: 2em;
@@ -71,16 +73,6 @@
         .vd__value {
             color: #999;
         }
-        // .vd__value > *:first-child:after {
-        //     color: #fff;
-        //     content: "!";
-        //     font-size: 0.5em;
-        //     margin-top: -1em;
-        //     background: darkblue;
-        //     border-radius: 100%;
-        //     width: 12px;
-        //     height:12px;
-        // }
     }
 
     .vd__incr {
@@ -106,6 +98,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
 
         &:first-child {
             border-radius: 0 8px 0 0;
@@ -115,16 +108,15 @@
     .vd__label {
         grid-area: label;
         font-weight: 700;
-        font-size: 1em;
+        font-size: 0.875em;
         text-align: center;
         padding: 0.25em;
         white-space: nowrap;
         overflow: hidden;
         border-top: 1px solid #000;
-        border-radius: 0 0 8px 8px;
+        border-radius: 0 0 6px 6px;
         background-color: #ececec;
 
-        &.u-sm { font-size: 1em; }
     }
 }
 

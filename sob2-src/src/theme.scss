@@ -23,3 +23,11 @@ $sob-app-theme: mat-light-theme($sob-app-primary, $sob-app-accent, $sob-app-warn
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($sob-app-theme);
+
+
+.mat-flat-button.mat-success,
+.mat-raised-button.mat-success,
+.mat-fab.mat-success,
+.mat-mini-fab.mat-success {
+    background-color: lightgreen;
+}

@@ -1,17 +1,19 @@
 
 <h4 class="d-flex flex-justify-between flex-align-center">
     <div class="col u-text--sc">{{label}}</div>
-    <button type="button" class="btn--add u-sm" *ngIf="!character.faction" (click)="openChooser()">New</button>
+    <button mat-flat-button color="primary" *ngIf="!character.faction" (click)="openChooser()">New</button>
 </h4>
 <hr>
 <div class="card" *ngIf="!character?.faction">
     No {{label}} selected
 </div>
 <div class="card" *ngIf="character?.faction">
-    <h5 class="d-flex flex-justify-between flex-align-end">
-        {{character.faction.name}}
-        <button type="button" class="u-sm btn--del" (click)="character.faction=null;">X</button>
-    </h5>
+    <div class="d-flex flex-justify-between flex-align-end">
+        <div class="a-heading">{{character.faction.name}}</div>
+        <button mat-flat-button color="warn" class="u-sm" (click)="character.faction=null;">
+            <mat-icon>delete_forever</mat-icon>
+        </button>
+    </div>
     <div class="desc">{{character.faction.desc||character.faction.description}}</div>
     <div *ngIf="character.faction.modifiers" class="u-sm">
         <hr>

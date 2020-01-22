@@ -1,13 +1,14 @@
 import {
     Component, OnInit, OnChanges, OnDestroy,
     SimpleChanges, SimpleChange,
-    Input, Output, EventEmitter
+    Input, Output, EventEmitter, Inject
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from "rxjs";
 
 import { FirestoreService } from '../../firestore.service';
 import { SOBCharacter, GamblerTrick } from '../../models/character.model';
 import { GamblerTricksChooserComponent } from './chooser/chooser.component';
-import { ModalService } from'../../modal.service';
 
 @Component({
   selector: 'gambler-tricks',
@@ -21,12 +22,16 @@ export class GamblerTricksComponent implements OnInit {
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 
     public maxFortune: number = 0;
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
     private confirming : { key: number, value: boolean } = {} as { key: number, value: boolean };
 
     constructor(
         private afs : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         this.maxFortune = this.maxFortune || this.character.fortune.max;
@@ -95,20 +100,35 @@ export class GamblerTricksComponent implements OnInit {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(GamblerTricksChooserComponent);
-        ref.instance.options = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as GamblerTrick);
-            }
-        };
-
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
         this.getAvailableTricks().then( options => {
-            ref.instance.options = options;
+            let opts = {
+                data: {
+                    options: options
+                }
+            };
+            const dialogRef = this.dialog.open(GamblerTricksChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : GamblerTrick ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
         });
+        // const ref = this.modalService.createComponentRef(GamblerTricksChooserComponent);
+        // ref.instance.options = [];
+        // ref.instance.onClose = (event) => {
+        //     this.modalService.destroyRef(ref, 0);
+        //     if(event.apply) {
+        //         this.add(event.value as GamblerTrick);
+        //     }
+        // };
+        //
+        // const element = this.modalService.getDomElementFromComponentRef(ref);
+        // this.modalService.addChild(element);
+        // this.getAvailableTricks().then( options => {
+        //     ref.instance.options = options;
+        // });
     }
 
     confirmingDelete( index : number, value ?: boolean ) : boolean {

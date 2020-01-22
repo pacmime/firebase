@@ -30,10 +30,6 @@ import { AbstractDialogComponent } from '../../shared/dialog/dialog.component';
 export class ItemEditorComponent extends AbstractDialogComponent<ItemEditorComponent>
 implements OnInit, OnDestroy {
 
-    @Input() item : Item;
-    @Input() closable = true;
-    @Input() visible: boolean = true;
-    
     private uses : string[];
     private slots : string[];
     private modifierTargets : string[];
@@ -70,9 +66,6 @@ implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         super.ngOnDestroy();
-        this.item = null;
-        this.closable = false;
-        this.visible = false;
         this.uses = null;
         this.slots = null;
         this.modifierTargets = null;
@@ -81,7 +74,7 @@ implements OnInit, OnDestroy {
     }
 
     canApply() : boolean {
-        return !!this.item && !!this.item.name;
+        return !!this.data.item && !!this.data.item.name;
     }
 
 
@@ -90,13 +83,15 @@ implements OnInit, OnDestroy {
             affects: null,
             value: 0
         }
-        if(!this.item.modifiers)
-            this.item.modifiers = [];
-        this.item.modifiers.push(mod);
+        if(!this.data.item.modifiers)
+            this.data.item.modifiers = [];
+        this.data.item.modifiers.push(mod);
     }
 
     removeModifier (index) {
-        this.item.modifiers.splice(index, 1);
+        if(!this.data.item.modifiers || index > this.data.item.modifiers.length)
+            return;
+        this.data.item.modifiers.splice(index, 1);
     }
 
 

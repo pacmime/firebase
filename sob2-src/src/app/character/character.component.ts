@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, QueryList, ViewChildren } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {
-    MatSnackBar, MatSnackBarConfig, MatSnackBarRef
-} from '@angular/material/snack-bar';
+import { MatTab, MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material';
 import { Observable, Subscription } from "rxjs";
 import { switchMap } from 'rxjs/operators';
 
@@ -18,6 +16,9 @@ interface IMessage {
     value: string;
     canDismiss: boolean;
 }
+
+
+
 
 
 @Component({
@@ -40,6 +41,9 @@ export class CharacterComponent implements OnInit {
     public messages: IMessage[] = [] as IMessage[];
     private savingTimer : any;
     private snackBarRef : MatSnackBarRef<any>;
+
+    public selectedTabIndex: number = 0;
+    @ViewChildren(MatTab) mdTabList: QueryList<MatTab>;
 
     constructor(
         private snackBar: MatSnackBar,
@@ -78,8 +82,10 @@ export class CharacterComponent implements OnInit {
                         //clear loading message
                         // this.removeMessage(loadMsg);
 
-                        this.snackBarRef.dismiss();
-                        this.snackBarRef = null;
+                        if(this.snackBarRef) {
+                            this.snackBarRef.dismiss();
+                            this.snackBarRef = null;
+                        }
 
                     }, 1000);
 
@@ -386,6 +392,14 @@ export class CharacterComponent implements OnInit {
 
     hasFlag (classKey : SPECIAL_CLASSES) : boolean {
         return this.charFlags && this.charFlags.hasSpecialClass(classKey);
+    }
+
+    swipe( amount : number) {
+        let newIndex = this.selectedTabIndex + amount;
+        let max = this.mdTabList.length;
+        if( newIndex >= 0 && newIndex < max) {
+            this.selectedTabIndex = newIndex;
+        }
     }
 
 }

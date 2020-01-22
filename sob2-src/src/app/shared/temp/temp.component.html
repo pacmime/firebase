@@ -3,20 +3,20 @@
 
 <h5 class="d-flex flex-justify-between flex-align-end">Temporary Modifiers</h5>
 
-<div class="d-flex flex-justify-between">
-    <div class="col-2">
-        <select class="form-control u-sm" [(ngModel)]="newModifier.affects">
+<div class="d-flex flex-justify-between flex-align-center">
+    <div class="col-2 u-pd--md">
+        <select class="form-control" [(ngModel)]="newModifier.affects">
             <option [ngValue]="null">Select</option>
             <option *ngFor="let modtarget of modifierTargets" [ngValue]="modtarget">
                 {{modtarget}}
             </option>
         </select>
     </div>
-    <div class="col">
+    <div class="col u-pd--md">
         <input type="number" min="-10" [(ngModel)]="newModifier.value"
-            class="form-control u-sm" placeholder="0">
+            class="form-control" placeholder="0">
     </div>
-    <button type="button" class="btn--add u-sm"
+    <button mat-flat-button color="accent"
         (click)="addModifier()"
         [disabled]="!newModifier.affects">
         Add
@@ -25,10 +25,15 @@
 
 <br>
 
-<div *ngFor="let mod of mods; let $index=index">
-    <strong>{{mod.affects}}</strong>:
-    <em>{{mod.value}}</em>
-    <button type="button" class="btn--del u-sm" (click)="removeModifier($index)">&times;</button>
+<div *ngFor="let mod of mods; let $index=index"
+    class="card d-flex flex-justify-between flex-align-center flex-wrap">
+    <div class="flex-1">
+        <strong>{{mod.affects}}</strong>:
+        <em>{{mod.value}}</em>
+    </div>
+    <button mat-flat-button color="warn" (click)="removeModifier($index)">
+        <mat-icon>delete_forever</mat-icon>
+    </button>
 </div>
 
 <br>

@@ -18,24 +18,26 @@
 
     <div class="m-grid">
         <div *ngFor="let option of options" class="sidebag__option">
-            <label>
+            <div class="sidebag__option__icon">
                 <span class="sprite sprite-{{option.label}}"></span>
-                {{option.label}}
-            </label>
+            </div>
+            <div class="flex-1">
+                <label>{{option.label}}</label>
+                <small class="help-block">{{option.description}}</small>
+            </div>
             <div class="sidebag__control">
-                <button type="button" class="btn--del btn--round"
-                    (click)="decrease(option.label)"
+                <button mat-flat-button color="warn" (click)="decrease(option.label)"
                     (ngDisabled)="!sidebag[option.label]">
-                    -
+                    <mat-icon>remove</mat-icon>
                 </button>
                 <span>{{sidebag[option.label]||0}}</span>
-                <button type="button" class="btn--use btn--round"
+                <button mat-flat-button color="success"
                     (click)="increase(option.label)"
                     (ngDisabled)="!max">
-                    +
+                    <mat-icon>add</mat-icon>
                 </button>
             </div>
-            <small class="help-block">{{option.description}}</small>
+
         </div>
     </div>
 

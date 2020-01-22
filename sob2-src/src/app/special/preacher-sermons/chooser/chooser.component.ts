@@ -1,10 +1,13 @@
 import {
-    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+    Component, OnInit, OnDestroy,
+    Input, Output, OnChanges, EventEmitter, Inject
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Sermon } from '../../../models/character.model';
+import { AbstractDialogComponent } from '../../../shared/dialog/dialog.component';
 
 @Component({
   selector: 'preacher-spells-chooser',
@@ -22,36 +25,30 @@ import { Sermon } from '../../../models/character.model';
       ])
   ]
 })
-export class SermonsChooserComponent implements OnInit {
+export class SermonsChooserComponent extends AbstractDialogComponent<SermonsChooserComponent>
+implements OnInit, OnDestroy {
 
-    @Input() options : Sermon[];
-    @Input() closable = true;
-    @Input() visible: boolean = true;
-    @Output() onClose: Function;
-
+    public options : Sermon[] = [];
     private selection : Sermon = null;
 
-    constructor() { }
+    constructor(dialogRef: MatDialogRef<SermonsChooserComponent>,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ) {
+        super(dialogRef, data);
+    }
 
-    ngOnInit() { }
+    ngOnInit() {
+        super.ngOnInit();
+        if(this.data && this.data.options) {
+            this.options = this.data.options;
+        }
+    }
 
     ngOnDestroy() {
+        super.ngOnDestroy();
         this.options = null;
         this.selection = null;
-        this.closable = false;
-        this.visible = false;
-        this.onClose = null;
-    }
-
-    close() {
-        this.visible = false;
-        this.onClose({apply:false,value:null});
-    }
-
-    apply() {
-        this.visible = false;
-        let value : Sermon = JSON.parse(JSON.stringify(this.selection));
-        this.onClose({ apply:true, value:value });
+        this.data = null;
     }
 
     choose(value : Sermon) {

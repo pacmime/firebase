@@ -1,12 +1,15 @@
 import {
     Component, OnInit, OnChanges, OnDestroy,
     SimpleChanges, SimpleChange,
-    Input, Output, EventEmitter
+    Input, Output, EventEmitter, Inject
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from "rxjs";
+
 import { FirestoreService } from '../../firestore.service';
 import { SOBCharacter, ShamanSpell } from '../../models/character.model';
 import { ShamanSpellsChooserComponent } from './chooser/chooser.component';
-import { ModalService } from'../../modal.service';
+
 
 @Component({
   selector: 'shaman-spells',
@@ -21,11 +24,15 @@ export class ShamanSpellsComponent implements OnInit, OnDestroy {
 
     public maxMagik : number = 0;
     public confirmingDelete: boolean = false;
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
 
     constructor(
         private afs : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         this.maxMagik = this.maxMagik || this.character.magik.max;
@@ -97,19 +104,21 @@ export class ShamanSpellsComponent implements OnInit, OnDestroy {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(ShamanSpellsChooserComponent);
-        ref.instance.options = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as ShamanSpell);
-            }
-        };
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
 
-        this.getAvailableSpells().then( available => {
-            ref.instance.options = available;
+        this.getAvailableSpells().then( options => {
+            let opts = {
+                data: {
+                    options: options
+                }
+            };
+            const dialogRef = this.dialog.open(ShamanSpellsChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : ShamanSpell ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
         });
     }
 

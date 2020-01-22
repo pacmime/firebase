@@ -1,13 +1,15 @@
 import {
     Component, OnInit, OnChanges, OnDestroy,
     SimpleChanges, SimpleChange,
-    Input, Output, EventEmitter
+    Input, Output, EventEmitter, Inject
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from "rxjs";
+
 import { FirestoreService } from '../../firestore.service';
 import { SOBCharacter, SamuraiTactic, Modifier } from "../../models/character.model";
 import { SamuraiTacticsChooserComponent } from './chooser/chooser.component';
 
-import { ModalService } from'../../modal.service';
 
 @Component({
   selector: 'samurai-tactics',
@@ -21,12 +23,16 @@ export class SamuraiTacticsComponent implements OnInit {
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
 
     public maxFury : number = 0;
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
     private confirming : { key: number, value: boolean } = {} as { key: number, value: boolean };
 
     constructor(
         private afs : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         this.maxFury = this.maxFury || this.character.fury.max;
@@ -89,20 +95,20 @@ export class SamuraiTacticsComponent implements OnInit {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(SamuraiTacticsChooserComponent);
-        ref.instance.options = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as SamuraiTactic);
-            }
-        };
-
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
-
         this.getAvailable().then( options => {
-            ref.instance.options = options;
+            let opts = {
+                data: {
+                    options: options
+                }
+            };
+            const dialogRef = this.dialog.open(SamuraiTacticsChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : SamuraiTactic ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
         });
     }
 

@@ -1,27 +1,30 @@
-<div [@dialog] *ngIf="visible" class="dialog">
-    <div class="dialog__body">
-        <div *ngIf="!options.length" class="c-option--available">
-            <h5>None available</h5>
+<h5 mat-dialog-title>Choose Trick</h5>
+<div mat-dialog-content>
+    <div *ngIf="!data ||!data.options.length" class="c-option--available">
+        <h5>None available</h5>
+    </div>
+    <div *ngFor="let mission of data?.options"
+        class="c-option--available"
+        (click)="choose(mission)"
+        [ngClass]="{'is-selected':isChosen(mission)}">
+        <div class="a-heading">
+            <mat-icon>{{isChosen(mission)?'check_box':'check_box_outline_blank'}}</mat-icon>
+            {{mission.name}}
         </div>
-        <div *ngFor="let mission of options"
-            class="c-option--available"
-            [ngClass]="{'is-selected':isChosen(mission)}">
-            <h5>{{mission.name}}</h5>
+        <div class="u-sm">
             <div>{{mission.desc}}</div>
             <div class="col" *ngIf="mission.requires">
                 <strong>Requires</strong> <em>{{mission.requires}}</em>
             </div>
-            <button type="button" class="btn btn--use"
-                *ngIf="!mission.disabled"
-                (click)="choose(mission)">
-                <span>{{isChosen(mission)?'Unselect':'Choose'}}</span>
-            </button>
         </div>
     </div>
-    <div class="d-flex flex-justify-end">
-        <button type="button" (click)="close()" aria-label="Close">Cancel</button>
-        <button type="button" aria-label="Apply"
-            [disabled]="!hasSelection()"
-            (click)="apply()">Apply</button>
-    </div>
+</div>
+<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+    <a mat-flat-button color="accent" (click)="close()" aria-label="Close">Cancel</a>
+    &nbsp;&nbsp;&nbsp;
+    <a mat-flat-button color="primary" [mat-dialog-close]="selection"
+        aria-label="Apply"
+        [disabled]="!selection">
+        Apply
+    </a>
 </div>

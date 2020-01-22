@@ -1,11 +1,13 @@
 
 import {
-    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,Inject
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SamuraiTactic } from '../../../models/character.model';
+import { AbstractDialogComponent } from '../../../shared/dialog/dialog.component';
 
 
 @Component({
@@ -24,38 +26,24 @@ import { SamuraiTactic } from '../../../models/character.model';
       ])
   ]
 })
-export class SamuraiTacticsChooserComponent implements OnInit {
-
-  @Input() options : SamuraiTactic[];
-  @Input() closable = true;
-  @Input() visible: boolean = true;
-  @Output() onClose: Function;
+export class SamuraiTacticsChooserComponent extends AbstractDialogComponent<SamuraiTacticsChooserComponent>
+implements OnInit, OnDestroy {
 
   private selection : SamuraiTactic = null;
 
-  constructor() { }
+  constructor(dialogRef: MatDialogRef<SamuraiTacticsChooserComponent>,
+      @Inject(MAT_DIALOG_DATA) data: any
+  ) {
+      super(dialogRef, data);
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+      super.ngOnInit();
+  }
 
   ngOnDestroy() {
-      this.options = null;
+      super.ngOnDestroy();
       this.selection = null;
-      this.closable = false;
-      this.visible = false;
-      this.onClose = null;
-  }
-
-  close() {
-      this.visible = false;
-      this.onClose({apply:false,value:null});
-  }
-
-  apply() {
-      this.visible = false;
-
-      let value : SamuraiTactic = JSON.parse(JSON.stringify(this.selection));
-
-      this.onClose({ apply:true, value:value });
   }
 
   choose(value : SamuraiTactic) {

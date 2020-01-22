@@ -61,6 +61,7 @@ select.form-control,
 textarea.form-control {
     width: 100%;
     font-size: 1em;
+    height: 2.25em;
     padding: 0.25em .5em;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -223,7 +224,11 @@ button[type="button"] {
 
 
 
-
+.a-heading {
+    font-weight: 700;
+    font-size: 1.125em;
+    margin-bottom: 0.25em;
+}
 
 .desc {
     color: #777;
@@ -425,9 +430,9 @@ select.form-control {
     &.no-pad {
         padding: 0;
     }
-    &.flex-align-stretch {
-        align-items: stretch;
-    }
+    &.flex-align-stretch { align-items: stretch; }
+    &.flex-justify-around {  justify-content: space-around; }
+    &.flex-justify-between {  justify-content: space-between; }
 }
 @media(min-width: 768px) {
     .m-grid {
@@ -465,4 +470,40 @@ select.form-control {
 .mat-stroked-button.u-sm {
     min-width: 36px;
     line-height: 28px;
+}
+
+
+body .mat-dialog-container {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+item-editor .mat-tab-body-wrapper {
+    min-height: 250px;
+}
+
+
+
+
+
+
+
+
+
+.c-option--available {
+    margin:   -1px 0 0;
+    border:   1px solid #ddd;
+    padding:  0.5em;
+    cursor:   pointer;
+
+    &:first-child {
+        border-radius:  4px 4px 0 0;
+        margin-top: 0;
+    }
+    &:last-child { border-radius:   0 0 4px 4px; }
+
+    &.is-selected {
+        background-color: #3267dd;
+        color: #fff;
+    }
 }

@@ -2,22 +2,22 @@
 
     <div *ngIf="isEditing===false">
 
-        <h5 class="d-flex flex-justify-between flex-align-end">
-            {{attack.name}}
+        <div class="d-flex flex-justify-between flex-align-end">
+            <div class="a-heading">{{attack.name}}</div>
             <div class="d-flex flex-justify-end flex-align-end">
                 <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
                 &nbsp;&nbsp;&nbsp;
                 <button class="u-sm" mat-flat-button color="warn"
                     (click)="confirmingDelete=true"
                     *ngIf="!confirmingDelete">
-                    X
+                    <mat-icon>delete_forever</mat-icon>
                 </button>
                 <div class="btn-group" *ngIf="confirmingDelete">
-                    <button class="u-sm" mat-flat-button color="primary" (click)="remove()">Y</button>
-                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false">N</button>
+                    <button class="u-sm" mat-flat-button color="warn" (click)="remove()"><mat-icon>check_circle</mat-icon></button>
+                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false"><mat-icon>not_interested</mat-icon></button>
                 </div>
             </div>
-        </h5>
+        </div>
 
         <small class="d-flex flex-justify-between">
             <div class="col-half"><strong>Type: </strong> {{attack.type}}</div>
@@ -82,33 +82,36 @@
         </div>
 
 
-        <div>
-            <label>Type</label>
-            <select class="form-control" [(ngModel)]="editable.type">
-                <option value="melee">Melee</option>
-                <option value="ranged">Ranged</option>
-            </select>
+        <div class="d-flex flex-justify-start flex-align-center">
+            <div class="flex-1">
+                <label>Type</label>
+                <select class="form-control" [(ngModel)]="editable.type">
+                    <option value="melee">Melee</option>
+                    <option value="ranged">Ranged</option>
+                </select>
+            </div>
+
+            <div *ngIf="'ranged' === editable.type" class="flex-1">
+                <label>Range</label>
+                <input type="text" class="form-control"
+                    [(ngModel)]="editable.range"
+                    placeholder="Specify attack range">
+            </div>
         </div>
 
-        <div *ngIf="'ranged' === editable.type">
-            <label>Range</label>
-            <input type="text" class="form-control"
-                [(ngModel)]="editable.range"
-                placeholder="Specify attack range">
-        </div>
-
-        <div>
-            <label>Att: </label>
-            <input type="text" class="form-control" required
-                [(ngModel)]="editable.attack"
-                placeholder="e.g., 2D6">
-        </div>
-
-        <div>
-            <label>Dmg: </label>
-            <input type="text" class="form-control" required
-                [(ngModel)]="editable.damage"
-                placeholder="e.g., D6+2">
+        <div class="d-flex flex-justify-between flex-align-center">
+            <div class="flex-1">
+                <label>Att: </label>
+                <input type="text" class="form-control" required
+                    [(ngModel)]="editable.attack"
+                    placeholder="e.g., 2D6">
+            </div>
+            <div class="flex-1">
+                <label>Dmg: </label>
+                <input type="text" class="form-control" required
+                    [(ngModel)]="editable.damage"
+                    placeholder="e.g., D6+2">
+            </div>
         </div>
 
         <div>
@@ -121,8 +124,8 @@
         <hr>
 
         <div class="d-flex flex-justify-between">
-            <button type="button" class="u-sm" (click)="cancelEditing()">cancel</button>
-            <button type="button" class="u-sm" (click)="saveEdits()">save</button>
+            <button mat-flat-button color="accent" (click)="cancelEditing()">cancel</button>
+            <button mat-flat-button color="primary" (click)="saveEdits()">save</button>
         </div>
 
     </div>

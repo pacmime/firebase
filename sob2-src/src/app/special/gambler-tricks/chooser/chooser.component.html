@@ -1,24 +1,27 @@
-<div [@dialog] *ngIf="visible" class="dialog">
-    <div class="dialog__body">
-        <div *ngFor="let trick of options"
-            class="c-option--available"
-            [ngClass]="{'is-selected':isChosen(trick)}">
-            <h5>{{trick.name}}</h5>
+<h5 mat-dialog-title>Choose Trick</h5>
+<div mat-dialog-content>
+    <div *ngFor="let trick of data?.options"
+        class="c-option--available"
+        (click)="choose(trick)"
+        [ngClass]="{'is-selected':isChosen(trick)}">
+        <div class="a-heading">
+            <mat-icon>{{isChosen(trick)?'check_box':'check_box_outline_blank'}}</mat-icon>
+            {{trick.name}}
+        </div>
+        <div class="u-sm">
             <div>{{trick.desc}}</div>
             <div class="col" *ngIf="trick.requires">
                 <strong>Requires</strong> <em>{{trick.requires}}</em>
             </div>
-            <button type="button" class="btn btn--use"
-                *ngIf="!trick.disabled"
-                (click)="choose(trick)">
-                <span>{{isChosen(trick)?'Unselect':'Choose'}}</span>
-            </button>
         </div>
     </div>
-    <div class="d-flex flex-justify-end">
-        <button type="button" (click)="close()" aria-label="Close">Cancel</button>
-        <button type="button" aria-label="Apply"
-            [disabled]="!hasSelection()"
-            (click)="apply()">Apply</button>
-    </div>
+</div>
+<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+    <a mat-flat-button color="accent" (click)="close()" aria-label="Close">Cancel</a>
+    &nbsp;&nbsp;&nbsp;
+    <a mat-flat-button color="primary" [mat-dialog-close]="selection"
+        aria-label="Apply"
+        [disabled]="!selection">
+        Apply
+    </a>
 </div>
