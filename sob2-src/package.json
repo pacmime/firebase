@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href /sob/",
-    "postbuild": "cp dist/*.* ../sob/",
+    "postbuild": "cp -R dist/ ../sob/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

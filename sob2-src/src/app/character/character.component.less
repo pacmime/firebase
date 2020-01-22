@@ -86,10 +86,20 @@
     & > .m-grid {
         justify-content: space-around;
 
+        & > * {
+            flex: 1 0 45%;
+            text-align:center;
+        }
+
         .m-grid { justify-content: space-around; }
     }
 }
 
+@media(min-width: 768px) {
+    .t-health, .t-sanity {
+        & > .m-grid > * { flex: auto; }
+    }
+}
 @media(min-width: 992px) {
     .t-combat {
         justify-content: flex-start;
@@ -98,7 +108,13 @@
         flex: 1;
         justify-content: flex-start;
 
-        & > .m-grid { justify-content: flex-start; }
+        & > .m-grid {
+            justify-content: flex-start;
+
+            & > * {
+                flex: auto;
+            }
+        }
     }
     .t-grit, .t-corruption, .t-faith,
     .t-mana, .t-magik, .t-fury, .t-ki {

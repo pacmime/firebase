@@ -9,9 +9,15 @@
       "**/bower_components/**",
       "sob2-src"
     ],
-    "rewrites": [ {
+    "rewrites": [ 
+       {
   	"source": "sob2/**",
   	"destination": "/sob2/index.html"
-    }]
+       },
+       {
+  	"source": "sob/**",
+  	"destination": "/sob/index.html"
+       }
+    ]
   }
 }

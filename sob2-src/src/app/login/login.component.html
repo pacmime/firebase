@@ -24,11 +24,11 @@
 
         <div class="d-flex flex-justify-between flex-align-center">
             <button type="button" (click)="resetPassword()"
-                [disabled]="!userEmail||!userEmail.length">
+                [disabled]="!email||!email.length">
                 Reset Password
             </button>
             <button type="button" class="btn--use" (click)="login()"
-                [disabled]="!userEmail||!userPassword">
+                [disabled]="!email||!password">
                 Login
             </button>
         </div>

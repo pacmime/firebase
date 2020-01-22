@@ -1,9 +1,9 @@
-<div class="spell card">
+<div class="spell">
 
     <div *ngIf="!isEditing">
 
         <div class="d-flex flex-justify-between flex-align-center">
-            <div class="col a-heading">
+            <div class="flex-1 a-heading">
                 <span *ngIf="spell.deadly" style="color:#f00">!</span>
                 {{spell.name}} <span *ngIf="spell.deadly"  class="icon-deadly">!</span>
                 <small>({{spell.type}})</small>

@@ -150,7 +150,8 @@ const appRoutes: Routes = [
     { path: 'chars',        component: CharListComponent,   canActivate: [AuthGuard] },
     { path: 'chars/:id',    component: CharacterComponent,  canActivate: [AuthGuard] },
     { path: 'import',       component: UploadComponent },
-    { path: '',             redirectTo: '/chars', pathMatch: 'full' }
+    { path: '',             redirectTo: '/chars', pathMatch: 'full' },
+    { path: '**',           redirectTo: '/chars' }
 
 ];
 

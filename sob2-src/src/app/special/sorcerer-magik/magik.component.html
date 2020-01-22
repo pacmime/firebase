@@ -5,14 +5,18 @@
 
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
-    <strong>Mana:</strong>
-    {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]
+    <div class="flex-1">
+        <strong>Mana:</strong>
+        {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]
+    </div>
     <button mat-flat-button color="accent" (click)="reset()">Reset</button>
 </div>
 <hr>
 <div class="d-flex flex-justify-between flex-align-center">
-    <strong>Arcane Powder:</strong>
-    {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]
+    <div class="flex-1">
+        <strong>Arcane Powder:</strong>
+        {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]
+    </div>
     <button class="u-sm" mat-flat-button color="accent"
         (click)="useArcanePowder()" *ngIf="arcanePowder>0">Use</button>
     <button class="u-sm" mat-flat-button color="accent"
