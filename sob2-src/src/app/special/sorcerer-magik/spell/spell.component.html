@@ -2,14 +2,58 @@
 
     <div *ngIf="!isEditing">
 
-        <div class="d-flex flex-justify-between flex-align-center">
+        <div class="d-flex flex-justify-between flex-align-start">
+            <div class="a-special__check">{{spell.check}}+</div>
             <div class="flex-1 a-heading">
-                <span *ngIf="spell.deadly" style="color:#f00">!</span>
-                {{spell.name}} <span *ngIf="spell.deadly"  class="icon-deadly">!</span>
+                <mat-icon *ngIf="spell.deadly" color="warn">error</mat-icon>
+                {{spell.name}}
                 <small>({{spell.type}})</small>
             </div>
-            <div class="d-flex flex-justify-end flex-align-end">
-                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
+            <div class="a-special__range">
+                <mat-icon>double_arrow</mat-icon>
+                {{spell.range||"-"}}
+            </div>
+            <div class="a-special__cost--mana">{{spell.cost||"0"}}</div>
+        </div>
+
+        <!-- <div class="u-sm">
+            <strong>Cost: </strong> {{spell.cost||"N/A"}} ;
+            <strong>Range: </strong> {{spell.range||"N/A"}}
+        </div> -->
+
+        <div class="desc u-sm">{{spell.desc}}</div>
+
+        <hr>
+
+        <div class="d-flex flex-justify-between flex-align-end">
+
+            <div class="flex-1">
+                <!-- if not cast already and not empty or insufficient -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canCast()" (click)="use()">Cast</button>
+
+                <!-- if cast but not empty -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canSpendPowder()"
+                    (click)="spendArcanePowder()">+powder</button>
+
+                <!-- if cast but no applied xp -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canApplyXP()" (click)="applyXP()">
+                    + {{spell.xp}} XP
+                </button>
+
+                <!-- if empty or not cast and insufficient -->
+                <span *ngIf="isInsufficient()">
+                    <em>not enough mana</em>
+                </span>
+            </div>
+
+            <div class="flex-1 d-flex flex-justify-end flex-align-end">
+
+                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">
+                    <mat-icon>edit</mat-icon>
+                </button>
                 &nbsp;&nbsp;&nbsp;
                 <button class="u-sm" mat-flat-button color="warn"
                     (click)="confirmingDelete=true"
@@ -21,41 +65,6 @@
                     <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false"><mat-icon>not_interested</mat-icon></button>
                 </div>
             </div>
-        </div>
-
-        <div class="desc">{{spell.desc}}</div>
-
-        <div class="u-sm u-mg-top--md u-mg-bottom--md">
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div><strong>Range: </strong> {{spell.range||"N/A"}}</div>
-                <div><strong>Check: </strong> [{{spell.check}}+]</div>
-                <div><strong>Cost: </strong> {{spell.cost}}</div>
-                <div><strong>XP: </strong> {{spell.xp||'N/A'}}</div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div>
-
-            <!-- if not cast already and not empty or insufficient -->
-            <button class="u-sm" mat-flat-button color="accent"
-                *ngIf="canCast()" (click)="use()">cast</button>
-
-            <!-- if cast but not empty -->
-            <button class="u-sm" mat-flat-button color="accent"
-                *ngIf="canSpendPowder()"
-                (click)="spendArcanePowder()">+powder</button>
-
-            <!-- if cast but no applied xp -->
-            <button class="u-sm" mat-flat-button color="accent"
-                *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
-
-            <!-- if empty or not cast and insufficient -->
-            <span *ngIf="isInsufficient()">
-                <em>not enough mana</em>
-            </span>
-
 
         </div>
 

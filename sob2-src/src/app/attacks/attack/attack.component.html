@@ -46,23 +46,28 @@
 
         <div *ngIf="roll">
             <br>
-            <div>
-                Hits:
-                <button *ngFor="let hit of roll.hits; let i = index;"
-                    type="button" class="die u-sm" (click)="rerollHit(i)">
-                    {{hit}}
-                </button>
+            <div class="u-sm">
+                <strong>Hits:</strong>
+                <span *ngFor="let hit of roll.hits; let i = index;">
+                    &nbsp;
+                    <button type="button" class="die u-sm" (click)="rerollHit(i)"
+                        [ngClass]="{'is-miss':hit < details.target}">
+                        {{hit}}
+                    </button>
+                </span>
             </div>
             <br>
-            <div>
-                Dmg:
-                <button *ngFor="let dmg of roll.dmg; let i = index"
-                    type="button" class="die u-sm" (click)="rerollDmg(i)"
-                    (ngDisabled)="roll.hits[i]<roll.attack.target">
-                    {{dmg}}
-                </button>
+            <div class="u-sm">
+                <strong>Dmg:</strong>
+                <span *ngFor="let dmg of roll.dmg; let i = index">
+                    &nbsp;
+                    <button type="button" class="die u-sm" (click)="rerollDmg(i)"
+                        [disabled]="roll.hits[i]< details.target">
+                        {{dmg}}
+                    </button>
+                </span>
                 &nbsp;
-                <small><strong>&nbsp;Total: {{roll.dmg|sum}}</strong></small>
+                <small><strong>( {{roll.totalDmg}} )</strong></small>
             </div>
 
         </div>

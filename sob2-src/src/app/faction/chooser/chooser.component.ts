@@ -1,10 +1,13 @@
 import {
-    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, Inject
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Option } from '../../models/character.model';
+import { AbstractDialogComponent } from '../../shared/dialog/dialog.component';
 
 
 @Component({
@@ -23,54 +26,63 @@ import { Option } from '../../models/character.model';
       ])
   ]
 })
-export class FactionChooserComponent implements OnInit {
+export class FactionChooserComponent extends AbstractDialogComponent<FactionChooserComponent>
+implements OnInit, OnDestroy  {
 
-  @Input() options : Option[];
-  @Input() factions : Option[];
-  @Input() closable = true;
-  @Input() visible: boolean = true;
-  @Output() onClose: Function;
+    private selection : Option = null;
+    public groupToggles : any = {
+        paths: false,
+        rolled: false,
+        rest: false
+    };
 
-  private selection : Option = null;
+    constructor(dialogRef: MatDialogRef<FactionChooserComponent>,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ) {
+        super(dialogRef, data);
+    }
 
-  public groupToggles : any = {
-      paths: false,
-      rolled: false,
-      rest: false
-  };
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  constructor() { }
-
-  ngOnInit() { }
-
-  ngOnDestroy() {
-      this.factions = null;
-      this.options = null;
-      this.selection = null;
-      this.closable = false;
-      this.visible = false;
-      this.onClose = null;
+    ngOnDestroy() {
+        super.ngOnDestroy();
+        // this.factions = null;
+        // this.options = null;
+        this.selection = null;
+        // this.closable = false;
+        // this.visible = false;
+        // this.onClose = null;
   }
-
-  close() {
-      this.visible = false;
-      this.onClose({apply:false,value:null});
-  }
-
-  apply() {
-      this.visible = false;
-
-      //move ".value" to ".desc" for chosen factions
-      let value : Option = JSON.parse(JSON.stringify(this.selection));
-      value.desc = this.selection.value;
-      delete value.value;
-
-      this.onClose({ apply:true, value:value });
-  }
+  //
+  // close() {
+  //     this.visible = false;
+  //     this.onClose({apply:false,value:null});
+  // }
+  //
+  // apply() {
+  //     this.visible = false;
+  //
+  //     //move ".value" to ".desc" for chosen factions
+  //     let value : Option = JSON.parse(JSON.stringify(this.selection));
+  //     value.desc = this.selection.value;
+  //     delete value.value;
+  //
+  //     this.onClose({ apply:true, value:value });
+  // }
 
   choose(faction : Option) {
       if(this.isChosen(faction)) this.selection = null;
-      else this.selection = faction;
+      else {
+          if(faction.desc) this.selection = faction;
+          else {
+              let value : Option = JSON.parse(JSON.stringify(faction));
+              value.desc = faction.value;
+              delete value.value;
+              this.selection = value;
+          }
+      }
   }
 
   isChosen(faction : Option) {

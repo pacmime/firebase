@@ -47,6 +47,10 @@ export class GamblerTricksComponent implements OnInit {
         }
     }
     ngOnDestroy() {
+        if(this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
         this.character = null;
         this.modifiers = null;
         this.maxFortune = null;
@@ -115,20 +119,6 @@ export class GamblerTricksComponent implements OnInit {
                 this.subscription = null;
             });
         });
-        // const ref = this.modalService.createComponentRef(GamblerTricksChooserComponent);
-        // ref.instance.options = [];
-        // ref.instance.onClose = (event) => {
-        //     this.modalService.destroyRef(ref, 0);
-        //     if(event.apply) {
-        //         this.add(event.value as GamblerTrick);
-        //     }
-        // };
-        //
-        // const element = this.modalService.getDomElementFromComponentRef(ref);
-        // this.modalService.addChild(element);
-        // this.getAvailableTricks().then( options => {
-        //     ref.instance.options = options;
-        // });
     }
 
     confirmingDelete( index : number, value ?: boolean ) : boolean {

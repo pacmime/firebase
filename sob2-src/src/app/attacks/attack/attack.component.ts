@@ -82,7 +82,7 @@ export class AttackComponent implements OnInit {
      */
     execute() {
 
-        let result : AttackRoll = { attack: null, hits: [], dmg: [], bounces: [] };
+        let result : AttackRoll = { attack: null, hits: [], dmg: [], totalDmg: 0, bounces: [] };
 
         if(!this.details) {
             this.details = this.parseAttackStats(this.attack, result);
@@ -100,23 +100,22 @@ export class AttackComponent implements OnInit {
         //     }
         // }
 
-        var i=0, hits = 0;
-        while( i < this.details.numAttDie) {
+
+
+        for(let i=0, hits=0; i<this.details.numAttDie; ++i) {
 
             //roll to-hit
-            var roll = Math.ceil( Math.random() * this.details.attDie );
+            let roll = Math.ceil( Math.random() * this.details.attDie );
             if(this.details.attMod)
                 roll += this.details.attMod;
             result.hits[i] = roll;
 
             //roll damage
             var dmg = Math.ceil( Math.random() * this.details.dmgDie );
-            if(this.details.dmgMod)
-                dmg += this.details.dmgMod;
-            result.dmg[i] = dmg*1;
-            if(result.hits[i] < this.details.target) {
-                result.dmg[i] = '(' + result.dmg[i] + ')'
-            }
+            if(this.details.dmgMod) dmg += (this.details.dmgMod*1);
+            result.dmg[i] = dmg;
+
+            if(roll >= this.details.target) result.totalDmg += dmg;
 
             if(roll >= this.details.target) {  //if hit target, remove bounces
                 result.bounces = [];
@@ -125,7 +124,6 @@ export class AttackComponent implements OnInit {
             //     result.dmg[i] = '-';
             // }
 
-            i++;
         }
 
         this.roll = result;
@@ -133,42 +131,57 @@ export class AttackComponent implements OnInit {
 
     /**
      * reroll a to-hit value
-     * @param {string} id - id of the attack containing the to-hit value
      * @param {integer} index - position of the to-hit value in the attack's array
      */
-    rerollHit (id, index) {
-        // var result = this.rollResults[id];
-        // var roll = Math.ceil( Math.random() * result.attack.attDie );
-        // if(result.attack.attMod)
-        //     roll += result.attack.attMod;
-        // result.hits[index] = roll;
-        //
-        // var dmg = Math.ceil( Math.random() * result.attack.dmgDie );
-        // if(result.attack.dmgMod)
-        //     dmg += result.attack.dmgMod;
-        // result.dmg[index] = dmg;
-        //
-        // result.bounces = this.rollBounces();
-        //
-        // if(roll >= result.attack.target) {  //if hit target, remove bounces
-        //     result.bounces = [];
-        // } else if('dynamite' !== id) {      //if miss non-dyn, blank damage
+    rerollHit (index) {
+        var result = this.roll;
+        var roll = Math.ceil( Math.random() * this.details.attDie );
+        if(this.details.attMod)
+            roll += this.details.attMod;
+        result.hits[index] = roll;
+
+        var dmg = Math.ceil( Math.random() * this.details.dmgDie );
+        if(this.details.dmgMod)
+            dmg += this.details.dmgMod;
+        result.dmg[index] = dmg;
+
+        //re-sum total damage
+        result.totalDmg = 0;
+        result.dmg.forEach( (d,i) => {
+            if(result.hits[i] >= this.details.target) {
+                result.totalDmg += d;
+            }
+        });
+
+
+        result.bounces = this.rollBounces();
+
+        if(roll >= this.details.target) {  //if hit target, remove bounces
+            result.bounces = [];
+        }
+        //  else if('dynamite' !== id) {      //if miss non-dyn, blank damage
         //     result.dmg[i] = '-';
         // }
-
     }
 
     /**
      * reroll a damage value
-     * @param {string} id - id of the attack containing the damage value
      * @param {integer} index - position of the damage value in the attack's array
      */
-    rerollDmg(id, index) {
-        // var result = this.rollResults[id];
-        // var dmg = Math.ceil( Math.random() * result.attack.dmgDie );
-        // if(result.attack.dmgMod)
-        //     dmg += result.attack.dmgMod;
-        // result.dmg[index] = dmg;
+    rerollDmg(index) {
+        var result = this.roll;
+        var dmg = Math.ceil( Math.random() * this.details.dmgDie );
+        if(this.details.dmgMod)
+            dmg += this.details.dmgMod;
+        result.dmg[index] = dmg;
+
+        //re-sum total damage
+        result.totalDmg = 0;
+        result.dmg.forEach( (d,i) => {
+            if(result.hits[i] >= this.details.target) {
+                result.totalDmg += d;
+            }
+        })
     }
 
     /**

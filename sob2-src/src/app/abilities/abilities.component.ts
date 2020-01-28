@@ -1,6 +1,9 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, EventEmitter
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from "rxjs";
+
 import { FirestoreService } from '../firestore.service';
 import { SOBCharacter, Ability, Modifier } from "../models/character.model";
 import { SOBError } from "../models/error";
@@ -19,21 +22,28 @@ export class AbilitiesComponent implements OnInit {
     @Output() onSave : EventEmitter<any> = new EventEmitter<any>();
     @Output() onError : EventEmitter<any> = new EventEmitter<any>();
 
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
     private confirming : { key: number, value: boolean } = {} as { key: number, value: boolean };
 
     constructor(
         private afs : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
 
     }
 
     ngOnDestroy() {
+        if(this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
         this.character = null;
         this.afs = null;
-        this.modalService = null;
     }
 
     add(ability) {
@@ -113,24 +123,40 @@ export class AbilitiesComponent implements OnInit {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(AbilityChooserComponent);
-        ref.instance.abilities = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as Ability);
-            }
-        };
-
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
-
-        // this.getAvailable().then( options => {
-        //     ref.instance.abilities = options;
-        // });
         this.getChooserOptions().then( options => {
-            ref.instance.options = options;
-        })
+            let opts = {
+                data: {
+                    options: options
+                }
+            };
+            const dialogRef = this.dialog.open(AbilityChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : Ability ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
+        });
+
+        // const ref = this.modalService.createComponentRef(AbilityChooserComponent);
+        // ref.instance.abilities = [];
+        // ref.instance.onClose = (event) => {
+        //     this.modalService.destroyRef(ref, 0);
+        //     if(event.apply) {
+        //         this.add(event.value as Ability);
+        //     }
+        // };
+        //
+        // const element = this.modalService.getDomElementFromComponentRef(ref);
+        // this.modalService.addChild(element);
+        //
+        // // this.getAvailable().then( options => {
+        // //     ref.instance.abilities = options;
+        // // });
+        // this.getChooserOptions().then( options => {
+        //     ref.instance.options = options;
+        // })
     }
 
 

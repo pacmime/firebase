@@ -1,0 +1,68 @@
+<div class="d-flex flex-justify-between flex-align-start">
+
+    <div class="a-heading">{{item.name}}</div>
+
+    <div class="d-flex flex-justify-end flex-align-end">
+        <button class="u-sm" mat-flat-button color="accent" (click)="editItem()">
+            <mat-icon>edit</mat-icon>
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button class="u-sm" mat-flat-button color="warn"
+            (click)="confirmingDelete(true)"
+            *ngIf="!confirmingDelete()">
+            <mat-icon>delete_forever</mat-icon>
+        </button>
+        <div class="btn-group" *ngIf="confirmingDelete()">
+            <button class="u-sm" mat-flat-button color="warn" (click)="removeItem()">
+                <mat-icon>check_circle</mat-icon>
+            </button>
+            <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(false)">
+                <mat-icon>not_interested</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-justify-between flex-align-start u-sm">
+    <span>{{item.source||""}}</span>
+    <em>{{item.keywords||""}}</em>
+    <span *ngIf="item.cost">${{item.cost||0}}</span>
+</div>
+
+<br>
+<div class="desc u-sm" *ngIf="item.description">{{item.description}}</div>
+<br>
+
+<mat-chip-list *ngIf="item.modifiers" class="u-sm" [selectable]="false">
+    <mat-chip *ngFor="let modifier of item.modifiers">
+        {{modifier.affects}} {{modifier.value|modifier}}
+    </mat-chip>
+</mat-chip-list>
+
+<div class="item__stats">
+    <div [ngClass]="{faded:!item.weight}">
+        <span class="sprite sprite-item_weight"></span> {{item.weight||0}}
+    </div>
+    <div [ngClass]="{faded:!item.darkstone}">
+        <span class="sprite sprite-item_darkstone"></span> {{item.darkstone||0}}
+    </div>
+    <div [ngClass]="{faded:!item.hands}">
+        <span class="sprite sprite-item_hands"></span> {{item.hands||0}}
+    </div>
+    <div [ngClass]="{faded:!item.slots}">
+        <span class="sprite sprite-item_slots" ></span> {{item.slots||0}}
+    </div>
+</div>
+
+
+<div class="d-flex flex-justify-between flex-align-center">
+    <div>
+        <button class="u-sm" mat-flat-button color="accent" (click)="equipItem()">
+            <mat-icon>{{item.equipped?'check_box':'check_box_outline_blank'}}</mat-icon>
+            Equip<span *ngIf="item.slot"> ({{item.slot}})</span>
+        </button>
+    </div>
+    <button *ngIf="item.usage" class="u-sm" mat-flat-button color="success" (click)="item.used=!item.used">
+        <mat-icon>{{item.used?'check_box':'check_box_outline_blank'}}</mat-icon> Use ({{item.usage}})
+    </button>
+</div>

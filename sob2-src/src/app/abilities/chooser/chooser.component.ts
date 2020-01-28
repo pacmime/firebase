@@ -1,10 +1,12 @@
 import {
-    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter,
+    Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, Inject
 } from '@angular/core';
 import {
     trigger, state, style, animate, transition
 } from '@angular/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Ability } from '../../models/character.model';
+import { AbstractDialogComponent } from '../../shared/dialog/dialog.component';
 
 
 @Component({
@@ -23,17 +25,18 @@ import { Ability } from '../../models/character.model';
       ])
   ]
 })
-export class AbilityChooserComponent implements OnInit {
+export class AbilityChooserComponent extends AbstractDialogComponent<AbilityChooserComponent>
+implements OnInit, OnDestroy {
 
-  @Input() options : {
-      paths: Ability[];
-      rolled: Ability[];
-      rest: Ability[];
-  };
-  @Input() abilities : Ability[];
-  @Input() closable = true;
-  @Input() visible: boolean = true;
-  @Output() onClose: Function;
+  // @Input() options : {
+  //     paths: Ability[];
+  //     rolled: Ability[];
+  //     rest: Ability[];
+  // };
+  // @Input() abilities : Ability[];
+  // @Input() closable = true;
+  // @Input() visible: boolean = true;
+  // @Output() onClose: Function;
 
   private selection : Ability = null;
 
@@ -43,37 +46,53 @@ export class AbilityChooserComponent implements OnInit {
       rest: false
   };
 
-  constructor() { }
+  constructor(dialogRef: MatDialogRef<AbilityChooserComponent>,
+      @Inject(MAT_DIALOG_DATA) data: any
+  ) {
+      super(dialogRef, data);
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+      super.ngOnInit();
+  }
 
   ngOnDestroy() {
-      this.abilities = null;
+      super.ngOnDestroy();
+      // this.abilities = null;
       this.selection = null;
-      this.closable = false;
-      this.visible = false;
-      this.onClose = null;
+      // this.closable = false;
+      // this.visible = false;
+      // this.onClose = null;
   }
 
-  close() {
-      this.visible = false;
-      this.onClose({apply:false,value:null});
-  }
-
-  apply() {
-      this.visible = false;
-
-      //move ".value" to ".desc" for chosen abilities
-      let value : Ability = JSON.parse(JSON.stringify(this.selection));
-      value.desc = this.selection.value;
-      delete value.value;
-
-      this.onClose({ apply:true, value:value });
-  }
+  // close() {
+  //     this.visible = false;
+  //     this.onClose({apply:false,value:null});
+  // }
+  //
+  // apply() {
+  //     this.visible = false;
+  //
+  //     //move ".value" to ".desc" for chosen abilities
+  //     let value : Ability = JSON.parse(JSON.stringify(this.selection));
+  //     value.desc = this.selection.value;
+  //     delete value.value;
+  //
+  //     this.onClose({ apply:true, value:value });
+  // }
 
   choose(ability : Ability) {
+      if(!ability || ability.disabled) return;
       if(this.isChosen(ability)) this.selection = null;
-      else this.selection = ability;
+      else {
+          if(ability.desc) this.selection = ability;
+          else {
+              let value : Ability = JSON.parse(JSON.stringify(ability));
+              value.desc = ability.value;
+              delete value.value;
+              this.selection = value;
+          }
+      }
   }
 
   isChosen(ability : Ability) {

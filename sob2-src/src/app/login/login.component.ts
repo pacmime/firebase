@@ -28,16 +28,24 @@ export class LoginComponent implements OnInit {
         });
     }
 
+    /**
+     *
+     */
     login() {
         if(!this.email || !this.password) {
             this.message = "Specify your email address and password";
             return;
         }
-        this.service.login(this.email, this.password).then( user => {
-            this.router.navigate(['/chars']);
+        this.service.login(this.email, this.password)
+        .then( user => { this.router.navigate(['/chars']); })
+        .catch( (e:Error) => {
+            this.message = "Unable to log because of an error - " + e.message;
         });
     }
 
+    /**
+     *
+     */
     resetPassword() {
         if(!this.email) {
             this.message = "Specify your email address to reset your password";

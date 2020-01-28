@@ -1,13 +1,13 @@
 <div *ngIf="character" class="l-char">
 
-    <div *ngIf="error" class="c-error">
+    <!-- <div *ngIf="error" class="c-error">
         <h5>Error</h5>
         <p>{{error.message}}</p>
         <a *ngIf="'auth'===error.type" routerLink="/login" routerLinkActive="active">
             Sign in
         </a>
         <button type="button" (click)="error=null">DISMISS</button>
-    </div>
+    </div> -->
 
     <!-- <div *ngIf="messages.length" class="c-messages">
         <div class="c-message" *ngFor="let msg of messages">

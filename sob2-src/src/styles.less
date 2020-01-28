@@ -118,6 +118,8 @@ button[type="button"] {
 }
 
 
+.is-highlighted { background-color: #fff700; }
+
 .hidden { display: none; }
 
 .u-text--center { text-align: center; }
@@ -438,7 +440,7 @@ select.form-control {
     .m-grid {
         padding: 1em;
 
-        & > .card { flex: 0 1 48%; }
+        & > .card { flex: 0 1 47%; }
     }
 
 }
@@ -447,6 +449,14 @@ select.form-control {
         padding: 1em;
 
         & > .card { flex: 0 1 31%; }
+
+    }
+}
+@media(min-width: 1200px) {
+    .m-grid {
+        padding: 1em;
+
+        & > .card { flex: 0 1 23%; }
 
     }
 }
@@ -470,6 +480,7 @@ select.form-control {
 .mat-stroked-button.u-sm {
     min-width: 36px;
     line-height: 28px;
+    padding: 0 8px;
 }
 
 
@@ -485,6 +496,13 @@ item-editor .mat-tab-body-wrapper {
 
 
 
+
+//override standard mat chip styles for modifiers display
+body .mat-chip.mat-standard-chip {
+    background-color: #dbc1eac2;
+    padding: 4px 8px;
+    min-height: 24px;
+}
 
 
 
@@ -506,4 +524,79 @@ item-editor .mat-tab-body-wrapper {
         background-color: #3267dd;
         color: #fff;
     }
+}
+
+
+
+
+
+
+
+
+
+.a-special__check {
+    padding: 0.25em 0.5em;
+    background: #bbb;
+    width: 30px;
+    height: 30px;
+    font-size: 0.875em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin-right: 0.5em;
+}
+.a-special__range {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875em;
+    padding: 0.25em 0.5em;
+    font-weight: 700;
+    height: 28px;
+}
+.a-special__cost {
+    font-size: 0.875em;
+    border-radius: 16px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.a-special__cost--mana {
+    .a-special__cost;
+    color: #fff;
+    background: purple;
+    border: 1px solid purple;
+}
+.a-special__cost--faith {
+    .a-special__cost;
+    background: yellow;
+    border: 1px solid orange;
+}
+.a-special__cost--fury {
+    .a-special__cost;
+    color: #fff;
+    background: red;
+    border: 1px solid darkred;
+}
+.a-special__cost--magik {
+    .a-special__cost;
+    color: #fff;
+    background: purple;
+    border: 1px solid purple;
+}
+.a-special__cost--fortune {
+    .a-special__cost;
+    background: #0f0;
+    border: 1px solid darkgreen;
+}
+.a-special__cost--ki {
+    .a-special__cost;
+    background: yellow;
+    border: 1px solid orange;
 }

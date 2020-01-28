@@ -27,11 +27,11 @@
             <small><strong>{{ability.userInput.name}}:</strong></small>
             <input type="text" [(ngModel)]="ability.userInput.value">
         </div>
-        <div *ngIf="ability.modifiers" class="u-sm">
-            <hr>
-            <div *ngFor="let modifier of ability.modifiers">
+        <br>
+        <mat-chip-list *ngIf="ability.modifiers" class="u-sm" [selectable]="false">
+            <mat-chip *ngFor="let modifier of ability.modifiers">
                 {{modifier.affects}} {{modifier.value|modifier}}
-            </div>
-        </div>
+            </mat-chip>
+        </mat-chip-list>
     </div>
 </div>

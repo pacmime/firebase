@@ -3,14 +3,55 @@
     <div *ngIf="!isEditing">
 
         <div class="d-flex flex-justify-between flex-align-center">
-            <div class="col a-heading">
-                <span *ngIf="sermon.deadly" class="icon-deadly">!</span>
+            <div class="a-special__check">{{sermon.check}}+</div>
+            <div class="flex-1 a-heading">
+                <mat-icon *ngIf="sermon.deadly" color="warn">error</mat-icon>
                 {{sermon.name}}
                 <small>({{sermon.type}})</small>
             </div>
+            <div class="a-special__cost--faith">{{sermon.cost||"0"}}</div>
+        </div>
+
+        <div class="u-sm"><strong>Range: </strong> {{sermon.range||"Not specified"}}</div>
+
+        <div class="u-sm">
+            <div class="desc">{{sermon.desc}}</div>
+        </div>
+
+        <hr>
+
+        <!-- if empty or not cast and insufficient -->
+        <div *ngIf="isInsufficient()"> <em>Not enough faith to cast</em> </div>
+
+        <div class="d-flex flex-justify-between flex-align-center">
+
+            <div class="flex-1">
+
+                <!-- if not cast already and not empty or insufficient -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canCast()" (click)="use()">
+                    cast
+                </button>
+
+                <!-- if cast but not empty -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canSpendExtraFaith()" (click)="spendExtraFaith()">
+                    +faith
+                </button>
+
+                <!-- if cast but no applied xp -->
+                <button class="u-sm" mat-flat-button color="accent"
+                    *ngIf="canApplyXP()" (click)="applyXP()">
+                    +{{sermon.xp}} XP
+                </button>
+
+            </div>
+
             <div class="d-flex flex-justify-end flex-align-end">
-                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
-                &nbsp;&nbsp;&nbsp;
+                <button class="u-sm" mat-flat-button color="accent" (click)="edit()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                &nbsp;
                 <button class="u-sm" mat-flat-button color="warn"
                     (click)="confirmingDelete=true"
                     *ngIf="!confirmingDelete">
@@ -21,39 +62,6 @@
                     <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete=false"><mat-icon>not_interested</mat-icon></button>
                 </div>
             </div>
-        </div>
-
-        <div class="u-sm">
-            <div class="desc">{{sermon.desc}}</div>
-
-            <div><strong>Range: </strong> {{sermon.range||"Not specified"}}</div>
-
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div><strong>Check: </strong> [{{sermon.check}}+]</div>
-                <div><strong>Cost: </strong> {{sermon.cost}}</div>
-                <div><strong>XP: </strong> {{sermon.xp}}</div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div>
-
-            <!-- if not cast already and not empty or insufficient -->
-            <button class="u-sm" mat-flat-button color="accent" *ngIf="canCast()" (click)="use()">cast</button>
-
-            <!-- if cast but not empty -->
-            <button class="u-sm" mat-flat-button color="accent" *ngIf="canSpendExtraFaith()"
-                (click)="spendExtraFaith()">+faith</button>
-
-            <!-- if cast but no applied xp -->
-            <button class="u-sm" mat-flat-button color="accent" *ngIf="canApplyXP()" (click)="applyXP()">+xp</button>
-
-            <!-- if empty or not cast and insufficient -->
-            <span *ngIf="isInsufficient()">
-                <em>not enough faith</em>
-            </span>
-
 
         </div>
 

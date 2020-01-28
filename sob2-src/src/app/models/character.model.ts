@@ -1,5 +1,14 @@
 
 
+export const Events = {
+    ITEM_EDIT   : 'item.edit',
+    ITEM_ADD    : 'item.added',
+    ITEM_UPDATE : 'item.updated',
+    ITEM_REMOVE : 'item.removed',
+    ITEM_EQUIP  : 'item.equipped'
+};
+
+
 
 export interface Modifier {
     affects: string;
@@ -31,6 +40,7 @@ export interface AttackRoll {
     attack  : string;
     hits    : any[];
     dmg     : any[];
+    totalDmg : number;
     bounces : any[];
 }
 

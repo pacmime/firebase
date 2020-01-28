@@ -13,75 +13,8 @@
 <hr>
 
 <div class="m-grid flex-align-stretch no-pad">
-    <div *ngFor="let item of items; let i = index" class="card">
-
-        <div class="d-flex flex-justify-between flex-align-start">
-            <div class="a-heading">{{item.name}}</div>
-            <div class="d-flex flex-justify-end flex-align-end">
-                <button class="u-sm" mat-flat-button color="accent" (click)="editItem(i)">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                &nbsp;&nbsp;&nbsp;
-                <button class="u-sm" mat-flat-button color="warn"
-                    (click)="confirmingDelete(i,true)"
-                    *ngIf="!confirmingDelete(i)">
-                    <mat-icon>delete_forever</mat-icon>
-                </button>
-                <div class="btn-group" *ngIf="confirmingDelete(i)">
-                    <button class="u-sm" mat-flat-button color="warn" (click)="removeItem(i)"><mat-icon>check_circle</mat-icon></button>
-                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)"><mat-icon>not_interested</mat-icon></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex flex-justify-between flex-align-start u-sm">
-            <span>{{item.source}}</span>
-            <span *ngIf="item.keywords"><em>{{item.keywords}}</em></span>
-        </div>
-
-        <div class="desc" *ngIf="item.description">{{item.description}}</div>
-
-        <div *ngIf="item.usage || item.cost"
-            class="u-sm d-flex flex-justify-between flex-align-center">
-            <div *ngIf="item.usage">Use per: {{item.usage}}</div>
-            <div *ngIf="!item.usage">&nbsp;</div>
-            <div *ngIf="item.cost">Cost: ${{item.cost}}</div>
-        </div>
-
-        <div *ngIf="item.modifiers && item.modifiers.length">
-            <hr>
-            <div *ngFor="let modifier of item.modifiers"  class="u-sm">
-                {{modifier.affects}} {{modifier.value|modifier}}
-            </div>
-        </div>
-
-        <div class="item__stats">
-            <div [ngClass]="{faded:!item.weight}">
-                <span class="sprite sprite-item_weight"></span> {{item.weight}}
-            </div>
-            <div [ngClass]="{faded:!item.darkstone}">
-                <span class="sprite sprite-item_darkstone"></span> {{item.darkstone}}
-            </div>
-            <div [ngClass]="{faded:!item.hands}">
-                <span class="sprite sprite-item_hands"></span> {{item.hands}}
-            </div>
-            <div [ngClass]="{faded:!item.slots}">
-                <span class="sprite sprite-item_slots" ></span> {{item.slots}}
-            </div>
-        </div>
-
-
-        <div class="d-flex flex-justify-between flex-align-center">
-            <div>
-                <button class="u-sm" mat-flat-button color="accent" (click)="equipItem(item)">
-                    <mat-icon>{{item.equipped?'check_box':'check_box_outline_blank'}}</mat-icon>
-                    Equip
-                </button>
-                <span *ngIf="item.slot">[{{item.slot}}]</span>
-            </div>
-            <button *ngIf="item.usage" class="u-sm" mat-flat-button color="success" (click)="item.used=!item.used">
-                <mat-icon>{{item.used?'check_box':'check_box_outline_blank'}}</mat-icon> Use
-            </button>
-        </div>
-    </div>
+    <item *ngFor="let item of items; let i = index" class="card"
+        [item]="item"
+        (onEvent)="onItemEvent($event, i)">
+    </item>
 </div>

@@ -210,8 +210,9 @@ export class CharacterComponent implements OnInit {
             try {
                 if(!this.applyChange(key, arg.value)) return;
             } catch(e) {
-                this.error = new SOBError("save",
-                    "Unable to apply change(s) to character, because " + e.message);
+                // this.error = new SOBError("save",
+                //     "Unable to apply change(s) to character, because " + e.message);
+                this.snackBar.open("Unable to save changes because " + e.message, "Dismiss");
                 return;
             }
 
@@ -343,8 +344,9 @@ export class CharacterComponent implements OnInit {
             this.snackBarRef.dismiss();
             this.snackBarRef = null;
 
-            this.error = new SOBError("save",
-                "Unable to save character changes, because " + e.message);
+            // this.error = new SOBError("save",
+            //     "Unable to save character changes, because " + e.message);
+            this.snackBar.open("Unable to save character because " + e.message, "Dismiss");
         });
     }
 

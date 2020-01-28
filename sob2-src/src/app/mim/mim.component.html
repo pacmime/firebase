@@ -38,11 +38,17 @@
             </div>
             <div class="desc">{{mutation.desc}}</div>
             <br>
+            <mat-chip-list *ngIf="mutation.modifiers" class="u-sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of mutation.modifiers">
+                    {{modifier.affects}} {{modifier.value|modifier}}
+                </mat-chip>
+            </mat-chip-list>
+            <!-- <br>
             <div *ngIf="mutation.modifiers">
                 <div *ngFor="let modifier of mutation.modifiers">
                     {{modifier.affects}} {{modifier.value|modifier}}
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -84,11 +90,17 @@
                 </button>
             </div>
             <div class="desc">{{injury.desc}}</div>
-            <div *ngIf="injury.modifiers">
+            <br>
+            <mat-chip-list *ngIf="injury.modifiers" class="u-sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of injury.modifiers">
+                    {{modifier.affects}} {{modifier.value|modifier}}
+                </mat-chip>
+            </mat-chip-list>
+            <!-- <div *ngIf="injury.modifiers">
                 <div *ngFor="let modifier of injury.modifiers">
                     {{modifier.affects}} : +{{modifier.value}}
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -130,11 +142,17 @@
                 </button>
             </div>
             <div class="desc">{{mad.desc}}</div>
-            <div *ngIf="mad.modifiers">
+            <br>
+            <mat-chip-list *ngIf="mad.modifiers" class="u-sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of mad.modifiers">
+                    {{modifier.affects}} {{modifier.value|modifier}}
+                </mat-chip>
+            </mat-chip-list>
+            <!-- <div *ngIf="mad.modifiers">
                 <div *ngFor="let modifier of mad.modifiers">
                     {{modifier.affects}} : +{{modifier.value}}
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

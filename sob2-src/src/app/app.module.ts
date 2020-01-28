@@ -7,7 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MatSelectModule, MatTabsModule, MatSnackBarModule,
     MatCardModule, MatToolbarModule, MatButtonModule,
-    MatIconModule, MatInputModule, MatDialogModule
+    MatIconModule, MatInputModule, MatDialogModule,
+    MatChipsModule
 } from '@angular/material';
 
 import { ModalService } from'./modal.service'
@@ -29,6 +30,7 @@ import { UploadComponent } from './upload/upload.component';
 import { AbilitiesComponent } from './abilities/abilities.component';
 import { AbilityChooserComponent } from './abilities/chooser/chooser.component';
 import { ItemsComponent } from './items/items.component';
+import { ItemComponent } from './items/item.component';
 import { MimComponent } from './mim/mim.component';
 import {
     ValueDisplayComponent,
@@ -94,11 +96,12 @@ export class MimGroupFilterPipe implements PipeTransform {
 })
 @Injectable()
 export class SumFilterPipe implements PipeTransform {
-    transform(values: any[]): any {
-        let result = 0;
+    transform(values: number[], min?:number): any {
+        let result = 0, minimum = 0;
+        if(!isNaN(min)) minimum = min*1;
         values.forEach( v => {
-            if(!isNaN(v))
-                result+=v*1
+            if( !isNaN(v) && (v*1) >= minimum)
+                result+=(v*1)
         });
         return result;
     }
@@ -168,6 +171,7 @@ const appRoutes: Routes = [
     AbilitiesComponent,
     AbilityChooserComponent,
     ItemsComponent,
+    ItemComponent,
     MimComponent,
     ModifierPipe,
     MimGroupFilterPipe,
@@ -217,7 +221,7 @@ const appRoutes: Routes = [
       AngularFireAuthModule,
       AngularFireDatabaseModule,
       MatSelectModule, MatTabsModule, MatSnackBarModule, MatCardModule, MatToolbarModule,
-      MatButtonModule, MatIconModule, MatInputModule, MatDialogModule
+      MatButtonModule, MatIconModule, MatInputModule, MatDialogModule, MatChipsModule
   ],
   providers: [
       ModalService,

@@ -1,11 +1,13 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, EventEmitter
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from "rxjs";
+
 import { FirestoreService } from '../firestore.service';
 import { SOBCharacter, Modifier, Option, SPECIAL_CLASSES } from "../models/character.model";
 import { SOBError } from "../models/error";
 
-import { ModalService } from'../modal.service';
 import { FactionChooserComponent } from './chooser/chooser.component';
 
 @Component({
@@ -20,12 +22,16 @@ export class FactionComponent implements OnInit {
     @Output() onError : EventEmitter<any> = new EventEmitter<any>();
 
     public label : string = "Faction";
+    public  dialog    : MatDialog;
+    private subscription : Subscription;
     private confirming : { key: number, value: boolean } = {} as { key: number, value: boolean };
 
     constructor(
         private afs : FirestoreService,
-        private modalService : ModalService
-    ) { }
+        dialog ?: MatDialog
+    ) {
+        if(dialog) this.dialog = dialog;
+    }
 
     ngOnInit() {
         if('Assassin' === this.character.class) {
@@ -34,9 +40,12 @@ export class FactionComponent implements OnInit {
     }
 
     ngOnDestroy() {
+        if(this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
         this.character = null;
         this.afs = null;
-        this.modalService = null;
     }
 
     add(faction) {
@@ -64,20 +73,36 @@ export class FactionComponent implements OnInit {
     }
 
     openChooser() {
-        const ref = this.modalService.createComponentRef(FactionChooserComponent);
-        ref.instance.options = [];
-        ref.instance.onClose = (event) => {
-            this.modalService.destroyRef(ref, 0);
-            if(event.apply) {
-                this.add(event.value as Option);
-            }
-        };
-
-        const element = this.modalService.getDomElementFromComponentRef(ref);
-        this.modalService.addChild(element);
         this.getChooserOptions().then( options => {
-            ref.instance.options = options;
-        })
+            let opts = {
+                data: {
+                    options: options
+                }
+            };
+            const dialogRef = this.dialog.open(FactionChooserComponent, opts);
+            this.subscription = dialogRef.afterClosed().subscribe( ( result : Option ) => {
+                if(result) {
+                    this.add(result);
+                }
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            });
+        });
+
+        // const ref = this.modalService.createComponentRef(FactionChooserComponent);
+        // ref.instance.options = [];
+        // ref.instance.onClose = (event) => {
+        //     this.modalService.destroyRef(ref, 0);
+        //     if(event.apply) {
+        //         this.add(event.value as Option);
+        //     }
+        // };
+        //
+        // const element = this.modalService.getDomElementFromComponentRef(ref);
+        // this.modalService.addChild(element);
+        // this.getChooserOptions().then( options => {
+        //     ref.instance.options = options;
+        // })
     }
 
 
