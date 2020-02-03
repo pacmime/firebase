@@ -1,5 +1,5 @@
 
-<h4 class="d-flex flex-justify-between flex-align-center">
+<h4 class="m-grid gutter flex-justify-between flex-align-center">
     <div class="col u-text--sc">{{label}}</div>
     <button mat-flat-button color="primary" *ngIf="!character.faction" (click)="openChooser()">New</button>
 </h4>
@@ -8,7 +8,7 @@
     No {{label}} selected
 </div>
 <div class="card" *ngIf="character?.faction">
-    <div class="d-flex flex-justify-between flex-align-end">
+    <div class="m-grid gutter flex-justify-between flex-align-end">
         <div class="a-heading">{{character.faction.name}}</div>
         <button mat-flat-button color="warn" class="u-sm" (click)="character.faction=null;">
             <mat-icon>delete_forever</mat-icon>

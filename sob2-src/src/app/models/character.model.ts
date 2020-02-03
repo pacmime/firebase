@@ -131,19 +131,20 @@ export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |
 export type Usage = "Turn" | "Fight" | "Adventure";
 
 export interface Item extends Option {
-    name: string;
-    source: string;
-    slot: Slot;
+    name     : string;
+    source   : string;
+    slot     : Slot;
     description: string;
-    keywords: string;
-    usage?: Usage;
+    keywords : string;
+    usage   ?: Usage;
     modifiers: Modifier[];
-    cost: number;
-    weight: number;
+    cost     : number;
+    weight   : number;
     darkstone: number;
-    hands: number;
-    slots: number;
-    equipped: boolean;
+    hands    : number;
+    slots    : number;
+    equipped : boolean;
+    used    ?: boolean;
 }
 
 

@@ -67,12 +67,10 @@ export class ItemsComponent implements OnInit, OnChanges, OnDestroy {
     updateTotals() {
         let weight = 0;
         let stone = 0;
-
         this.items.forEach( item => {
-            weight += item.weight ? item.weight : 0;
-            stone += item.darkstone ? item.darkstone : 0;
+            weight += isNaN(item.weight) ? 0 : (item.weight*1);
+            stone  += isNaN(item.darkstone) ? 0 : (item.darkstone*1);
         });
-
         this.totalWeight = weight;
         this.totalDarkstone = stone;
     }

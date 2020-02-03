@@ -1,9 +1,8 @@
 
-<br>
+<h4 class="u-text--sc">Temporary Modifiers</h4>
+<hr>
 
-<h5 class="d-flex flex-justify-between flex-align-end">Temporary Modifiers</h5>
-
-<div class="d-flex flex-justify-between flex-align-center">
+<div class="m-grid gutter flex-justify-between flex-align-center">
     <div class="col-2 u-pd--md">
         <select class="form-control" [(ngModel)]="newModifier.affects">
             <option [ngValue]="null">Select</option>
@@ -25,8 +24,16 @@
 
 <br>
 
-<div *ngFor="let mod of mods; let $index=index"
-    class="card d-flex flex-justify-between flex-align-center flex-wrap">
+<mat-chip-list class="u-sm" [selectable]="false">
+    <mat-chip *ngFor="let modifier of mods; let $index=index;">
+        <strong>{{modifier.affects}}</strong> : {{modifier.value|modifier}}
+        <mat-icon class="mat-chip-remove mat-chip-trailing-icon mat-icon" (click)="removeModifier($index)">
+            cancel
+        </mat-icon>
+    </mat-chip>
+</mat-chip-list>
+<!-- <div *ngFor="let mod of mods; let $index=index"
+    class="card m-grid gutter flex-justify-between flex-align-center flex-wrap">
     <div class="flex-1">
         <strong>{{mod.affects}}</strong>:
         <em>{{mod.value}}</em>
@@ -34,6 +41,6 @@
     <button mat-flat-button color="warn" (click)="removeModifier($index)">
         <mat-icon>delete_forever</mat-icon>
     </button>
-</div>
+</div> -->
 
 <br>

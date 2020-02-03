@@ -20,6 +20,7 @@ export class SidebagComponent implements OnInit {
     public carrying : number = 0;
     private max : number = 0;
 
+    public showDesc : {[key:string] : boolean} = {};
     public options : {label:string; description:string}[] = [
         {label:"bandages",  description: "discard to heal D6 wounds from yourself or adjacent hero"},
         {label:"whiskey",   description: "discard to heal D6 sanity from yourself or adjacent hero"},

@@ -1,0 +1,406 @@
+<div *ngIf="character" class="l-char old-style">
+
+
+    <div class="l-page">
+        <main class="m-grid gutter">
+            <div class="p-overview flex-1">
+
+                <div class="o-container--bio">
+                    <avatar (onSave)="saveChar('avatar', $event)"></avatar>
+                    <div class="bio">
+                        <div *ngIf="!isEditingBio">
+                            <h4>{{character.name}}</h4>
+                            <div><small>{{character.class}}</small></div>
+                            <div><small><em>{{character.keywords}}</em></small></div>
+                            <button class="u-sm edit-button" mat-raised-button color="accent" (click)="editBio()">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="isEditingBio">
+                            <label>Name</label>
+                            <input type="test" class="form-control" [(ngModel)]="editableBio.name">
+
+                            <label>Keywords</label>
+                            <input type="test" class="form-control" [(ngModel)]="editableBio.keywords">
+
+                            <button mat-flat-button color="accent" (click)="cancelBioEdit()">Cancel</button>
+                            &nbsp;
+                            <button mat-flat-button color="primary" (click)="saveBio()">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-grid u-sm t-combat">
+                    <div class="flex-1">
+                        <div class="m-grid gutter">
+                            <value-display label="Combat"
+                                value="{{character.combat}}"
+                                [modifiers]="modifiers.combat"
+                                (onSave)="saveChar('combat', $event)">
+                            </value-display>
+                            <value-display-with-max label="Grit"
+                                value="{{character.grit.current}}"
+                                max="{{character.grit.max}}"
+                                [modifiers]="modifiers.grit"
+                                [options]="{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}"
+                                (onSave)="saveChar('grit.current', $event)">
+                            </value-display-with-max>
+                        </div>
+                    </div>
+                    <div class="flex-2">
+                        <div class="m-grid gutter">
+                            <value-display label="Melee"
+                                value="{{character.melee}}"
+                                (onSave)="saveChar('melee', $event)">
+                            </value-display>
+                            <value-display label="Ranged"
+                                value="{{character.ranged}}"
+                                (onSave)="saveChar('ranged', $event)">
+                            </value-display>
+                        </div>
+                        <div class="m-grid gutter">
+                            <value-display label="Cover"
+                                value="{{character.cover}}"
+                                [modifiers]="modifiers.cover"
+                                (onSave)="saveChar('cover', $event)">
+                            </value-display>
+                            <value-display label="Endurance"
+                                value="{{character.endurance}}"
+                                [modifiers]="modifiers.endurance"
+                                (onSave)="saveChar('endurance', $event)">
+                            </value-display>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-main flex-2">
+
+                <div class="o-container--attrs">
+
+                    <div class="m-attributes">
+                        <div  *ngFor="let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']">
+                            <value-display
+                                label="{{st}}"
+                                value="{{character.stats[st]}}"
+                                [modifiers]="modifiers[st]"
+                                (onSave)="saveChar('stats.'+st, $event)">
+                            </value-display>
+                        </div>
+                    </div>
+                    <div class="flex-1">&nbsp;</div>
+                    <div class="m-stats">
+                        <div class="flex-1 o-container">
+                            <value-display label="Init"
+                                value="{{character.init}}"
+                                [modifiers]="modifiers.init"
+                                (onSave)="saveChar('init', $event)">
+                            </value-display>
+
+                            <value-display label="Move"
+                                value="{{character.movement}}"
+                                [options]="{min:-10}"
+                                [modifiers]="modifiers.movement"
+                                (onSave)="saveChar('movement', $event)">
+                            </value-display>
+                        </div>
+
+                        <div class="flex-1 o-container">
+                            <value-display label="Level"
+                                value="{{character.level}}"
+                                [canAdjust]="false"
+                                (onSave)="saveChar('level', $event)">
+                            </value-display>
+                            <xp-value-display label="XP"
+                                value="{{character.xp}}"
+                                [options]="{valueSize:'sm'}"
+                                needed="{{xpLevels[character.level]}}"
+                                (onSave)="saveChar('xp', $event)">
+                            </xp-value-display>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="character?.sidebag">
+                    <br>
+                    <div class="m-grid u-sm">
+                        <div *ngFor="let token of character?.sidebag | keyvalue"
+                            class="m-grid gutter">
+                            <div *ngIf="'capacity'!== token.key && (token.value*1)>0"
+                                class="m-sidebag-chip m-grid gutter">
+                                <span class="sprite sprite-{{token.key}}"></span>
+                                {{token.key}} : {{token.value}}
+                                <button mat-flat-button class="u-sm" color="primary">
+                                    use
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="o-corruption-container m-grid gutter u-sm">
+
+                    <div class="m-group t-resources">
+
+                        <div class="m-grid">
+                            <value-display label="Wealth"
+                                value="{{character.wealth}}"
+                                [options]="{valueSize:'sm'}"
+                                (onSave)="saveChar('wealth', $event)">
+                            </value-display>
+                            <value-display label="Dark Stone"
+                                value="{{character.darkstone}}"
+                                [options]="{labelSize:'sm'}"
+                                (onSave)="saveChar('darkstone', $event)">
+                            </value-display>
+                            <value-display label="Tech"
+                                value="{{character.techCurrency}}"
+                                (onSave)="saveChar('techCurrency', $event)">
+                            </value-display>
+                            <value-display label="Scrap"
+                                value="{{character.scrapCurrency}}"
+                                (onSave)="saveChar('scrapCurrency', $event)">
+                            </value-display>
+                        </div>
+                    </div>
+
+                    <div class="m-group t-corruption">
+                        <value-display-with-max label="Corruption"
+                            value="{{character.corruption.current}}"
+                            max="{{character.corruption.max}}"
+                            [modifiers]="modifiers.corruption"
+                            (onSave)="saveChar('corruption.current', $event)">
+                        </value-display-with-max>
+                    </div>
+                    <div class="m-group"
+                        *ngIf="hasFlag(CLASSES.PREACHER)||hasFlag(CLASSES.GAMBLER)||hasFlag(CLASSES.SHAMAN)||hasFlag(CLASSES.SORCERER)||hasFlag(CLASSES.SAMURAI)||hasFlag(CLASSES.MONK)"
+                        [ngClass]="{'t-faith':hasFlag(CLASSES.PREACHER), 't-fortune':hasFlag(CLASSES.GAMBLER), 't-magik':hasFlag(CLASSES.SHAMAN), 't-mana':hasFlag(CLASSES.SORCERER), 't-fury':hasFlag(CLASSES.SAMURAI), 't-ki':hasFlag(CLASSES.MONK)}">
+                        <div *ngIf="hasFlag(CLASSES.PREACHER)">
+                            <value-display label="Faith"
+                                value="{{character.faith}}"
+                                [modifiers]="modifiers.faith"
+                                (onSave)="saveChar('faith', $event)">
+                            </value-display>
+                        </div>
+                        <div *ngIf="hasFlag(CLASSES.GAMBLER)">
+                            <value-display-with-max label="Fortune"
+                                value="{{character.fortune.current}}"
+                                max="{{character.fortune.max}}"
+                                [modifiers]="modifiers.fortune"
+                                [options]="{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}"
+                                (onSave)="saveChar('fortune.current', $event)">
+                            </value-display-with-max>
+                        </div>
+                        <div *ngIf="hasFlag(CLASSES.SHAMAN)">
+                            <value-display-with-max label="Magik"
+                                value="{{character.magik.current}}"
+                                max="{{character.magik.max}}"
+                                [modifiers]="modifiers.magik"
+                                [options]="{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}"
+                                (onSave)="saveChar('magik.current', $event)">
+                            </value-display-with-max>
+                        </div>
+                        <div *ngIf="hasFlag(CLASSES.SAMURAI)">
+                            <value-display-with-max label="Fury"
+                                value="{{character.fury.current}}"
+                                max="{{character.fury.max}}"
+                                [modifiers]="modifiers.fury"
+                                [options]="{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}"
+                                (onSave)="saveChar('fury.current', $event)">
+                            </value-display-with-max>
+                        </div>
+                        <div *ngIf="hasFlag(CLASSES.MONK)">
+                            <value-display-with-max label="Ki"
+                                value="{{character.ki.current}}"
+                                max="{{character.ki.max}}"
+                                [modifiers]="modifiers.ki"
+                                [options]="{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}"
+                                (onSave)="saveChar('ki.current', $event)">
+                            </value-display-with-max>
+                        </div>
+                        <div *ngIf="hasFlag(CLASSES.SORCERER)">
+                            <value-display label="Mana"
+                                value="{{character.mana}}"
+                                [modifiers]="modifiers.mana"
+                                (onSave)="saveChar('mana', $event)">
+                            </value-display>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o-container--health-sanity m-grid">
+
+                    <div class="m-group t-health">
+                        <div class="m-grid gutter u-sm">
+                            <div>
+                                <value-display-with-max label="Health"
+                                    value="{{character.health.wounds}}"
+                                    max="{{character.health.max}}"
+                                    [modifiers]="modifiers.health"
+                                    (onSave)="saveChar('health.wounds', $event)">
+                                </value-display-with-max>
+                            </div>
+                            <div>
+                                <value-display label="Defense"
+                                    value="{{character.defense}}"
+                                    [modifiers]="modifiers.defense"
+                                    (onSave)="saveChar('defense', $event)">
+                                </value-display>
+                            </div>
+                            <div>
+                                <value-display label="Armor"
+                                    value="{{character.armor}}"
+                                    [modifiers]="modifiers.armor"
+                                    (onSave)="saveChar('armor', $event)">
+                                </value-display>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-group t-sanity">
+                        <div class="m-grid gutter u-sm">
+                            <div>
+                                <value-display-with-max label="Sanity"
+                                    value="{{character.sanity.loss}}"
+                                    max="{{character.sanity.max}}"
+                                    [modifiers]="modifiers.sanity"
+                                    (onSave)="saveChar('sanity.loss', $event)">
+                                </value-display-with-max>
+                            </div>
+                            <div>
+                                <value-display label="Willpower"
+                                    value="{{character.willpower}}"
+                                    [modifiers]="modifiers.willpower"
+                                    (onSave)="saveChar('willpower', $event)">
+                                </value-display>
+                            </div>
+                            <div>
+                                <value-display  label="Spirit Armor"
+                                    value="{{character.spiritArmor}}"
+                                    [modifiers]="modifiers.spiritArmor"
+                                    [options]="{labelSize:'sm'}"
+                                    (onSave)="saveChar('spiritArmor', $event)">
+                                </value-display>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+
+
+
+    <div class="l-page--wide">
+        <main class="m-grid gutter">
+            <div class="flex-1">
+                <abilities
+                    [character]="character"
+                    (onSave)="saveChar(null, $event)">
+                </abilities>
+            </div>
+            <div class="flex-1">
+                <preacher-sermons *ngIf="hasFlag(CLASSES.PREACHER)"
+                    [character]="character"
+                    [modifiers]="modifiers.faith"
+                    (onSave)="saveChar(null, $event)">
+                </preacher-sermons>
+
+                <shaman-spells *ngIf="hasFlag(CLASSES.SHAMAN)"
+                    [character]="character"
+                    [modifiers]="modifiers.magik"
+                    (onSave)="saveChar(null, $event)">
+                </shaman-spells>
+
+                <samurai-tactics  *ngIf="hasFlag(CLASSES.SAMURAI)"
+                     [character]="character"
+                     [modifiers]="modifiers.fury"
+                     (onSave)="saveChar(null, $event)">
+                 </samurai-tactics>
+
+                <gambler-tricks *ngIf="hasFlag(CLASSES.GAMBLER)"
+                    [character]="character"
+                    [modifiers]="modifiers.fortune"
+                    (onSave)="saveChar(null, $event)">
+                </gambler-tricks>
+
+                <orphan-missions *ngIf="hasFlag(CLASSES.ORPHAN)"
+                    [character]="character"
+                    (onSave)="saveChar(null, $event)">
+                </orphan-missions>
+
+                <sorcerer-elemental-magik *ngIf="hasFlag(CLASSES.SORCERER)"
+                    [character]="character"
+                    [modifiersMana]="modifiers.mana"
+                    [modifiersArcanePowder]="modifiers.arcanePowder"
+                    (onSave)="saveChar(null, $event)">
+                </sorcerer-elemental-magik>
+
+                <factions *ngIf="hasFlag(CLASSES.ASSASSIN) || hasFlag(CLASSES.TREDERRAN_VETERAN)"
+                    [character]="character"
+                    (onSave)="saveChar(null, $event)">
+                </factions>
+
+
+
+                <attacks
+                    [attacks]="character.attacks"
+                    (onSave)="saveChar(null, $event)">
+                </attacks>
+
+                <char-uses [items]="character.items"
+                        (onSave)="saveChar(null, $event)">
+                </char-uses>
+
+
+            </div>
+
+        </main>
+    </div>
+
+
+    <div class="l-page--wide">
+        <main class="m-grid gutter">
+            <div class="flex-2">
+                <items [items]="character.items"
+                       [weightLimit]="getWeightLimit()"
+                        (onSave)="saveChar(null, $event)">
+                </items>
+            </div>
+            <div class="flex-1">
+                <sidebag
+                   [sidebag]="character.sidebag"
+                   [modifiers]="modifiers.sidebag"
+                   [hasDynamiteSatchel]="hasDynamiteSatchel()"
+                   (onSave)="saveChar(null, $event)">
+                </sidebag>
+            </div>
+        </main>
+    </div>
+
+
+    <div class="l-page--wide">
+        <main class="m-grid gutter">
+            <div class="flex-1">
+                <mim [current]="character.mutations" (onSave)="saveChar(null, $event)"></mim>
+            </div>
+
+            <div class="flex-1">
+
+                <temporary-modifiers [mods]="character.temporaryMods"
+                   (onSave)="saveChar('temporaryMods', $event)">
+                </temporary-modifiers>
+
+                <char-notes [notes]="character.notes"
+                   (onSave)="saveChar('notes', $event)">
+                </char-notes>
+            </div>
+        </main>
+    </div>
+
+</div>

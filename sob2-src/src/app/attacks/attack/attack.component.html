@@ -2,9 +2,9 @@
 
     <div *ngIf="isEditing===false">
 
-        <div class="d-flex flex-justify-between flex-align-end">
+        <div class="m-grid flex-justify-between flex-align-end">
             <div class="a-heading">{{attack.name}}</div>
-            <div class="d-flex flex-justify-end flex-align-end">
+            <div class="m-grid flex-justify-end flex-align-end">
                 <button class="u-sm" mat-flat-button color="accent" (click)="edit()">edit</button>
                 &nbsp;&nbsp;&nbsp;
                 <button class="u-sm" mat-flat-button color="warn"
@@ -19,22 +19,22 @@
             </div>
         </div>
 
-        <small class="d-flex flex-justify-between">
-            <div class="col-half"><strong>Type: </strong> {{attack.type}}</div>
-            <div class="col-half" *ngIf="'ranged'===attack.type">
+        <small class="m-grid flex-justify-between">
+            <div class="flex-1"><strong>Type: </strong> {{attack.type}}</div>
+            <div class="flex-1" *ngIf="'ranged'===attack.type">
                 <strong>Range: </strong> {{attack.range||0}}
             </div>
         </small>
-        <small class="d-flex flex-justify-between">
-            <div class="col-half"><strong>Att: </strong> {{attack.attack||'not specified'}}</div>
-            <div class="col-half"><strong>Dmg: </strong> {{attack.damage||'not specified'}}</div>
+        <small class="m-grid flex-justify-between">
+            <div class="flex-1"><strong>Att: </strong> {{attack.attack||'not specified'}}</div>
+            <div class="flex-1"><strong>Dmg: </strong> {{attack.damage||'not specified'}}</div>
         </small>
 
         <div class="desc" *ngIf="attack.description"><br>{{attack.description}}</div>
 
         <hr>
 
-        <div class="d-flex flex-justify-between flex-align-center">
+        <div class="m-grid gutter flex-justify-between flex-align-center">
             <button class="u-sm" mat-flat-button color="accent" (click)="roll=null">clear</button>
 
             <button class="u-sm" mat-flat-button color="primary"
@@ -87,7 +87,7 @@
         </div>
 
 
-        <div class="d-flex flex-justify-start flex-align-center">
+        <div class="m-grid gutter flex-justify-start flex-align-center">
             <div class="flex-1">
                 <label>Type</label>
                 <select class="form-control" [(ngModel)]="editable.type">
@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-justify-between flex-align-center">
+        <div class="m-grid gutter flex-justify-between flex-align-center">
             <div class="flex-1">
                 <label>Att: </label>
                 <input type="text" class="form-control" required
@@ -128,7 +128,7 @@
 
         <hr>
 
-        <div class="d-flex flex-justify-between">
+        <div class="m-grid gutter flex-justify-between">
             <button mat-flat-button color="accent" (click)="cancelEditing()">cancel</button>
             <button mat-flat-button color="primary" (click)="saveEdits()">save</button>
         </div>

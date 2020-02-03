@@ -1,0 +1,247 @@
+
+.l-char {
+    flex-wrap:   nowrap;
+    align-items: stretch;
+    overflow-y:  hidden;
+    overflow-x:  auto;
+    height:      100%;
+    // padding-top: 36px;
+    // white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+.l-page {
+    flex: 1 0 100%;
+    overflow-y: auto;
+    white-space: normal;
+}
+
+/* IPAD
+@media(min-width:375px) {
+    .l-page { flex: 1 0 375px; }
+}*/
+@media(min-width:1024px) {
+    .l-page {
+        flex: 1 0 1024px;
+        overflow-y: auto;
+        white-space: normal;
+        padding: 0.5em 0.5em 1em;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.mat-tab-group {
+    width: 100%;
+}
+
+section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.25em 0;
+    background-image: url(assets/texture.png);
+
+    & > section {
+        flex: 1;
+    }
+    &.misc {
+        padding: 0;
+        justify-content: stretch;
+    }
+}
+
+
+
+
+
+
+
+
+.swipe--left {
+    position: absolute;
+    left: 0;
+    bottom: 2em;
+    z-index: 100;
+}
+.swipe--right {
+    position: absolute;
+    right: 0;
+    bottom: 2em;
+    z-index: 100;
+}
+
+
+
+
+\
+
+
+
+
+
+
+
+
+.o-container {
+    background: #cd9c3b;
+    border: 1px solid #777;
+    margin-right: 0.5em;
+}
+
+.o-container--attrs {
+    .o-container;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    font-size:0.875em;
+    background-color: #cd9c3b;
+    background-image: url(assets/texture.png);
+}
+
+
+.o-container--bio {
+    border-bottom: 1px solid #bbb;
+    margin-bottom: 1em;
+}
+
+@media(min-width:992px) {
+
+    .o-container--bio {
+        flex: 1;
+        border-bottom: none;
+    }
+    .o-attributes-container {
+        flex: 3;
+    }
+}
+
+
+.m-attributes {
+    flex            : 6;
+    display         : flex;
+    flex-wrap       : wrap;
+    align-items     : center;
+    justify-content : center;
+
+    & > * {
+        flex        : 1 0 33%;
+        text-align  : center;
+    }
+
+    .value-display .label {
+        background-color: #000;
+        color: #fff;
+    }
+}
+.m-stats {
+    flex: 4;
+    background-color: #e7c581;
+    background-image: url(assets/texture.png);
+
+    .o-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+}
+
+
+.bio {
+    position  : relative;
+    padding   : 0.25em 0.25em 0;
+    border    : 1px solid #bbb;
+    background: #f7f7f787;
+    text-align: center;
+
+    .edit-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+
+.m-sidebag-chip {
+    border: 1px solid #777;
+    border-radius: 24px;
+    background: #efefef;
+    display:flex;
+    justify-content: space-between;
+    align-items:center
+}
+
+
+
+.t-combat, .t-health, .t-sanity, .t-grit, .t-corruption,
+.t-faith, .t-mana, .t-magik, .t-fury, .t-ki,
+.t-resources {
+    flex: auto;
+
+    justify-content: space-around;
+    & > .m-grid {
+        justify-content: space-around;
+    }
+}
+
+.t-health, .t-sanity {
+    & > .m-grid {
+        justify-content: space-around;
+
+        & > * {
+            flex: 1;
+            text-align:center;
+        }
+
+        .m-grid { justify-content: space-around; }
+    }
+}
+
+@media(min-width: 768px) {
+    .t-health, .t-sanity {
+        & > .m-grid > * { flex: auto; }
+    }
+    .t-corruption,
+    .t-faith, .t-mana, .t-magik, .t-fury, .t-ki,
+    .t-resources {
+        flex: 1 0 auto;
+        padding: 0.5em;
+    }
+}
+@media(min-width: 992px) {
+    .t-combat {
+        justify-content: flex-start;
+    }
+    .t-health, .t-sanity {
+        flex: 1;
+        justify-content: flex-start;
+
+        & > .m-grid {
+            justify-content: flex-start;
+
+            & > * {
+                flex: auto;
+            }
+        }
+    }
+    .t-grit, .t-corruption, .t-faith, .t-mana, .t-magik, .t-fury, .t-ki,
+    .t-resources {
+        flex: 0 1 auto;
+        justify-content: flex-start;
+    }
+
+    .t-combat, .t-health, .t-sanity, .t-grit, .t-corruption,
+    .t-faith, .t-mana, .t-magik, .t-fury, .t-ki,
+    .t-resources {
+        & > .m-grid {
+            justify-content: flex-start;
+            .m-grid { justify-content: flex-start; }
+        }
+    }
+}

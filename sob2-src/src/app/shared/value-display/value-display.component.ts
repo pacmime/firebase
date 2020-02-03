@@ -44,8 +44,7 @@ export class ValueDisplayComponent implements OnInit, OnDestroy {
         if(typeof(this.canAdjust) === 'undefined')
         this.canAdjust = true;
 
-        let modifier = this.modifiers ? this.modifiers.value*1 : 0;
-        this.computed = this.value*1 + modifier;
+        this.applyModifiers();
         // console.log(this.label + ": " + this.value + " + " + modifier + " = " + this.computed + " (" + this.isModified() + ")");
     }
 
@@ -71,17 +70,20 @@ export class ValueDisplayComponent implements OnInit, OnDestroy {
         if(this.value !== newValue*1)
             this.value = newValue*1;
         this.options.valueSize = (this.value > 999) ? 'sm' : null;
-        let modifier = this.modifiers ? this.modifiers.value*1 : 0;
-        if(modifier) {
-            // console.log("Value Display using modifier (" + modifier + ") for " + this.label);
-            this.computed = this.value*1 + modifier;
-        } else {
-            this.computed = this.value*1;
-        }
+        this.applyModifiers();
     }
 
     isModified () {
         return !!this.modifiers;
+    }
+
+    applyModifiers() {
+        let modifier = this.modifiers ? this.modifiers.value*1 : 0;
+        if(modifier) {
+            this.computed = this.value*1 + modifier;
+        } else {
+            this.computed = this.value*1;
+        }
     }
 
     increment() {
@@ -175,22 +177,22 @@ export class XPValueDisplayComponent extends ValueDisplayComponent {
     styleUrls: ['./value-display.component.less'],
     template: `
     <div class="vd">
-        <div class="vd__value u-sm" [ngClass]="{modified:isModified()}"
+        <div class="vd__value" [ngClass]="{modified:isModified()}"
             (click)="openKeypad()">
             <div>
-                <div class="d-flex flex-col">
+                <div class="m-grid flex-col flex-align-center no-pad">
                     {{weight}}
-                    <div class="needed">{{value}}</div>
+                    <div class="needed u-xs">{{value}}</div>
                 </div>
             </div>
         </div>
         <button type="button" class="vd__incr" (click)="increment()"
             (ngDisabled)="!canAdjust || !canIncrement()">
-            +
+            <mat-icon>add</mat-icon>
         </button>
         <button type="button" class="vd__decr" (click)="decrement()"
             (ngDisabled)="!canAdjust || !canDecrement()">
-            -
+            <mat-icon>remove</mat-icon>
         </button>
         <div class="vd__label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
             {{label}}
@@ -201,4 +203,48 @@ export class XPValueDisplayComponent extends ValueDisplayComponent {
 export class SidebagValueDisplayComponent extends ValueDisplayComponent {
     @Input()  weight : number = 0;
     @Output() onLevel: EventEmitter<{xp:number}> = new EventEmitter<{xp:number}>();
+}
+
+
+
+@Component({
+    selector: 'value-display-with-max',
+    styleUrls: ['./value-display.component.less'],
+    template: `
+    <div class="vd">
+        <div class="vd__value" [ngClass]="{modified:isModified()}"
+            (click)="openKeypad()">
+            <div>
+                <div class="m-grid flex-col flex-align-center no-pad">
+                    {{value}}
+                    <div class="needed u-xs">{{computed}}</div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="vd__incr" (click)="increment()"
+            (ngDisabled)="!canAdjust || !canIncrement()">
+            <mat-icon>add</mat-icon>
+        </button>
+        <button type="button" class="vd__decr" (click)="decrement()"
+            (ngDisabled)="!canAdjust || !canDecrement()">
+            <mat-icon>remove</mat-icon>
+        </button>
+        <div class="vd__label" [ngClass]="{'u-sm':'sm'===options.labelSize}">
+            {{label}}
+        </div>
+    </div>
+    `
+})
+export class ValueDisplayWithMaxComponent extends ValueDisplayComponent {
+    @Input()  max : number = 0;
+
+    /** @override */
+    applyModifiers() {
+        let modifier = this.modifiers ? this.modifiers.value*1 : 0;
+        if(modifier) {
+            this.computed = this.max*1 + modifier;
+        } else {
+            this.computed = this.max*1;
+        }
+    }
 }

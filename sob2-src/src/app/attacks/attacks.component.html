@@ -1,12 +1,10 @@
 
-<h4 class="d-flex flex-justify-between flex-align-center">
-    <div class=" u-text--sc">Attacks</div>
+<div class="m-grid gutter flex-justify-between flex-align-center">
+    <h4 class=" u-text--sc">Attacks</h4>
     <button mat-flat-button color="primary" (click)="add()">New</button>
-</h4>
+</div>
 <hr>
 
-<div class="m-grid flex-align-stretch no-pad">
-    <div *ngFor="let attack of attacks" class="card">
-        <attack [attack]="attack" (onEvent)="onEvent($event)"></attack>
-    </div>
+<div *ngFor="let attack of attacks" class="card">
+    <attack [attack]="attack" (onEvent)="onEvent($event)"></attack>
 </div>

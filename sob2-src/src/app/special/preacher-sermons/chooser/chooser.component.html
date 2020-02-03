@@ -11,7 +11,7 @@
             <span *ngIf="sermon.deadly" class="icon-deadly">!</span>
         </div>
         <div class="u-sm">
-            <div class="d-flex flex-justify-between flex-align-center">
+            <div class="m-grid gutter flex-justify-between flex-align-center">
                 <div><strong>Check: </strong> [{{sermon.check}}+]</div>
                 <div><strong>Cost: </strong> {{sermon.cost}}</div>
                 <div><strong>XP: </strong> {{sermon.xp}}</div>
@@ -23,7 +23,7 @@
         </div>
     </div>
 </div>
-<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+<div mat-dialog-actions class="m-grid gutter flex-justify-end flex-align-center">
     <a mat-flat-button color="accent" (click)="close()" aria-label="Close">Cancel</a>
     &nbsp;&nbsp;&nbsp;
     <a mat-flat-button color="primary" [mat-dialog-close]="selection"

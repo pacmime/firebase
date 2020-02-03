@@ -23,8 +23,8 @@ interface IMessage {
 
 @Component({
   selector: 'app-character',
-  templateUrl: './character.component.html',
-  styleUrls: ['./character.component.less']
+  templateUrl: './character-oldstyle.component.html',
+  styleUrls: ['./character-oldstyle.component.less']
 })
 export class CharacterComponent implements OnInit {
 
@@ -341,8 +341,10 @@ export class CharacterComponent implements OnInit {
             else if(timeoutSnackBarRef) timeoutSnackBarRef.dismiss();
 
             // this.removeMessage(savingMsg);
-            this.snackBarRef.dismiss();
-            this.snackBarRef = null;
+            if(this.snackBarRef) {
+                this.snackBarRef.dismiss();
+                this.snackBarRef = null;
+            }
 
             // this.error = new SOBError("save",
             //     "Unable to save character changes, because " + e.message);

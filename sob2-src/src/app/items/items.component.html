@@ -1,7 +1,7 @@
 
-<h4 class="d-flex flex-justify-between flex-align-end">
+<h4 class="m-grid flex-justify-between flex-align-center">
     <div class=" u-text--sc">Items</div>
-    <div class="d-flex flex-align-center flex-justify-end u-sm">
+    <div class="m-grid gutter flex-align-center flex-justify-end u-sm">
         <span class="sprite sprite-item_weight"></span> {{totalWeight}}
         / {{weightLimit}}
         &nbsp;
@@ -12,7 +12,7 @@
 </h4>
 <hr>
 
-<div class="m-grid flex-align-stretch no-pad">
+<div class="m-grid gutter flex-align-stretch">
     <item *ngFor="let item of items; let i = index" class="card"
         [item]="item"
         (onEvent)="onItemEvent($event, i)">

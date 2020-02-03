@@ -35,7 +35,8 @@ import { MimComponent } from './mim/mim.component';
 import {
     ValueDisplayComponent,
     XPValueDisplayComponent,
-    SidebagValueDisplayComponent
+    SidebagValueDisplayComponent,
+    ValueDisplayWithMaxComponent
 } from './shared/value-display/value-display.component';
 import { KeypadComponent } from './shared/keypad/keypad.component';
 
@@ -47,6 +48,9 @@ import { PreacherSermonComponent } from './special/preacher-sermons/sermon/sermo
 import { SermonsChooserComponent } from './special/preacher-sermons/chooser/chooser.component';
 import { ItemEditorComponent } from './items/editor/editor.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { FactionComponent } from './faction/faction.component';
+import { FactionChooserComponent } from './faction/chooser/chooser.component';
+
 import { ShamanSpellComponent,
          ShamanSpellsComponent } from './special/shaman-spells/shaman-spells.component';
 import { ShamanSpellsChooserComponent } from './special/shaman-spells/chooser/chooser.component';
@@ -63,8 +67,22 @@ import { ElementalMagikChooserComponent } from './special/sorcerer-magik/chooser
 import { NotesComponent } from './special/notes/notes.component';
 import { ChooserComponent } from './shared/chooser/chooser.component';
 import { TempComponent } from './shared/temp/temp.component';
-import { FactionComponent } from './faction/faction.component';
-import { FactionChooserComponent } from './faction/chooser/chooser.component';
+import { UsesComponent } from './shared/uses/uses.component';
+
+
+import { Item } from './models/character.model';
+@Pipe({
+    name: 'hasUsage'
+})
+@Injectable()
+export class UsagePipe implements PipeTransform {
+    transform(value: Item[]) : Item[] {
+        if(!value || !value.length) return [];
+        let list = value.filter( v=> !!v.usage);
+        list.sort( (a,b) => a.usage > b.usage ? 1 : -1 );
+        return list;
+    }
+}
 
 
 @Pipe({
@@ -178,9 +196,11 @@ const appRoutes: Routes = [
     SumFilterPipe,
     JoinPipe,
     OrderByPipe,
+    UsagePipe,
     ValueDisplayComponent,
     XPValueDisplayComponent,
     SidebagValueDisplayComponent,
+    ValueDisplayWithMaxComponent,
     AttacksComponent,
     AttackComponent,
     KeypadComponent,
@@ -207,7 +227,8 @@ const appRoutes: Routes = [
     ElementalMagikChooserComponent,
     TempComponent,
     FactionComponent,
-    FactionChooserComponent
+    FactionChooserComponent,
+    UsesComponent
   ],
   imports: [
       //                               for debugging purposes only

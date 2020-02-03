@@ -1,6 +1,6 @@
 import {
     Component, OnInit, OnChanges, OnDestroy,
-    Input, Output, EventEmitter, SimpleChanges
+    Input, Output, EventEmitter, SimpleChanges, HostBinding
 } from '@angular/core';
 
 import { Item, Events } from '../models/character.model';
@@ -11,12 +11,14 @@ import { SOBError } from "../models/error";
 @Component({
   selector: 'item',
   templateUrl: './item.component.html',
-  styleUrls: ['./items.component.less']
+  styleUrls: ['./items.component.less'],
+
 })
 export class ItemComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input()  item        : Item;
     @Output() onEvent     : EventEmitter<any> = new EventEmitter<any>();
+    @HostBinding('class.is-collapsed') isCollapsed: boolean = true;
 
     private confirming    : boolean = false;
 

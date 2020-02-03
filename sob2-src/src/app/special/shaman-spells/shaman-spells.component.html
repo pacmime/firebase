@@ -1,20 +1,18 @@
-<h4 class="d-flex flex-justify-between flex-align-center">
+<h4 class="m-grid gutter flex-justify-between flex-align-center">
     <div class="col u-text--sc">Shaman Spells</div>
     <button mat-flat-button color="primary"
         (click)="openChooser()">New</button>
 </h4>
 <hr>
-<div class="d-flex flex-justify-between flex-align-center">
+<div class="m-grid gutter flex-justify-between flex-align-center">
     Current Magik: {{character.magik.current}} / {{maxMagik}}
     <button mat-flat-button color="accent" (click)="resetMagik()">Reset</button>
 </div>
 <hr>
 
-<div class="m-grid flex-align-stretch no-pad">
-    <div *ngFor="let spell of character.spells;let index=$index" class="card">
-        <shaman-spell [spell]="spell"
-            [magik]="character.magik.current"
-            (onEvent)="onSpellEvent($event)">
-        </shaman-spell>
-    </div>
+<div *ngFor="let spell of character.spells;let index=$index" class="card">
+    <shaman-spell [spell]="spell"
+        [magik]="character.magik.current"
+        (onEvent)="onSpellEvent($event)">
+    </shaman-spell>
 </div>

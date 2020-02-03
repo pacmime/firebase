@@ -2,11 +2,11 @@
 
     <div *ngIf="!isEditing">
 
-        <div class="d-flex flex-justify-between flex-align-start">
+        <div class="no-pad m-grid flex-justify-between flex-align-start">
             <div class="a-special__check">{{spell.check}}+</div>
             <div class="flex-1 a-heading">
                 <mat-icon *ngIf="spell.deadly" color="warn">error</mat-icon>
-                {{spell.name}}
+                <span (click)="isCollapsed=!isCollapsed">{{spell.name}}</span>
                 <small>({{spell.type}})</small>
             </div>
             <div class="a-special__range">
@@ -21,11 +21,11 @@
             <strong>Range: </strong> {{spell.range||"N/A"}}
         </div> -->
 
-        <div class="desc u-sm">{{spell.desc}}</div>
+        <div class="desc u-sm" [ngClass]="{'is-hidden':isCollapsed}">{{spell.desc}}</div>
 
         <hr>
 
-        <div class="d-flex flex-justify-between flex-align-end">
+        <div class="no-pad m-grid flex-justify-between flex-align-end">
 
             <div class="flex-1">
                 <!-- if not cast already and not empty or insufficient -->
@@ -49,7 +49,7 @@
                 </span>
             </div>
 
-            <div class="flex-1 d-flex flex-justify-end flex-align-end">
+            <div class="no-pad flex-1 m-grid flex-justify-end flex-align-end">
 
                 <button class="u-sm" mat-flat-button color="accent" (click)="edit()">
                     <mat-icon>edit</mat-icon>
@@ -84,7 +84,7 @@
             </textarea>
         </div>
 
-        <div class="d-flex flex-justify-between flex-align-center">
+        <div class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col">
                 <label>Deadly?
                     <input type="checkbox" [(ngModel)]="editable.deadly">
@@ -106,7 +106,7 @@
             <input type="text" class="form-control" [(ngModel)]="editable.range">
         </div>
 
-        <div class="d-flex flex-justify-between flex-align-center">
+        <div class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col">
                 <label>Check</label>
                 <input type="number" class="form-control" [(ngModel)]="editable.check">
@@ -125,7 +125,7 @@
 
         <hr>
 
-        <div class="d-flex flex-justify-between">
+        <div class="m-grid gutter flex-justify-between">
             <button class="u-sm" mat-flat-button color="accent" (click)="cancelEditing()">cancel</button>
             <button class="u-sm" mat-flat-button color="primary" (click)="save()">save</button>
         </div>

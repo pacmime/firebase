@@ -1,0 +1,25 @@
+
+<div class="m-grid flex-justify-between flex-align-center">
+    <h4 class="u-text--sc flex-1">Uses</h4>
+    <button mat-flat-button color="accent" (click)="reset()">reset</button>
+</div>
+<hr>
+
+<div *ngFor="let item of items | hasUsage" class="card">
+
+    <div class="m-grid gutter flex-justify-between flex-align-center">
+        [{{item.usage}}]
+
+        <strong (click)="showDesc[item.name]=!showDesc[item.name]">{{item.name}}</strong>
+
+        <button mat-flat-button color="accent" (click)="use(item)"
+            [disabled]="item.used">
+            use
+        </button>
+    </div>
+    <div *ngIf="showDesc[item.name]" class="u-sm">
+        {{item.description}}
+        <br>
+    </div>
+
+</div>

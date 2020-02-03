@@ -1,6 +1,6 @@
 <div class="sidebag">
 
-    <div class="d-flex flex-align-center">
+    <div class="m-grid gutter flex-align-start">
         <h4 class="col u-text--sc">Sidebag</h4>
         <!-- <div class="sidebag__carrying">{{carrying}} / </div> -->
         <div>
@@ -16,14 +16,13 @@
     </div>
     <br>
 
-    <div class="m-grid">
+    <div class="m-grid gutter">
         <div *ngFor="let option of options" class="sidebag__option">
             <div class="sidebag__option__icon">
                 <span class="sprite sprite-{{option.label}}"></span>
             </div>
             <div class="flex-1">
-                <label>{{option.label}}</label>
-                <small class="help-block">{{option.description}}</small>
+                <label (click)="showDesc[option.label]=!showDesc[option.label]">{{option.label}}</label>
             </div>
             <div class="sidebag__control">
                 <button mat-flat-button color="warn" (click)="decrease(option.label)"
@@ -37,6 +36,10 @@
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
+
+            <small class="help-block" *ngIf="showDesc[option.label]">
+                {{option.description}}
+            </small>
 
         </div>
     </div>

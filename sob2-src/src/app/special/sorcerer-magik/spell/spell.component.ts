@@ -41,6 +41,7 @@ export class ElementalMagikSpellComponent implements OnInit {
 
     private editable: ElementalMagik;
 
+    public isCollapsed : boolean = true;
     public isEditing: boolean = false;
     public confirmingDelete : boolean = false;
 

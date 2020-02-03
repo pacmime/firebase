@@ -1,56 +1,54 @@
-<h4 class="d-flex flex-justify-between flex-align-center">
+<h4 class="m-grid gutter flex-justify-between flex-align-center">
     <div class="col u-text--sc">Gambler Tricks</div>
     <button mat-flat-button color="primary"
         (click)="openChooser()">New</button>
 </h4>
 
 <hr>
-<div class="d-flex flex-justify-between flex-align-center">
+<div class="m-grid gutter flex-justify-between flex-align-center">
     Current Fortune: {{character.fortune.current}} / {{maxFortune}}
     <button mat-flat-button color="accent" (click)="resetFortune()">Reset</button>
 </div>
 <hr>
 
-<div class="m-grid flex-align-stretch no-pad">
-    <div *ngFor="let trick of character.tricks; let i = index;" class="card">
-        <div class="d-flex flex-justify-between flex-align-end">
-            <div class="a-heading">
-                {{trick.name}}
-            </div>
-            <div class="a-special__cost--fortune">{{trick.cost||0}}</div>
+<div *ngFor="let trick of character.tricks; let i = index;" class="card">
+    <div class="m-grid gutter flex-justify-between flex-align-end">
+        <div class="a-heading">
+            {{trick.name}}
         </div>
-        <!-- <br>
-        <div *ngIf="trick.cost">
-            <strong>Cost: </strong> {{trick.cost}}
-        </div> -->
-        <div class="desc">{{trick.desc}}</div>
-        <div *ngIf="trick.modifiers">
-            <div *ngFor="let modifier of trick.modifiers">
-                {{modifier.affects}} : +{{modifier.value}}
-            </div>
+        <div class="a-special__cost--fortune">{{trick.cost||0}}</div>
+    </div>
+    <!-- <br>
+    <div *ngIf="trick.cost">
+        <strong>Cost: </strong> {{trick.cost}}
+    </div> -->
+    <div class="desc">{{trick.desc}}</div>
+    <div *ngIf="trick.modifiers">
+        <div *ngFor="let modifier of trick.modifiers">
+            {{modifier.affects}} : +{{modifier.value}}
         </div>
-        <hr>
-        <div class="d-flex flex-justify-between flex-align-center">
-            <div class="flex-1">
-                <button class="u-sm" mat-flat-button color="accent"
-                    [disabled]="!hasFortune()" (click)="spendFortune()">
-                    Use
-                </button>&nbsp;
-                <button class="u-sm" mat-flat-button color="accent"
-                    *ngIf="trick.xp" (click)="gainXP(trick.xp)">
-                    +{{trick.xp}} XP
-                </button>
-            </div>
-            <div class="d-flex flex-justify-end flex-align-end">
-                <button class="u-sm" mat-flat-button color="warn"
-                    (click)="confirmingDelete(i,true)"
-                    *ngIf="!confirmingDelete(i)">
-                    <mat-icon>delete_forever</mat-icon>
-                </button>
-                <div class="btn-group" *ngIf="confirmingDelete(i)">
-                    <button class="u-sm" mat-flat-button color="warn" (click)="remove(i)"><mat-icon>check_circle</mat-icon></button>
-                    <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)"><mat-icon>not_interested</mat-icon></button>
-                </div>
+    </div>
+    <hr>
+    <div class="m-grid gutter flex-justify-between flex-align-center">
+        <div class="flex-1">
+            <button class="u-sm" mat-flat-button color="accent"
+                [disabled]="!hasFortune()" (click)="spendFortune()">
+                Use
+            </button>&nbsp;
+            <button class="u-sm" mat-flat-button color="accent"
+                *ngIf="trick.xp" (click)="gainXP(trick.xp)">
+                +{{trick.xp}} XP
+            </button>
+        </div>
+        <div class="m-grid gutter flex-justify-end flex-align-end">
+            <button class="u-sm" mat-flat-button color="warn"
+                (click)="confirmingDelete(i,true)"
+                *ngIf="!confirmingDelete(i)">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
+            <div class="btn-group" *ngIf="confirmingDelete(i)">
+                <button class="u-sm" mat-flat-button color="warn" (click)="remove(i)"><mat-icon>check_circle</mat-icon></button>
+                <button class="u-sm" mat-flat-button color="accent" (click)="confirmingDelete(i,false)"><mat-icon>not_interested</mat-icon></button>
             </div>
         </div>
     </div>

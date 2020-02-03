@@ -25,7 +25,7 @@
     </div>
     <div class="manual-entry">
         <br>
-        <div class="d-flex flex-justify-around flex-align-stretch">
+        <div class="m-grid gutter flex-justify-around flex-align-stretch">
             <button mat-flat-button class="u-sm" color="accent" (click)="changeManual(-1)" (ngClass)="{disabled:!hasManual()}">-</button>
             <div class="col">
                 <input type="number" class="form-control" [(ngModel)]="manualAdj" placeholder="Adjust by ...">
@@ -40,7 +40,7 @@
     <div class="u-sm"><strong>Final Value:</strong> {{result}}</div>
 
 </div>
-<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+<div mat-dialog-actions class="m-grid gutter flex-justify-end flex-align-center">
     <a mat-flat-button color="accent" (click)="close()" aria-label="Close">Cancel</a>
     &nbsp;&nbsp;&nbsp;
     <a mat-flat-button color="primary" [mat-dialog-close]="result" aria-label="Apply">Apply</a>

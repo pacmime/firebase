@@ -44,16 +44,16 @@
         </mat-tab>
         <mat-tab label="Stats">
             <br>
-            <div class="d-flex flex-justify-between flex-align-center">
+            <div class="m-grid gutter flex-justify-between flex-align-center">
                 <div>Cost</div>
                 <input type="text" class="form-control flex-1 u-sm" [(ngModel)]="data.item.cost"
                     placeholder="Optionally, specify the cost">
             </div>
             <br>
-            <div class="d-flex flex-justify-between flex-align-center">
+            <div class="m-grid gutter flex-justify-between flex-align-center">
                 <div class="col" style="margin-right: 2em;">
 
-                    <div class="d-flex flex-justify-between flex-align-center">
+                    <div class="m-grid gutter flex-justify-between flex-align-center">
                         <img src="assets/item_weight.png" height="16">
                         <select type="text" class="form-control" [(ngModel)]="data.item.weight">
                             <option>None</option>
@@ -66,7 +66,7 @@
                         </select>
                     </div>
 
-                    <div class="d-flex flex-justify-between flex-align-center">
+                    <div class="m-grid gutter flex-justify-between flex-align-center">
                         <img src="assets/item_hands.png" height="16">
                         <select type="text" class="form-control" [(ngModel)]="data.item.hands">
                             <option>None</option>
@@ -80,7 +80,7 @@
 
                 <div class="col">
 
-                    <div class="d-flex flex-justify-between flex-align-center">
+                    <div class="m-grid gutter flex-justify-between flex-align-center">
                         <img src="assets/item_darkstone.png" height="16">
                         <select type="text" class="form-control" [(ngModel)]="data.item.darkstone">
                             <option>None</option>
@@ -93,7 +93,7 @@
                         </select>
                     </div>
 
-                    <div class="d-flex flex-justify-between flex-align-center">
+                    <div class="m-grid gutter flex-justify-between flex-align-center">
                         <img src="assets/item_slots.png" height="16">
                         <select type="text" class="form-control" [(ngModel)]="data.item.slots">
                             <option>None</option>
@@ -115,7 +115,7 @@
                 <mat-icon>add</mat-icon> Add
             </button>
 
-            <div class="d-flex flex-align-center flex-justify-between"
+            <div class="m-grid gutter flex-align-center flex-justify-between"
                 *ngFor="let modifier of data.item.modifiers">
 
                 <div class="col-2" id="modifier-{{id}}">
@@ -140,7 +140,7 @@
     </mat-tab-group>
 
 </div>
-<div mat-dialog-actions class="d-flex flex-justify-end flex-align-center">
+<div mat-dialog-actions class="m-grid gutter flex-justify-end flex-align-center">
     <a mat-flat-button color="light" (click)="close()" aria-label="Close">Cancel</a>
     &nbsp;&nbsp;&nbsp;
     <a mat-flat-button color="primary" [mat-dialog-close]="data.item" aria-label="Save">Save</a>

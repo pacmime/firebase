@@ -2,13 +2,13 @@
 <div class="p-mim">
 
     <div class="o-mutation-container">
-        <h4 class="d-flex flex-justify-between flex-align-center">
+        <h4 class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col u-text--sc">Mutations</div>
             <button mat-flat-button color="primary"
                 (click)="showAvailable.mutations=!showAvailable.mutations">New</button>
         </h4>
         <hr>
-        <div *ngIf="showAvailable.mutations" class="d-flex flex-justify-between flex-align-center">
+        <div *ngIf="showAvailable.mutations" class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col">
                 <br>
                 <select class="form-control" name="newMutation"
@@ -29,26 +29,21 @@
         </div>
 
         <div *ngFor="let mutation of mutations; let i = index" class="card">
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div class="a-heading">{{mutation.name}}</div>
-                <button class="u-sm" mat-flat-button color="warn"
-                    (click)="remove('mutations', i)">
-                    <mat-icon>delete_forever</mat-icon>
-                </button>
-            </div>
-            <div class="desc">{{mutation.desc}}</div>
-            <br>
-            <mat-chip-list *ngIf="mutation.modifiers" class="u-sm" [selectable]="false">
-                <mat-chip *ngFor="let modifier of mutation.modifiers">
-                    {{modifier.affects}} {{modifier.value|modifier}}
-                </mat-chip>
-            </mat-chip-list>
-            <!-- <br>
-            <div *ngIf="mutation.modifiers">
-                <div *ngFor="let modifier of mutation.modifiers">
-                    {{modifier.affects}} {{modifier.value|modifier}}
+            <div class="flex-1">
+                <span class="a-heading">{{mutation.name}}</span> - {{mutation.desc}}
+                <div *ngIf="mutation.modifiers">
+                    <hr>
+                    <mat-chip-list class="u-sm" [selectable]="false">
+                        <mat-chip *ngFor="let modifier of mutation.modifiers">
+                            {{modifier.affects}} {{modifier.value|modifier}}
+                        </mat-chip>
+                    </mat-chip-list>
                 </div>
-            </div> -->
+            </div>
+            <button class="u-sm" mat-flat-button color="warn"
+                (click)="remove('mutations', i)">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
         </div>
     </div>
 
@@ -56,13 +51,13 @@
 
 
     <div class="o-injury-container">
-        <h4 class="d-flex flex-justify-between flex-align-center">
+        <h4 class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col u-text--sc">Injuries</div>
             <button mat-flat-button color="primary"
                 (click)="showAvailable.injuries=!showAvailable.injuries">New</button>
         </h4>
         <hr>
-        <div *ngIf="showAvailable.injuries" class="d-flex flex-justify-between flex-align-center">
+        <div *ngIf="showAvailable.injuries" class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col">
                 <br>
                 <select class="form-control" name="newInjury"
@@ -82,25 +77,21 @@
             Add a new injury using the 'New' button.
         </div>
         <div *ngFor="let injury of injuries; let i = index" class="card">
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div class="a-heading">{{injury.name}}</div>
-                <button class="u-sm" mat-flat-button color="warn"
-                    (click)="remove('injuries', i)">
-                    <mat-icon>delete_forever</mat-icon>
-                </button>
-            </div>
-            <div class="desc">{{injury.desc}}</div>
-            <br>
-            <mat-chip-list *ngIf="injury.modifiers" class="u-sm" [selectable]="false">
-                <mat-chip *ngFor="let modifier of injury.modifiers">
-                    {{modifier.affects}} {{modifier.value|modifier}}
-                </mat-chip>
-            </mat-chip-list>
-            <!-- <div *ngIf="injury.modifiers">
-                <div *ngFor="let modifier of injury.modifiers">
-                    {{modifier.affects}} : +{{modifier.value}}
+            <div class="flex-1">
+                <span class="a-heading">{{injury.name}}</span> - {{injury.desc}}
+                <div *ngIf="injury.modifiers">
+                    <hr>
+                    <mat-chip-list class="u-sm" [selectable]="false">
+                        <mat-chip *ngFor="let modifier of injury.modifiers">
+                            {{modifier.affects}} {{modifier.value|modifier}}
+                        </mat-chip>
+                    </mat-chip-list>
                 </div>
-            </div> -->
+            </div>
+            <button class="u-sm" mat-flat-button color="warn"
+                (click)="remove('injuries', i)">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
         </div>
     </div>
 
@@ -109,13 +100,13 @@
 
 
     <div class="o-madness-container">
-        <h4 class="d-flex flex-justify-between flex-align-center">
+        <h4 class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col u-text--sc">Madness</div>
             <button mat-flat-button color="primary"
                 (click)="showAvailable.madness=!showAvailable.madness">New</button>
         </h4>
         <hr>
-        <div *ngIf="showAvailable.madness" class="d-flex flex-justify-between flex-align-center">
+        <div *ngIf="showAvailable.madness" class="m-grid gutter flex-justify-between flex-align-center">
             <div class="col">
                 <br>
                 <select class="form-control" name="newMadness"
@@ -135,24 +126,20 @@
             Add a new madness using the 'New' button.
         </div>
         <div *ngFor="let mad of madness; let i = index" class="card">
-            <div class="d-flex flex-justify-between flex-align-center">
-                <div class="a-heading">{{mad.name}}</div>
+            <div class="flex-1">
+                <span class="a-heading">{{mad.name}}</span> - {{mad.desc}}
+                <div *ngIf="mad.modifiers">
+                    <hr>
+                    <mat-chip-list class="u-sm" [selectable]="false">
+                        <mat-chip *ngFor="let modifier of mad.modifiers">
+                            {{modifier.affects}} {{modifier.value|modifier}}
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
                 <button class="u-sm" mat-flat-button color="warn" (click)="remove('madness', i)">
                     <mat-icon>delete_forever</mat-icon>
                 </button>
             </div>
-            <div class="desc">{{mad.desc}}</div>
-            <br>
-            <mat-chip-list *ngIf="mad.modifiers" class="u-sm" [selectable]="false">
-                <mat-chip *ngFor="let modifier of mad.modifiers">
-                    {{modifier.affects}} {{modifier.value|modifier}}
-                </mat-chip>
-            </mat-chip-list>
-            <!-- <div *ngIf="mad.modifiers">
-                <div *ngFor="let modifier of mad.modifiers">
-                    {{modifier.affects}} : +{{modifier.value}}
-                </div>
-            </div> -->
         </div>
     </div>
 </div>
