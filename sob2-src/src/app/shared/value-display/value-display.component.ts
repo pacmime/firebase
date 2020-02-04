@@ -110,34 +110,46 @@ export class ValueDisplayComponent implements OnInit, OnDestroy {
                 this.value * 1 > this.options.min * 1;
     }
 
-    openKeypad(): void {
-        let opts = {
+    getKeypadOpts() : any {
+        return {
             data: {
                 visible: true,
                 value : this.computed,
                 modifiers : this.modifiers
             }
         };
+    }
+
+    openKeypad(): void {
+        let opts = this.getKeypadOpts();
         const dialogRef = this.dialog.open(KeypadComponent, opts);
         this.subscription = dialogRef.afterClosed().subscribe( ( result : any ) => {
-            if( !isNaN(result) ) {
-                let change = result*1;
-                let current = this.value*1;
-                current += change - this.computed;
-                try {
-                    this.onValueChange(current);
-                } catch(e) {
-                    console.log("VD keypad - Error changing value: " + e.message);
-                }
-                try {
-                    this.onSave.emit({label:this.label,value:this.value});
-                } catch(e) {
-                    console.log("VD keypad - Error emitting save event " + e.message);
-                }
-            }
+            this.onKeypadChange(result);
             this.subscription.unsubscribe();
             this.subscription = null;
         });
+    }
+
+    onKeypadChange( result : any ) {
+        if( !isNaN(result) ) {
+            let current = this.applyKeypadChange(result*1);
+            try {
+                this.onValueChange(current);
+            } catch(e) {
+                console.log("VD keypad - Error changing value: " + e.message);
+            }
+            try {
+                this.onSave.emit({label:this.label,value:this.value});
+            } catch(e) {
+                console.log("VD keypad - Error emitting save event " + e.message);
+            }
+        }
+    }
+
+    applyKeypadChange( change : number ) : number {
+        let current = this.value*1;
+        current += change - this.computed;
+        return current;
     }
 
 }
@@ -246,5 +258,22 @@ export class ValueDisplayWithMaxComponent extends ValueDisplayComponent {
         } else {
             this.computed = this.max*1;
         }
+    }
+
+    /** @override */
+    getKeypadOpts() : any {
+        return {
+            data: {
+                visible: true,
+                value : this.value
+            }
+        };
+    }
+
+    /** @override */
+    applyKeypadChange( change : number ) : number {
+        let current = this.value*1;
+        current += change - this.value;
+        return current;
     }
 }

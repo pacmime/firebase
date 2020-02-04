@@ -36,6 +36,7 @@ export class ElementalMagikSpellComponent implements OnInit {
     @Input() spell: ElementalMagik;
     @Input() availableMana: number = 0;
     @Input() arcanePowder : number = 0;
+    @Input() focus        : string = null;
     @Input() eventSubject : Subject<{name:string,value:any}>;
     @Output() onEvent = new EventEmitter<{ name:string, value:any }>();
 
@@ -70,6 +71,17 @@ export class ElementalMagikSpellComponent implements OnInit {
                 removeFlag(this.spell, FLAGS.insufficient);
             }
         }
+    }
+
+    getCastCheck() : string {
+        let v : any = this.spell.check;
+        if(!v || isNaN(v)) return "-";
+        let check : number = v*1;
+        let type = this.spell.type;
+        if( type && this.focus && type.toLowerCase() == this.focus.toLowerCase() ) {
+            check -= 1;
+        }
+        return check + "+";
     }
 
 

@@ -131,7 +131,8 @@
                                 class="m-sidebag-chip m-grid gutter">
                                 <span class="sprite sprite-{{token.key}}"></span>
                                 {{token.key}} : {{token.value}}
-                                <button mat-flat-button class="u-sm" color="primary">
+                                <button mat-flat-button class="u-sm" color="primary"
+                                    (click)="useQuickSidebagToken(token.key)">
                                     use
                                 </button>
                             </div>
@@ -353,7 +354,7 @@
                     (onSave)="saveChar(null, $event)">
                 </attacks>
 
-                <char-uses [items]="character.items"
+                <char-uses [character]="character"
                         (onSave)="saveChar(null, $event)">
                 </char-uses>
 

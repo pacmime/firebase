@@ -3,7 +3,7 @@
     <div *ngIf="!isEditing">
 
         <div class="no-pad m-grid flex-justify-between flex-align-start">
-            <div class="a-special__check">{{spell.check}}+</div>
+            <div class="a-special__check">{{getCastCheck()}}</div>
             <div class="flex-1 a-heading">
                 <mat-icon *ngIf="spell.deadly" color="warn">error</mat-icon>
                 <span (click)="isCollapsed=!isCollapsed">{{spell.name}}</span>

@@ -1,0 +1,75 @@
+<div class="ability" *ngIf="!editing">
+
+    <div class="flex-1">
+        <span class="a-heading">{{ability.name}}</span> - {{ability.desc}}
+        <div *ngIf="ability.userInput">
+            <hr>
+            <small><strong>{{ability.userInput.name}}:</strong></small>
+            <input type="text" [(ngModel)]="ability.userInput.value">
+        </div>
+        <div *ngIf="ability.modifiers">
+            <hr>
+            <mat-chip-list class="u-sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of ability.modifiers">
+                    {{modifier.affects}} {{modifier.value|modifier}}
+                </mat-chip>
+            </mat-chip-list>
+        </div>
+    </div>
+    <div>
+        <button class="u-sm" mat-flat-button color="warn" (click)="confirming=true" *ngIf="!confirming">
+            <mat-icon>delete_forever</mat-icon>
+        </button>
+        <div class="btn-group" *ngIf="confirming===true">
+            <button class="u-sm" mat-flat-button color="warn" (click)="remove()"><mat-icon>check_circle</mat-icon></button>
+            <button class="u-sm" mat-flat-button color="accent" (click)="confirming=false"><mat-icon>not_interested</mat-icon></button>
+        </div>
+        <br>
+        <button class="u-sm" mat-flat-button color="accent" (click)="edit()"><mat-icon>edit</mat-icon></button>
+
+    </div>
+
+</div>
+
+<div class="ability" *ngIf="editing">
+
+    <div class="flex-1">
+
+        <div class="a-heading">{{ability.name}}</div>
+
+        <div class="form-group">
+            <label class="u-sm">Description</label>
+            <textarea rows="3" class="form-control input-sm" [(ngModel)]="editable.desc"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="u-sm">Use</label>
+            <select class="form-control" [(ngModel)]="editable.usage">
+                <option value="">N/A</option>
+                <option *ngFor="let use of ['Turn', 'Fight', 'Adventure']" [ngValue]="use">{{use}}</option>
+            </select>
+        </div>
+
+        <div class="form-group" *ngIf="ability.userInput">
+            <label class="u-sm">{{ability.userInput.name}}</label>
+            <input type="text" class="form-control input-sm" [(ngModel)]="editable.userInput.value">
+        </div>
+
+        <!-- <div *ngIf="ability.modifiers">
+            <hr>
+            <mat-chip-list class="u-sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of ability.modifiers">
+                    {{modifier.affects}} {{modifier.value|modifier}}
+                </mat-chip>
+            </mat-chip-list>
+        </div> -->
+
+
+        <div class="m-grid flex-justify-end flex-align-center">
+            <button class="u-sm" mat-flat-button color="accent" (click)="editing=false">cancel</button>
+            &nbsp;&nbsp;
+            <button class="u-sm" mat-flat-button color="primary" (click)="save()">save</button>
+        </div>
+    </div>
+
+</div>

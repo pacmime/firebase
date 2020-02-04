@@ -366,6 +366,11 @@ export class CharacterComponent implements OnInit {
         return satchel && satchel.equipped;
     }
 
+    useQuickSidebagToken(tokenKey : string) {
+        this.character.sidebag[tokenKey]-=1;
+        // this.scheduleSave();
+    }
+
 
     createMessage(title: string, message: string, canDismiss?: boolean) {
         let msg : IMessage = {

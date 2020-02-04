@@ -7,7 +7,18 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<h4 class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button mat-flat-button color=\"primary\" (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<div *ngFor=\"let ability of character.abilities; let i = index\" class=\"ability\">\n\n    <div class=\"flex-1\">\n        <span class=\"a-heading\">{{ability.name}}</span> - {{ability.desc}}\n        <div *ngIf=\"ability.userInput\">\n            <hr>\n            <small><strong>{{ability.userInput.name}}:</strong></small>\n            <input type=\"text\" [(ngModel)]=\"ability.userInput.value\">\n        </div>\n        <div *ngIf=\"ability.modifiers\">\n            <hr>\n            <mat-chip-list class=\"u-sm\" [selectable]=\"false\">\n                <mat-chip *ngFor=\"let modifier of ability.modifiers\">\n                    {{modifier.affects}} {{modifier.value|modifier}}\n                </mat-chip>\n            </mat-chip-list>\n        </div>\n    </div>\n    <div>\n        <button class=\"u-sm\" mat-flat-button color=\"warn\"\n            (click)=\"confirmingDelete(i,true)\"\n            *ngIf=\"!confirmingDelete(i)\">\n            <mat-icon>delete_forever</mat-icon>\n        </button>\n        <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n            <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"remove(i)\"><mat-icon>check_circle</mat-icon></button>\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete(i,false)\"><mat-icon>not_interested</mat-icon></button>\n        </div>\n    </div>\n\n</div>\n"
+module.exports = "\n<h4 class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"col u-text--sc\">Abilities</div>\n    <button mat-flat-button color=\"primary\" (click)=\"openChooser()\">New</button>\n</h4>\n<hr>\n\n<!-- <div *ngFor=\"let ability of character.abilities; let i = index\" class=\"ability\">\n\n    <div class=\"flex-1\">\n        <span class=\"a-heading\">{{ability.name}}</span> - {{ability.desc}}\n        <div *ngIf=\"ability.userInput\">\n            <hr>\n            <small><strong>{{ability.userInput.name}}:</strong></small>\n            <input type=\"text\" [(ngModel)]=\"ability.userInput.value\">\n        </div>\n        <div *ngIf=\"ability.modifiers\">\n            <hr>\n            <mat-chip-list class=\"u-sm\" [selectable]=\"false\">\n                <mat-chip *ngFor=\"let modifier of ability.modifiers\">\n                    {{modifier.affects}} {{modifier.value|modifier}}\n                </mat-chip>\n            </mat-chip-list>\n        </div>\n    </div>\n    <div>\n        <button class=\"u-sm\" mat-flat-button color=\"warn\"\n            (click)=\"confirmingDelete(i,true)\"\n            *ngIf=\"!confirmingDelete(i)\">\n            <mat-icon>delete_forever</mat-icon>\n        </button>\n        <div class=\"btn-group\" *ngIf=\"confirmingDelete(i)\">\n            <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"remove(i)\"><mat-icon>check_circle</mat-icon></button>\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete(i,false)\"><mat-icon>not_interested</mat-icon></button>\n        </div>\n    </div>\n\n</div> -->\n<ability *ngFor=\"let ability of character.abilities; let i = index\"\n    [ability]=\"ability\"\n    [index]=\"i\"\n    (onEvent)=\"onEvent($event)\">\n</ability>\n"
+
+/***/ }),
+
+/***/ "./node_modules/@angular-devkit/build-angular/node_modules/raw-loader/index.js!./src/app/abilities/ability/ability.component.html":
+/*!*******************************************************************************************************************************!*\
+  !*** ./node_modules/@angular-devkit/build-angular/node_modules/raw-loader!./src/app/abilities/ability/ability.component.html ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ability\" *ngIf=\"!editing\">\n\n    <div class=\"flex-1\">\n        <span class=\"a-heading\">{{ability.name}}</span> - {{ability.desc}}\n        <div *ngIf=\"ability.userInput\">\n            <hr>\n            <small><strong>{{ability.userInput.name}}:</strong></small>\n            <input type=\"text\" [(ngModel)]=\"ability.userInput.value\">\n        </div>\n        <div *ngIf=\"ability.modifiers\">\n            <hr>\n            <mat-chip-list class=\"u-sm\" [selectable]=\"false\">\n                <mat-chip *ngFor=\"let modifier of ability.modifiers\">\n                    {{modifier.affects}} {{modifier.value|modifier}}\n                </mat-chip>\n            </mat-chip-list>\n        </div>\n    </div>\n    <div>\n        <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"confirming=true\" *ngIf=\"!confirming\">\n            <mat-icon>delete_forever</mat-icon>\n        </button>\n        <div class=\"btn-group\" *ngIf=\"confirming===true\">\n            <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"remove()\"><mat-icon>check_circle</mat-icon></button>\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirming=false\"><mat-icon>not_interested</mat-icon></button>\n        </div>\n        <br>\n        <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"edit()\"><mat-icon>edit</mat-icon></button>\n\n    </div>\n\n</div>\n\n<div class=\"ability\" *ngIf=\"editing\">\n\n    <div class=\"flex-1\">\n\n        <div class=\"a-heading\">{{ability.name}}</div>\n\n        <div class=\"form-group\">\n            <label class=\"u-sm\">Description</label>\n            <textarea rows=\"3\" class=\"form-control input-sm\" [(ngModel)]=\"editable.desc\"></textarea>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"u-sm\">Use</label>\n            <select class=\"form-control\" [(ngModel)]=\"editable.usage\">\n                <option value=\"\">N/A</option>\n                <option *ngFor=\"let use of ['Turn', 'Fight', 'Adventure']\" [ngValue]=\"use\">{{use}}</option>\n            </select>\n        </div>\n\n        <div class=\"form-group\" *ngIf=\"ability.userInput\">\n            <label class=\"u-sm\">{{ability.userInput.name}}</label>\n            <input type=\"text\" class=\"form-control input-sm\" [(ngModel)]=\"editable.userInput.value\">\n        </div>\n\n        <!-- <div *ngIf=\"ability.modifiers\">\n            <hr>\n            <mat-chip-list class=\"u-sm\" [selectable]=\"false\">\n                <mat-chip *ngFor=\"let modifier of ability.modifiers\">\n                    {{modifier.affects}} {{modifier.value|modifier}}\n                </mat-chip>\n            </mat-chip-list>\n        </div> -->\n\n\n        <div class=\"m-grid flex-justify-end flex-align-center\">\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"editing=false\">cancel</button>\n            &nbsp;&nbsp;\n            <button class=\"u-sm\" mat-flat-button color=\"primary\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -73,7 +84,7 @@ module.exports = "<div class=\"avatar\">\n    <div class=\"image-wrapper\" (clic
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"character\" class=\"l-char old-style\">\n\n\n    <div class=\"l-page\">\n        <main class=\"m-grid gutter\">\n            <div class=\"p-overview flex-1\">\n\n                <div class=\"o-container--bio\">\n                    <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n                    <div class=\"bio\">\n                        <div *ngIf=\"!isEditingBio\">\n                            <h4>{{character.name}}</h4>\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                            <button class=\"u-sm edit-button\" mat-raised-button color=\"accent\" (click)=\"editBio()\">\n                                <mat-icon>edit</mat-icon>\n                            </button>\n                        </div>\n                        <div *ngIf=\"isEditingBio\">\n                            <label>Name</label>\n                            <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                            <label>Keywords</label>\n                            <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                            <button mat-flat-button color=\"accent\" (click)=\"cancelBioEdit()\">Cancel</button>\n                            &nbsp;\n                            <button mat-flat-button color=\"primary\" (click)=\"saveBio()\">Save</button>\n                        </div>\n                    </div>\n                </div>\n\n                <div class=\"m-grid u-sm t-combat\">\n                    <div class=\"flex-1\">\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Combat\"\n                                value=\"{{character.combat}}\"\n                                [modifiers]=\"modifiers.combat\"\n                                (onSave)=\"saveChar('combat', $event)\">\n                            </value-display>\n                            <value-display-with-max label=\"Grit\"\n                                value=\"{{character.grit.current}}\"\n                                max=\"{{character.grit.max}}\"\n                                [modifiers]=\"modifiers.grit\"\n                                [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                                (onSave)=\"saveChar('grit.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                    </div>\n                    <div class=\"flex-2\">\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Melee\"\n                                value=\"{{character.melee}}\"\n                                (onSave)=\"saveChar('melee', $event)\">\n                            </value-display>\n                            <value-display label=\"Ranged\"\n                                value=\"{{character.ranged}}\"\n                                (onSave)=\"saveChar('ranged', $event)\">\n                            </value-display>\n                        </div>\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Cover\"\n                                value=\"{{character.cover}}\"\n                                [modifiers]=\"modifiers.cover\"\n                                (onSave)=\"saveChar('cover', $event)\">\n                            </value-display>\n                            <value-display label=\"Endurance\"\n                                value=\"{{character.endurance}}\"\n                                [modifiers]=\"modifiers.endurance\"\n                                (onSave)=\"saveChar('endurance', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                </div>\n\n            </div>\n\n            <div class=\"p-main flex-2\">\n\n                <div class=\"o-container--attrs\">\n\n                    <div class=\"m-attributes\">\n                        <div  *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                            <value-display\n                                label=\"{{st}}\"\n                                value=\"{{character.stats[st]}}\"\n                                [modifiers]=\"modifiers[st]\"\n                                (onSave)=\"saveChar('stats.'+st, $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                    <div class=\"flex-1\">&nbsp;</div>\n                    <div class=\"m-stats\">\n                        <div class=\"flex-1 o-container\">\n                            <value-display label=\"Init\"\n                                value=\"{{character.init}}\"\n                                [modifiers]=\"modifiers.init\"\n                                (onSave)=\"saveChar('init', $event)\">\n                            </value-display>\n\n                            <value-display label=\"Move\"\n                                value=\"{{character.movement}}\"\n                                [options]=\"{min:-10}\"\n                                [modifiers]=\"modifiers.movement\"\n                                (onSave)=\"saveChar('movement', $event)\">\n                            </value-display>\n                        </div>\n\n                        <div class=\"flex-1 o-container\">\n                            <value-display label=\"Level\"\n                                value=\"{{character.level}}\"\n                                [canAdjust]=\"false\"\n                                (onSave)=\"saveChar('level', $event)\">\n                            </value-display>\n                            <xp-value-display label=\"XP\"\n                                value=\"{{character.xp}}\"\n                                [options]=\"{valueSize:'sm'}\"\n                                needed=\"{{xpLevels[character.level]}}\"\n                                (onSave)=\"saveChar('xp', $event)\">\n                            </xp-value-display>\n                        </div>\n                    </div>\n                </div>\n\n                <div *ngIf=\"character?.sidebag\">\n                    <br>\n                    <div class=\"m-grid u-sm\">\n                        <div *ngFor=\"let token of character?.sidebag | keyvalue\"\n                            class=\"m-grid gutter\">\n                            <div *ngIf=\"'capacity'!== token.key && (token.value*1)>0\"\n                                class=\"m-sidebag-chip m-grid gutter\">\n                                <span class=\"sprite sprite-{{token.key}}\"></span>\n                                {{token.key}} : {{token.value}}\n                                <button mat-flat-button class=\"u-sm\" color=\"primary\">\n                                    use\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <br>\n                </div>\n\n                <div class=\"o-corruption-container m-grid gutter u-sm\">\n\n                    <div class=\"m-group t-resources\">\n\n                        <div class=\"m-grid\">\n                            <value-display label=\"Wealth\"\n                                value=\"{{character.wealth}}\"\n                                [options]=\"{valueSize:'sm'}\"\n                                (onSave)=\"saveChar('wealth', $event)\">\n                            </value-display>\n                            <value-display label=\"Dark Stone\"\n                                value=\"{{character.darkstone}}\"\n                                [options]=\"{labelSize:'sm'}\"\n                                (onSave)=\"saveChar('darkstone', $event)\">\n                            </value-display>\n                            <value-display label=\"Tech\"\n                                value=\"{{character.techCurrency}}\"\n                                (onSave)=\"saveChar('techCurrency', $event)\">\n                            </value-display>\n                            <value-display label=\"Scrap\"\n                                value=\"{{character.scrapCurrency}}\"\n                                (onSave)=\"saveChar('scrapCurrency', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n\n                    <div class=\"m-group t-corruption\">\n                        <value-display-with-max label=\"Corruption\"\n                            value=\"{{character.corruption.current}}\"\n                            max=\"{{character.corruption.max}}\"\n                            [modifiers]=\"modifiers.corruption\"\n                            (onSave)=\"saveChar('corruption.current', $event)\">\n                        </value-display-with-max>\n                    </div>\n                    <div class=\"m-group\"\n                        *ngIf=\"hasFlag(CLASSES.PREACHER)||hasFlag(CLASSES.GAMBLER)||hasFlag(CLASSES.SHAMAN)||hasFlag(CLASSES.SORCERER)||hasFlag(CLASSES.SAMURAI)||hasFlag(CLASSES.MONK)\"\n                        [ngClass]=\"{'t-faith':hasFlag(CLASSES.PREACHER), 't-fortune':hasFlag(CLASSES.GAMBLER), 't-magik':hasFlag(CLASSES.SHAMAN), 't-mana':hasFlag(CLASSES.SORCERER), 't-fury':hasFlag(CLASSES.SAMURAI), 't-ki':hasFlag(CLASSES.MONK)}\">\n                        <div *ngIf=\"hasFlag(CLASSES.PREACHER)\">\n                            <value-display label=\"Faith\"\n                                value=\"{{character.faith}}\"\n                                [modifiers]=\"modifiers.faith\"\n                                (onSave)=\"saveChar('faith', $event)\">\n                            </value-display>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.GAMBLER)\">\n                            <value-display-with-max label=\"Fortune\"\n                                value=\"{{character.fortune.current}}\"\n                                max=\"{{character.fortune.max}}\"\n                                [modifiers]=\"modifiers.fortune\"\n                                [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                                (onSave)=\"saveChar('fortune.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SHAMAN)\">\n                            <value-display-with-max label=\"Magik\"\n                                value=\"{{character.magik.current}}\"\n                                max=\"{{character.magik.max}}\"\n                                [modifiers]=\"modifiers.magik\"\n                                [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                                (onSave)=\"saveChar('magik.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SAMURAI)\">\n                            <value-display-with-max label=\"Fury\"\n                                value=\"{{character.fury.current}}\"\n                                max=\"{{character.fury.max}}\"\n                                [modifiers]=\"modifiers.fury\"\n                                [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                                (onSave)=\"saveChar('fury.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.MONK)\">\n                            <value-display-with-max label=\"Ki\"\n                                value=\"{{character.ki.current}}\"\n                                max=\"{{character.ki.max}}\"\n                                [modifiers]=\"modifiers.ki\"\n                                [options]=\"{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}\"\n                                (onSave)=\"saveChar('ki.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SORCERER)\">\n                            <value-display label=\"Mana\"\n                                value=\"{{character.mana}}\"\n                                [modifiers]=\"modifiers.mana\"\n                                (onSave)=\"saveChar('mana', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                </div>\n\n                <div class=\"o-container--health-sanity m-grid\">\n\n                    <div class=\"m-group t-health\">\n                        <div class=\"m-grid gutter u-sm\">\n                            <div>\n                                <value-display-with-max label=\"Health\"\n                                    value=\"{{character.health.wounds}}\"\n                                    max=\"{{character.health.max}}\"\n                                    [modifiers]=\"modifiers.health\"\n                                    (onSave)=\"saveChar('health.wounds', $event)\">\n                                </value-display-with-max>\n                            </div>\n                            <div>\n                                <value-display label=\"Defense\"\n                                    value=\"{{character.defense}}\"\n                                    [modifiers]=\"modifiers.defense\"\n                                    (onSave)=\"saveChar('defense', $event)\">\n                                </value-display>\n                            </div>\n                            <div>\n                                <value-display label=\"Armor\"\n                                    value=\"{{character.armor}}\"\n                                    [modifiers]=\"modifiers.armor\"\n                                    (onSave)=\"saveChar('armor', $event)\">\n                                </value-display>\n                            </div>\n                        </div>\n                    </div>\n\n                    <div class=\"m-group t-sanity\">\n                        <div class=\"m-grid gutter u-sm\">\n                            <div>\n                                <value-display-with-max label=\"Sanity\"\n                                    value=\"{{character.sanity.loss}}\"\n                                    max=\"{{character.sanity.max}}\"\n                                    [modifiers]=\"modifiers.sanity\"\n                                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                                </value-display-with-max>\n                            </div>\n                            <div>\n                                <value-display label=\"Willpower\"\n                                    value=\"{{character.willpower}}\"\n                                    [modifiers]=\"modifiers.willpower\"\n                                    (onSave)=\"saveChar('willpower', $event)\">\n                                </value-display>\n                            </div>\n                            <div>\n                                <value-display  label=\"Spirit Armor\"\n                                    value=\"{{character.spiritArmor}}\"\n                                    [modifiers]=\"modifiers.spiritArmor\"\n                                    [options]=\"{labelSize:'sm'}\"\n                                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                                </value-display>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n\n            </div>\n\n        </main>\n    </div>\n\n\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-1\">\n                <abilities\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </abilities>\n            </div>\n            <div class=\"flex-1\">\n                <preacher-sermons *ngIf=\"hasFlag(CLASSES.PREACHER)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </preacher-sermons>\n\n                <shaman-spells *ngIf=\"hasFlag(CLASSES.SHAMAN)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </shaman-spells>\n\n                <samurai-tactics  *ngIf=\"hasFlag(CLASSES.SAMURAI)\"\n                     [character]=\"character\"\n                     [modifiers]=\"modifiers.fury\"\n                     (onSave)=\"saveChar(null, $event)\">\n                 </samurai-tactics>\n\n                <gambler-tricks *ngIf=\"hasFlag(CLASSES.GAMBLER)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </gambler-tricks>\n\n                <orphan-missions *ngIf=\"hasFlag(CLASSES.ORPHAN)\"\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </orphan-missions>\n\n                <sorcerer-elemental-magik *ngIf=\"hasFlag(CLASSES.SORCERER)\"\n                    [character]=\"character\"\n                    [modifiersMana]=\"modifiers.mana\"\n                    [modifiersArcanePowder]=\"modifiers.arcanePowder\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </sorcerer-elemental-magik>\n\n                <factions *ngIf=\"hasFlag(CLASSES.ASSASSIN) || hasFlag(CLASSES.TREDERRAN_VETERAN)\"\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </factions>\n\n\n\n                <attacks\n                    [attacks]=\"character.attacks\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </attacks>\n\n                <char-uses [items]=\"character.items\"\n                        (onSave)=\"saveChar(null, $event)\">\n                </char-uses>\n\n\n            </div>\n\n        </main>\n    </div>\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-2\">\n                <items [items]=\"character.items\"\n                       [weightLimit]=\"getWeightLimit()\"\n                        (onSave)=\"saveChar(null, $event)\">\n                </items>\n            </div>\n            <div class=\"flex-1\">\n                <sidebag\n                   [sidebag]=\"character.sidebag\"\n                   [modifiers]=\"modifiers.sidebag\"\n                   [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                   (onSave)=\"saveChar(null, $event)\">\n                </sidebag>\n            </div>\n        </main>\n    </div>\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-1\">\n                <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n            </div>\n\n            <div class=\"flex-1\">\n\n                <temporary-modifiers [mods]=\"character.temporaryMods\"\n                   (onSave)=\"saveChar('temporaryMods', $event)\">\n                </temporary-modifiers>\n\n                <char-notes [notes]=\"character.notes\"\n                   (onSave)=\"saveChar('notes', $event)\">\n                </char-notes>\n            </div>\n        </main>\n    </div>\n\n</div>\n"
+module.exports = "<div *ngIf=\"character\" class=\"l-char old-style\">\n\n\n    <div class=\"l-page\">\n        <main class=\"m-grid gutter\">\n            <div class=\"p-overview flex-1\">\n\n                <div class=\"o-container--bio\">\n                    <avatar (onSave)=\"saveChar('avatar', $event)\"></avatar>\n                    <div class=\"bio\">\n                        <div *ngIf=\"!isEditingBio\">\n                            <h4>{{character.name}}</h4>\n                            <div><small>{{character.class}}</small></div>\n                            <div><small><em>{{character.keywords}}</em></small></div>\n                            <button class=\"u-sm edit-button\" mat-raised-button color=\"accent\" (click)=\"editBio()\">\n                                <mat-icon>edit</mat-icon>\n                            </button>\n                        </div>\n                        <div *ngIf=\"isEditingBio\">\n                            <label>Name</label>\n                            <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.name\">\n\n                            <label>Keywords</label>\n                            <input type=\"test\" class=\"form-control\" [(ngModel)]=\"editableBio.keywords\">\n\n                            <button mat-flat-button color=\"accent\" (click)=\"cancelBioEdit()\">Cancel</button>\n                            &nbsp;\n                            <button mat-flat-button color=\"primary\" (click)=\"saveBio()\">Save</button>\n                        </div>\n                    </div>\n                </div>\n\n                <div class=\"m-grid u-sm t-combat\">\n                    <div class=\"flex-1\">\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Combat\"\n                                value=\"{{character.combat}}\"\n                                [modifiers]=\"modifiers.combat\"\n                                (onSave)=\"saveChar('combat', $event)\">\n                            </value-display>\n                            <value-display-with-max label=\"Grit\"\n                                value=\"{{character.grit.current}}\"\n                                max=\"{{character.grit.max}}\"\n                                [modifiers]=\"modifiers.grit\"\n                                [options]=\"{max:character.grit.max+(modifiers.grit?modifiers.grit.value:0)}\"\n                                (onSave)=\"saveChar('grit.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                    </div>\n                    <div class=\"flex-2\">\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Melee\"\n                                value=\"{{character.melee}}\"\n                                (onSave)=\"saveChar('melee', $event)\">\n                            </value-display>\n                            <value-display label=\"Ranged\"\n                                value=\"{{character.ranged}}\"\n                                (onSave)=\"saveChar('ranged', $event)\">\n                            </value-display>\n                        </div>\n                        <div class=\"m-grid gutter\">\n                            <value-display label=\"Cover\"\n                                value=\"{{character.cover}}\"\n                                [modifiers]=\"modifiers.cover\"\n                                (onSave)=\"saveChar('cover', $event)\">\n                            </value-display>\n                            <value-display label=\"Endurance\"\n                                value=\"{{character.endurance}}\"\n                                [modifiers]=\"modifiers.endurance\"\n                                (onSave)=\"saveChar('endurance', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                </div>\n\n            </div>\n\n            <div class=\"p-main flex-2\">\n\n                <div class=\"o-container--attrs\">\n\n                    <div class=\"m-attributes\">\n                        <div  *ngFor=\"let st of ['Agility','Cunning','Lore','Luck','Spirit','Strength']\">\n                            <value-display\n                                label=\"{{st}}\"\n                                value=\"{{character.stats[st]}}\"\n                                [modifiers]=\"modifiers[st]\"\n                                (onSave)=\"saveChar('stats.'+st, $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                    <div class=\"flex-1\">&nbsp;</div>\n                    <div class=\"m-stats\">\n                        <div class=\"flex-1 o-container\">\n                            <value-display label=\"Init\"\n                                value=\"{{character.init}}\"\n                                [modifiers]=\"modifiers.init\"\n                                (onSave)=\"saveChar('init', $event)\">\n                            </value-display>\n\n                            <value-display label=\"Move\"\n                                value=\"{{character.movement}}\"\n                                [options]=\"{min:-10}\"\n                                [modifiers]=\"modifiers.movement\"\n                                (onSave)=\"saveChar('movement', $event)\">\n                            </value-display>\n                        </div>\n\n                        <div class=\"flex-1 o-container\">\n                            <value-display label=\"Level\"\n                                value=\"{{character.level}}\"\n                                [canAdjust]=\"false\"\n                                (onSave)=\"saveChar('level', $event)\">\n                            </value-display>\n                            <xp-value-display label=\"XP\"\n                                value=\"{{character.xp}}\"\n                                [options]=\"{valueSize:'sm'}\"\n                                needed=\"{{xpLevels[character.level]}}\"\n                                (onSave)=\"saveChar('xp', $event)\">\n                            </xp-value-display>\n                        </div>\n                    </div>\n                </div>\n\n                <div *ngIf=\"character?.sidebag\">\n                    <br>\n                    <div class=\"m-grid u-sm\">\n                        <div *ngFor=\"let token of character?.sidebag | keyvalue\"\n                            class=\"m-grid gutter\">\n                            <div *ngIf=\"'capacity'!== token.key && (token.value*1)>0\"\n                                class=\"m-sidebag-chip m-grid gutter\">\n                                <span class=\"sprite sprite-{{token.key}}\"></span>\n                                {{token.key}} : {{token.value}}\n                                <button mat-flat-button class=\"u-sm\" color=\"primary\"\n                                    (click)=\"useQuickSidebagToken(token.key)\">\n                                    use\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <br>\n                </div>\n\n                <div class=\"o-corruption-container m-grid gutter u-sm\">\n\n                    <div class=\"m-group t-resources\">\n\n                        <div class=\"m-grid\">\n                            <value-display label=\"Wealth\"\n                                value=\"{{character.wealth}}\"\n                                [options]=\"{valueSize:'sm'}\"\n                                (onSave)=\"saveChar('wealth', $event)\">\n                            </value-display>\n                            <value-display label=\"Dark Stone\"\n                                value=\"{{character.darkstone}}\"\n                                [options]=\"{labelSize:'sm'}\"\n                                (onSave)=\"saveChar('darkstone', $event)\">\n                            </value-display>\n                            <value-display label=\"Tech\"\n                                value=\"{{character.techCurrency}}\"\n                                (onSave)=\"saveChar('techCurrency', $event)\">\n                            </value-display>\n                            <value-display label=\"Scrap\"\n                                value=\"{{character.scrapCurrency}}\"\n                                (onSave)=\"saveChar('scrapCurrency', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n\n                    <div class=\"m-group t-corruption\">\n                        <value-display-with-max label=\"Corruption\"\n                            value=\"{{character.corruption.current}}\"\n                            max=\"{{character.corruption.max}}\"\n                            [modifiers]=\"modifiers.corruption\"\n                            (onSave)=\"saveChar('corruption.current', $event)\">\n                        </value-display-with-max>\n                    </div>\n                    <div class=\"m-group\"\n                        *ngIf=\"hasFlag(CLASSES.PREACHER)||hasFlag(CLASSES.GAMBLER)||hasFlag(CLASSES.SHAMAN)||hasFlag(CLASSES.SORCERER)||hasFlag(CLASSES.SAMURAI)||hasFlag(CLASSES.MONK)\"\n                        [ngClass]=\"{'t-faith':hasFlag(CLASSES.PREACHER), 't-fortune':hasFlag(CLASSES.GAMBLER), 't-magik':hasFlag(CLASSES.SHAMAN), 't-mana':hasFlag(CLASSES.SORCERER), 't-fury':hasFlag(CLASSES.SAMURAI), 't-ki':hasFlag(CLASSES.MONK)}\">\n                        <div *ngIf=\"hasFlag(CLASSES.PREACHER)\">\n                            <value-display label=\"Faith\"\n                                value=\"{{character.faith}}\"\n                                [modifiers]=\"modifiers.faith\"\n                                (onSave)=\"saveChar('faith', $event)\">\n                            </value-display>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.GAMBLER)\">\n                            <value-display-with-max label=\"Fortune\"\n                                value=\"{{character.fortune.current}}\"\n                                max=\"{{character.fortune.max}}\"\n                                [modifiers]=\"modifiers.fortune\"\n                                [options]=\"{max:character.fortune.max+(modifiers.fortune?modifiers.fortune.value:0)}\"\n                                (onSave)=\"saveChar('fortune.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SHAMAN)\">\n                            <value-display-with-max label=\"Magik\"\n                                value=\"{{character.magik.current}}\"\n                                max=\"{{character.magik.max}}\"\n                                [modifiers]=\"modifiers.magik\"\n                                [options]=\"{max:character.magik.max+(modifiers.magik?modifiers.magik.value:0)}\"\n                                (onSave)=\"saveChar('magik.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SAMURAI)\">\n                            <value-display-with-max label=\"Fury\"\n                                value=\"{{character.fury.current}}\"\n                                max=\"{{character.fury.max}}\"\n                                [modifiers]=\"modifiers.fury\"\n                                [options]=\"{max:character.fury.max+(modifiers.fury?modifiers.fury.value:0)}\"\n                                (onSave)=\"saveChar('fury.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.MONK)\">\n                            <value-display-with-max label=\"Ki\"\n                                value=\"{{character.ki.current}}\"\n                                max=\"{{character.ki.max}}\"\n                                [modifiers]=\"modifiers.ki\"\n                                [options]=\"{max:character.ki.max+(modifiers.ki?modifiers.ki.value:0)}\"\n                                (onSave)=\"saveChar('ki.current', $event)\">\n                            </value-display-with-max>\n                        </div>\n                        <div *ngIf=\"hasFlag(CLASSES.SORCERER)\">\n                            <value-display label=\"Mana\"\n                                value=\"{{character.mana}}\"\n                                [modifiers]=\"modifiers.mana\"\n                                (onSave)=\"saveChar('mana', $event)\">\n                            </value-display>\n                        </div>\n                    </div>\n                </div>\n\n                <div class=\"o-container--health-sanity m-grid\">\n\n                    <div class=\"m-group t-health\">\n                        <div class=\"m-grid gutter u-sm\">\n                            <div>\n                                <value-display-with-max label=\"Health\"\n                                    value=\"{{character.health.wounds}}\"\n                                    max=\"{{character.health.max}}\"\n                                    [modifiers]=\"modifiers.health\"\n                                    (onSave)=\"saveChar('health.wounds', $event)\">\n                                </value-display-with-max>\n                            </div>\n                            <div>\n                                <value-display label=\"Defense\"\n                                    value=\"{{character.defense}}\"\n                                    [modifiers]=\"modifiers.defense\"\n                                    (onSave)=\"saveChar('defense', $event)\">\n                                </value-display>\n                            </div>\n                            <div>\n                                <value-display label=\"Armor\"\n                                    value=\"{{character.armor}}\"\n                                    [modifiers]=\"modifiers.armor\"\n                                    (onSave)=\"saveChar('armor', $event)\">\n                                </value-display>\n                            </div>\n                        </div>\n                    </div>\n\n                    <div class=\"m-group t-sanity\">\n                        <div class=\"m-grid gutter u-sm\">\n                            <div>\n                                <value-display-with-max label=\"Sanity\"\n                                    value=\"{{character.sanity.loss}}\"\n                                    max=\"{{character.sanity.max}}\"\n                                    [modifiers]=\"modifiers.sanity\"\n                                    (onSave)=\"saveChar('sanity.loss', $event)\">\n                                </value-display-with-max>\n                            </div>\n                            <div>\n                                <value-display label=\"Willpower\"\n                                    value=\"{{character.willpower}}\"\n                                    [modifiers]=\"modifiers.willpower\"\n                                    (onSave)=\"saveChar('willpower', $event)\">\n                                </value-display>\n                            </div>\n                            <div>\n                                <value-display  label=\"Spirit Armor\"\n                                    value=\"{{character.spiritArmor}}\"\n                                    [modifiers]=\"modifiers.spiritArmor\"\n                                    [options]=\"{labelSize:'sm'}\"\n                                    (onSave)=\"saveChar('spiritArmor', $event)\">\n                                </value-display>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n\n            </div>\n\n        </main>\n    </div>\n\n\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-1\">\n                <abilities\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </abilities>\n            </div>\n            <div class=\"flex-1\">\n                <preacher-sermons *ngIf=\"hasFlag(CLASSES.PREACHER)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.faith\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </preacher-sermons>\n\n                <shaman-spells *ngIf=\"hasFlag(CLASSES.SHAMAN)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.magik\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </shaman-spells>\n\n                <samurai-tactics  *ngIf=\"hasFlag(CLASSES.SAMURAI)\"\n                     [character]=\"character\"\n                     [modifiers]=\"modifiers.fury\"\n                     (onSave)=\"saveChar(null, $event)\">\n                 </samurai-tactics>\n\n                <gambler-tricks *ngIf=\"hasFlag(CLASSES.GAMBLER)\"\n                    [character]=\"character\"\n                    [modifiers]=\"modifiers.fortune\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </gambler-tricks>\n\n                <orphan-missions *ngIf=\"hasFlag(CLASSES.ORPHAN)\"\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </orphan-missions>\n\n                <sorcerer-elemental-magik *ngIf=\"hasFlag(CLASSES.SORCERER)\"\n                    [character]=\"character\"\n                    [modifiersMana]=\"modifiers.mana\"\n                    [modifiersArcanePowder]=\"modifiers.arcanePowder\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </sorcerer-elemental-magik>\n\n                <factions *ngIf=\"hasFlag(CLASSES.ASSASSIN) || hasFlag(CLASSES.TREDERRAN_VETERAN)\"\n                    [character]=\"character\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </factions>\n\n\n\n                <attacks\n                    [attacks]=\"character.attacks\"\n                    (onSave)=\"saveChar(null, $event)\">\n                </attacks>\n\n                <char-uses [character]=\"character\"\n                        (onSave)=\"saveChar(null, $event)\">\n                </char-uses>\n\n\n            </div>\n\n        </main>\n    </div>\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-2\">\n                <items [items]=\"character.items\"\n                       [weightLimit]=\"getWeightLimit()\"\n                        (onSave)=\"saveChar(null, $event)\">\n                </items>\n            </div>\n            <div class=\"flex-1\">\n                <sidebag\n                   [sidebag]=\"character.sidebag\"\n                   [modifiers]=\"modifiers.sidebag\"\n                   [hasDynamiteSatchel]=\"hasDynamiteSatchel()\"\n                   (onSave)=\"saveChar(null, $event)\">\n                </sidebag>\n            </div>\n        </main>\n    </div>\n\n\n    <div class=\"l-page--wide\">\n        <main class=\"m-grid gutter\">\n            <div class=\"flex-1\">\n                <mim [current]=\"character.mutations\" (onSave)=\"saveChar(null, $event)\"></mim>\n            </div>\n\n            <div class=\"flex-1\">\n\n                <temporary-modifiers [mods]=\"character.temporaryMods\"\n                   (onSave)=\"saveChar('temporaryMods', $event)\">\n                </temporary-modifiers>\n\n                <char-notes [notes]=\"character.notes\"\n                   (onSave)=\"saveChar('notes', $event)\">\n                </char-notes>\n            </div>\n        </main>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -128,7 +139,7 @@ module.exports = "<!-- no title to reduce height -->\n<div mat-dialog-content>\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"m-grid flex-justify-between flex-align-start\">\n\n    <div class=\"a-heading\" (click)=\"isCollapsed=!isCollapsed\">{{item.name}}</div>\n\n    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"equipItem()\">\n        <mat-icon>{{item.equipped?'check_box':'check_box_outline_blank'}}</mat-icon>\n        Equip<span *ngIf=\"item.slot\"> ({{item.slot}})</span>\n    </button>\n\n</div>\n\n<div class=\"item__metadata m-grid flex-justify-between flex-align-start u-sm\">\n    <span>{{item.source||\"\"}}</span>\n    <em>{{item.keywords||\"\"}}</em>\n    <span *ngIf=\"item.cost\">${{item.cost||0}}</span>\n</div>\n\n<div class=\"item__desc u-sm\" *ngIf=\"item.description\">{{item.description}}</div>\n\n<div class=\"item__stats\">\n    <div [ngClass]=\"{faded:!item.weight}\">\n        <span class=\"sprite sprite-item_weight\"></span> {{item.weight||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.darkstone}\">\n        <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.hands}\">\n        <span class=\"sprite sprite-item_hands\"></span> {{item.hands||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.slots}\">\n        <span class=\"sprite sprite-item_slots\" ></span> {{item.slots||0}}\n    </div>\n</div>\n\n\n<div class=\"item__modifiers\">\n    <mat-chip-list *ngIf=\"item.modifiers\" class=\"u-sm\" [selectable]=\"false\">\n        <mat-chip *ngFor=\"let modifier of item.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </mat-chip>\n    </mat-chip-list>\n</div>\n\n<div class=\"item__actions m-grid flex-justify-between flex-align-end\">\n\n    <button *ngIf=\"!!item.usage\" class=\"u-sm\" mat-flat-button color=\"success\" (click)=\"item.used=!item.used\">\n        <mat-icon>{{item.used?'check_box':'check_box_outline_blank'}}</mat-icon>\n        Use ({{\"Adventure\"===item.usage?\"Adv\" : item.usage}})\n    </button>\n\n    <div class=\"flex-1\">&nbsp;</div>\n\n    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"editItem()\">\n        <mat-icon>edit</mat-icon>\n    </button>\n    &nbsp;&nbsp;&nbsp;\n    <button class=\"u-sm\" mat-flat-button color=\"warn\"\n        (click)=\"confirmingDelete(true)\"\n        *ngIf=\"!confirmingDelete()\">\n        <mat-icon>delete_forever</mat-icon>\n    </button>\n    <div class=\"btn-group\" *ngIf=\"confirmingDelete()\">\n        <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"removeItem()\">\n            <mat-icon>check_circle</mat-icon>\n        </button>\n        <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete(false)\">\n            <mat-icon>not_interested</mat-icon>\n        </button>\n    </div>\n</div>\n"
+module.exports = "<div class=\"m-grid flex-justify-between flex-align-start no-wrap\">\n\n    <div class=\"a-heading\" (click)=\"isCollapsed=!isCollapsed\">{{item.name}}</div>\n\n    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"equipItem()\">\n        <mat-icon>{{item.equipped?'check_box':'check_box_outline_blank'}}</mat-icon>\n        Equip<span *ngIf=\"item.slot\"> ({{item.slot}})</span>\n    </button>\n\n</div>\n\n<div class=\"item__metadata m-grid flex-justify-between flex-align-start u-sm\">\n    <span>{{item.source||\"\"}}</span>\n    <em>{{item.keywords||\"\"}}</em>\n    <span *ngIf=\"item.cost\">${{item.cost||0}}</span>\n</div>\n\n<div class=\"item__desc u-sm\" *ngIf=\"item.description\">{{item.description}}</div>\n\n<div class=\"item__stats\">\n    <div [ngClass]=\"{faded:!item.weight}\">\n        <span class=\"sprite sprite-item_weight\"></span> {{item.weight||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.darkstone}\">\n        <span class=\"sprite sprite-item_darkstone\"></span> {{item.darkstone||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.hands}\">\n        <span class=\"sprite sprite-item_hands\"></span> {{item.hands||0}}\n    </div>\n    <div [ngClass]=\"{faded:!item.slots}\">\n        <span class=\"sprite sprite-item_slots\" ></span> {{item.slots||0}}\n    </div>\n</div>\n\n\n<div class=\"item__modifiers\">\n    <mat-chip-list *ngIf=\"item.modifiers\" class=\"u-sm\" [selectable]=\"false\">\n        <mat-chip *ngFor=\"let modifier of item.modifiers\">\n            {{modifier.affects}} {{modifier.value|modifier}}\n        </mat-chip>\n    </mat-chip-list>\n</div>\n\n<div class=\"item__actions m-grid flex-justify-between flex-align-end\">\n\n    <button *ngIf=\"!!item.usage\" class=\"u-sm\" mat-flat-button color=\"success\" (click)=\"item.used=!item.used\">\n        <mat-icon>{{item.used?'check_box':'check_box_outline_blank'}}</mat-icon>\n        Use ({{\"Adventure\"===item.usage?\"Adv\" : item.usage}})\n    </button>\n\n    <div class=\"flex-1\">&nbsp;</div>\n\n    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"editItem()\">\n        <mat-icon>edit</mat-icon>\n    </button>\n    &nbsp;&nbsp;&nbsp;\n    <button class=\"u-sm\" mat-flat-button color=\"warn\"\n        (click)=\"confirmingDelete(true)\"\n        *ngIf=\"!confirmingDelete()\">\n        <mat-icon>delete_forever</mat-icon>\n    </button>\n    <div class=\"btn-group\" *ngIf=\"confirmingDelete()\">\n        <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"removeItem()\">\n            <mat-icon>check_circle</mat-icon>\n        </button>\n        <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete(false)\">\n            <mat-icon>not_interested</mat-icon>\n        </button>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -205,7 +216,7 @@ module.exports = "\n<h4 class=\"u-text--sc\">Temporary Modifiers</h4>\n<hr>\n\n<
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"m-grid flex-justify-between flex-align-center\">\n    <h4 class=\"u-text--sc flex-1\">Uses</h4>\n    <button mat-flat-button color=\"accent\" (click)=\"reset()\">reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let item of items | hasUsage\" class=\"card\">\n\n    <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n        [{{item.usage}}]\n\n        <strong (click)=\"showDesc[item.name]=!showDesc[item.name]\">{{item.name}}</strong>\n\n        <button mat-flat-button color=\"accent\" (click)=\"use(item)\"\n            [disabled]=\"item.used\">\n            use\n        </button>\n    </div>\n    <div *ngIf=\"showDesc[item.name]\" class=\"u-sm\">\n        {{item.description}}\n        <br>\n    </div>\n\n</div>\n"
+module.exports = "\n<div class=\"m-grid flex-justify-between flex-align-center\">\n    <h4 class=\"u-text--sc flex-1\">Uses</h4>\n    <div class=\"m-grid flex-align-center gutter\">\n        <span>Reset: </span>\n        <button class=\"u-sm\" mat-raised-button color=\"accent\" (click)=\"reset('Turn')\">Turn</button>\n        <button class=\"u-sm\" mat-raised-button color=\"accent\" (click)=\"reset('Fight')\">Fight</button>\n        <button class=\"u-sm\" mat-raised-button color=\"accent\" (click)=\"reset('Adventure')\">Adventure</button>\n    </div>\n</div>\n<hr>\n\n<!-- Abilities -->\n<div *ngFor=\"let ability of character?.abilities | hasUsage\" class=\"card\">\n    <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n        [{{ability.usage}}]\n        <strong (click)=\"showDesc[ability.name]=!showDesc[ability.name]\">{{ability.name}}</strong>\n        <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"use(ability)\"\n            [disabled]=\"ability.used\">\n            use\n        </button>\n    </div>\n    <div *ngIf=\"showDesc[ability.name]\" class=\"u-sm\">{{ability.desc}}<br></div>\n</div>\n\n<!-- Items -->\n<div *ngFor=\"let item of character?.items | hasUsage\" class=\"card\">\n    <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n        [{{item.usage}}]\n        <strong (click)=\"showDesc[item.name]=!showDesc[item.name]\">{{item.name}}</strong>\n        <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"use(item)\"\n            [disabled]=\"item.used\">\n            use\n        </button>\n    </div>\n    <div *ngIf=\"showDesc[item.name]\" class=\"u-sm\">{{item.description}}<br></div>\n</div>\n"
 
 /***/ }),
 
@@ -403,7 +414,7 @@ module.exports = "<div [@dialog] *ngIf=\"visible\" class=\"dialog\">\n    <div c
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\" u-text--sc\">Elemental Magik</div>\n    <button mat-flat-button color=\"primary\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"flex-1\">\n        <strong>Mana:</strong>\n        {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]\n    </div>\n    <button mat-flat-button color=\"accent\" (click)=\"reset()\">Reset</button>\n</div>\n<hr>\n<div class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"flex-1\">\n        <strong>Arcane Powder:</strong>\n        {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]\n    </div>\n    <button class=\"u-sm\" mat-flat-button color=\"accent\"\n        (click)=\"useArcanePowder()\" *ngIf=\"arcanePowder>0\">Use</button>\n    <button class=\"u-sm\" mat-flat-button color=\"accent\"\n        (click)=\"resetArcanePowder()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let magik of character.elementalMagik\" class=\"card\">\n    <magik [spell]=\"magik\"\n        [eventSubject]=\"eventSubject\"\n        (onEvent)=\"onEvent($event)\"\n        [availableMana]=\"getAvailableMana()\"\n        [arcanePowder]=\"arcanePowder\">\n    </magik>\n</div>\n"
+module.exports = "<h4 class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\" u-text--sc\">Elemental Magik</div>\n    <button mat-flat-button color=\"primary\" (click)=\"openChooser()\">New</button>\n</h4>\n\n<hr>\n<div class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"flex-1\">\n        <strong>Mana:</strong>\n        {{getAvailableMana()}} / {{maxMana+getManaModifier()}}  [+{{modifiersMana?.value||0}}]\n    </div>\n    <button class=\"u-sm\" mat-raised-button color=\"accent\" (click)=\"reset()\">Reset</button>\n</div>\n<hr>\n<div class=\"m-grid gutter flex-justify-between flex-align-center\">\n    <div class=\"flex-1\">\n        <strong>Arcane Powder:</strong>\n        {{arcanePowder}} / {{arcanePowderMax}} [+{{modifiersArcanePowder?.value||0}}]\n    </div>\n    <button class=\"u-sm\" mat-raised-button color=\"accent\"\n        (click)=\"useArcanePowder()\" *ngIf=\"arcanePowder>0\">Use</button>\n    <button class=\"u-sm\" mat-raised-button color=\"accent\"\n        (click)=\"resetArcanePowder()\">Reset</button>\n</div>\n<hr>\n\n<div *ngFor=\"let magik of character.elementalMagik\" class=\"card\">\n    <magik [spell]=\"magik\" [focus]=\"focusType\"\n        [eventSubject]=\"eventSubject\"\n        [availableMana]=\"getAvailableMana()\"\n        [arcanePowder]=\"arcanePowder\"\n        (onEvent)=\"onEvent($event)\">\n    </magik>\n</div>\n"
 
 /***/ }),
 
@@ -414,7 +425,7 @@ module.exports = "<h4 class=\"m-grid gutter flex-justify-between flex-align-cent
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"spell\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <div class=\"no-pad m-grid flex-justify-between flex-align-start\">\n            <div class=\"a-special__check\">{{spell.check}}+</div>\n            <div class=\"flex-1 a-heading\">\n                <mat-icon *ngIf=\"spell.deadly\" color=\"warn\">error</mat-icon>\n                <span (click)=\"isCollapsed=!isCollapsed\">{{spell.name}}</span>\n                <small>({{spell.type}})</small>\n            </div>\n            <div class=\"a-special__range\">\n                <mat-icon>double_arrow</mat-icon>\n                {{spell.range||\"-\"}}\n            </div>\n            <div class=\"a-special__cost--mana\">{{spell.cost||\"0\"}}</div>\n        </div>\n\n        <!-- <div class=\"u-sm\">\n            <strong>Cost: </strong> {{spell.cost||\"N/A\"}} ;\n            <strong>Range: </strong> {{spell.range||\"N/A\"}}\n        </div> -->\n\n        <div class=\"desc u-sm\" [ngClass]=\"{'is-hidden':isCollapsed}\">{{spell.desc}}</div>\n\n        <hr>\n\n        <div class=\"no-pad m-grid flex-justify-between flex-align-end\">\n\n            <div class=\"flex-1\">\n                <!-- if not cast already and not empty or insufficient -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canCast()\" (click)=\"use()\">Cast</button>\n\n                <!-- if cast but not empty -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canSpendPowder()\"\n                    (click)=\"spendArcanePowder()\">+powder</button>\n\n                <!-- if cast but no applied xp -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">\n                    + {{spell.xp}} XP\n                </button>\n\n                <!-- if empty or not cast and insufficient -->\n                <span *ngIf=\"isInsufficient()\">\n                    <em>not enough mana</em>\n                </span>\n            </div>\n\n            <div class=\"no-pad flex-1 m-grid flex-justify-end flex-align-end\">\n\n                <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"edit()\">\n                    <mat-icon>edit</mat-icon>\n                </button>\n                &nbsp;&nbsp;&nbsp;\n                <button class=\"u-sm\" mat-flat-button color=\"warn\"\n                    (click)=\"confirmingDelete=true\"\n                    *ngIf=\"!confirmingDelete\">\n                    <mat-icon>delete_forever</mat-icon>\n                </button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"remove()\"><mat-icon>check_circle</mat-icon></button>\n                    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete=false\"><mat-icon>not_interested</mat-icon></button>\n                </div>\n            </div>\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this spell\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Earth\">Earth</option>\n                    <option value=\"Fire\">Fire</option>\n                    <option value=\"Water\">Water</option>\n                    <option value=\"Wind\">Wind</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"m-grid gutter flex-justify-between\">\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"cancelEditing()\">cancel</button>\n            <button class=\"u-sm\" mat-flat-button color=\"primary\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
+module.exports = "<div class=\"spell\">\n\n    <div *ngIf=\"!isEditing\">\n\n        <div class=\"no-pad m-grid flex-justify-between flex-align-start\">\n            <div class=\"a-special__check\">{{getCastCheck()}}</div>\n            <div class=\"flex-1 a-heading\">\n                <mat-icon *ngIf=\"spell.deadly\" color=\"warn\">error</mat-icon>\n                <span (click)=\"isCollapsed=!isCollapsed\">{{spell.name}}</span>\n                <small>({{spell.type}})</small>\n            </div>\n            <div class=\"a-special__range\">\n                <mat-icon>double_arrow</mat-icon>\n                {{spell.range||\"-\"}}\n            </div>\n            <div class=\"a-special__cost--mana\">{{spell.cost||\"0\"}}</div>\n        </div>\n\n        <!-- <div class=\"u-sm\">\n            <strong>Cost: </strong> {{spell.cost||\"N/A\"}} ;\n            <strong>Range: </strong> {{spell.range||\"N/A\"}}\n        </div> -->\n\n        <div class=\"desc u-sm\" [ngClass]=\"{'is-hidden':isCollapsed}\">{{spell.desc}}</div>\n\n        <hr>\n\n        <div class=\"no-pad m-grid flex-justify-between flex-align-end\">\n\n            <div class=\"flex-1\">\n                <!-- if not cast already and not empty or insufficient -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canCast()\" (click)=\"use()\">Cast</button>\n\n                <!-- if cast but not empty -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canSpendPowder()\"\n                    (click)=\"spendArcanePowder()\">+powder</button>\n\n                <!-- if cast but no applied xp -->\n                <button class=\"u-sm\" mat-flat-button color=\"accent\"\n                    *ngIf=\"canApplyXP()\" (click)=\"applyXP()\">\n                    + {{spell.xp}} XP\n                </button>\n\n                <!-- if empty or not cast and insufficient -->\n                <span *ngIf=\"isInsufficient()\">\n                    <em>not enough mana</em>\n                </span>\n            </div>\n\n            <div class=\"no-pad flex-1 m-grid flex-justify-end flex-align-end\">\n\n                <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"edit()\">\n                    <mat-icon>edit</mat-icon>\n                </button>\n                &nbsp;&nbsp;&nbsp;\n                <button class=\"u-sm\" mat-flat-button color=\"warn\"\n                    (click)=\"confirmingDelete=true\"\n                    *ngIf=\"!confirmingDelete\">\n                    <mat-icon>delete_forever</mat-icon>\n                </button>\n                <div class=\"btn-group\" *ngIf=\"confirmingDelete\">\n                    <button class=\"u-sm\" mat-flat-button color=\"warn\" (click)=\"remove()\"><mat-icon>check_circle</mat-icon></button>\n                    <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"confirmingDelete=false\"><mat-icon>not_interested</mat-icon></button>\n                </div>\n            </div>\n\n        </div>\n\n    </div>\n\n    <div *ngIf=\"isEditing\">\n        <div>\n            <label>Name</label>\n            <input type=\"text\" class=\"form-control\"\n                [(ngModel)]=\"editable.name\"\n                placeholder=\"Name this spell\">\n        </div>\n\n        <div>\n            <label>Cost</label>\n            <textarea rows=\"3\" class=\"form-control\" [(ngModel)]=\"editable.desc\">\n            </textarea>\n        </div>\n\n        <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Deadly?\n                    <input type=\"checkbox\" [(ngModel)]=\"editable.deadly\">\n                </label>\n            </div>\n            <div class=\"col-2\">\n                <label>Type</label>\n                <select class=\"form-control\" [(ngModel)]=\"editable.type\">\n                    <option value=\"Earth\">Earth</option>\n                    <option value=\"Fire\">Fire</option>\n                    <option value=\"Water\">Water</option>\n                    <option value=\"Wind\">Wind</option>\n                </select>\n            </div>\n        </div>\n\n        <div>\n            <label>Range</label>\n            <input type=\"text\" class=\"form-control\" [(ngModel)]=\"editable.range\">\n        </div>\n\n        <div class=\"m-grid gutter flex-justify-between flex-align-center\">\n            <div class=\"col\">\n                <label>Check</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.check\">\n            </div>\n\n            <div class=\"col\">\n                <label>Cost</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.cost\">\n            </div>\n\n            <div class=\"col\">\n                <label>XP</label>\n                <input type=\"number\" class=\"form-control\" [(ngModel)]=\"editable.xp\">\n            </div>\n        </div>\n\n        <hr>\n\n        <div class=\"m-grid gutter flex-justify-between\">\n            <button class=\"u-sm\" mat-flat-button color=\"accent\" (click)=\"cancelEditing()\">cancel</button>\n            <button class=\"u-sm\" mat-flat-button color=\"primary\" (click)=\"save()\">save</button>\n        </div>\n    </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -614,6 +625,20 @@ let AbilitiesComponent = class AbilitiesComponent {
             return this.confirming[index];
         }
     }
+    onEvent($event) {
+        let type = $event.type;
+        let position = $event.index;
+        switch (type) {
+            case 'ability.remove':
+                this.remove(position);
+                break;
+            case 'ability.update':
+                let ability = $event.value;
+                this.character.abilities[position] = ability;
+                this.onSave.emit({});
+                break;
+        }
+    }
 };
 AbilitiesComponent.ctorParameters = () => [
     { type: _firestore_service__WEBPACK_IMPORTED_MODULE_3__["FirestoreService"] },
@@ -640,6 +665,83 @@ AbilitiesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_firestore_service__WEBPACK_IMPORTED_MODULE_3__["FirestoreService"],
         _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"]])
 ], AbilitiesComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/abilities/ability/ability.component.less":
+/*!**********************************************************!*\
+  !*** ./src/app/abilities/ability/ability.component.less ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".card .desc {\n  font-size: 0.875em;\n  color: #555;\n  text-align: justify;\n}\n.ability {\n  display: -webkit-box;\n  display: flex;\n  background: rgba(255, 255, 255, 0.75);\n  margin: 0.5em 0;\n  padding: 0.5em;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);\n  width: 100%;\n  border-radius: 4px;\n  font-size: 0.875em;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9wYXRyaWNrbi9Db2RlL3BlcnNvbmFsL2ZpcmViYXNlL3NvYjItc3JjL3NyYy9hcHAvYWJpbGl0aWVzL2FiaWxpdHkvYWJpbGl0eS5jb21wb25lbnQubGVzcyIsInNyYy9hcHAvYWJpbGl0aWVzL2FiaWxpdHkvYWJpbGl0eS5jb21wb25lbnQubGVzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNJLGtCQUFBO0VBQ0EsV0FBQTtFQUNBLG1CQUFBO0FDQUo7QURJQTtFQUNJLG9CQUFBO0VBQUEsYUFBQTtFQUNBLHFDQUFBO0VBQ0EsZUFBQTtFQUNBLGNBQUE7RUFDQSx3Q0FBQTtFQUNBLFdBQUE7RUFDQSxrQkFBQTtFQUNBLGtCQUFBO0FDRkoiLCJmaWxlIjoic3JjL2FwcC9hYmlsaXRpZXMvYWJpbGl0eS9hYmlsaXR5LmNvbXBvbmVudC5sZXNzIiwic291cmNlc0NvbnRlbnQiOlsiXG4uY2FyZCAuZGVzYyB7XG4gICAgZm9udC1zaXplOiAwLjg3NWVtO1xuICAgIGNvbG9yOiAjNTU1O1xuICAgIHRleHQtYWxpZ246IGp1c3RpZnk7XG59XG5cblxuLmFiaWxpdHkge1xuICAgIGRpc3BsYXkgICAgIDogZmxleDtcbiAgICBiYWNrZ3JvdW5kICA6IHJnYmEoMjU1LDI1NSwyNTUsMC43NSk7XG4gICAgbWFyZ2luICAgICAgOiAwLjVlbSAwO1xuICAgIHBhZGRpbmcgICAgIDogMC41ZW07XG4gICAgYm94LXNoYWRvdyAgOiAwIDFweCAzcHggcmdiYSgwLDAsMCwwLjIpO1xuICAgIHdpZHRoICAgICAgIDogMTAwJTtcbiAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgZm9udC1zaXplICAgOiAwLjg3NWVtO1xufVxuIiwiLmNhcmQgLmRlc2Mge1xuICBmb250LXNpemU6IDAuODc1ZW07XG4gIGNvbG9yOiAjNTU1O1xuICB0ZXh0LWFsaWduOiBqdXN0aWZ5O1xufVxuLmFiaWxpdHkge1xuICBkaXNwbGF5OiBmbGV4O1xuICBiYWNrZ3JvdW5kOiByZ2JhKDI1NSwgMjU1LCAyNTUsIDAuNzUpO1xuICBtYXJnaW46IDAuNWVtIDA7XG4gIHBhZGRpbmc6IDAuNWVtO1xuICBib3gtc2hhZG93OiAwIDFweCAzcHggcmdiYSgwLCAwLCAwLCAwLjIpO1xuICB3aWR0aDogMTAwJTtcbiAgYm9yZGVyLXJhZGl1czogNHB4O1xuICBmb250LXNpemU6IDAuODc1ZW07XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/abilities/ability/ability.component.ts":
+/*!********************************************************!*\
+  !*** ./src/app/abilities/ability/ability.component.ts ***!
+  \********************************************************/
+/*! exports provided: AbilityComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AbilityComponent", function() { return AbilityComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let AbilityComponent = class AbilityComponent {
+    constructor() {
+        this.index = -1;
+        this.onEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.editable = null;
+        this.confirming = false;
+        this.editing = false;
+    }
+    ngOnInit() {
+    }
+    ngOnDestroy() {
+        this.confirming = false;
+        this.editing = false;
+    }
+    remove() {
+        this.confirming = false;
+        this.onEvent.emit({ type: 'ability.remove', index: this.index, value: this.ability });
+    }
+    edit() {
+        this.editable = JSON.parse(JSON.stringify(this.ability));
+        this.editing = true;
+    }
+    save() {
+        this.editing = false;
+        this.onEvent.emit({ type: 'ability.update', index: this.index, value: this.editable });
+    }
+};
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+], AbilityComponent.prototype, "ability", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Number)
+], AbilityComponent.prototype, "index", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+], AbilityComponent.prototype, "onEvent", void 0);
+AbilityComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'ability',
+        template: __webpack_require__(/*! raw-loader!./ability.component.html */ "./node_modules/@angular-devkit/build-angular/node_modules/raw-loader/index.js!./src/app/abilities/ability/ability.component.html"),
+        styles: [__webpack_require__(/*! ./ability.component.less */ "./src/app/abilities/ability/ability.component.less")]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+], AbilityComponent);
 
 
 
@@ -866,37 +968,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _upload_upload_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./upload/upload.component */ "./src/app/upload/upload.component.ts");
 /* harmony import */ var _abilities_abilities_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./abilities/abilities.component */ "./src/app/abilities/abilities.component.ts");
-/* harmony import */ var _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./abilities/chooser/chooser.component */ "./src/app/abilities/chooser/chooser.component.ts");
-/* harmony import */ var _items_items_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./items/items.component */ "./src/app/items/items.component.ts");
-/* harmony import */ var _items_item_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./items/item.component */ "./src/app/items/item.component.ts");
-/* harmony import */ var _mim_mim_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./mim/mim.component */ "./src/app/mim/mim.component.ts");
-/* harmony import */ var _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./shared/value-display/value-display.component */ "./src/app/shared/value-display/value-display.component.ts");
-/* harmony import */ var _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./shared/keypad/keypad.component */ "./src/app/shared/keypad/keypad.component.ts");
-/* harmony import */ var _attacks_attacks_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./attacks/attacks.component */ "./src/app/attacks/attacks.component.ts");
-/* harmony import */ var _attacks_attack_attack_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./attacks/attack/attack.component */ "./src/app/attacks/attack/attack.component.ts");
-/* harmony import */ var _sidebag_sidebag_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./sidebag/sidebag.component */ "./src/app/sidebag/sidebag.component.ts");
-/* harmony import */ var _special_preacher_sermons_sermons_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./special/preacher-sermons/sermons.component */ "./src/app/special/preacher-sermons/sermons.component.ts");
-/* harmony import */ var _special_preacher_sermons_sermon_sermon_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./special/preacher-sermons/sermon/sermon.component */ "./src/app/special/preacher-sermons/sermon/sermon.component.ts");
-/* harmony import */ var _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./special/preacher-sermons/chooser/chooser.component */ "./src/app/special/preacher-sermons/chooser/chooser.component.ts");
-/* harmony import */ var _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./items/editor/editor.component */ "./src/app/items/editor/editor.component.ts");
-/* harmony import */ var _avatar_avatar_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./avatar/avatar.component */ "./src/app/avatar/avatar.component.ts");
-/* harmony import */ var _faction_faction_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./faction/faction.component */ "./src/app/faction/faction.component.ts");
-/* harmony import */ var _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./faction/chooser/chooser.component */ "./src/app/faction/chooser/chooser.component.ts");
-/* harmony import */ var _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./special/shaman-spells/shaman-spells.component */ "./src/app/special/shaman-spells/shaman-spells.component.ts");
-/* harmony import */ var _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./special/shaman-spells/chooser/chooser.component */ "./src/app/special/shaman-spells/chooser/chooser.component.ts");
-/* harmony import */ var _special_gambler_tricks_gambler_tricks_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./special/gambler-tricks/gambler-tricks.component */ "./src/app/special/gambler-tricks/gambler-tricks.component.ts");
-/* harmony import */ var _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./special/gambler-tricks/chooser/chooser.component */ "./src/app/special/gambler-tricks/chooser/chooser.component.ts");
-/* harmony import */ var _special_samurai_tactics_samurai_tactics_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./special/samurai-tactics/samurai-tactics.component */ "./src/app/special/samurai-tactics/samurai-tactics.component.ts");
-/* harmony import */ var _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./special/samurai-tactics/chooser/chooser.component */ "./src/app/special/samurai-tactics/chooser/chooser.component.ts");
-/* harmony import */ var _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./special/orphan-missions/orphan-missions.component */ "./src/app/special/orphan-missions/orphan-missions.component.ts");
-/* harmony import */ var _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./special/orphan-missions/chooser/chooser.component */ "./src/app/special/orphan-missions/chooser/chooser.component.ts");
-/* harmony import */ var _special_sorcerer_magik_spell_spell_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./special/sorcerer-magik/spell/spell.component */ "./src/app/special/sorcerer-magik/spell/spell.component.ts");
-/* harmony import */ var _special_sorcerer_magik_magik_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./special/sorcerer-magik/magik.component */ "./src/app/special/sorcerer-magik/magik.component.ts");
-/* harmony import */ var _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./special/sorcerer-magik/chooser/chooser.component */ "./src/app/special/sorcerer-magik/chooser/chooser.component.ts");
-/* harmony import */ var _special_notes_notes_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./special/notes/notes.component */ "./src/app/special/notes/notes.component.ts");
-/* harmony import */ var _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./shared/chooser/chooser.component */ "./src/app/shared/chooser/chooser.component.ts");
-/* harmony import */ var _shared_temp_temp_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./shared/temp/temp.component */ "./src/app/shared/temp/temp.component.ts");
-/* harmony import */ var _shared_uses_uses_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./shared/uses/uses.component */ "./src/app/shared/uses/uses.component.ts");
+/* harmony import */ var _abilities_ability_ability_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./abilities/ability/ability.component */ "./src/app/abilities/ability/ability.component.ts");
+/* harmony import */ var _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./abilities/chooser/chooser.component */ "./src/app/abilities/chooser/chooser.component.ts");
+/* harmony import */ var _items_items_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./items/items.component */ "./src/app/items/items.component.ts");
+/* harmony import */ var _items_item_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./items/item.component */ "./src/app/items/item.component.ts");
+/* harmony import */ var _mim_mim_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./mim/mim.component */ "./src/app/mim/mim.component.ts");
+/* harmony import */ var _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./shared/value-display/value-display.component */ "./src/app/shared/value-display/value-display.component.ts");
+/* harmony import */ var _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./shared/keypad/keypad.component */ "./src/app/shared/keypad/keypad.component.ts");
+/* harmony import */ var _attacks_attacks_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./attacks/attacks.component */ "./src/app/attacks/attacks.component.ts");
+/* harmony import */ var _attacks_attack_attack_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./attacks/attack/attack.component */ "./src/app/attacks/attack/attack.component.ts");
+/* harmony import */ var _sidebag_sidebag_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./sidebag/sidebag.component */ "./src/app/sidebag/sidebag.component.ts");
+/* harmony import */ var _special_preacher_sermons_sermons_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./special/preacher-sermons/sermons.component */ "./src/app/special/preacher-sermons/sermons.component.ts");
+/* harmony import */ var _special_preacher_sermons_sermon_sermon_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./special/preacher-sermons/sermon/sermon.component */ "./src/app/special/preacher-sermons/sermon/sermon.component.ts");
+/* harmony import */ var _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./special/preacher-sermons/chooser/chooser.component */ "./src/app/special/preacher-sermons/chooser/chooser.component.ts");
+/* harmony import */ var _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./items/editor/editor.component */ "./src/app/items/editor/editor.component.ts");
+/* harmony import */ var _avatar_avatar_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./avatar/avatar.component */ "./src/app/avatar/avatar.component.ts");
+/* harmony import */ var _faction_faction_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./faction/faction.component */ "./src/app/faction/faction.component.ts");
+/* harmony import */ var _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./faction/chooser/chooser.component */ "./src/app/faction/chooser/chooser.component.ts");
+/* harmony import */ var _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./special/shaman-spells/shaman-spells.component */ "./src/app/special/shaman-spells/shaman-spells.component.ts");
+/* harmony import */ var _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./special/shaman-spells/chooser/chooser.component */ "./src/app/special/shaman-spells/chooser/chooser.component.ts");
+/* harmony import */ var _special_gambler_tricks_gambler_tricks_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./special/gambler-tricks/gambler-tricks.component */ "./src/app/special/gambler-tricks/gambler-tricks.component.ts");
+/* harmony import */ var _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./special/gambler-tricks/chooser/chooser.component */ "./src/app/special/gambler-tricks/chooser/chooser.component.ts");
+/* harmony import */ var _special_samurai_tactics_samurai_tactics_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./special/samurai-tactics/samurai-tactics.component */ "./src/app/special/samurai-tactics/samurai-tactics.component.ts");
+/* harmony import */ var _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./special/samurai-tactics/chooser/chooser.component */ "./src/app/special/samurai-tactics/chooser/chooser.component.ts");
+/* harmony import */ var _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./special/orphan-missions/orphan-missions.component */ "./src/app/special/orphan-missions/orphan-missions.component.ts");
+/* harmony import */ var _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./special/orphan-missions/chooser/chooser.component */ "./src/app/special/orphan-missions/chooser/chooser.component.ts");
+/* harmony import */ var _special_sorcerer_magik_spell_spell_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./special/sorcerer-magik/spell/spell.component */ "./src/app/special/sorcerer-magik/spell/spell.component.ts");
+/* harmony import */ var _special_sorcerer_magik_magik_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./special/sorcerer-magik/magik.component */ "./src/app/special/sorcerer-magik/magik.component.ts");
+/* harmony import */ var _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./special/sorcerer-magik/chooser/chooser.component */ "./src/app/special/sorcerer-magik/chooser/chooser.component.ts");
+/* harmony import */ var _special_notes_notes_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./special/notes/notes.component */ "./src/app/special/notes/notes.component.ts");
+/* harmony import */ var _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./shared/chooser/chooser.component */ "./src/app/shared/chooser/chooser.component.ts");
+/* harmony import */ var _shared_temp_temp_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./shared/temp/temp.component */ "./src/app/shared/temp/temp.component.ts");
+/* harmony import */ var _shared_uses_uses_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./shared/uses/uses.component */ "./src/app/shared/uses/uses.component.ts");
+
 
 
 
@@ -1077,48 +1181,49 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _login_login_component__WEBPACK_IMPORTED_MODULE_19__["LoginComponent"],
             _upload_upload_component__WEBPACK_IMPORTED_MODULE_20__["UploadComponent"],
             _abilities_abilities_component__WEBPACK_IMPORTED_MODULE_21__["AbilitiesComponent"],
-            _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_22__["AbilityChooserComponent"],
-            _items_items_component__WEBPACK_IMPORTED_MODULE_23__["ItemsComponent"],
-            _items_item_component__WEBPACK_IMPORTED_MODULE_24__["ItemComponent"],
-            _mim_mim_component__WEBPACK_IMPORTED_MODULE_25__["MimComponent"],
+            _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_23__["AbilityChooserComponent"],
+            _abilities_ability_ability_component__WEBPACK_IMPORTED_MODULE_22__["AbilityComponent"],
+            _items_items_component__WEBPACK_IMPORTED_MODULE_24__["ItemsComponent"],
+            _items_item_component__WEBPACK_IMPORTED_MODULE_25__["ItemComponent"],
+            _mim_mim_component__WEBPACK_IMPORTED_MODULE_26__["MimComponent"],
             ModifierPipe,
             MimGroupFilterPipe,
             SumFilterPipe,
             JoinPipe,
             OrderByPipe,
             UsagePipe,
-            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_26__["ValueDisplayComponent"],
-            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_26__["XPValueDisplayComponent"],
-            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_26__["SidebagValueDisplayComponent"],
-            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_26__["ValueDisplayWithMaxComponent"],
-            _attacks_attacks_component__WEBPACK_IMPORTED_MODULE_28__["AttacksComponent"],
-            _attacks_attack_attack_component__WEBPACK_IMPORTED_MODULE_29__["AttackComponent"],
-            _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_27__["KeypadComponent"],
-            _sidebag_sidebag_component__WEBPACK_IMPORTED_MODULE_30__["SidebagComponent"],
-            _special_preacher_sermons_sermons_component__WEBPACK_IMPORTED_MODULE_31__["PreacherSermonsComponent"],
-            _special_preacher_sermons_sermon_sermon_component__WEBPACK_IMPORTED_MODULE_32__["PreacherSermonComponent"],
-            _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_33__["SermonsChooserComponent"],
-            _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_34__["ItemEditorComponent"],
-            _avatar_avatar_component__WEBPACK_IMPORTED_MODULE_35__["AvatarComponent"],
-            _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_38__["ShamanSpellsComponent"],
-            _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_38__["ShamanSpellComponent"],
-            _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_39__["ShamanSpellsChooserComponent"],
-            _special_gambler_tricks_gambler_tricks_component__WEBPACK_IMPORTED_MODULE_40__["GamblerTricksComponent"],
-            _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_41__["GamblerTricksChooserComponent"],
-            _special_samurai_tactics_samurai_tactics_component__WEBPACK_IMPORTED_MODULE_42__["SamuraiTacticsComponent"],
-            _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_43__["SamuraiTacticsChooserComponent"],
-            _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_44__["OrphanMissionsComponent"],
-            _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_45__["OrphanMissionsChooserComponent"],
-            _special_notes_notes_component__WEBPACK_IMPORTED_MODULE_49__["NotesComponent"],
-            _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_50__["ChooserComponent"],
-            _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_44__["OrphanMissionsComponent"],
-            _special_sorcerer_magik_spell_spell_component__WEBPACK_IMPORTED_MODULE_46__["ElementalMagikSpellComponent"],
-            _special_sorcerer_magik_magik_component__WEBPACK_IMPORTED_MODULE_47__["ElementalMagikComponent"],
-            _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_48__["ElementalMagikChooserComponent"],
-            _shared_temp_temp_component__WEBPACK_IMPORTED_MODULE_51__["TempComponent"],
-            _faction_faction_component__WEBPACK_IMPORTED_MODULE_36__["FactionComponent"],
-            _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_37__["FactionChooserComponent"],
-            _shared_uses_uses_component__WEBPACK_IMPORTED_MODULE_52__["UsesComponent"]
+            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_27__["ValueDisplayComponent"],
+            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_27__["XPValueDisplayComponent"],
+            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_27__["SidebagValueDisplayComponent"],
+            _shared_value_display_value_display_component__WEBPACK_IMPORTED_MODULE_27__["ValueDisplayWithMaxComponent"],
+            _attacks_attacks_component__WEBPACK_IMPORTED_MODULE_29__["AttacksComponent"],
+            _attacks_attack_attack_component__WEBPACK_IMPORTED_MODULE_30__["AttackComponent"],
+            _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_28__["KeypadComponent"],
+            _sidebag_sidebag_component__WEBPACK_IMPORTED_MODULE_31__["SidebagComponent"],
+            _special_preacher_sermons_sermons_component__WEBPACK_IMPORTED_MODULE_32__["PreacherSermonsComponent"],
+            _special_preacher_sermons_sermon_sermon_component__WEBPACK_IMPORTED_MODULE_33__["PreacherSermonComponent"],
+            _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_34__["SermonsChooserComponent"],
+            _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_35__["ItemEditorComponent"],
+            _avatar_avatar_component__WEBPACK_IMPORTED_MODULE_36__["AvatarComponent"],
+            _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_39__["ShamanSpellsComponent"],
+            _special_shaman_spells_shaman_spells_component__WEBPACK_IMPORTED_MODULE_39__["ShamanSpellComponent"],
+            _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_40__["ShamanSpellsChooserComponent"],
+            _special_gambler_tricks_gambler_tricks_component__WEBPACK_IMPORTED_MODULE_41__["GamblerTricksComponent"],
+            _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_42__["GamblerTricksChooserComponent"],
+            _special_samurai_tactics_samurai_tactics_component__WEBPACK_IMPORTED_MODULE_43__["SamuraiTacticsComponent"],
+            _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_44__["SamuraiTacticsChooserComponent"],
+            _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_45__["OrphanMissionsComponent"],
+            _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_46__["OrphanMissionsChooserComponent"],
+            _special_notes_notes_component__WEBPACK_IMPORTED_MODULE_50__["NotesComponent"],
+            _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_51__["ChooserComponent"],
+            _special_orphan_missions_orphan_missions_component__WEBPACK_IMPORTED_MODULE_45__["OrphanMissionsComponent"],
+            _special_sorcerer_magik_spell_spell_component__WEBPACK_IMPORTED_MODULE_47__["ElementalMagikSpellComponent"],
+            _special_sorcerer_magik_magik_component__WEBPACK_IMPORTED_MODULE_48__["ElementalMagikComponent"],
+            _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_49__["ElementalMagikChooserComponent"],
+            _shared_temp_temp_component__WEBPACK_IMPORTED_MODULE_52__["TempComponent"],
+            _faction_faction_component__WEBPACK_IMPORTED_MODULE_37__["FactionComponent"],
+            _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_38__["FactionChooserComponent"],
+            _shared_uses_uses_component__WEBPACK_IMPORTED_MODULE_53__["UsesComponent"]
         ],
         imports: [
             //                               for debugging purposes only
@@ -1140,17 +1245,17 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _auth_guard__WEBPACK_IMPORTED_MODULE_16__["AuthGuard"]
         ],
         entryComponents: [
-            _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_27__["KeypadComponent"],
-            _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_34__["ItemEditorComponent"],
-            _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_50__["ChooserComponent"],
-            _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_22__["AbilityChooserComponent"],
-            _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_33__["SermonsChooserComponent"],
-            _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_43__["SamuraiTacticsChooserComponent"],
-            _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_39__["ShamanSpellsChooserComponent"],
-            _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_41__["GamblerTricksChooserComponent"],
-            _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_45__["OrphanMissionsChooserComponent"],
-            _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_48__["ElementalMagikChooserComponent"],
-            _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_37__["FactionChooserComponent"]
+            _shared_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_28__["KeypadComponent"],
+            _items_editor_editor_component__WEBPACK_IMPORTED_MODULE_35__["ItemEditorComponent"],
+            _shared_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_51__["ChooserComponent"],
+            _abilities_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_23__["AbilityChooserComponent"],
+            _special_preacher_sermons_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_34__["SermonsChooserComponent"],
+            _special_samurai_tactics_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_44__["SamuraiTacticsChooserComponent"],
+            _special_shaman_spells_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_40__["ShamanSpellsChooserComponent"],
+            _special_gambler_tricks_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_42__["GamblerTricksChooserComponent"],
+            _special_orphan_missions_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_46__["OrphanMissionsChooserComponent"],
+            _special_sorcerer_magik_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_49__["ElementalMagikChooserComponent"],
+            _faction_chooser_chooser_component__WEBPACK_IMPORTED_MODULE_38__["FactionChooserComponent"]
         ],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_9__["AppComponent"]]
     })
@@ -1981,6 +2086,10 @@ let CharacterComponent = class CharacterComponent {
     hasDynamiteSatchel() {
         let satchel = this.character.items.find(it => it.name === "Dynamite Satchel");
         return satchel && satchel.equipped;
+    }
+    useQuickSidebagToken(tokenKey) {
+        this.character.sidebag[tokenKey] -= 1;
+        // this.scheduleSave();
     }
     createMessage(title, message, canDismiss) {
         let msg = {
@@ -14937,26 +15046,27 @@ __webpack_require__.r(__webpack_exports__);
 
 let UsesComponent = class UsesComponent {
     constructor() {
-        this.items = [];
         this.onSave = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.showDesc = {};
     }
     ngOnInit() {
     }
-    use(item) {
-        item.used = !item.used;
+    use(it) {
+        it.used = !it.used;
     }
-    reset() {
-        this.items.forEach(item => {
-            if (item.used)
-                item.used = false;
-        });
+    reset(type) {
+        let items = this.character.items;
+        items.forEach(it => { if (it.used && type == it.usage)
+            it.used = false; });
+        let abilities = this.character.abilities;
+        abilities.forEach(a => { if (a.used && type == a.usage)
+            a.used = false; });
     }
 };
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
-], UsesComponent.prototype, "items", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+], UsesComponent.prototype, "character", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
@@ -15081,36 +15191,45 @@ let ValueDisplayComponent = class ValueDisplayComponent {
             typeof (this.options.min) === 'undefined' ||
             this.value * 1 > this.options.min * 1;
     }
-    openKeypad() {
-        let opts = {
+    getKeypadOpts() {
+        return {
             data: {
                 visible: true,
                 value: this.computed,
                 modifiers: this.modifiers
             }
         };
+    }
+    openKeypad() {
+        let opts = this.getKeypadOpts();
         const dialogRef = this.dialog.open(_keypad_keypad_component__WEBPACK_IMPORTED_MODULE_3__["KeypadComponent"], opts);
         this.subscription = dialogRef.afterClosed().subscribe((result) => {
-            if (!isNaN(result)) {
-                let change = result * 1;
-                let current = this.value * 1;
-                current += change - this.computed;
-                try {
-                    this.onValueChange(current);
-                }
-                catch (e) {
-                    console.log("VD keypad - Error changing value: " + e.message);
-                }
-                try {
-                    this.onSave.emit({ label: this.label, value: this.value });
-                }
-                catch (e) {
-                    console.log("VD keypad - Error emitting save event " + e.message);
-                }
-            }
+            this.onKeypadChange(result);
             this.subscription.unsubscribe();
             this.subscription = null;
         });
+    }
+    onKeypadChange(result) {
+        if (!isNaN(result)) {
+            let current = this.applyKeypadChange(result * 1);
+            try {
+                this.onValueChange(current);
+            }
+            catch (e) {
+                console.log("VD keypad - Error changing value: " + e.message);
+            }
+            try {
+                this.onSave.emit({ label: this.label, value: this.value });
+            }
+            catch (e) {
+                console.log("VD keypad - Error emitting save event " + e.message);
+            }
+        }
+    }
+    applyKeypadChange(change) {
+        let current = this.value * 1;
+        current += change - this.computed;
+        return current;
     }
 };
 ValueDisplayComponent.ctorParameters = () => [
@@ -15252,6 +15371,21 @@ let ValueDisplayWithMaxComponent = class ValueDisplayWithMaxComponent extends Va
             this.computed = this.max * 1;
         }
     }
+    /** @override */
+    getKeypadOpts() {
+        return {
+            data: {
+                visible: true,
+                value: this.value
+            }
+        };
+    }
+    /** @override */
+    applyKeypadChange(change) {
+        let current = this.value * 1;
+        current += change - this.value;
+        return current;
+    }
 };
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -15353,6 +15487,23 @@ let SidebagComponent = class SidebagComponent {
     ngOnInit() {
         this.max = this.getAvailableSidebagCapacity();
     }
+    ngDoCheck() {
+        if (!this.sidebag)
+            return;
+        //check to see if the load in the sidebag is the same as the previously
+        // computed "carrying" value from the last time a change was detected.
+        // If so, the "quick" sidebag on the overview page must have been fired
+        // so the value display at the top of this view needs to be updated to
+        // reflect new counts.
+        let count = Object.keys(this.sidebag)
+            .map(key => this.sidebag[key])
+            .filter(v => 'capacity' !== v)
+            .length;
+        if (count !== this.carrying) {
+            // console.log("Sidebag changed");
+            this.max = this.getAvailableSidebagCapacity();
+        }
+    }
     ngOnChanges(changes) {
         if (changes && changes.hasDynamiteSatchel) {
             let prev = changes.hasDynamiteSatchel.previousValue;
@@ -15361,6 +15512,10 @@ let SidebagComponent = class SidebagComponent {
                 this.getAvailableSidebagCapacity();
             }
         }
+        // else if(changes && changes.sidebag) {
+        //     console.log("Sidebag changed");
+        //     this.max = this.getAvailableSidebagCapacity();
+        // }
     }
     save() {
         this.onSave.emit({ type: "sidebag" });
@@ -17089,10 +17244,15 @@ let ElementalMagikComponent = class ElementalMagikComponent {
         this.availableMana = 0;
         this.arcanePowder = 0;
         this.arcanePowderMax = 0;
+        this.focusType = null;
         this.eventSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
     }
     ngOnInit() {
         this.availableMana = this.maxMana = this.character.mana;
+        let focus = this.character.abilities.find(a => 'Magik Focus' === a.name);
+        if (focus && focus.userInput && focus.userInput.value) {
+            this.focusType = focus.userInput.value.toLowerCase();
+        }
     }
     ngOnChanges(changes) {
         if (changes.modifiersMana) {
@@ -17277,6 +17437,7 @@ let ElementalMagikSpellComponent = class ElementalMagikSpellComponent {
     constructor() {
         this.availableMana = 0;
         this.arcanePowder = 0;
+        this.focus = null;
         this.onEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.isCollapsed = true;
         this.isEditing = false;
@@ -17304,6 +17465,17 @@ let ElementalMagikSpellComponent = class ElementalMagikSpellComponent {
                 removeFlag(this.spell, 2 /* insufficient */);
             }
         }
+    }
+    getCastCheck() {
+        let v = this.spell.check;
+        if (!v || isNaN(v))
+            return "-";
+        let check = v * 1;
+        let type = this.spell.type;
+        if (type && this.focus && type.toLowerCase() == this.focus.toLowerCase()) {
+            check -= 1;
+        }
+        return check + "+";
     }
     use() {
         applyFlag(this.spell, 4 /* cast */);
@@ -17389,6 +17561,10 @@ tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Number)
 ], ElementalMagikSpellComponent.prototype, "arcanePowder", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+], ElementalMagikSpellComponent.prototype, "focus", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"])

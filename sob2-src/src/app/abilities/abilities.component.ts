@@ -169,4 +169,21 @@ export class AbilitiesComponent implements OnInit {
             return this.confirming[index];
         }
     }
+
+    onEvent( $event : any ) {
+        let type : string = $event.type;
+        let position : number = $event.index;
+        switch(type) {
+            case 'ability.remove':
+            this.remove(position);
+            break;
+
+            case 'ability.update':
+            let ability = $event.value;
+            this.character.abilities[position]=ability;
+            this.onSave.emit({});
+            break;
+
+        }
+    }
 }

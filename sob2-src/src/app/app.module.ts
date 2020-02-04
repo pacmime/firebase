@@ -28,6 +28,7 @@ import { CharacterComponent } from './character/character.component';
 import { LoginComponent } from './login/login.component';
 import { UploadComponent } from './upload/upload.component';
 import { AbilitiesComponent } from './abilities/abilities.component';
+import { AbilityComponent } from './abilities/ability/ability.component';
 import { AbilityChooserComponent } from './abilities/chooser/chooser.component';
 import { ItemsComponent } from './items/items.component';
 import { ItemComponent } from './items/item.component';
@@ -188,6 +189,7 @@ const appRoutes: Routes = [
     UploadComponent,
     AbilitiesComponent,
     AbilityChooserComponent,
+    AbilityComponent,
     ItemsComponent,
     ItemComponent,
     MimComponent,

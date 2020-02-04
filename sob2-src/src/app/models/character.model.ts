@@ -8,6 +8,9 @@ export const Events = {
     ITEM_EQUIP  : 'item.equipped'
 };
 
+export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |
+    'belt' |  'pants' |  'gloves' | 'boots';
+export type Usage = "Turn" | "Fight" | "Adventure";
 
 
 export interface Modifier {
@@ -124,11 +127,11 @@ export interface Ability extends Option {
     modifiers:  Modifier[]  //mods associated
     type?:      string; //type of ability (starting, etc)
     roll?:      string; //2d6 rolled to acquire upgrade ability
+    userInput?: any;
+    usage?:     Usage;
+    used ?:     boolean;
 }
 
-export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |
-    'belt' |  'pants' |  'gloves' | 'boots';
-export type Usage = "Turn" | "Fight" | "Adventure";
 
 export interface Item extends Option {
     name     : string;

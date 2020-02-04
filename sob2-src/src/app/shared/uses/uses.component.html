@@ -1,25 +1,37 @@
 
 <div class="m-grid flex-justify-between flex-align-center">
     <h4 class="u-text--sc flex-1">Uses</h4>
-    <button mat-flat-button color="accent" (click)="reset()">reset</button>
+    <div class="m-grid flex-align-center gutter">
+        <span>Reset: </span>
+        <button class="u-sm" mat-raised-button color="accent" (click)="reset('Turn')">Turn</button>
+        <button class="u-sm" mat-raised-button color="accent" (click)="reset('Fight')">Fight</button>
+        <button class="u-sm" mat-raised-button color="accent" (click)="reset('Adventure')">Adventure</button>
+    </div>
 </div>
 <hr>
 
-<div *ngFor="let item of items | hasUsage" class="card">
+<!-- Abilities -->
+<div *ngFor="let ability of character?.abilities | hasUsage" class="card">
+    <div class="m-grid gutter flex-justify-between flex-align-center">
+        [{{ability.usage}}]
+        <strong (click)="showDesc[ability.name]=!showDesc[ability.name]">{{ability.name}}</strong>
+        <button class="u-sm" mat-flat-button color="accent" (click)="use(ability)"
+            [disabled]="ability.used">
+            use
+        </button>
+    </div>
+    <div *ngIf="showDesc[ability.name]" class="u-sm">{{ability.desc}}<br></div>
+</div>
 
+<!-- Items -->
+<div *ngFor="let item of character?.items | hasUsage" class="card">
     <div class="m-grid gutter flex-justify-between flex-align-center">
         [{{item.usage}}]
-
         <strong (click)="showDesc[item.name]=!showDesc[item.name]">{{item.name}}</strong>
-
-        <button mat-flat-button color="accent" (click)="use(item)"
+        <button class="u-sm" mat-flat-button color="accent" (click)="use(item)"
             [disabled]="item.used">
             use
         </button>
     </div>
-    <div *ngIf="showDesc[item.name]" class="u-sm">
-        {{item.description}}
-        <br>
-    </div>
-
+    <div *ngIf="showDesc[item.name]" class="u-sm">{{item.description}}<br></div>
 </div>

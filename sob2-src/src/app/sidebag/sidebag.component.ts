@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, OnChanges,
+    Component, OnInit, OnChanges, DoCheck,
     SimpleChanges, SimpleChange,
     Input, Output, EventEmitter
 } from '@angular/core';
@@ -9,7 +9,7 @@ import {
     templateUrl: './sidebag.component.html',
     styleUrls: ['./sidebag.component.less']
 })
-export class SidebagComponent implements OnInit {
+export class SidebagComponent implements OnInit, OnChanges, DoCheck {
 
     @Input() sidebag : any;
     @Input() modifiers: { value:number, sources: string[] };
@@ -53,6 +53,23 @@ export class SidebagComponent implements OnInit {
         this.max = this.getAvailableSidebagCapacity();
     }
 
+    ngDoCheck() {
+        if(!this.sidebag) return;
+        //check to see if the load in the sidebag is the same as the previously
+        // computed "carrying" value from the last time a change was detected.
+        // If so, the "quick" sidebag on the overview page must have been fired
+        // so the value display at the top of this view needs to be updated to
+        // reflect new counts.
+        let count = Object.keys(this.sidebag)
+            .map( key => this.sidebag[key] )
+            .filter( v => 'capacity' !== v )
+            .length;
+        if(count !== this.carrying) {
+            // console.log("Sidebag changed");
+            this.max = this.getAvailableSidebagCapacity();
+        }
+    }
+
     ngOnChanges( changes: SimpleChanges ) {
         if(changes && changes.hasDynamiteSatchel) {
             let prev = changes.hasDynamiteSatchel.previousValue;
@@ -61,6 +78,10 @@ export class SidebagComponent implements OnInit {
                 this.getAvailableSidebagCapacity();
             }
         }
+        // else if(changes && changes.sidebag) {
+        //     console.log("Sidebag changed");
+        //     this.max = this.getAvailableSidebagCapacity();
+        // }
     }
 
     save () {

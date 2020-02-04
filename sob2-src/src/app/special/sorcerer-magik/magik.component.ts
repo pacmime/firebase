@@ -26,6 +26,7 @@ export class ElementalMagikComponent implements OnInit {
     public availableMana: number = 0;
     public arcanePowder : number = 0;
     public arcanePowderMax : number = 0;
+    public focusType : string = null;
 
     private eventSubject : Subject<{name:string,value:any}> = new Subject();
 
@@ -36,6 +37,11 @@ export class ElementalMagikComponent implements OnInit {
 
     ngOnInit() {
         this.availableMana = this.maxMana = this.character.mana;
+
+        let focus = this.character.abilities.find(a => 'Magik Focus' === a.name);
+        if(focus && focus.userInput && focus.userInput.value) {
+            this.focusType = focus.userInput.value.toLowerCase();
+        }
     }
 
     ngOnChanges(changes : SimpleChanges) {
