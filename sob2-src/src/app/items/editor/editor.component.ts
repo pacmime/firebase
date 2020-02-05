@@ -51,7 +51,7 @@ implements OnInit, OnDestroy {
 
     ngOnInit() {
         super.ngOnInit();
-        this.uses = ['Turn', "Fight", "Adventure"];
+        this.uses = ['Turn', "Fight", "Adventure", "Travel"];
         this.slots = ['hat', 'face', 'shoulders', 'coat',
             'torso', 'belt',  'pants',  'gloves', 'boots'];
         this.modifierTargets = [

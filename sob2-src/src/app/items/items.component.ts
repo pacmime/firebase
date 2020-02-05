@@ -80,7 +80,7 @@ export class ItemsComponent implements OnInit, OnChanges, OnDestroy {
      */
     addItem () {
         let item : Item = this.createBlankItem();
-        this.openEditor(item, null);
+        this.openEditor(item, -1);
     }
 
     /**
@@ -103,13 +103,13 @@ export class ItemsComponent implements OnInit, OnChanges, OnDestroy {
             if(result) {
                 let type = '';
 
-                if(!isNaN(position) && position >= 0) {
-                    type = Events.ITEM_ADD;//"item.added";
-                    this.items.push(result);
+                if(!isNaN(position) && position !== null && position >= 0) {
+                    type = Events.ITEM_UPDATE; //"item.updated";
+                    this.items[position] = result;
 
                 } else {
-                    this.items[position] = result;
-                    type = Events.ITEM_UPDATE; //"item.updated";
+                    this.items.push(result);
+                    type = Events.ITEM_ADD;//"item.added";
                 }
                 this.updateTotals();
                 this.onSave.emit({ type:type, value:result });

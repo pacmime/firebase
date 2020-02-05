@@ -10,7 +10,7 @@ export const Events = {
 
 export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |
     'belt' |  'pants' |  'gloves' | 'boots';
-export type Usage = "Turn" | "Fight" | "Adventure";
+export type Usage = "Turn" | "Fight" | "Adventure" | "Travel";
 
 
 export interface Modifier {
