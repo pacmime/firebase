@@ -12,6 +12,12 @@ export type Slot = 'hat' | 'face' | 'shoulders' | 'coat' | 'torso' |
     'belt' |  'pants' |  'gloves' | 'boots';
 export type Usage = "Turn" | "Fight" | "Adventure" | "Travel";
 
+export const ModifierTargets : string[] = [
+    'Agility', 'Cunning', 'Spirit', 'Strength', 'Lore', 'Luck',
+    'armor', 'combat', 'corruption', 'cover', 'defense', 'endurance',
+    'faith', 'fury', 'grit', 'health', 'init', 'ki',
+    'spiritArmor', 'magik', 'mana', 'melee', 'ranged', 'move', 'sanity'
+];
 
 export interface Modifier {
     affects: string;

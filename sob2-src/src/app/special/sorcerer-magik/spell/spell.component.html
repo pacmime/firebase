@@ -7,7 +7,7 @@
             <div class="flex-1 a-heading">
                 <mat-icon *ngIf="spell.deadly" color="warn">error</mat-icon>
                 <span (click)="isCollapsed=!isCollapsed">{{spell.name}}</span>
-                <small>({{spell.type}})</small>
+                <small>&nbsp;({{spell.type}})</small>
             </div>
             <div class="a-special__range">
                 <mat-icon>double_arrow</mat-icon>
@@ -15,11 +15,6 @@
             </div>
             <div class="a-special__cost--mana">{{spell.cost||"0"}}</div>
         </div>
-
-        <!-- <div class="u-sm">
-            <strong>Cost: </strong> {{spell.cost||"N/A"}} ;
-            <strong>Range: </strong> {{spell.range||"N/A"}}
-        </div> -->
 
         <div class="desc u-sm" [ngClass]="{'is-hidden':isCollapsed}">{{spell.desc}}</div>
 

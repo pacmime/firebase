@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subject, Subscription } from "rxjs";
 
 import { FirestoreService } from '../../firestore.service';
-import { Ability, Modifier } from "../../models/character.model";
+import { Ability, Modifier, ModifierTargets } from "../../models/character.model";
 import { SOBError } from "../../models/error";
 
 @Component({
@@ -22,6 +22,10 @@ export class AbilityComponent implements OnInit {
     public editable : Ability = null;
     private confirming : boolean = false;
     private editing    : boolean = false;
+
+    public newModifier : Modifier = { affects: null, value: 0 };
+    public modifierTargets : string[] = ModifierTargets;
+
 
     constructor() {
     }
@@ -42,11 +46,25 @@ export class AbilityComponent implements OnInit {
 
     edit() {
         this.editable = JSON.parse(JSON.stringify(this.ability));
+        this.editable.modifiers = this.editable.modifiers || [];
         this.editing = true;
     }
     save() {
         this.editing = false;
         this.onEvent.emit({type: 'ability.update', index: this.index, value: this.editable });
+    }
+
+
+    addModifier() {
+        this.editable.modifiers.push(Object.assign({}, this.newModifier));
+
+        //reset new modifier value
+        this.newModifier.affects = null;
+        this.newModifier.value = 0;
+    }
+
+    removeModifier(index) {
+        this.editable.modifiers.splice(index, 1);
     }
 
 }

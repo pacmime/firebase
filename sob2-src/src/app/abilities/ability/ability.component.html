@@ -55,14 +55,39 @@
             <input type="text" class="form-control input-sm" [(ngModel)]="editable.userInput.value">
         </div>
 
-        <!-- <div *ngIf="ability.modifiers">
-            <hr>
-            <mat-chip-list class="u-sm" [selectable]="false">
-                <mat-chip *ngFor="let modifier of ability.modifiers">
-                    {{modifier.affects}} {{modifier.value|modifier}}
+        <div>
+            <label class="u-sm">Modifiers</label>
+
+            <mat-chip-list class="u-sm u-pd--sm" [selectable]="false">
+                <mat-chip *ngFor="let modifier of editable.modifiers; let $index=index">
+                    <strong>{{modifier.affects}}</strong> : {{modifier.value|modifier}}
+                    <mat-icon class="mat-chip-remove mat-chip-trailing-icon mat-icon" (click)="removeModifier($index)">
+                        cancel
+                    </mat-icon>
                 </mat-chip>
             </mat-chip-list>
-        </div> -->
+
+            <div class="m-grid gutter flex-justify-between flex-align-center">
+                <div class="flex-2">
+                    <select class="form-control" [(ngModel)]="newModifier.affects">
+                        <option [ngValue]="null">Select</option>
+                        <option *ngFor="let modtarget of modifierTargets" [ngValue]="modtarget">
+                            {{modtarget}}
+                        </option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <input type="number" min="-10" [(ngModel)]="newModifier.value"
+                        class="form-control" placeholder="0">
+                </div>
+                <button mat-flat-button class="u-sm"
+                    color="accent"
+                    (click)="addModifier()"
+                    [disabled]="!newModifier.affects">
+                    Add
+                </button>
+            </div>
+        </div>
 
 
         <div class="m-grid flex-justify-end flex-align-center">

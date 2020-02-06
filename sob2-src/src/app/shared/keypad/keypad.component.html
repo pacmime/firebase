@@ -25,12 +25,18 @@
     </div>
     <div class="manual-entry">
         <br>
-        <div class="m-grid gutter flex-justify-around flex-align-stretch">
-            <button mat-flat-button class="u-sm" color="accent" (click)="changeManual(-1)" (ngClass)="{disabled:!hasManual()}">-</button>
-            <div class="col">
+        <div class="m-grid flex-justify-around flex-align-stretch">
+            <button mat-flat-button class="u-sm" color="warn"
+                (click)="changeManual(-1)" (ngClass)="{disabled:!hasManual()}">
+                <mat-icon>remove</mat-icon>
+            </button>
+            <div style="width:70%"><!-- because on phone it wraps -->
                 <input type="number" class="form-control" [(ngModel)]="manualAdj" placeholder="Adjust by ...">
             </div>
-            <button mat-flat-button class="u-sm" color="accent" (click)="changeManual(1)" (ngClass)="{disabled:!hasManual()}">+</button>
+            <button mat-flat-button class="u-sm" color="success"
+                (click)="changeManual(1)" (ngClass)="{disabled:!hasManual()}">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
     </div>
     <div class="u-sm">

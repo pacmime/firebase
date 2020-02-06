@@ -367,13 +367,13 @@
 
     <div class="l-page--wide">
         <main class="m-grid gutter">
-            <div class="flex-2">
+            <div class="o-container--items">
                 <items [items]="character.items"
                        [weightLimit]="getWeightLimit()"
                         (onSave)="saveChar(null, $event)">
                 </items>
             </div>
-            <div class="flex-1">
+            <div class="o-container--sidebag">
                 <sidebag
                    [sidebag]="character.sidebag"
                    [modifiers]="modifiers.sidebag"

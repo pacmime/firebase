@@ -59,18 +59,9 @@ export class CharacterComponent implements OnInit {
 
         if(this.route.paramMap) {
             this.route.paramMap.pipe(
+
                 switchMap((params: ParamMap) => {
-
-                    // loadMsg = this.createMessage(
-                    //     "Loading character",
-                    //     "This should only take a moment...",
-                    //     false
-                    // );
-                    // this.messages.push(loadMsg);
-
-                    this.snackBarRef = this.snackBar.open("Loading character, one moment...");
-
-
+                    this.showSnackBar("Loading character, one moment...");
                     let id = params.get('id');
                     this.charId = id;
                     return this.service.loadCharacter(id);
@@ -78,24 +69,16 @@ export class CharacterComponent implements OnInit {
 
             ).subscribe( (character: SOBCharacter) => {
 
-                    setTimeout( () => {
-                        //clear loading message
-                        // this.removeMessage(loadMsg);
+                //clear loading message
+                setTimeout( () => { this.dismissSnackBar(); }, 1000);
 
-                        if(this.snackBarRef) {
-                            this.snackBarRef.dismiss();
-                            this.snackBarRef = null;
-                        }
-
-                    }, 1000);
-
-                    //charSubscription above will handle getting characters from the service
-                    // but this subscribe is necessary to get the actual event from the
-                    // Observable from the service
-                    // console.log("char event");
-                    this.character = character;
-                    this.init();
-                });
+                //charSubscription above will handle getting characters from the service
+                // but this subscribe is necessary to get the actual event from the
+                // Observable from the service
+                // console.log("char event");
+                this.character = character;
+                this.init();
+            });
         }
     }
 
@@ -194,7 +177,7 @@ export class CharacterComponent implements OnInit {
                 //         "Choose a class ability and roll for a new level-up ability"
                 //     )
                 // );
-                this.snackBar.open("Level Up!", "Dismiss");
+                this.showSnackBar("Level Up!", "Dismiss");
                 this.character.level++;
                 arg.value -= neededXP;  //reset
             }
@@ -210,9 +193,7 @@ export class CharacterComponent implements OnInit {
             try {
                 if(!this.applyChange(key, arg.value)) return;
             } catch(e) {
-                // this.error = new SOBError("save",
-                //     "Unable to apply change(s) to character, because " + e.message);
-                this.snackBar.open("Unable to save changes because " + e.message, "Dismiss");
+                this.showSnackBar("Unable to save changes because " + e.message, "Dismiss");
                 return;
             }
 
@@ -279,34 +260,13 @@ export class CharacterComponent implements OnInit {
 
     doSave() {
 
-        // let opts : MatSnackBarConfig = {
-        //     duration: 2000
-        // }
-        // this.snackBar.open("Loading character, one moment...", null, opts);
 
-
-        // let savingMsg = this.createMessage(
-        //     'Saving changes', 'this should only take a moment...', false);
-        // this.messages.push(savingMsg);
-
-        if(this.snackBarRef) {
-            this.snackBarRef.dismiss();
-        }
-        this.snackBarRef = this.snackBar.open("Saving changes, one moment...");
-
-        let timeoutSnackBarRef;
-
+        this.showSnackBar("Saving changes, one moment...");
 
         //set timer for saves that take too long...
         let timeoutMsg = null;
         let timer = setTimeout( () => {
-            // this.removeMessage(savingMsg);
-            // timeoutMsg = this.createMessage(
-            //     'Save Timed Out', 'Saving is taking a really long time...', true);
-            // this.messages.push(timeoutMsg);
-
-            timeoutSnackBarRef = this.snackBar.open("Save is taking longer than expected...");
-
+            this.showSnackBar("Save is taking longer than expected...");
         }, 5000);
 
 
@@ -314,41 +274,13 @@ export class CharacterComponent implements OnInit {
         // console.log(this.character);
         this.service.updateCharacter(this.charId, this.character)
         .then( () => {
-
             if(timer) clearTimeout(timer);
-            // else if(timeoutMsg) this.removeMessage(timeoutMsg);
-            else if(timeoutSnackBarRef) timeoutSnackBarRef.dismiss();
-
-            // this.removeMessage(savingMsg);
-            this.snackBarRef.dismiss();
-            this.snackBarRef = null;
-
-            // let savedMsg = this.createMessage('Changes saved!', 'this will go away shortly', false);
-            // this.messages.push(savedMsg);
-            // setTimeout( () => { this.removeMessage(savedMsg); }, 3000);
-
-            this.snackBarRef = this.snackBar.open("Changes saved!");
-            setTimeout( () => {
-                if(this.snackBarRef) {
-                    this.snackBarRef.dismiss();
-                    this.snackBarRef = null;
-                }
-            }, 3000);
+            this.showSnackBar("Changes saved!");
+            setTimeout( () => { this.dismissSnackBar(); }, 3000);
         })
         .catch(e => {
             if(timer) clearTimeout(timer);
-            // else if(timeoutMsg) this.removeMessage(timeoutMsg);
-            else if(timeoutSnackBarRef) timeoutSnackBarRef.dismiss();
-
-            // this.removeMessage(savingMsg);
-            if(this.snackBarRef) {
-                this.snackBarRef.dismiss();
-                this.snackBarRef = null;
-            }
-
-            // this.error = new SOBError("save",
-            //     "Unable to save character changes, because " + e.message);
-            this.snackBar.open("Unable to save character because " + e.message, "Dismiss");
+            this.showSnackBar("Unable to save character because " + e.message, "Dismiss");
         });
     }
 
@@ -408,6 +340,23 @@ export class CharacterComponent implements OnInit {
         let max = this.mdTabList.length;
         if( newIndex >= 0 && newIndex < max) {
             this.selectedTabIndex = newIndex;
+        }
+    }
+
+
+    showSnackBar(message : string, dismissLabel ?: string) {
+        this.dismissSnackBar();
+        this.snackBarRef = this.snackBar.open(message, dismissLabel||null);
+    }
+
+    dismissSnackBar() {
+        try {
+            if(this.snackBarRef) {
+                this.snackBarRef.dismiss();
+                this.snackBarRef = null;
+            }
+        } catch(e) {
+            this.snackBarRef = null;
         }
     }
 
