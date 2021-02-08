@@ -1,0 +1,27 @@
+<div class="l-top  {{member.name.toLowerCase()}}">
+    <img src="/assets/{{member.name.toLowerCase()}}.png">
+    <div class="a-label">{{member.name}}</div>
+</div>
+<div class="l-middle">
+    <div class="o-roll">
+        <div *ngFor="let result of roll?.results; let $index = index"
+            class="a-die"
+            [ngClass]="{'is-used':result.used, 'is-selected':result.selected}"
+            (click)="onDieClick(result, $event)">
+            <span class="fa-2x fas fa-dice-{{result.value|numToLetter}}"></span>
+        </div>
+    </div>
+    <div>
+        <button type="button" *ngIf="hasFail" (click)="spend(1)">Fail</button>
+        <button type="button" *ngIf="hasPair" (click)="spend(2)">Pair</button>
+        <button type="button" *ngIf="hasTriple" (click)="spend(3)">Triple</button>
+        <button type="button" *ngIf="hasQuad" (click)="spend(4)">Quad</button>
+        <button type="button" *ngIf="hasSpecial" (click)="spend(6)">Special</button>
+    </div>
+</div>
+<div class="l-bottom">
+    <strong>SPECIAL</strong>
+    <div class="a-special" (click)="addReward(member.special.reward)">
+        {{member.special.reward.label||"Not specified"}}
+    </div>
+</div>

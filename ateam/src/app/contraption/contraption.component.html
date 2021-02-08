@@ -1,0 +1,30 @@
+
+<div class="l-container">
+
+    <div class="l-spaces-container">
+        <div class="m-space"
+            *ngFor="let space of contraption?.spaces; let $index=index;"
+            [ngClass]="{'is-target':previewPart && space.supports}"
+            (click)="addPart($index)">
+
+            <ng-container *ngIf="space.part">
+                <ateam-parts [part]="space.part"
+                    (onEvent)="onPartEvent($event)">
+                </ateam-parts>
+                <div class="a-btn" *ngIf="!space.frame" (click)="remove($index)">&times;</div>
+            </ng-container>
+
+        </div>
+    </div>
+
+    <!-- <div class="l-side">
+
+        <button type="button" (click)="preview()">Draw</button>&nbsp;
+        <button type="button" (click)="previewPart=null">Discard</button>
+
+        <div *ngIf="previewPart" class="a-preview">
+            <ateam-parts [part]="previewPart" ></ateam-parts>
+        </div>
+
+    </div> -->
+</div>

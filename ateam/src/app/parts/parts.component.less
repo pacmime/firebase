@@ -1,0 +1,120 @@
+:host {
+    position        : relative;
+    display         : flex;
+    flex-direction  : column;
+    justify-content : center;
+    align-items     : center;
+    width           : 100%;
+    height          : 100%;
+    // border          : 2px solid #fff;
+    border-radius   : 4px;
+    overflow        : hidden;
+    box-shadow      : inset 0px 0px 3px rgba(0,0,0,0.75);
+
+    background-color: #c3cbdc;
+    background-image: linear-gradient(335deg, #c3cbdc 0%, #edf1f4 74%);
+}
+
+.l-top {
+    // font-size: 0.8275em;
+    font-weight: 700;
+    padding-top: 0.75em;
+    font-variant: small-caps;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.l-middle {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.l-bottom {
+    font-size: 0.8125em;
+    color: #777;
+    padding-bottom: 0.75em;
+}
+
+
+.a-connector--top,
+.a-connector--bottom,
+.a-connector--left,
+.a-connector--right {
+    height: 1em;
+    border-radius: 100%;
+    color: #999;
+    background-color: #ededed;
+
+    &.is-set {
+        color: green;
+        background-color: limegreen;
+    }
+}
+
+.a-connector--top {
+    position: absolute;
+    top: -8px;
+    left: 45%;
+}
+.a-connector--bottom {
+    position: absolute;
+    bottom:-8px;
+    left  : 45%;
+}
+.a-connector--left {
+    position: absolute;
+    left: -8px;
+    top : 45%;
+}
+.a-connector--right {
+    position: absolute;
+    right:-8px;
+    top  : 45%;
+}
+
+
+
+.a-connector--top-slot,
+.a-connector--bottom-slot,
+.a-connector--left-slot,
+.a-connector--right-slot {
+    background-color: limegreen;
+}
+
+.a-connector--top-slot {
+    position: absolute;
+    top: 0;
+    height: 12px;
+    width: 100%;
+}
+.a-connector--bottom-slot {
+    position: absolute;
+    bottom:0;
+    height: 12px;
+    width: 100%;
+}
+.a-connector--left-slot {
+    position: absolute;
+    left: 0;
+    width: 12px;
+    height: 100%;
+}
+.a-connector--right-slot {
+    position: absolute;
+    right:0;
+    width: 12px;
+    height: 100%;
+}
+
+
+
+
+.a-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.25em;
+}

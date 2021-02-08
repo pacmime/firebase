@@ -1,0 +1,13 @@
+
+<div>
+    <div class="a-dc" (click)="onSlotClick($event)">
+        <span class="fa-2x fas fa-dice-{{slot.dc|numToLetter}}"></span>
+    </div>
+    <div class="a-die" *ngIf="slot.hasDie()" (click)="onDieClick($event)">
+        <span class="fa-2x fas fa-dice-{{slot.die|numToLetter}}"></span>
+    </div>
+</div>
+<ng-container *ngIf="slot.hasDie()">
+    <div class="a-btn a-btn--lr" *ngIf="slot.die<6" (click)="incr()">+</div>
+    <div class="a-btn a-btn--ll" (click)="decr()">-</div>
+</ng-container>

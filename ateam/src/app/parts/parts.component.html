@@ -1,0 +1,38 @@
+<div class="l-top">{{part?.name}}</div>
+<div class="l-middle">
+    <ateam-slot *ngIf="part?.slot"
+        [slot]="part.slot"
+        (onEvent)="onSlotEvent($event)">
+    </ateam-slot>
+    <div class="a-placeholder" *ngIf="part && !part.slot">FRAME</div>
+</div>
+<div class="l-bottom" *ngIf="part?.reward">
+    <div class="a-reward">{{part.reward.label}}</div>
+</div>
+
+<div class="a-connector--top"    *ngIf="part?.connectors.top"
+    [ngClass]="{'is-set':part?.connectors.topSet}">
+    <span class="fas fa-vector-square"></span>
+</div>
+<div class="a-connector--bottom" *ngIf="part?.connectors.bottom"
+    [ngClass]="{'is-set':part?.connectors.bottomSet}">
+    <span class="fas fa-vector-square"></span>
+</div>
+<div class="a-connector--left"   *ngIf="part?.connectors.left"
+    [ngClass]="{'is-set':part?.connectors.leftSet}">
+    <span class="fas fa-vector-square"></span>
+</div>
+<div class="a-connector--right"  *ngIf="part?.connectors.right"
+    [ngClass]="{'is-set':part?.connectors.rightSet}">
+    <span class="fas fa-vector-square"></span>
+</div>
+
+
+<div class="a-connector--top-slot"    *ngIf="editing && !part?.connectors.top">
+</div>
+<div class="a-connector--bottom-slot" *ngIf="editing && !part?.connectors.bottom">
+</div>
+<div class="a-connector--left-slot"   *ngIf="editing && !part?.connectors.left">
+</div>
+<div class="a-connector--right-slot"  *ngIf="editing && !part?.connectors.right">
+</div>

@@ -1,0 +1,58 @@
+:host {
+    position: relative;
+    display: block;
+    width: 48px;
+    height: 50px;
+    border: 1px solid #bbb;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: inset 2px 2px rgba(100, 100, 100, 0.2);
+    cursor: pointer;
+    
+    & > * {
+        position: relative;
+
+        &:first-child {
+            display: flex;
+            height: 48px;
+        }
+    }
+}
+
+.a-dc {
+    color: #bbb;
+    cursor: pointer;
+}
+.a-die {
+    background-color: #000;
+    color: #fff;
+}
+.a-dc, .a-die {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.a-btn {
+    // padding: 0 0.25em;
+    cursor: pointer;
+}
+.a-btn--ll {
+    position: absolute;
+    bottom:0;
+    left: 0;
+}
+.a-btn--lr {
+    position: absolute;
+    bottom:0;
+    right: 0;
+}

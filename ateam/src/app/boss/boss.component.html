@@ -1,0 +1,12 @@
+<div class="l-top">
+    <div class="a-label">Boss</div>
+</div>
+<div class="l-middle">
+    <span class="fas fa-user-secret fa-3x"></span>
+    <div class="hp">{{hp}} / {{max}}</div>
+</div>
+<div class="l-bottom" *ngIf="inShowdown">
+    <button type="button"  *ngIf="canDamage()" (click)="damage()">
+        <span class="fas fa-bahai"></span>
+    </button>
+</div>

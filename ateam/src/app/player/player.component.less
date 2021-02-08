@@ -1,0 +1,124 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    border: 4px solid #000;
+    border-radius: 8px;
+    background-color: #fff;
+    margin: 1em;
+    overflow: hidden;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+
+    &.hannibal {
+        border-color: #ffd800;
+    }
+    &.faceman {
+        border-color: lightskyblue;
+    }
+    &.ba {
+        border-color: red;
+    }
+    &.murdock {
+        border-color: blueviolet;
+    }
+}
+
+.l-top {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    z-index: 2;
+
+    &.hannibal {
+        background-color: #ffd800;
+        // border-color: #897400;
+    }
+    &.faceman {
+        background-color: lightskyblue;
+        // border-color: #4a728b;
+    }
+    &.ba {
+        background-color: red;
+        // border-color: #830000;
+    }
+    &.murdock {
+        background-color: blueviolet;
+        // border-color: #531989;
+    }
+
+    .a-label {
+        text-align: center;
+        flex: 1;
+        text-shadow: 0px 0px 2px #000;
+    }
+
+    img {
+        height: 50px;
+        border-radius: 4px 4px 0 0;
+    }
+}
+
+.l-middle {
+    flex: 1;
+    padding: 0.25em 0;
+    box-shadow: inset 0px 3px 5px rgba(0,0,0,0.25);
+}
+
+.l-bottom {
+    text-align: center;
+    background: #e5e5e5;
+    border-top: 1px solid #777;
+
+    .a-special {
+        background: #fff;
+        text-align: center;
+        font-size: 0.825em;
+        border-top: 1px solid #bbb;
+        padding: 0.25em;
+        cursor: pointer;
+    }
+}
+
+.a-label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.25em;
+}
+
+.a-special {
+
+}
+
+.o-roll {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 0.5em;
+
+    .a-die:nth-child(1) { color: #ffd800; }
+    .a-die:nth-child(2) { color: lightskyblue; }
+    .a-die:nth-child(3) { color: red; }
+    .a-die:nth-child(4) { color: blueviolet; }
+}
+
+.a-die {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
+    height: 32px;
+    width: 32px;
+    border-radius: 6px;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+
+    &.is-used {
+        opacity: 0.3;
+    }
+    &.is-selected {
+        border-color: limegreen;
+        box-shadow: 0px 3px 5px rgba(50, 205, 50, .50);
+    }
+}

@@ -1,0 +1,159 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    overflow: none;
+}
+
+.o-gameboard {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+
+    .l-main {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        display: relative;
+    }
+    .l-side {
+        width: 500px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -400px;
+        overflow-y: auto;
+        border-left: 1px solid #333;
+        background: #e6e6e6;
+    }
+}
+
+@media(min-width: 992px) {
+    .o-gameboard {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+
+        .l-main {
+            flex: 1 0 67%;
+        }
+        .l-side {
+            position: relative;
+            // flex: 0 1 33%;
+            right: 0;
+            padding: 1em;
+        }
+    }
+}
+
+.o-toolbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #777;
+    color: #fff;
+}
+.o-tracker {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #f00;
+    color: #fff;
+
+    .a-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        border: 1px solid #fff;
+
+        &.is-set {
+            background:#fff;
+        }
+    }
+}
+
+.o-players {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.o-boss {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+.o-henchmen {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.o-locations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+
+    & > * {
+        width: 48%;
+    }
+}
+
+.o-rewards {
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+}
+
+
+.a-label {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.25em;
+    text-align: center;
+    padding: 0.125em 0.5em;
+}
+
+.o-preview {
+    height: 150px;
+    margin: 1em auto;
+    width: 150px;
+    font-size: 1.125em;
+
+    ateam-parts {
+        width: 100%;
+        height: 125px;
+    }
+}
+
+.a-placeholder {
+    height: 125px;
+    width: 100%;
+    border: 4px solid #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #c3cbdc;
+    background-image: linear-gradient(335deg, #c3cbdc 0%, #edf1f4 74%);
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.o-help {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255,255,255, 0.75);
+    z-index: 999;
+    padding: 3em 5em;
+}

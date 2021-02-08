@@ -1,0 +1,167 @@
+
+<div class="o-toolbar">
+    <ng-container *ngIf="Modes.Showdown !== mode">
+        <div><span class="a-label">Round: </span> {{round}}</div>
+        <button type="button" (click)="nextRound()">Next Round</button>
+        <div>&nbsp;</div>
+    </ng-container>
+    <ng-container *ngIf="Modes.Showdown === mode">
+        <span class="a-label">SHOWDOWN!</span>
+    </ng-container>
+    <button type="button" (click)="showHelp=!showHelp">Help</button>
+</div>
+<div class="o-tracker">
+    <div class="a-label">Col Lynch Tracker </div>
+    <button type="button" (click)="decrTracker()">-</button>
+    <div class="a-dot" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]"
+        [ngClass]="{'is-set':tracker>=i}"></div>
+    <!-- <button type="button" (click)="incrTracker()">+</button> -->
+</div>
+
+
+<div class="o-gameboard">
+
+    <div class="l-main">
+
+
+        <div *ngIf="showHelp" class="o-help">
+            <h2>How to Play</h2>
+            <p>
+                Each Round, the four members of the A-Team work together to clear
+                Locations of Henchmen while also building out a Contraption for use
+                against the Boss during the Showdown at the end of the game.
+            </p>
+            <br>
+
+            <h3>Locations</h3>
+            <p>
+                Locations must be cleared by first defeating all Henchmen on it and
+                then filling each of its slots with dice. Once cleared, the A-Team
+                receives the Location's reward. If a Location is not cleared by
+                the end of the round, Henchmen reinforcements will arrive to reclaim.
+            </p>
+            <br>
+
+            <h3>Col Lynch Tracker</h3>
+            <p>
+                The tracker represents the dogged pursuit by Col. Lynch. Any 1's
+                that cannot be used by players on their turn will cause the tracker to
+                increment 1 step. Also, if at least one Location remains
+                uncleared at the end of the round, the tracker is incremented by
+                1 step.
+            </p>
+            <p>
+                If the tracker ever reaches the final step, the players must
+                enter the Showdown against the Boss immediately before they are
+                captured by Col. Lynch.
+            </p>
+            <br>
+
+            <h3>Die Rewards</h3>
+            <ul>
+                <li><strong>Pair: </strong> 1 Action</li>
+                <li><strong>3 of a Kind: </strong> 2 Actions</li>
+                <li><strong>4 of a Kind: </strong> 3 Action</li>
+                <li><strong>3-die Straight: </strong> ???</li>
+            </ul>
+
+            <h3>Actions</h3>
+            <ul>
+                <li>Apply 1 damage</li>
+                <li>Draw a Parts card</li>
+                <li>Reduce Tracker by 1</li>
+            </ul>
+        </div>
+
+
+        <div class="o-contraption">
+            <ateam-contraption
+                [round]="round"
+                [contraption]="contraption"
+                [previewPart]="previewPart"
+                (onEvent)="onContraptionEvent($event)">
+            </ateam-contraption>
+        </div>
+
+
+        <div class="o-players">
+            <ateam-player *ngFor="let member of team"
+                [member]="member"
+                [round]="round"
+                (onEvent)="onPlayerEvent($event)">
+            </ateam-player>
+        </div>
+
+    </div>
+
+    <div class="l-side">
+
+        <ng-container *ngIf="Modes.Showdown !== mode">
+            <div class="o-preview">
+                <ateam-parts *ngIf="previewPart" [part]="previewPart" ></ateam-parts>
+                <div *ngIf="!previewPart" class="a-placeholder" (click)="preview()">
+                    <strong>PARTS</strong>
+                    <small>Click to Draw</small>
+                </div>
+                <button type="button" *ngIf="previewPart" (click)="previewPart=null">Discard</button>
+            </div>
+
+            <hr>
+
+            <div class="a-label">LOCATIONS</div>
+            <div class="o-locations">
+                <ateam-location *ngFor="let location of locations"
+                    [location]="location"
+                    [round]="round"
+                    (onEvent)="onLocationEvent($event)">
+                </ateam-location>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="Modes.Showdown === mode">
+            <div class="o-boss">
+                <ateam-boss [mode]="mode"></ateam-boss>
+            </div>
+        </ng-container>
+
+        <hr>
+
+        <div class="o-rewards">
+            <div class="a-label">Available Rewards ({{bankedActions}})</div>
+            <div>
+                <button type="button" (click)="addReward({type:RewardTypes.Damage,label:'Deal Damage'})">+ Damage</button>
+                <button type="button" (click)="addReward({type:RewardTypes.Part,label:'Add Part'})">+ Part</button>
+                <button type="button" (click)="addReward({type:RewardTypes.Tracker,label:'Reduce Tracker'})">+ Tracker</button>
+            </div>
+            <div *ngFor="let reward of rewards">
+                {{reward.label}}
+                <span *ngIf="reward.value">
+                    <span *ngIf="RewardTypes.Slot===reward.type"
+                        class="fa-lg fas fa-dice-{{reward.value|numToLetter}}">
+                    </span>
+                    <span *ngIf="RewardTypes.Slot!==reward.type">
+                        ({{reward.value}})
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <!-- <div class="o-reference">
+            <div><strong>1 : </strong> increment tracker</div>
+            <div><strong>6 : </strong> special</div>
+            <div><strong>pair : </strong> 1 Action</div>
+            <div><strong>triple : </strong> 2 Actions</div>
+            <div><strong>quad : </strong> 3 Actions</div>
+            <div><strong>straight : </strong> Defeat a Henchmen</div>
+
+            <ul><strong>Actions:</strong>
+            <li>Add a Part</li>
+            <li>Damage a Henchmen</li>
+            <li>Reduce Tracker</li>
+            </ul>
+        </div> -->
+    </div>
+
+
+
+</div>
