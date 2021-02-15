@@ -39,11 +39,6 @@ export class ContraptionComponent implements OnInit, OnChanges {
         this.rewards.add(part.reward);
     }
 
-    // preview() {
-    //     this.previewPart = PartFactory();
-    //     this.determineAvailbleSpaces();
-    // }
-
     addPart(index : number) {
         if(!this.previewPart) return;
         let spaces = this.contraption.spaces;
@@ -54,13 +49,17 @@ export class ContraptionComponent implements OnInit, OnChanges {
         }
     }
 
-    remove( index: number ) {
+    remove( event : any, index: number ) {
         let spaces = this.contraption.spaces;
         if( spaces[index].part ) {
             spaces[index].part = null;
-        }
-    }
 
+            if(this.previewPart) {
+                this.determineAvailbleSpaces(this.previewPart);
+            }
+        }
+        event.stopPropagation();
+    }
 
     determineAvailbleSpaces( part : Part ) {
         for(let i=0; i<25; ++i) {

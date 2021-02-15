@@ -86,21 +86,37 @@ function distributeConnections( numConns : number ) : any {
 }
 
 
+const DAMAGE_LABEL = '<span class="fas fa-bahai"></span>';
+function getLabel(dmg : number) : string {
+    let result = '<span title="Deal ' + dmg + ' Damage">';
+    for(let i=0; i<dmg; ++i) {
+        result += DAMAGE_LABEL;
+    }
+    result += '</span>';
+    return result;
+}
+
+
+
 export function PartFactory() {
 
     let numConns = determineNumConnections();
     let connectors = distributeConnections(numConns);
 
-    let dc = 2, dmg = 1;
-    if(numConns === 4) {
-        dc += 3;
-    } else if(numConns === 3) {
-        dc += 2; dmg += 1;
-    } else if(numConns === 2) {
-        dc += 2; dmg += 2;
-    } else {
-        dc += 1; dmg += 2;
-    }
+    let dc = random(6), dmg = 1 + (dc-2); //higher DCs do more damage
+    dmg -= Math.max(0, numConns-2);       //more connections lessen damage
+    dmg = Math.max(dmg, 1);               //always do at least 1 dmg
+
+    // let dc = 2, dmg = 1;
+    // if(numConns === 4) {
+    //     dc += 3;
+    // } else if(numConns === 3) {
+    //     dc += 2; dmg += 1;
+    // } else if(numConns === 2) {
+    //     dc += 2; dmg += 2;
+    // } else {
+    //     dc += 1; dmg += 2;
+    // }
 
     // let connOffset = Math.floor(numConns * 0.5);    //0, 1, 2
     // let dmg = 3 - connOffset;
@@ -112,7 +128,7 @@ export function PartFactory() {
     let slot = new Slot(dc);
     let reward : Reward = {
         type: RewardTypes.Damage,
-        label: "Deal Damage",
+        label: getLabel(dmg),       //`Deal ${dmg} Damage`,
         value: dmg
     }
     return new Part(name, slot, reward, connectors);

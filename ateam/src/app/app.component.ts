@@ -9,7 +9,7 @@ import { Contraption } from './contraption/contraption';
 import { Part, PartFactory } from './parts/part';
 import { Slot } from './slot/slot';
 import { Reward, RewardTypes, RewardsService } from './reward.service';
-import { Modes } from './models';
+import { Modes, Difficulties } from './models';
 
 
 @Component({
@@ -19,13 +19,14 @@ import { Modes } from './models';
 })
 export class AppComponent implements OnInit {
 
+    public difficulty : number = Difficulties.Normal;
     public team : any[] = [];
     public locations : Location[] = [];
     public contraption : Contraption = new Contraption();
     public round: number = 0;
     public tracker : number = 0;
     public RewardTypes = RewardTypes;
-    public mode : any = Modes.Plan;
+    public mode : any = Modes.Intro;
     public Modes = Modes;
     public showHelp : boolean = false;
     public previewPart : Part;
@@ -38,11 +39,18 @@ export class AppComponent implements OnInit {
     public rewards : Reward[] = [];
     private rewardSub : Subscription;
 
+
     constructor( public rewardSvc : RewardsService ) {
 
     }
 
     ngOnInit() {
+
+    }
+
+    startGame() {
+
+        console.log("Difficulty: " + this.difficulty);
 
         this.rewardSub = this.rewardSvc.subscribe(() => {
             setTimeout( () => {
@@ -55,11 +63,13 @@ export class AppComponent implements OnInit {
             this.team.push(member);
         });
 
-        for(let i=0; i<4; ++i) {
+        for(let i=0; i < this.difficulty; ++i) {
             this.locations.push( LocationFactory() );
         }
 
         this.nextRound();
+
+        this.mode = Modes.Plan;
     }
 
     nextRound() {

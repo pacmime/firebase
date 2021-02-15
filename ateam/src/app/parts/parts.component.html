@@ -7,7 +7,7 @@
     <div class="a-placeholder" *ngIf="part && !part.slot">FRAME</div>
 </div>
 <div class="l-bottom" *ngIf="part?.reward">
-    <div class="a-reward">{{part.reward.label}}</div>
+    <div class="a-reward" [innerHTML]="part.reward.label"></div>
 </div>
 
 <div class="a-connector--top"    *ngIf="part?.connectors.top"

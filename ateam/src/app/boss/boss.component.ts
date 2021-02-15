@@ -1,6 +1,11 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { RewardsService, RewardTypes } from '../reward.service';
-import { Modes } from '../models';
+import { Modes, Difficulties } from '../models';
+
+const HP = {};
+HP[Difficulties.Normal] = 20;
+HP[Difficulties.Hard] = 25;
+HP[Difficulties.Elite] = 30;
 
 
 @Component({
@@ -11,6 +16,7 @@ import { Modes } from '../models';
 export class BossComponent implements OnInit, OnChanges {
 
     @Input() mode : any;
+    @Input() difficulty : number = Difficulties.Normal;
     public hp : number = 10;
     public max: number = 10;
     public inShowdown : boolean = false;
@@ -18,6 +24,8 @@ export class BossComponent implements OnInit, OnChanges {
     constructor( private rewards : RewardsService ) { }
 
     ngOnInit() {
+        this.hp = HP[this.difficulty]*1;
+        this.max = HP[this.difficulty]*1;
     }
 
     ngOnChanges( changes : SimpleChanges ) {

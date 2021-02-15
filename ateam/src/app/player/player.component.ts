@@ -61,7 +61,11 @@ export class PlayerComponent implements OnInit {
 
     /** */
     onDieClick( die : any, $event: any) {
-        if ($event.altKey) { //TODO check for reward before allowing this
+        if ($event.altKey) {
+            //
+            //TODO check for reward before allowing this
+            //
+            //
             event.preventDefault();
 			event.stopPropagation();
             let val = prompt("Enter new die value", die.value);
@@ -81,6 +85,9 @@ export class PlayerComponent implements OnInit {
         this.clipboard.copy(die.value, (used : boolean) => {
             die.selected = false;   //unmark
             die.used = used;        //and set as used
+
+            //TODO if die was a 1, check if fail should still be active
+            this.checkRoll();
         });
     }
 
