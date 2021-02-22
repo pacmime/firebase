@@ -1,7 +1,7 @@
 
 import { Henchmen } from '../henchmen/henchmen';
 import { Slot } from '../slot/slot';
-import { Reward, RewardTypes } from '../reward.service';
+import { Reward, RewardTypes, RewardTypeLabels } from '../models';
 
 const NAMES = [
     "Repair Shop",
@@ -18,20 +18,20 @@ const NAMES = [
 
 
 const REWARDS : Reward[] = [
-    { type: RewardTypes.Defeat,  label: "Defeat a Henchmen"  },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Tracker, label: "Decrement Tracker"  },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Defeat,  label: "Defeat a Henchmen"  },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Damage,  label: "Damage to up to 3 Henchmen", value: 3 },
-    { type: RewardTypes.Defeat,  label: "Defeat a Henchmen"  },
-    { type: RewardTypes.Slot,    label: "Slot a Die"         },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    },
-    { type: RewardTypes.Part,    label: "Draw Parts Card"    }
+    new Reward(RewardTypes.Defeat),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Tracker),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Defeat),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Damage, 3),
+    new Reward(RewardTypes.Defeat),
+    new Reward(RewardTypes.Slot),
+    new Reward(RewardTypes.Part),
+    new Reward(RewardTypes.Part)
 ];
 
 export class Location {
@@ -44,7 +44,7 @@ export class Location {
         private _name : string,
         private _reward : Reward,
         private numSlots : number = 3,
-        private maxHenchmen : number = 2
+        private maxHenchmen : number = 3
     ) {
 
         for(let i=0; i<numSlots; ++i) {

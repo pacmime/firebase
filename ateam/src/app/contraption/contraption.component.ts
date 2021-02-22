@@ -3,9 +3,10 @@ import {
     SimpleChanges, EventEmitter
 } from '@angular/core';
 
+import { Reward } from '../models';
 import { Contraption } from './contraption';
 import { PartFactory, Part } from '../parts/part';
-import { Reward, RewardsService } from '../reward.service';
+import { RewardsService } from '../reward.service';
 
 @Component({
   selector: 'ateam-contraption',

@@ -3,11 +3,12 @@ import {
     Input, Output, EventEmitter, SimpleChanges
 } from '@angular/core';
 
+import { RewardTypes } from '../models';
 import { Slot } from '../slot/slot';
 import { SlotEvent } from '../slot/slot.component';
 import { Location, LocationFactory } from './location';
 import { Henchmen } from '../henchmen/henchmen';
-import { RewardsService, RewardTypes } from '../reward.service';
+import { RewardsService } from '../reward.service';
 
 @Component({
   selector: 'ateam-location',

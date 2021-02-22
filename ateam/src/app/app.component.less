@@ -4,7 +4,7 @@
     overflow: hidden;
 }
 
-.o-intro-card {
+.o-intro-card, .o-end-card {
     width: 100%;
     height: 100%;
     padding-top: 3em;
@@ -33,12 +33,53 @@
         }
     }
     .a-hero__heading {
+        margin-block-end: 0;
         font-family: 'Stardos Stencil', cursive;
         font-size: 10em;
         text-transform: uppercase;
         text-shadow: 1px 1px 3px rgb(0,0,0,0.75);
 
         .a-hero__upper, .a-hero__lower { font-size: 0.25em; }
+    }
+
+    .animation {
+        display: flex;
+        justify-content: center;
+        width: 50%;
+        margin: 0 auto 2em;
+        color: #333;
+        text-shadow: 0 0 3px #fff;
+        font-size: 2em;
+        margin-top: -1em;
+
+        & > * { opacity: 0; }
+        &.start > * { opacity: 1; }
+
+        & > :nth-child(1) {
+            margin-top:1em;
+            transition: opacity 0.2s linear 0.1s;
+        }
+        & > :nth-child(2) {
+            transition: opacity 0.2s linear 0.3s;
+        }
+        & > :nth-child(3) {
+            margin-top:1em;
+            transition: opacity 0.2s linear 0.5s;
+        }
+        & > :nth-child(4) {
+            transition: opacity 0.2s linear 0.7s;
+        }
+        & > :nth-child(5) {
+            margin-top:1em;
+            transition: opacity 0.2s linear 0.9s;
+        }
+        & > :nth-child(6) {
+            transition: opacity 0.2s linear 1.1s;
+        }
+        & > :nth-child(7) {
+            margin-top:1em;
+            transition: opacity 0.2s linear 1.3s;
+        }
     }
 }
 
@@ -55,7 +96,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 2em;
+    height: 3em;
 }
 .o-toolbar {
     order: 2;
@@ -66,6 +107,20 @@
     background: #777;
     color: #fff;
     height: 100%;
+
+    button {
+        background: #000;
+        color: #fff;
+        border-radius: 16px;
+        padding: 0.5em 1em;
+        border: 1px solid transparent;
+        text-transform: uppercase;
+
+        &:hover {
+            background: #fff;
+            color: #000;
+        }
+    }
 }
 .o-tracker {
     order: 1;
@@ -78,8 +133,8 @@
     height: 100%;
 
     .a-dot {
-        width: 16px;
-        height: 16px;
+        width: 24px;
+        height: 24px;
         border-radius: 100%;
         border: 1px solid #fff;
 
@@ -98,11 +153,12 @@
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 400px;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 2em 1fr;
     grid-template-areas:
         "contraption contraption contraption sidebar"
         "contraption contraption contraption sidebar"
         "contraption contraption contraption sidebar"
+        "rewards rewards rewards sidebar"
         "players players players sidebar";
 
 }
@@ -156,9 +212,15 @@
 }
 
 .o-rewards {
+    grid-area: rewards;
     width: 100%;
     height: 200px;
     overflow-y: auto;
+
+    select {
+        width: 100%;
+        height: 2.5em;
+    }
 }
 
 
@@ -207,165 +269,3 @@
     padding: 2em 2em;
     overflow-y: auto;
 }
-
-/*
-.o-gameboard {
-    width: 100%;
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-
-    .l-main {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        display: relative;
-    }
-    .l-side {
-        width: 500px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: -400px;
-        overflow-y: auto;
-        border-left: 1px solid #333;
-        background: #e6e6e6;
-    }
-}
-
-@media(min-width: 992px) {
-    .o-gameboard {
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch;
-
-        .l-main {
-            flex: 1 0 67%;
-        }
-        .l-side {
-            position: relative;
-            // flex: 0 1 33%;
-            right: 0;
-            padding: 1em;
-        }
-    }
-}
-
-.o-header {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.o-toolbar {
-    order: 2;
-    flex: 1;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #777;
-    color: #fff;
-}
-.o-tracker {
-    order: 1;
-    flex: 2;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #f00;
-    color: #fff;
-
-    .a-dot {
-        width: 16px;
-        height: 16px;
-        border-radius: 100%;
-        border: 1px solid #fff;
-
-        &.is-set {
-            background:#fff;
-        }
-    }
-}
-
-.o-players {
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch;
-}
-
-.o-boss {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1em;
-}
-
-.o-henchmen {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: flex-start;
-}
-
-.o-locations {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: flex-start;
-
-    & > * {
-        width: 48%;
-    }
-}
-
-.o-rewards {
-    width: 100%;
-    height: 200px;
-    overflow-y: auto;
-}
-
-
-.a-label {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 1.25em;
-    text-align: center;
-    padding: 0.125em 0.5em;
-}
-
-.o-preview {
-    height: 150px;
-    margin: 1em auto;
-    width: 150px;
-    font-size: 1.125em;
-
-    ateam-parts {
-        width: 100%;
-        height: 125px;
-    }
-}
-
-.a-placeholder {
-    height: 125px;
-    width: 100%;
-    border: 4px solid #fff;
-    border-radius: 4px;
-    overflow: hidden;
-    background-color: #c3cbdc;
-    background-image: linear-gradient(335deg, #c3cbdc 0%, #edf1f4 74%);
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.o-help {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    background: rgba(255,255,255, 0.75);
-    z-index: 999;
-    padding: 3em 5em;
-}
-*/

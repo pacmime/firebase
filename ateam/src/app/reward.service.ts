@@ -1,20 +1,7 @@
 
 import { Injectable } from "@angular/core";
 import { Subject, Subscription } from 'rxjs';
-
-export enum RewardTypes {
-    Damage,
-    Defeat,
-    Part,
-    Tracker,
-    Slot,
-    DieFace
-}
-export interface Reward {
-    type   : RewardTypes;
-    value ?: number;
-    label ?: string;
-}
+import { Reward, RewardTypes, RewardTypeLabels } from './models';
 
 @Injectable()
 export class RewardsService {
@@ -32,20 +19,20 @@ export class RewardsService {
     }
 
 
-    add( reward : Reward ) {
+    add( arg : Reward ) {
 
         //dupe input object
-        reward = Object.assign({}, reward);
+        let reward = arg.clone();
 
         if(RewardTypes.Slot === reward.type) {
             //generate random die value for reward
-            reward.value = Math.ceil((Math.random()*6000)/1000);
+            reward.value = Math.ceil((Math.random()*5000)/1000)+1;
         }
 
-        if(RewardTypes.Damage === reward.type &&
-            reward.value && reward.value > 1) {
+
+        if(RewardTypes.Slot !== reward.type && !isNaN(reward.value) && reward.value > 1) {
             while(reward.value > 0) {
-                this._rewards.push({ type: reward.type, label: reward.label, value: 1 });
+                this._rewards.push(new Reward(reward.type));
                 reward.value--;
             }
 
@@ -53,6 +40,9 @@ export class RewardsService {
             this._rewards.push(reward);
         }
 
+        let label = reward.label;
+        console.log(`RewardService.add() - Added '${label}' reward`);
+        console.log(`RewardService.add() - now has ${this._rewards.length} rewards`);
         this._subject.next();
     }
 

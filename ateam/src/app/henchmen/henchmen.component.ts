@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+import { RewardTypes } from '../models';
 import { Henchmen } from './henchmen';
-import { RewardsService, RewardTypes } from '../reward.service';
+import { RewardsService } from '../reward.service';
 
 
 @Component({

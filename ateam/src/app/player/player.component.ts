@@ -3,17 +3,19 @@ import {
     Input, Output, EventEmitter, SimpleChanges
 } from '@angular/core';
 
-import { Roll } from '../roll';
+import { Die, Roll } from '../roll';
+import { Team, Reward, RewardTypes, RewardTypeLabels, RewardTypeIcons } from '../models';
 import { ClipboardService } from '../clipboard.service';
-import { Reward, RewardsService } from '../reward.service';
+import { RewardsService } from '../reward.service';
 
 
 export interface PlayerEvent {
     type: 'damage' | 'defeat' | 'parts' | 'tracker' | 'action';
     value: number;
+    member : string;
 }
 
-const MEMBERS = [ 'hannibal', 'faceman', 'ba', 'murdock' ];
+// const MEMBERS = [ 'hannibal', 'faceman', 'ba', 'murdock' ];
 
 
 @Component({
@@ -23,17 +25,19 @@ const MEMBERS = [ 'hannibal', 'faceman', 'ba', 'murdock' ];
 })
 export class PlayerComponent implements OnInit {
 
+    @Input() member : string;
     @Input() round : number;
-    @Input() member : any;
     @Output() onEvent : EventEmitter<PlayerEvent> = new EventEmitter<PlayerEvent>();
 
-    public roll : Roll = new Roll();
+    public roll : Roll;
     public hasPair : boolean = false;
     public hasTriple : boolean = false;
     public hasQuad : boolean = false;
     public hasSpecial : boolean = false;
     public hasFail : boolean = false;
     public numRewardsAvailable : number = 0;
+    public messages : string[] = [];
+    public NoReward : any = RewardTypes.None;
 
     constructor(
         private clipboard : ClipboardService,
@@ -41,20 +45,22 @@ export class PlayerComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.rollDice();
     }
 
     ngOnChanges( changes : SimpleChanges ) {
-        if(changes.round) {
+        if(changes.round && this.roll) {
             this.rollDice();
         }
     }
 
     @HostBinding('class') get class() {
-        return this.member.name.toLowerCase();
+        return this.member.toString().toLowerCase();
     }
 
     rollDice() {
-        this.roll = new Roll();
+        this.messages = [];
+        this.roll = new Roll(this.member);
         this.roll.roll();
         this.checkRoll();
     }
@@ -62,16 +68,16 @@ export class PlayerComponent implements OnInit {
     /** */
     onDieClick( die : any, $event: any) {
         if ($event.altKey) {
-            //
-            //TODO check for reward before allowing this
-            //
-            //
             event.preventDefault();
-			event.stopPropagation();
+            event.stopPropagation();
+
+            //make sure a reward exists
+            if(!this.rewards.has(RewardTypes.DieFace)) return;
+            this.rewards.get(RewardTypes.DieFace);
             let val = prompt("Enter new die value", die.value);
             let newValue : number = parseInt(val);
             die.value = isNaN(newValue) ? die.value : newValue;
-            this.checkRoll();
+            this.roll.check();
             return;
         }
         if ($event.shiftKey) {
@@ -85,25 +91,29 @@ export class PlayerComponent implements OnInit {
         this.clipboard.copy(die.value, (used : boolean) => {
             die.selected = false;   //unmark
             die.used = used;        //and set as used
-
-            //TODO if die was a 1, check if fail should still be active
-            this.checkRoll();
+            this.roll.check();
+            this.checkAllUsed();
         });
     }
 
 
     checkRoll() {
-        let name = this.member.name.toLowerCase();
-        let idx = MEMBERS.indexOf(name);
-        // if(idx >= 0 && 6 === this.roll.results[idx].value) {
-        //     this.addReward(this.member.special.reward);
-        // }
+        this.roll.check();
+        if(this.roll.groupUsed) return;
 
-        this.hasFail = this.roll.hasFail();
-        this.hasPair = this.roll.hasPair();
-        this.hasTriple = this.roll.hasTriple();
-        this.hasQuad = this.roll.hasQuad();
-        this.hasSpecial = this.roll.hasSpecial(idx);
+        //if player's roll has multiples, they get additional actions they
+        // can choose rewards from
+        if(this.roll.hasQuad) {
+            this.messages.push("Four of Kind: +2 Actions!")
+            this.onEvent.emit({type: 'action', value: 2, member: this.member});
+        } else if(this.roll.hasTriple) {
+            this.messages.push("Three of Kind: +1 Actions!")
+            this.onEvent.emit({type: 'action', value: 1, member: this.member});
+        } else if(this.roll.hasPair) {
+            this.messages.push("Two of Kind: +1 Damage!")
+            this.rewards.add(new Reward(RewardTypes.Damage));
+            // this.onEvent.emit({type: 'action', value: 1, member: this.member});
+        }
 
     }
 
@@ -111,42 +121,30 @@ export class PlayerComponent implements OnInit {
         this.rewards.add(reward);
     }
 
-    spend(type : number) {
-        switch(type) {
-
-            //Fail
-            case 1:
-            this.roll.markFail();
-            this.onEvent.emit({type:'tracker',value:1});
-            break;
-
-            //Pair
-            case 2:
-            this.roll.getPair();
-            this.numRewardsAvailable += 1;
-            this.onEvent.emit({type: 'action', value: 1});
-            break;
-
-            // 3 of a Kind
-            case 3: this.roll.getThreeOfAKind();
-            this.numRewardsAvailable += 2;
-            this.onEvent.emit({type: 'action', value: 2});
-            break;
-
-            // 4 of a Kind
-            case 4: this.roll.getFourOfAKind();
-            this.numRewardsAvailable += 3;
-            this.onEvent.emit({type: 'action', value: 3});
-            break;
-
-            // Special
-            case 6:
-            this.addReward(this.member.special.reward);
-            let name = this.member.name.toLowerCase();
-            let idx = MEMBERS.indexOf(name);
-            this.roll.useSpecial(idx);
+    /**
+     *
+     */
+    useDie( die : Die ) {
+        if(die.used) return;   //already spent
+        die.used = true;
+        if(die.reward.type === RewardTypes.Penalty) {
+            // this.rewards.add(die.reward);
+            this.onEvent.emit({type:'tracker',value:1, member: this.member});
+        } else if(die.reward.type === RewardTypes.Tracker) {
+            this.onEvent.emit({type:'tracker',value:-1, member: this.member});
+        } else {
+            this.rewards.add(die.reward);
         }
-        this.checkRoll();
+
+        this.checkAllUsed();
+    }
+
+    checkAllUsed() {
+        if(this.roll.allUsed()) {
+            console.log(`${this.member} has used all dice!`);
+            let reward = new Reward(RewardTypes.Damage);
+            this.rewards.add(reward);
+        }
     }
 
 }

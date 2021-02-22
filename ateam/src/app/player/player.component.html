@@ -1,27 +1,21 @@
-<div class="l-top  {{member.name.toLowerCase()}}">
-    <img src="/assets/{{member.name.toLowerCase()}}.png">
-    <div class="a-label">{{member.name}}</div>
+<div class="l-top {{member.toLowerCase()}}">
+    <img src="/assets/{{member.toLowerCase()}}.png">
+    <div class="a-label">{{member}}</div>
 </div>
 <div class="l-middle">
     <div class="o-roll">
-        <div *ngFor="let result of roll?.results; let $index = index"
-            class="a-die"
-            [ngClass]="{'is-used':result.used, 'is-selected':result.selected}"
-            (click)="onDieClick(result, $event)">
-            <span class="fa-2x fas fa-dice-{{result.value|numToLetter}}"></span>
+        <div *ngFor="let die of roll?.results; let $index = index"
+            class="rolled-die" [ngClass]="{'is-special':die.special}">
+            <span class="a-die" (click)="onDieClick(die, $event)"
+            [ngClass]="{'is-used':die.used, 'is-selected':die.selected}">
+                <span class="fa-2x fas fa-dice-{{die.value|numToLetter}}"></span>
+            </span>
+            <small title="{{die.reward.label}}"><span class="{{die.reward.icon}}"></span></small>
+            <button *ngIf="!die.used && die.reward.type !== NoReward"
+                type="button" (click)="useDie(die)">Use</button>
         </div>
-    </div>
-    <div>
-        <button type="button" *ngIf="hasFail" (click)="spend(1)">Fail</button>
-        <button type="button" *ngIf="hasPair" (click)="spend(2)">Pair</button>
-        <button type="button" *ngIf="hasTriple" (click)="spend(3)">Triple</button>
-        <button type="button" *ngIf="hasQuad" (click)="spend(4)">Quad</button>
-        <button type="button" *ngIf="hasSpecial" (click)="spend(6)">Special</button>
     </div>
 </div>
 <div class="l-bottom">
-    <strong>SPECIAL</strong>
-    <div class="a-special" (click)="addReward(member.special.reward)">
-        {{member.special.reward.label||"Not specified"}}
-    </div>
+    <div *ngFor="let msg of messages"><small>{{msg}}</small></div>
 </div>

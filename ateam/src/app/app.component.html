@@ -7,6 +7,17 @@
             <h1 class="a-hero__heading">
                 <sup class="a-hero__upper">the</sup>A<span class="a-hero__lower">-Team</span>
             </h1>
+
+            <div class="animation" [ngClass]="{'start':beginAnim}">
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+                <span class="fas fa-bahai"></span>
+            </div>
+
             <select name="difficulty" class="form-control" [(ngModel)]="difficulty">
                 <option value="4" selected>Normal</option>
                 <option value="6">Hard</option>
@@ -20,7 +31,7 @@
 
 </ng-container>
 
-<ng-container *ngIf="Modes.Intro !== mode">
+<ng-container *ngIf="Modes.Intro !== mode && Modes.End !== mode">
 
     <div class="o-wrapper">
         <div class="o-header">
@@ -37,10 +48,9 @@
             </div>
             <div class="o-tracker">
                 <div class="a-label"><img src="assets/badge.svg" height="16"> Col Lynch </div>
-                <button type="button" (click)="decrTracker()">-</button>
+                <!-- <button type="button" (click)="decrTracker()">-</button> -->
                 <div class="a-dot" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]"
                     [ngClass]="{'is-set':tracker>=i}"></div>
-                <!-- <button type="button" (click)="incrTracker()">+</button> -->
             </div>
         </div>
 
@@ -54,41 +64,32 @@
                 (onEvent)="onContraptionEvent($event)">
             </ateam-contraption>
 
+            <div class="o-rewards">
+                <ng-container *ngIf="bankedActions">
+                    <button *ngFor="let choice of actionChoices"
+                        (click)="onActionChosen(choice.type)">
+                        <span class="{{choice.icon}}"></span>
+                    </button>
+                </ng-container>
+                <strong>&nbsp;Rewards ({{bankedActions}}): </strong>
+                <span *ngFor="let reward of rewards; let $idx = index;">
+                    <span *ngIf="$idx > 0">, </span>
+                    <span class="{{reward.icon}}"
+                        title="{{reward.label}}"></span>
+                    <ng-container *ngIf="reward.value">
+                        <ng-container *ngIf="RewardTypes.Slot===reward.type">
+                            &nbsp;(<span class="fa-lg fas fa-dice-{{reward.value|numToLetter}}"></span>)
+                        </ng-container>
+                    </ng-container>
+                </span>
+            </div>
+
             <div class="o-players">
                 <ateam-player *ngFor="let member of team"
                     [member]="member"
                     [round]="round"
                     (onEvent)="onPlayerEvent($event)">
                 </ateam-player>
-
-                <div class="o-rewards">
-                    <div class="a-label">Rewards ({{bankedActions}})</div>
-                    <div>
-                        <button type="button" (click)="addReward({type:RewardTypes.Damage,label:'Damage a Henchmen'})">
-                            &#43; <span class="fas fa-bahai" height="16"></span>
-                        </button>
-                        <button type="button" (click)="addReward({type:RewardTypes.Part,label:'Add Part'})">
-                            &#43; <span class="fas fa-vector-square" height="16"></span>
-                        </button>
-                        <button type="button" (click)="addReward({type:RewardTypes.Tracker,label:'Reduce Tracker'})">
-                            &lt; <img src="assets/badge.svg" width="13" height="13">
-                        </button>
-                    </div>
-                    <div *ngFor="let reward of rewards">
-                        <span [innerHTML]="reward.label"></span>
-                        <span *ngIf="reward.value">
-                            <span *ngIf="RewardTypes.Slot===reward.type"
-                                class="fa-lg fas fa-dice-{{reward.value|numToLetter}}">
-                            </span>
-                            <span *ngIf="RewardTypes.Damage===reward.type">
-                                Damage a Henchmen
-                            </span>
-                            <span *ngIf="RewardTypes.Slot!==reward.type">
-                                ({{reward.value}})
-                            </span>
-                        </span>
-                    </div>
-                </div>
             </div>
 
             <div class="o-sidebar">
@@ -105,18 +106,19 @@
 
                     <div class="o-locations">
                         <div class="a-label">LOCATIONS</div>
-                        <div class="l-container--flex">
+                        <!-- <div class="l-container--flex"> -->
                             <ateam-location *ngFor="let location of locations"
                                 [location]="location"
                                 [round]="round"
                                 (onEvent)="onLocationEvent($event)">
                             </ateam-location>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </ng-container>
 
                 <div class="o-boss" *ngIf="Modes.Showdown === mode">
-                    <ateam-boss [mode]="mode" [difficulty]="difficulty">
+                    <ateam-boss [mode]="mode" [difficulty]="difficulty"
+                        (onEvent)="onBossEvent($event)">
                     </ateam-boss>
                 </div>
 
@@ -176,4 +178,24 @@
             <li>Reduce Tracker by 1</li>
         </ul>
     </div>
+</ng-container>
+
+<ng-container *ngIf="Modes.End === mode">
+
+    <div class="o-end-card">
+        <div class="a-hero">
+            <h1 class="a-hero__heading">
+                <sup class="a-hero__upper">the</sup>A<span class="a-hero__lower">-Team</span>
+            </h1>
+
+            <div *ngIf="won">Congratulations! You won!</div>
+            <div *ngIf="!won">Uh-oh! The A-Team was captured by Col. Lynch!</div>
+            <br>
+            <br>
+            <button type="button" (click)="restart()">Play again</button>
+            <br>
+
+        </div>
+    </div>
+
 </ng-container>

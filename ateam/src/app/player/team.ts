@@ -1,123 +1,27 @@
 import { Roll } from "../roll";
-import { Reward, RewardTypes } from '../reward.service';
+import { Reward, RewardTypes, RewardTypeLabels } from '../models';
 
 
 export const ATEAM = {
 
     Hannibal : {
         special : {
-            reward: { label: "Defeat Henchmen", type: RewardTypes.Defeat }
-        },
-        pair    : {
-            description: "Deal damage to henchmen",
-            action: function(roll : Roll) {
-                //apply X/2 to HENCHMEN
-            }
-        },
-        triple    : {
-            description: "Add PARTS card",
-            action: function(roll : Roll) {
-                //draw random parts card and add
-            }
-        },
-        quad    : {
-            description: "Defeat Henchmen",
-            action: function(roll : Roll) {
-                //remove random HM
-            }
-        },
-        straight : {
-            description: "???",
-            action: function(roll : Roll) {
-
-            }
+            reward: { label: RewardTypeLabels[RewardTypes.Defeat], type: RewardTypes.Defeat }
         }
     },
     Faceman : {
         special : {
-            reward: { label: "Slot a die without restriction", type: RewardTypes.Slot }
-        },
-        pair    : {
-            description: "Deal damage to henchmen",
-            action: function(roll : Roll) {
-                //apply X/2 to HENCHMEN
-            }
-        },
-        triple    : {
-            description: "Add PARTS card",
-            action: function(roll : Roll) {
-                //draw random parts card and add
-            }
-        },
-        quad    : {
-            description: "Defeat Henchmen",
-            action: function(roll : Roll) {
-                //remove random HM
-            }
-        },
-        straight : {
-            description: "???",
-            action: function(roll : Roll) {
-
-            }
+            reward: { label: RewardTypeLabels[RewardTypes.Slot], type: RewardTypes.Slot }
         }
     },
     BA : {
         special : {
-            reward: { label: "Add Part", type: RewardTypes.Part }
-        },
-        pair    : {
-            description: "Deal damage to henchmen",
-            action: function(roll : Roll) {
-                //apply X/2 to HENCHMEN
-            }
-        },
-        triple    : {
-            description: "Add PARTS card",
-            action: function(roll : Roll) {
-                //draw random parts card and add
-            }
-        },
-        quad    : {
-            description: "Defeat Henchmen",
-            action: function(roll : Roll) {
-                //remove random HM
-            }
-        },
-        straight : {
-            description: "???",
-            action: function(roll : Roll) {
-
-            }
+            reward: { label: RewardTypeLabels[RewardTypes.Part], type: RewardTypes.Part }
         }
     },
     Murdock : {
         special : {
-            reward: { label: "Change face value of one die", type: RewardTypes.DieFace }
-        },
-        pair    : {
-            description: "Deal damage to henchmen",
-            action: function(roll : Roll) {
-                //apply X/2 to HENCHMEN
-            }
-        },
-        triple    : {
-            description: "Add PARTS card",
-            action: function(roll : Roll) {
-                //draw random parts card and add
-            }
-        },
-        quad    : {
-            description: "Defeat Henchmen",
-            action: function(roll : Roll) {
-                //remove random HM
-            }
-        },
-        straight : {
-            description: "???",
-            action: function(roll : Roll) {
-
-            }
+            reward: { label: RewardTypeLabels[RewardTypes.DieFace], type: RewardTypes.DieFace }
         }
     }
 }

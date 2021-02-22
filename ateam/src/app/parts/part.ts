@@ -1,6 +1,6 @@
 
 import { Slot } from '../slot/slot';
-import { Reward, RewardTypes } from '../reward.service';
+import { Reward, RewardTypes } from '../models';
 
 
 const NAMES = [
@@ -126,10 +126,7 @@ export function PartFactory() {
 
     let name = NAMES[ Math.floor(Math.random()*NAMES.length) ];
     let slot = new Slot(dc);
-    let reward : Reward = {
-        type: RewardTypes.Damage,
-        label: getLabel(dmg),       //`Deal ${dmg} Damage`,
-        value: dmg
-    }
+    let reward = new Reward(RewardTypes.Damage, dmg);
+    reward.label = getLabel(dmg);
     return new Part(name, slot, reward, connectors);
 }

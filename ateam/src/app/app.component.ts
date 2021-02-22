@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Henchmen } from './henchmen/henchmen';
@@ -8,8 +8,11 @@ import { Location, LocationFactory } from './location/location';
 import { Contraption } from './contraption/contraption';
 import { Part, PartFactory } from './parts/part';
 import { Slot } from './slot/slot';
-import { Reward, RewardTypes, RewardsService } from './reward.service';
-import { Modes, Difficulties } from './models';
+import { RewardsService } from './reward.service';
+import {
+    Modes, Difficulties, Team,
+    Reward, RewardTypes, RewardTypeLabels, RewardTypeIcons
+} from './models';
 
 
 @Component({
@@ -17,8 +20,9 @@ import { Modes, Difficulties } from './models';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
+    public beginAnim : boolean = false;
     public difficulty : number = Difficulties.Normal;
     public team : any[] = [];
     public locations : Location[] = [];
@@ -28,15 +32,19 @@ export class AppComponent implements OnInit {
     public RewardTypes = RewardTypes;
     public mode : any = Modes.Intro;
     public Modes = Modes;
+    public won : boolean = false;
     public showHelp : boolean = false;
     public previewPart : Part;
     public placeholderPart : Part = new Part(
-        "Part", new Slot(1),
-        { type: RewardTypes.Damage, label: "Reward" },
+        "Part", new Slot(1), new Reward(RewardTypes.Damage),
         { top: true, bottom: true, left: true, right: true }
     );
     public bankedActions : number = 0;
     public rewards : Reward[] = [];
+
+    public actionChoice : RewardTypes;
+    public actionChoices : Reward[] = [];
+    public Icons = RewardTypeIcons;
     private rewardSub : Subscription;
 
 
@@ -46,22 +54,51 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
 
+        this.actionChoices.push(new Reward(RewardTypes.Damage));
+        this.actionChoices.push(new Reward(RewardTypes.Part));
+        this.actionChoices.push(new Reward(RewardTypes.Tracker));
+
+        setTimeout(() => { this.beginAnim = true; }, 500);
+    }
+
+    ngOnDestroy() {
+        this.won = false;
+        this.mode = Modes.Intro;
+        this.rewardSub.unsubscribe();
+        this.rewardSub = null;
+        this.team = [];
+        this.locations = [];
+        this.bankedActions = 0;
+        this.rewards = [];
+        this.rewardSvc.clear();
+        this.rewardSvc = null;
+        this.rewards = null;
+        this.previewPart = null;
+        this.placeholderPart = null;
+        this.tracker = 0;
+        this.contraption = null;
     }
 
     startGame() {
 
-        console.log("Difficulty: " + this.difficulty);
+        // console.log("Difficulty: " + this.difficulty);
 
         this.rewardSub = this.rewardSvc.subscribe(() => {
+            console.log("Reward was added!");
             setTimeout( () => {
                 this.rewards = this.rewardSvc.list();
+
+                //if list has tracker reward, apply it...
+                if(this.rewardSvc.has(RewardTypes.Tracker)) {
+                    this.decrTracker();
+                }
             });
         });
 
-        Object.keys(ATEAM).forEach( name => {
-            let member = Object.assign({ name: name }, ATEAM[name]);
-            this.team.push(member);
-        });
+        this.team.push(Team.Hannibal);
+        this.team.push(Team.Faceman);
+        this.team.push(Team.BA);
+        this.team.push(Team.Murdock);
 
         for(let i=0; i < this.difficulty; ++i) {
             this.locations.push( LocationFactory() );
@@ -83,6 +120,12 @@ export class AppComponent implements OnInit {
             this.tracker++; //bump tracker if any locations still open
         }
         this.round++;
+
+        //check of tracker has reached it's end
+        if(this.tracker >= 10) {
+            this.mode = Modes.End;
+            this.won = false;
+        }
     }
 
     incrTracker( value : number = 1) {
@@ -96,7 +139,11 @@ export class AppComponent implements OnInit {
     decrTracker() {
         let reward = this.rewardSvc.get(RewardTypes.Tracker);
         if(!reward) return;
-        this.tracker = this.tracker - 1;
+        this.tracker = this.tracker - (reward.value || 1);
+    }
+
+    onActionChosen( type : RewardTypes ) {
+        this.addReward(new Reward(type));
     }
 
     onContraptionEvent( event : any ) {
@@ -107,8 +154,13 @@ export class AppComponent implements OnInit {
 
     onPlayerEvent($event : PlayerEvent) {
         switch($event.type) {
-            case 'tracker' : this.tracker += $event.value; break;
-            case 'action'  : this.bankedActions += $event.value; break;
+            case 'tracker' :
+            setTimeout(() => { this.tracker += $event.value; });
+            break;
+
+            case 'action'  :
+            setTimeout(() => { this.bankedActions += $event.value; });
+            break;
         }
     }
 
@@ -133,4 +185,30 @@ export class AppComponent implements OnInit {
         }
     }
 
+
+    /** */
+    onBossEvent(success : boolean) {
+        if(success) {
+            this.mode = Modes.End;
+            this.won = true;
+        }
+    }
+
+    restart() {
+        this.won = false;
+        this.mode = Modes.Intro;
+
+        this.rewardSub.unsubscribe();
+        this.team = [];
+        this.locations = [];
+        this.bankedActions = 0;
+        this.rewards = [];
+        this.rewardSvc.clear();
+        this.previewPart = null;
+        this.tracker = 0;
+        this.contraption = new Contraption();
+
+        this.mode = Modes.Plan;
+        this.startGame();
+    }
 }

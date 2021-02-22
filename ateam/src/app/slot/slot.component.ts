@@ -3,8 +3,9 @@ import {
 } from '@angular/core';
 
 import { Slot } from './slot';
+import { RewardTypes } from '../models';
 import { ClipboardService } from '../clipboard.service';
-import { RewardsService, RewardTypes } from '../reward.service';
+import { RewardsService } from '../reward.service';
 
 export interface SlotEvent {
     type: 'die.added' | 'die.ejected' | 'die.cooled';
