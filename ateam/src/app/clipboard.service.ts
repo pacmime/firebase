@@ -1,36 +1,33 @@
 
 import { Injectable } from "@angular/core";
 
+import { Die } from './roll/roll';
+
 @Injectable()
 export class ClipboardService {
 
-    private _value: number;
+    private _die : Die;
     private _callback : any;
 
-    constructor() {
+    constructor() {}
 
-    }
-
-    copy( value : number, callback : (used : boolean) => void ) : void {
-
-        if(this._callback) {
-            this._callback(false);
-        }
-
-        this._value = value;
+    copy( die : Die, callback : (used : boolean) => void ) : void {
+        if(this._callback) this._callback(false);
+        this._die = die;
         this._callback = callback;
     }
 
-    paste() : number {
-        if(this._callback)
-            this._callback(true);
-        setTimeout(() => {
-            this._callback = null;
-            this._value = -1;
-        });
-        return this._value;
+    paste() : Die {
+        if(this._callback) this._callback(true);
+        setTimeout(() => { this.clear() });
+        return this._die;
     }
 
-    peek() : number { return this._value; }
+    peek() : Die { return this._die; }
+
+    clear() {
+        this._callback = null;
+        this._die = null;
+    }
 
 }

@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 
 import { Slot } from './slot';
-import { RewardTypes } from '../models';
+import { Die } from '../roll/roll';
+import { Team, RewardTypes } from '../models';
 import { ClipboardService } from '../clipboard.service';
 import { RewardsService } from '../reward.service';
 
@@ -19,6 +20,7 @@ export interface SlotEvent {
 export class SlotComponent implements OnInit {
 
     @Input()  slot : Slot;
+    @Input() canSelectDie: boolean = false;
     @Output() onEvent : EventEmitter<SlotEvent> = new EventEmitter<SlotEvent>();
 
     constructor(
@@ -30,8 +32,8 @@ export class SlotComponent implements OnInit {
     }
 
 
-    public addDie( value : number, override ?: boolean ) {
-        this.slot.addDie(value, override);
+    public addDie( die : Die, override ?: boolean ) {
+        this.slot.addDie(die, override);
         this.onEvent.emit({ type: 'die.added' });
     }
 
@@ -45,31 +47,46 @@ export class SlotComponent implements OnInit {
         this.onEvent.emit({ type: 'die.ejected' });
     }
 
-    incr() {
-        if(!this.slot.hasDie()) return;
-        this.slot.addDie(this.slot.die+1);
-        this.onEvent.emit({ type: 'die.added' });
-    }
-
-    decr() {
-        if(!this.slot.hasDie()) return;
-        this.coolDie();
-    }
+    // incr() {
+    //     if(!this.slot.hasDie()) return;
+    //     this.slot.addDie(this.slot.die+1);
+    //     this.onEvent.emit({ type: 'die.added' });
+    // }
+    //
+    // decr() {
+    //     if(!this.slot.hasDie()) return;
+    //     this.coolDie();
+    // }
 
     onSlotClick() {
         if(!this.slot.hasDie()) {
 
-            let value = this.clipboard.peek();
-            if(value < this.slot.dc) {
-                if( !this.rewards.has(RewardTypes.Slot, this.slot.dc) ) return;
-                //TODO prompt about using reward
-                value = this.rewards.get(RewardTypes.Slot, this.slot.dc).value;
+            let die = this.clipboard.peek();
+            if(die) {
+                let value = die.value;
+                if(value >= this.slot.dc) {
+                    this.addDie(die);
+                    this.clipboard.paste();
+                    return;
+                }
             }
-            this.addDie(value);
-            this.clipboard.paste();
+
+            if( this.rewards.has(RewardTypes.Die, this.slot.dc) ) {
+                //TODO prompt about using reward
+                let value = this.rewards.get(RewardTypes.Die, this.slot.dc).value;
+                die = new Die(Team.Hannibal, Team.Hannibal, value);
+                this.addDie(die);
+                return;
+            }
+
+        } else if(this.canSelectDie){
+            this.clipboard.copy(this.slot.die, (used : boolean) => {
+                this.slot.ejectDie();
+            });
         }
     }
 
+    /** */
     onDieClick($event) {
         if ($event.altKey) { //TODO check for reward before allowing this
             event.preventDefault();
@@ -78,9 +95,27 @@ export class SlotComponent implements OnInit {
             if(this.rewards.has(RewardTypes.DieFace)) {
                 this.rewards.get(RewardTypes.DieFace)
                 let newValue = prompt("Enter new die value", this.slot.die +'');
-                this.slot.die = parseInt(newValue);
+                this.slot.value = this.slot.die.value = parseInt(newValue);
                 this.slot.checkDie();
             }
+            return;
+        }
+
+        //if this slot allows selecting die inside it (aka, stored die in van)
+        if(this.canSelectDie) {
+            //die was already selected, deselect it
+            if(this.slot.die.selected) {
+                this.slot.die.selected = false;
+                return;
+            }
+            //mark as selected and copy to clipboard
+            this.slot.die.selected = true;
+            this.clipboard.copy(this.slot.die, (used : boolean) => {
+                //die being used
+                if(used) this.slot.ejectDie();
+                //another die selected, deselect this one
+                else this.slot.die.selected = false;
+            });
         }
     }
 }

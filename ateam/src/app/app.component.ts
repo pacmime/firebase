@@ -6,7 +6,7 @@ import { ATEAM } from "./player/team";
 import { PlayerEvent } from './player/player.component';
 import { Location, LocationFactory } from './location/location';
 import { Contraption } from './contraption/contraption';
-import { Part, PartFactory } from './parts/part';
+import { Part, PartFactory, buildDeck } from './parts/part';
 import { Slot } from './slot/slot';
 import { RewardsService } from './reward.service';
 import {
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public difficulty : number = Difficulties.Normal;
     public team : any[] = [];
     public locations : Location[] = [];
-    public contraption : Contraption = new Contraption();
+    public contraption : Contraption;
     public round: number = 0;
     public tracker : number = 0;
     public RewardTypes = RewardTypes;
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public showHelp : boolean = false;
     public previewPart : Part;
     public placeholderPart : Part = new Part(
-        "Part", new Slot(1), new Reward(RewardTypes.Damage),
+        "Part Name", new Slot(3), new Reward(RewardTypes.Damage, 1),
         { top: true, bottom: true, left: true, right: true }
     );
     public bankedActions : number = 0;
@@ -46,6 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public actionChoices : Reward[] = [];
     public Icons = RewardTypeIcons;
     private rewardSub : Subscription;
+
+    private partsDeck : Part[];
 
 
     constructor( public rewardSvc : RewardsService ) {
@@ -59,6 +61,18 @@ export class AppComponent implements OnInit, OnDestroy {
         this.actionChoices.push(new Reward(RewardTypes.Tracker));
 
         setTimeout(() => { this.beginAnim = true; }, 500);
+
+        this.rewardSub = this.rewardSvc.subscribe(() => {
+            // console.log("Reward was added!");
+            setTimeout( () => {
+
+                //if list has tracker reward, apply it...
+                this.checkAndDecrementTracker();
+
+                //update list of rewards for display
+                this.rewards = this.rewardSvc.list();
+            });
+        });
     }
 
     ngOnDestroy() {
@@ -83,32 +97,37 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // console.log("Difficulty: " + this.difficulty);
 
-        this.rewardSub = this.rewardSvc.subscribe(() => {
-            console.log("Reward was added!");
-            setTimeout( () => {
-                this.rewards = this.rewardSvc.list();
-
-                //if list has tracker reward, apply it...
-                if(this.rewardSvc.has(RewardTypes.Tracker)) {
-                    this.decrTracker();
-                }
-            });
-        });
-
         this.team.push(Team.Hannibal);
         this.team.push(Team.Faceman);
         this.team.push(Team.BA);
         this.team.push(Team.Murdock);
 
+        //generate locations (number based upon difficulty)
         for(let i=0; i < this.difficulty; ++i) {
             this.locations.push( LocationFactory() );
         }
 
+        //generate new deck of parts (size based upon difficulty)
+        this.partsDeck = buildDeck(
+            Difficulties.Normal === this.difficulty ? 30 :
+            (Difficulties.Hard   === this.difficulty ? 25 : 20)
+        );
+        // console.log("Parts: ");
+        // this.partsDeck.forEach((part) => {
+        //     let c = part.connectors;
+        //     console.log(`${part.name} : ${part.reward.value} (${c.top}/${c.right}/${c.bottom}/${c.left})`);
+        // });
+
+        this.contraption = new Contraption();
+
+        //advance round marker
         this.nextRound();
 
+        //make sure we're in Plan game mode
         this.mode = Modes.Plan;
     }
 
+    /** */
     nextRound() {
 
         this.rewardSvc.clear();
@@ -128,18 +147,19 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
-    incrTracker( value : number = 1) {
-        this.tracker += value;
-        if(this.tracker >= 10) {
-            this.mode = Modes.Showdown;
-            this.round++;   //trigger new round rolls
-        }
-    }
+    // incrTracker( value : number = 1) {
+    //     this.tracker += value;
+    //     if(this.tracker >= 10) {
+    //         this.mode = Modes.Showdown;
+    //         this.round++;   //trigger new round rolls
+    //     }
+    // }
 
-    decrTracker() {
-        let reward = this.rewardSvc.get(RewardTypes.Tracker);
-        if(!reward) return;
-        this.tracker = this.tracker - (reward.value || 1);
+    checkAndDecrementTracker() {
+        while( this.rewardSvc.has(RewardTypes.Tracker) ) {
+            let reward = this.rewardSvc.get(RewardTypes.Tracker);
+            this.tracker = this.tracker - (reward.value || 1);
+        }
     }
 
     onActionChosen( type : RewardTypes ) {
@@ -152,6 +172,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** */
     onPlayerEvent($event : PlayerEvent) {
         switch($event.type) {
             case 'tracker' :
@@ -164,27 +185,31 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** */
     onLocationEvent( location : Location ) {
 
     }
 
+    /** */
     preview() {
         let reward = this.rewardSvc.get(RewardTypes.Part);
         if(!reward) return;
-        this.previewPart = PartFactory();
+        // this.previewPart = PartFactory();
+
+        if(!this.partsDeck.length) {
+            alert("Ooops! Out of Parts!");
+            return;
+        }
+        this.previewPart = this.partsDeck.pop();
     }
 
+    /** */
     addReward( reward : Reward ) {
         if(this.bankedActions > 0) {
             this.bankedActions -= 1;
             this.rewardSvc.add(reward);
-            if(RewardTypes.Tracker === reward.type) {
-                this.decrTracker();
-                return;
-            }
         }
     }
-
 
     /** */
     onBossEvent(success : boolean) {
@@ -194,21 +219,22 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** */
     restart() {
         this.won = false;
         this.mode = Modes.Intro;
 
-        this.rewardSub.unsubscribe();
         this.team = [];
         this.locations = [];
         this.bankedActions = 0;
         this.rewards = [];
         this.rewardSvc.clear();
+        this.partsDeck = [];
         this.previewPart = null;
         this.tracker = 0;
-        this.contraption = new Contraption();
+        this.contraption = null;
 
-        this.mode = Modes.Plan;
-        this.startGame();
+        //go back to intro mode for difficulty selection
+        this.mode = Modes.Intro;
     }
 }

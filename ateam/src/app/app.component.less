@@ -153,13 +153,13 @@
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 400px;
-    grid-template-rows: 1fr 1fr 1fr 2em 1fr;
+    grid-template-rows: 1fr 1fr 1fr 3em 17em;
     grid-template-areas:
-        "contraption contraption contraption sidebar"
-        "contraption contraption contraption sidebar"
-        "contraption contraption contraption sidebar"
-        "rewards rewards rewards sidebar"
-        "players players players sidebar";
+        "contraption contraption contraption locations"
+        "contraption contraption contraption locations"
+        "contraption contraption contraption locations"
+        "rewards rewards rewards locations"
+        "players players players parts";
 
 }
 
@@ -175,6 +175,10 @@
     display: flex;
     justify-content: space-around;
     align-items: stretch;
+
+    & > * {
+        flex: 1 0 15%;
+    }
 }
 
 .o-sidebar {
@@ -183,6 +187,7 @@
     flex-direction: column;
 }
 .o-boss {
+    grid-area: locations;
     display: flex;
     justify-content: center;
     margin-bottom: 1em;
@@ -196,8 +201,12 @@
 }
 
 .o-locations {
+    grid-area: locations;
     flex: 1;
     overflow-y: auto;
+    border: 8px solid #bbb;
+    border-radius: 8px;
+    margin:0.25em;
 
     .l-container--flex {
         display: flex;
@@ -213,9 +222,10 @@
 
 .o-rewards {
     grid-area: rewards;
-    width: 100%;
-    height: 200px;
-    overflow-y: auto;
+    border: 2px solid #bbb;
+    border-radius: 8px;
+    margin: 0.25em;
+    padding: 0.5em 1em;
 
     select {
         width: 100%;
@@ -233,14 +243,92 @@
 }
 
 .o-preview {
-    margin: 1em;
+    position:relative;
+    grid-area: parts;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    ateam-parts, .a-placeholder {
-        width: 150px;
-        height: 150px;
-        margin: 0 auto;
+    .btn-discard {
+        position: absolute;
+        bottom: 1em;
+        left: 36%;
+
+        background: #000;
+        color: #fff;
+        border-radius: 16px;
+        padding: 0.5em 1em;
+        border: 3px solid #fff;
+        text-transform: uppercase;
+        box-shadow: 1px 1px 3px #000;
+
+        &:hover {
+            background: #fff;
+            color: #000;
+        }
     }
 }
+
+.a-deck {
+    position:relative;
+    width: 160px;
+    height: 160px;
+    perspective: 200px;
+}
+.a-card {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 4px solid #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #c3cbdc;
+    background-image: linear-gradient(335deg, #c3cbdc 0%, #edf1f4 74%);
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    transition: transform 1s;
+    transform-style: preserve-3d;
+
+    &:nth-child(1) { top: 8px; left: 8px; }
+    &:nth-child(2) { top: 6px; left: 6px; }
+    &:nth-child(3) { top: 4px; left: 4px; }
+    &:nth-child(4) { top: 2px; left: 2px; }
+    // &:nth-child(5) { top: -8px; left: -8px; }
+
+    &.is-flipped {
+        transform: rotateY( 180deg );
+        .a-card--back { opacity: 0; }
+    }
+}
+.a-card--front {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    // backface-visibility: hidden;
+    transform: rotateY( 180deg );
+}
+.a-card--back {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    transition: 0.25s opacity 0s linear;
+
+    &:before {
+        content: "PARTS";
+        display: block;
+        text-align:center;
+        font-weight: 700;
+        margin-top: 60px;
+    }
+    &:after {
+        content: "click to draw";
+        display: block;
+        text-align:center;
+        font-size: 0.875em;
+    }
+}
+
 
 .a-placeholder {
     height: 125px;
@@ -260,12 +348,19 @@
 
 .o-help {
     position: absolute;
-    top: 2em;
+    top: 3em;
     bottom: 0;
     right: 0;
-    width: 25%;
+    width: 50%;
     background: #fff;
     z-index: 999;
     padding: 2em 2em;
     overflow-y: auto;
+    box-shadow: -1px 6px 5px 7px rgba(0, 0, 0, 0.2);
+
+    .a-part-wrapper {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+    }
 }

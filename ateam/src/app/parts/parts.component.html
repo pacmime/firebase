@@ -1,13 +1,13 @@
-<div class="l-top">{{part?.name}}</div>
+<div class="l-top" *ngIf="part?.name">{{part?.name}}</div>
 <div class="l-middle">
     <ateam-slot *ngIf="part?.slot"
         [slot]="part.slot"
         (onEvent)="onSlotEvent($event)">
     </ateam-slot>
-    <div class="a-placeholder" *ngIf="part && !part.slot">FRAME</div>
+    <div class="a-placeholder" *ngIf="part && !part.slot">CONTRAPTION</div>
 </div>
 <div class="l-bottom" *ngIf="part?.reward">
-    <div class="a-reward" [innerHTML]="part.reward.label"></div>
+    <div class="a-reward" [innerHTML]="part.getRewardLabel()"></div>
 </div>
 
 <div class="a-connector--top"    *ngIf="part?.connectors.top"

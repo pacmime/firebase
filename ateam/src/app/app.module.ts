@@ -6,7 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LocationComponent } from './location/location.component';
 import { PlayerComponent } from './player/player.component';
+import { VanComponent } from './van/van.component';
 import { SlotComponent } from './slot/slot.component';
+import { RollComponent } from './roll/roll.component';
 import { HenchmenComponent } from './henchmen/henchmen.component';
 import { BossComponent } from './boss/boss.component';
 import { PartsComponent } from './parts/parts.component';
@@ -39,7 +41,9 @@ export class NumberToLetterPipe implements PipeTransform {
     AppComponent,
     LocationComponent,
     PlayerComponent,
+    VanComponent,
     SlotComponent,
+    RollComponent,
     HenchmenComponent,
     BossComponent,
     PartsComponent,

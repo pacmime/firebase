@@ -24,13 +24,9 @@ export class RewardsService {
         //dupe input object
         let reward = arg.clone();
 
-        if(RewardTypes.Slot === reward.type) {
-            //generate random die value for reward
-            reward.value = Math.ceil((Math.random()*5000)/1000)+1;
-        }
-
-
-        if(RewardTypes.Slot !== reward.type && !isNaN(reward.value) && reward.value > 1) {
+        //for rewards that apply multiple benefits (2 or more damage, 2 parts, etc)
+        // split them up into multiple instances of single rewards
+        if(RewardTypes.Die !== reward.type && !isNaN(reward.value) && reward.value > 1) {
             while(reward.value > 0) {
                 this._rewards.push(new Reward(reward.type));
                 reward.value--;
@@ -41,8 +37,8 @@ export class RewardsService {
         }
 
         let label = reward.label;
-        console.log(`RewardService.add() - Added '${label}' reward`);
-        console.log(`RewardService.add() - now has ${this._rewards.length} rewards`);
+        // console.log(`RewardService.add() - Added '${label}' reward`);
+        // console.log(`RewardService.add() - now has ${this._rewards.length} rewards`);
         this._subject.next();
     }
 

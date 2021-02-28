@@ -25,7 +25,7 @@ export enum RewardTypes {
     Defeat,
     Part,
     Tracker,
-    Slot,
+    Die,
     DieFace,
     None,       //no benefit
     Penalty     //if die is actually a punishment
@@ -35,7 +35,7 @@ RewardTypeLabels[RewardTypes.Damage]  = "Damage a Henchman";
 RewardTypeLabels[RewardTypes.Defeat]  = "Defeat a Henchman";
 RewardTypeLabels[RewardTypes.Part]    = "Draw a Part";
 RewardTypeLabels[RewardTypes.Tracker] = "Decrease Lynch Tracker";
-RewardTypeLabels[RewardTypes.Slot]    = "Slot a die w/o restriction";
+RewardTypeLabels[RewardTypes.Die]    = "Gain a die to slot";
 RewardTypeLabels[RewardTypes.DieFace] = "Change one die face value";
 RewardTypeLabels[RewardTypes.None]    = "No reward";
 RewardTypeLabels[RewardTypes.Penalty] = "Increase Lynch Tracker";
@@ -45,7 +45,7 @@ RewardTypeIcons[RewardTypes.Damage]  = "fas fa-bahai";
 RewardTypeIcons[RewardTypes.Defeat]  = "fas fa-skull-crossbones";
 RewardTypeIcons[RewardTypes.Part]    = "fas fa-vector-square";
 RewardTypeIcons[RewardTypes.Tracker] = "fas fa-user-shield t-good";
-RewardTypeIcons[RewardTypes.Slot]    = "fas fa-dice-d6";
+RewardTypeIcons[RewardTypes.Die]    = "fas fa-dice-d6";
 RewardTypeIcons[RewardTypes.DieFace] = "fas fa-dice";
 RewardTypeIcons[RewardTypes.None]    = "fas fa-ban";
 RewardTypeIcons[RewardTypes.Penalty] = "fas fa-user-shield t-bad";
@@ -62,6 +62,9 @@ export class Reward {
         this._icon = RewardTypeIcons[_type];
         if(!isNaN(value)) {
             this._value = value;
+        } else if(RewardTypes.Die === _type) {
+            //generate random die value for reward
+            this._value = Math.ceil((Math.random()*5000)/1000)+1;
         }
     }
 

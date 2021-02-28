@@ -1,5 +1,5 @@
 
-import { Team, Reward, RewardTypes, RewardTypeLabels } from './models';
+import { Team, Reward, RewardTypes, RewardTypeLabels } from '../models';
 
 //each member rolls 1 die per team member
 // but only gets a special if their specific die result is a 6
@@ -53,7 +53,7 @@ export class Die {
     private _special : boolean = false;
 
     constructor(
-        private member : any,
+        private _member : any,
         private _type : string,
         private _value : number
     ) {
@@ -61,6 +61,8 @@ export class Die {
     }
 
     get type () : string      { return this._type;     }
+    get typeId () : string      { return this._type.replace(/\s/g,'').toLowerCase(); }
+
     get value () : number     { return this._value;    }
     set value (v:number)      {
         this._value = v;
@@ -72,15 +74,18 @@ export class Die {
     set selected (v:boolean)  { this._selected = v;    }
     get reward () : Reward    { return this._reward;   }
     get special() : boolean   { return this._special;  }
+    get member() : string     { return this._member;   }
+    get memberId() : string   { return this._member.replace(/\s/g,'').toLowerCase(); }
+
 
     process() {
         let rewardType = RewardTypes.None;
         let reward = null;
 
-        if(this._value === 6 && this.member === this.type) {
+        if(this._value === 6 && this._member === this.type) {
             reward = this.determineSpecial();
         } else {
-            rewardType = DieRewards[this.member][this._value];
+            rewardType = DieRewards[this._member][this._value];
             reward = new Reward(rewardType);
         }
 
@@ -98,7 +103,7 @@ export class Die {
             break;
 
             case DieTypes.Faceman  :
-            rewardType = RewardTypes.Slot;
+            rewardType = RewardTypes.Die;
             break;
 
             case DieTypes.BA       :
@@ -170,6 +175,10 @@ export class Roll {
     /** has all dice in this roll been allocated? */
     public allUsed() : boolean {
         return !this.results.find(d=>!d.used);
+    }
+
+    public getFails() : number {
+        return this._results.filter(r=> r.value === 1 && !r.used).length;
     }
 
 }

@@ -3,7 +3,8 @@
     <div class="a-label">{{member}}</div>
 </div>
 <div class="l-middle">
-    <div class="o-roll">
+    <die-roll [roll]="roll" (onEvent)="onRollEvent($event)"></die-roll>
+    <!-- <div class="o-roll">
         <div *ngFor="let die of roll?.results; let $index = index"
             class="rolled-die" [ngClass]="{'is-special':die.special}">
             <span class="a-die" (click)="onDieClick(die, $event)"
@@ -14,7 +15,7 @@
             <button *ngIf="!die.used && die.reward.type !== NoReward"
                 type="button" (click)="useDie(die)">Use</button>
         </div>
-    </div>
+    </div> -->
 </div>
 <div class="l-bottom">
     <div *ngFor="let msg of messages"><small>{{msg}}</small></div>

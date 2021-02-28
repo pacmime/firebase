@@ -23,6 +23,14 @@
     &.murdock {
         border-color: blueviolet;
     }
+
+    // // colorize each member's die
+    // ::ng-deep .o-roll {
+    //     & > *:nth-child(1) .a-die { color: #ffd800; }       //hannibal
+    //     & > *:nth-child(2) .a-die { color: lightskyblue; }  //faceman
+    //     & > *:nth-child(3) .a-die { color: red; }           //ba
+    //     & > *:nth-child(4) .a-die { color: blueviolet; }    //murdock
+    // }
 }
 
 .l-top {
@@ -87,51 +95,4 @@
     font-size: 1.25em;
 }
 
-.a-special {
-
-}
-
-.o-roll {
-    // display: flex;
-    // justify-content: space-around;
-    // align-items: stretch;
-    // padding: 0.5em;
-
-    & > *:nth-child(1) .a-die { color: #ffd800; }
-    & > *:nth-child(2) .a-die { color: lightskyblue; }
-    & > *:nth-child(3) .a-die { color: red; }
-    & > *:nth-child(4) .a-die { color: blueviolet; }
-}
-
-.rolled-die {
-    padding: 0.25em 0.5em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &.is-special small .fas {
-        border: 2px solid #f00;
-        padding: 0.25em;
-        box-shadow: 0 0 3px #f00;
-    }
-}
-
-.a-die {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid white;
-    height: 32px;
-    width: 32px;
-    border-radius: 6px;
-    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
-    cursor: pointer;
-
-    &.is-used {
-        opacity: 0.3;
-    }
-    &.is-selected {
-        border-color: limegreen;
-        box-shadow: 0px 3px 5px rgba(50, 205, 50, .50);
-    }
-}
+.a-special { }

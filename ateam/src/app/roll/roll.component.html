@@ -1,0 +1,13 @@
+<div class="o-roll">
+    <div *ngFor="let die of roll?.results; let $index = index"
+        class="rolled-die die-{{die.typeId}}" [ngClass]="{'is-special':die.special}">
+        <span class="a-die" (click)="onDieClick(die, $event)"
+        [ngClass]="{'is-used':die.used, 'is-selected':die.selected}"
+        title="{{die.reward?.label}}">
+            <span class="fa-2x fas fa-dice-{{die.value|numToLetter}}"></span>
+        </span>
+        <small title="{{die.reward.label}}"><span class="{{die.reward.icon}}"></span></small>
+        <button *ngIf="!die.used && die.reward.type !== NoReward"
+            type="button" (click)="useDie(die)">Use</button>
+    </div>
+</div>

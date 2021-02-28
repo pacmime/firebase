@@ -29,7 +29,7 @@ const REWARDS : Reward[] = [
     new Reward(RewardTypes.Part),
     new Reward(RewardTypes.Damage, 3),
     new Reward(RewardTypes.Defeat),
-    new Reward(RewardTypes.Slot),
+    new Reward(RewardTypes.Die),
     new Reward(RewardTypes.Part),
     new Reward(RewardTypes.Part)
 ];

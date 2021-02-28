@@ -1,4 +1,4 @@
-import { Roll } from "../roll";
+import { Roll } from "../roll/roll";
 import { Reward, RewardTypes, RewardTypeLabels } from '../models';
 
 
@@ -11,7 +11,7 @@ export const ATEAM = {
     },
     Faceman : {
         special : {
-            reward: { label: RewardTypeLabels[RewardTypes.Slot], type: RewardTypes.Slot }
+            reward: { label: RewardTypeLabels[RewardTypes.Die], type: RewardTypes.Die }
         }
     },
     BA : {

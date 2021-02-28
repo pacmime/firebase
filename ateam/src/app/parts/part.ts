@@ -16,6 +16,8 @@ const NAMES = [
 ];
 
 
+const DAMAGE_LABEL = '<span class="fas fa-bahai"></span>';
+
 
 export class Part {
 
@@ -32,6 +34,14 @@ export class Part {
     public get slot() : Slot { return this._slot; }
     public get reward() : Reward { return this._reward; }
     public get connectors() : any { return this._connectors; }
+
+    getRewardLabel() : string {
+        let dmg = this.reward.value;
+        let result = '<span title="Deal ' + dmg + ' Damage">';
+        for(let i=0; i<dmg; ++i) result += DAMAGE_LABEL;
+        result += '</span>';
+        return result;
+    }
 
     coolDie() {
         if(this._slot) {
@@ -85,48 +95,67 @@ function distributeConnections( numConns : number ) : any {
     return { top: sides[0], bottom: sides[1], left: sides[2], right: sides[3] };
 }
 
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
-const DAMAGE_LABEL = '<span class="fas fa-bahai"></span>';
-function getLabel(dmg : number) : string {
-    let result = '<span title="Deal ' + dmg + ' Damage">';
-    for(let i=0; i<dmg; ++i) {
-        result += DAMAGE_LABEL;
-    }
-    result += '</span>';
-    return result;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = random(currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
 
 
+/** */
+export function PartFactory( numConns : number = 0 ) {
 
-export function PartFactory() {
-
-    let numConns = determineNumConnections();
+    if(!numConns) numConns = determineNumConnections();
     let connectors = distributeConnections(numConns);
 
     let dc = random(6), dmg = 1 + (dc-2); //higher DCs do more damage
     dmg -= Math.max(0, numConns-2);       //more connections lessen damage
     dmg = Math.max(dmg, 1);               //always do at least 1 dmg
 
-    // let dc = 2, dmg = 1;
-    // if(numConns === 4) {
-    //     dc += 3;
-    // } else if(numConns === 3) {
-    //     dc += 2; dmg += 1;
-    // } else if(numConns === 2) {
-    //     dc += 2; dmg += 2;
-    // } else {
-    //     dc += 1; dmg += 2;
-    // }
-
-    // let connOffset = Math.floor(numConns * 0.5);    //0, 1, 2
-    // let dmg = 3 - connOffset;
-    // let dc  = dmg + connOffset +
-    //     (test(5000, 4000) ?  1 : 0) +   //slim chance of being harder
-    //     (test(5000, 4500) ? -1 : 0);    //slim chance of being easier
-
     let name = NAMES[ Math.floor(Math.random()*NAMES.length) ];
     let slot = new Slot(dc);
     let reward = new Reward(RewardTypes.Damage, dmg);
-    reward.label = getLabel(dmg);
     return new Part(name, slot, reward, connectors);
 }
+
+/** */
+export function buildDeck(numParts : number) : Part[] {
+
+    let result = [];
+    let numFours  = Math.floor(numParts / 4);
+    let numThrees = Math.floor((numParts-numFours) / 3);
+    let numTwos   = Math.floor((numParts-numFours-numThrees) / 2);
+    let numOnes   = numParts - numFours - numThrees - numTwos;
+    console.log(`Deck distribution: ${numFours} / ${numThrees} / ${numTwos} / ${numOnes}`);
+
+    //10 four-conn parts
+    for(let i=0; i<numFours; i++) result.push(PartFactory(4));
+
+    //10 three-conn parts
+    for(let i=0; i<numThrees; i++) result.push(PartFactory(3));
+
+    //10 two-conn parts
+    for(let i=0; i<numTwos; i++) result.push(PartFactory(2));
+
+    //10 one-conn parts
+    for(let i=0; i<numOnes; i++) result.push(PartFactory(1));
+
+    return shuffle(result);
+}
+
+
+
+// export const PartsDeck : Part[] = buildDeck(40);

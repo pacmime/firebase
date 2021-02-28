@@ -20,6 +20,8 @@ export class ContraptionComponent implements OnInit, OnChanges {
     @Input() previewPart : Part;
     @Output() onEvent : EventEmitter<any> = new EventEmitter<any>();
 
+    public removedPart : any;
+
     constructor( private rewards : RewardsService ) { }
 
     ngOnInit() {
@@ -47,12 +49,17 @@ export class ContraptionComponent implements OnInit, OnChanges {
             this.contraption.addPart(this.previewPart, index);
             this.previewPart = null;
             this.onEvent.emit("part:added");
+
+            if(this.removedPart && this.removedPart.index === index) {
+                this.removedPart = null;
+            }
         }
     }
 
     remove( event : any, index: number ) {
         let spaces = this.contraption.spaces;
         if( spaces[index].part ) {
+            this.removedPart = {index: index, part: spaces[index].part};
             spaces[index].part = null;
 
             if(this.previewPart) {
@@ -60,6 +67,21 @@ export class ContraptionComponent implements OnInit, OnChanges {
             }
         }
         event.stopPropagation();
+    }
+
+    undoRemovePart() {
+        let idx = this.removedPart.index;
+        if(
+            this.removedPart &&
+            !this.contraption.spaces[idx].part
+        ) {
+            this.contraption.addPart(this.removedPart.part, idx);
+            this.removedPart = null;
+
+            if(this.previewPart) {
+                this.determineAvailbleSpaces(this.previewPart);
+            }
+        }
     }
 
     determineAvailbleSpaces( part : Part ) {

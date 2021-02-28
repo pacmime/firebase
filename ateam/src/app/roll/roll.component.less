@@ -1,0 +1,45 @@
+:host {
+    display: block;
+}
+
+.o-roll {
+
+}
+
+.rolled-die {
+    padding: 0.25em 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &.is-special small .fas {
+        border: 2px solid #f00;
+        padding: 0.25em;
+        box-shadow: 0 0 3px #f00;
+    }
+
+    &.die-hannibal   .a-die { color: #ffd800; }       //hannibal
+    &.die-faceman    .a-die { color: lightskyblue; }  //faceman
+    &.die-babarrakas .a-die { color: red; }           //ba
+    &.die-murdock    .a-die { color: blueviolet; }    //murdock
+}
+
+.a-die {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
+    height: 32px;
+    width: 32px;
+    border-radius: 6px;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+
+    &.is-used {
+        opacity: 0.3;
+    }
+    &.is-selected {
+        border-color: limegreen;
+        box-shadow: 0px 3px 5px rgba(50, 205, 50, .50);
+    }
+}

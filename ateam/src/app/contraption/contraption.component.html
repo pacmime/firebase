@@ -1,5 +1,9 @@
 
 <div class="l-container">
+    <button type="button" class="btn-undo" *ngIf="removedPart"
+        (click)="undoRemovePart()">
+        UNDO
+    </button>
     <div class="l-spaces-container">
         <div class="m-space"
             *ngFor="let space of contraption?.spaces; let $index=index;"

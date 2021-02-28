@@ -1,0 +1,41 @@
+:host {
+    height: 100%;
+    display: block;
+
+    background: url(/assets/van.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding-top: 5em;
+
+    & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    ::ng-deep .a-die.a-die-hannibal   { color: #ffd800; }       //hannibal
+    ::ng-deep .a-die.a-die-faceman    { color: lightskyblue; }  //faceman
+    ::ng-deep .a-die.a-die-babarrakas { color: red; }           //ba
+    ::ng-deep .a-die.a-die-murdock    { color: blueviolet; }    //murdock
+
+    ::ng-deep .a-die {
+        background: #fff;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid white;
+        // height: 32px;
+        // width: 32px;
+        border-radius: 6px;
+        box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+        cursor: pointer;
+
+        &.is-used {
+            opacity: 0.3;
+        }
+        &.is-selected {
+            border-color: limegreen;
+            box-shadow: 0px 3px 5px rgba(50, 205, 50, .50);
+        }
+    }
+}

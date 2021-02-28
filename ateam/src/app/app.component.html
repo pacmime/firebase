@@ -77,7 +77,7 @@
                     <span class="{{reward.icon}}"
                         title="{{reward.label}}"></span>
                     <ng-container *ngIf="reward.value">
-                        <ng-container *ngIf="RewardTypes.Slot===reward.type">
+                        <ng-container *ngIf="RewardTypes.Die===reward.type">
                             &nbsp;(<span class="fa-lg fas fa-dice-{{reward.value|numToLetter}}"></span>)
                         </ng-container>
                     </ng-container>
@@ -90,19 +90,11 @@
                     [round]="round"
                     (onEvent)="onPlayerEvent($event)">
                 </ateam-player>
+                <ateam-van (onEvent)="onPlayerEvent($event)"></ateam-van>
             </div>
 
-            <div class="o-sidebar">
+            <!-- <div class="o-sidebar"> -->
                 <ng-container *ngIf="Modes.Showdown !== mode">
-
-                    <div class="o-preview">
-                        <ateam-parts *ngIf="previewPart" [part]="previewPart" ></ateam-parts>
-                        <div *ngIf="!previewPart" class="a-placeholder" (click)="preview()">
-                            <strong>PARTS</strong>
-                            <small>Click to Draw</small>
-                        </div>
-                        <button type="button" *ngIf="previewPart" (click)="previewPart=null">Discard</button>
-                    </div>
 
                     <div class="o-locations">
                         <div class="a-label">LOCATIONS</div>
@@ -114,6 +106,33 @@
                             </ateam-location>
                         <!-- </div> -->
                     </div>
+
+                    <div class="o-preview">
+
+                        <small>{{partsDeck.length}} Remaining</small>
+                        <!-- deck of available parts -->
+                        <div class="a-deck">
+                            <div class="a-card"></div>
+                            <div class="a-card"></div>
+                            <div class="a-card"></div>
+                            <div class="a-card" [ngClass]="{'is-flipped':previewPart}">
+                                <div class="a-card--front">
+                                    <ateam-parts *ngIf="previewPart" [part]="previewPart" ></ateam-parts>
+                                </div>
+                                <div class="a-card--back" (click)="preview()"></div>
+                            </div>
+                            <!-- <div class="a-card--front">
+                                <ateam-parts *ngIf="previewPart" [part]="previewPart" ></ateam-parts>
+                            </div> -->
+                        </div>
+
+                        <button type="button" *ngIf="previewPart"
+                            class="btn-discard"
+                            (click)="previewPart=null">
+                            Discard
+                        </button>
+                    </div>
+
                 </ng-container>
 
                 <div class="o-boss" *ngIf="Modes.Showdown === mode">
@@ -122,7 +141,7 @@
                     </ateam-boss>
                 </div>
 
-            </div>
+            <!-- </div> -->
 
         </div>
     </div>
@@ -141,10 +160,11 @@
 
         <h3>Locations</h3>
         <p>
-            Locations must be cleared by first defeating all Henchmen on it and
+            Locations are cleared by first defeating all Henchmen within and
             then filling each of its slots with dice. Once cleared, the A-Team
-            receives the Location's reward. If a Location is not cleared by
-            the end of the round, Henchmen reinforcements will arrive to reclaim.
+            receives the reward indicated at the bottom of the Location's card.
+            If a Location is not cleared by the end of the round, reinforcements
+            will arrive to reclaim the Location.
         </p>
         <br>
 
@@ -163,20 +183,126 @@
         </p>
         <br>
 
-        <h3>Die Rewards</h3>
+        <h3>Rewards</h3>
+        <p>
+            Each member of the A-Team has a unique set of die options. Each option
+            is shown below.
+        </p>
         <ul>
-            <li><strong>Pair: </strong> 1 Action</li>
-            <li><strong>3 of a Kind: </strong> 2 Actions</li>
-            <li><strong>4 of a Kind: </strong> 3 Action</li>
-            <li><strong>3-die Straight: </strong> ???</li>
+            <li>
+                <span class="fas fa-bahai"></span> - Damage that can be applied
+                to Henchmen during the <strong>Plan</strong> or the Boss during
+                the <strong>Showdown</strong>
+            </li>
+            <li><span class="fas fa-skull-crossbones"></span> - Defeat any single Henchmen</li>
+            <li>
+                <span class="fas fa-vector-square"></span> - Gain a Part that
+                can be applied to the A-Team's <strong>Contraption</strong>
+            </li>
+            <li>
+                <span class="fas fas fa-dice-d6"></span> - Gain an extra die that
+                can be slotted immediately
+            </li>
+            <li>
+                <span class="fas fa-dice"></span> - Change the face value of any
+                one slotted or unslotted die
+            </li>
+            <li>
+                <span class="fas fa-user-shield t-good"></span> - Reduce the Col.
+                Lynch Tracker.
+            </li>
+            <li>
+                <span class="fas fa-user-shield t-bad"></span> - Increase the Col.
+                Lynch Tracker.
+            </li>
+            <li><span class="fas fa-ban"></span> - No result</li>
         </ul>
+        <p>
+            <strong>Note:</strong> Rewards gained from dice during a round are
+            lost at the end of the round if not used!
+        </p>
+        <br>
 
-        <h3>Actions</h3>
+        <h3>Parts</h3>
+        <p>
+            Parts can be incorporated into the team's Contraption. They contain a
+            slot which specifies a minimum die value required in order to slot a
+            die into it. Once a die is slotted into a Part, the reward specified
+            by the Part is applied.
+        </p>
+        <div class="a-part-wrapper">
+            <ateam-parts [part]="placeholderPart"></ateam-parts>
+        </div>
+        <p>
+            Parts have connectors on its sides which allow it to attach to existing
+            Parts already applied in the Contraption. The number of sides with
+            connectors varies and affects the reward offered by the Part - more
+            connectors (easier to install) means smaller rewards.
+        </p>
+        <br>
+
+        <h3>Henchmen</h3>
+        <p>
+            Henchmen occupy Locations, preventing the A-Team from revealing the
+            Boss ultimately pulling the strings in the background. Once enough
+            damage has been applied to a Henchman, it is defeated.
+        </p>
+        <br>
+
+        <h3>Boss</h3>
+        <p>
+            The Boss is only revealed once all Locations have been cleared of
+            Henchmen and had their die slots filled by the members of the A-Team.
+            The Boss has a number of hit points based upon the number of players
+            and the difficulty.
+        </p>
+        <p>
+            In order to defeat the Boss, the A-Team must put their Contraption into
+            battle, slotting their dice into it to gain damage that can be applied
+            to the Boss.
+        </p>
+        <br>
+
+        <h3>The Plan</h3>
+        <p>
+            During the Plan, players roll four dice - one per A-Team member - and
+            can choose between slotting each die or using the special option that
+            member has for the die based upon its face value. Each die is colored
+            based upon the member it represents - yellow for Hannibal, blue for Faceman,
+            red for BA, and purple for Murdock.
+        </p>
+        <p>
+            If a member of the A-Team rolls a 6 on their die (see above for which
+            colors belong to each member), they trigger a special reward only
+            available to that member.
+        </p>
         <ul>
-            <li>Apply 1 damage</li>
-            <li>Draw a Parts card</li>
-            <li>Reduce Tracker by 1</li>
+            <li>Hannibal - Reduce the Col. Lynch Tracker</li>
+            <li>Faceman - Gain a new die to slot immediately</li>
+            <li>BA - Draw 2 Parts</li>
+            <li>Murdock - Change any one die's face value</li>
         </ul>
+        <h4>Slotting Dice</h4>
+        <p>
+            A die can be slotted in any empty slot with a required value less than
+            or equal to the die's face value.  Click the die to slot and then click
+            the desired slot to insert it. If you decide against slotting a selected
+            die, click the selected die again to un-select it.
+        </p>
+        <h4>Using Dice Options</h4>
+        <p>
+            A die's special option can be used by clicking the "use" button to the
+            right of the die. An icon illustrating the option granted by the die
+            is shown between the die and the use button.
+        </p>
+        <h4>The Van</h4>
+        <p>
+            Members of the A-Team may take dice that they don't wish to use or
+            slot elsewhere in a round and instead slot them into the van. Dice slotted
+            in the van are kept between rounds and may be slotted later into Parts
+            or Locations.
+        </p>
+
     </div>
 </ng-container>
 
